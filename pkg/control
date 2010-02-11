@@ -1,0 +1,20 @@
+Package: xplain2sql
+Version: 4.1.0
+Section: devel
+Priority: optional
+Architecture: i386
+Essential: no
+Depends:
+Pre-Depends:
+Recommends:
+Suggests:
+Installed-Size:
+Maintainer: Berend de Boer <berend@pobox.com>
+Conflicts:
+Replaces:
+Provides: xplain2sql
+Description: xplain2sql can convert Xplain data definition and data
+             manipulation and retrieval statements to many SQL
+             dialects. Supported SQL dialects are InterBase,
+             PostgreSQL, MySQL, Microsoft Transact SQL, DB/2 and
+             Oracle.

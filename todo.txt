@@ -1,0 +1,388 @@
+- optional attribute joined with left join, but any attribute derived
+  from that uses a join, but should use a left join.
+- An extended attribute cannot be updated with an attribute of the
+  type for InterBase. See
+    update t1 its mytest = i8.
+  in test.ddl
+  More complex things like
+    update t1 its mytest = tsomething its i8.
+  will actually crash the generator
+- When you use a parameter like ?param and param is not a parameter,
+  you get "unknown type or base". Should be "is not a parameter."
+- FireBird 2.x can support some with:
+    select first 10 * from t;
+  (http://scott.yang.id.au/2004/01/limit-in-select-statements-in-firebird/)
+
+
+Optimisations:
+
+1. For MySQL at least the any/none functions should be done in terms
+   of the count query: this means they can be done with joins, as
+   subselects are gruesomely slow in mysql.
+
+1. Currently every function that is done via the left outer join
+   optimisation uses a count and a group by. In case you have a per
+   via a specialisation the group can be left out, and you can use a
+   case when specialisation.id is not null then True else False end
+   expression.
+
+1. It would be nice if the some statement can be done with left outer
+   join. This is possible if the predicate returns just 1 result, in
+   combination with the per statement of course.
+
+0. can do a left outer join in an extend with a where clause in
+   cases where I can move the where clause into the on clause of the
+   left outer join. Unclear how far that can be taken.
+
+0. Weird behaviour:
+
+  get min employee its age
+
+will return 99999 (see test2.ddl) if there is no data. I believe it
+would be better to return null or nothing as there is nothing?? The
+problem is a value is required. So what is the value in this case??
+Hard to fix easily.
+
+0. Should use left outer join for asserts with a some. Example:
+
+  type to do (I9) =
+    started by_user, last changed by_user,
+    process instance, from_task, task,
+    start date, last modified, optional date due.
+  type subprocess to do (I9) = [to do], process instance.
+  assert to do its subprocess = some subprocess to do its process instance per to do.
+
+  But the assert uses a subselect, not a left outer join.
+
+2. The requirement that the name of an extend cannot be equal to the
+   name of a base is weird. It can't be equal to the name of an
+   attribute, value of const of course but otherwise??
+
+3. when object of same name is created again, report the file andm
+   line number where the object was first created.
+
+
+*************** InterBase ***************
+
+- dates are not portable, need "06-jun-2002" for interbase for
+  example.
+
+- extend in stored procedure does not work.
+
+- don't emit empty stored procedure (without statements), just warning
+  that it cannot be created, so we don't get errors running the test script.
+
+- A statement as:
+
+    value pv3 = (1 = 2).
+
+  fails because InterBase doesn't have a case/when, but I could
+  implement this with an if-then-else statement.
+
+*************** DB2 ***************
+
+John Wiggins:
+
+>> It seems that as of their release 7.1 ORDER BY, LIMIT are supported in
+>> sub-selects and as of release 7.3 ALTER TABLE DROP CLOUMN is supported. I've
+>> attached copies of the release notes for you.
+
+  I added a 7.3 generator, add support for that. What is my DB2
+  version BTW? Can I upgrade??
+
+
+- select statements in stored procedures should have the read-only
+  clause or something like that? I never want them to be updateable,
+  but perhaps others will?
+
+- default value for attribute which is type should not be surrounded
+  by single quotes if the primary key is an integer.
+
+  This is also true for other cases where the identity is surrounded
+  by quotes.
+
+  All this is mainly input, never ever use strings to select instances
+  in the dll if the primary key is an integer, because DB/2 does not
+  silently convert it. Make note of this in manual.
+  Or perhaps I should simply forbid occurence of a string where we now
+  an integer should occur and vice versa.
+
+  Error occurs in test.ddl with probably:
+
+801:SQL0408N  A value is not compatible with the data type of its assignment
+852:SQL0401N  The data types of the operands for the operation "=" are not
+856:SQL0401N  The data types of the operands for the operation ">=" are not
+1080:SQL0401N  The data types of the operands for the operation "=" are not
+1148:SQL0100W  No row was found for FETCH, UPDATE or DELETE; or the result of a
+1335:SQL0401N  The data types of the operands for the operation "=" are not
+1488:SQL0407N  Assignment of a NULL value to a NOT NULL column "TBSPACEID=2,
+
+- add assert support by using the generate always statement, see
+  file://localhost/usr/IBMdb2/V7.1/doc/en_US/html/db2a0/db2a041.htm
+
+- add some support, should be possible. Example:
+    select current timestamp from user.table1 fetch first 1 row only
+
+- coalesce fails with 2nd argument is null. You get this value with
+  the some statement. We need another value here. For strings the ''
+  would be fine. But for integers??
+
+- values statement looks useful to create tables. Perhaps to return
+  the value of a value as a table??
+
+
+********** PostgreSQL **********
+
+- PostgreSQL supports clustered indexes:
+  http://www.postgresql.org/docs/current/interactive/sql-cluster.html;
+  but not really, it's a manual operation.
+
+- Insert statement can take option 'returning id' to return the id:
+  http://www.blahstuff.com/oldstuff/2007/02/22/611/postgresql-insert-returning/
+  This can perhaps make my insert procedures more optimal?
+
+- can drop type with if exists check:
+
+    http://www.postgresql.org/docs/8.2/interactive/sql-droptype.html
+
+- drop sequence after table is dropped, not done by postgresql.
+  2004-01-16: What does this mean? Is trigger not dropped?
+
+- drop of insert/update/delete procedure must list parameter types of
+  procedure.
+
+- version 7.2 and higher support inheritance like Xplain does. You can
+  specify create table child (a int, inherits (parent). Insert does a
+  transparent edit into parent. Neat feature that is quite useful to
+  support. But have to check if I can insert in child table only. If
+  it always creates a row in parent as well, than that's not something
+  that would work with Xplain.
+
+- 8.1 delete statement supports multiple tables as well, syntax very
+  similar to TSQL, see
+  http://www.postgresql.org/docs/8.1/interactive/sql-delete.html. But
+  the delete statement currently works anyway, so the only reason to
+  tinker with it is some speed advantage. Which requires decent
+  testing.
+
+
+*************** Oracle ***************
+
+- extend support inside stored procedures.
+  It seems I have a drop of the temporary table there. Does Oracle not
+  support local temporary tables?
+
+*************** SAP DB ***************
+
+- SAP DB support
+
+
+
+*************** MySQL ***************
+
+
+
+*************** General ***************
+
+
+** Thinks that look not to hard
+
+- extend does not check if extended type and per type are the same.
+
+- Should forbid two values with the same name in a single stored
+  procedure.
+
+- does updating an extension with the value of another extension work?
+  Yes for SQL Server. No for others: need subselect to the
+  stuff. Subselect is generated, but refers to wrong column.
+  2007-05-28: I believe this actually works.
+
+- can do a better error report if user says get v. Report instead:
+    use value v.
+  to return the value of a value.
+
+- this statement:
+
+    delete street 1
+
+  inside a stored procedure does not work. Conversion complains about
+  not supported. It's an unusual statement, but also a bit strange
+  that it is not supported.
+
+- add support for string functions combine, head and tail.
+
+- add support for date functions.
+
+- output warning for bases that are never referred to.
+  But only for .include stuff, never when .use is used, because then
+  you're not interested in such detail.
+
+- Cannot use a value inside an sp that is declared outside the
+  sp. Makes no sense, no warning, but bad code.
+
+- Emit update trigger to check if forced null columns (due to complex
+  init) are not set to null within an update.
+
+
+** Thinks that might be so easy
+
+0. See list of known bugs in xplain_parser.y.
+
+5. can support domain check for assert by checking it in the
+   trigger. Perhaps create a procedure and call that?
+
+   Can't do in trigger as it should fire at the end of a
+   transaction. So must create procedure: assert_<type> which can be
+   called on-demand to validate asserts.
+
+6. no check if trajectory mininum is lower than maximum in case the
+   number isn't an INTEGER_32.
+
+8. It seems an integer enumeration only handles 32-bit integers.
+
+10. assert domain restriction is incorrect. For example
+
+      base n (A200).
+      assert a (*..*) = count something.
+
+    will give the assert a range of 200 '9's. For assert my domain
+    trajectory hack is wrong, must base it on the actual expression.
+
+12. Support optimisation: for example if you only select from an
+    extend, we could generate a view instead.
+    Or only extend with the stuff that is retrieved.
+
+13. It would be excellent if the extend could be done for a type, not
+    just a base like now. So extend a type with a type. And you should
+    be able to do an its on that type. Should work, nothing in Xplain
+    seems to forbid that. Doesn't work now, because the extend is
+    treated as a base, not as a type.
+
+14. -nospace argument fails with tsql.
+
+15. Have I tested nested if-then-else constructs in init [default]
+    statements?
+
+16. insert statement could test if all supplied parameters are
+    provided, no need to wait to run it.
+
+17. Better unique index syntax perhaps: assert unique a its b, c, d.
+    But we still need index for normal indexes and clustered indexes.
+
+    With this option we can generate optimized some output, i.e. use a
+    join instead of subselect of we're sure the some returns exactly 0
+    or 1 instance.
+
+18. not parsed:
+
+      value v = a (?param) its b
+
+    has to be:
+
+       value v = a (?param) its b
+
+    either give better error msg or accept this.
+
+- if .use file has procedures and you have procedures with extends
+  with the same name, the extend is added, but not deleted at the end
+  of a stored procedure. This is just an artefact of the way current
+  parsing works.
+
+- if you have an enumeration, you can, potentially, check inserts and
+  updates if they are valid.
+
+- For stored procedure I can do a trick to optimize boolean extends:
+  if they are not updated, I can replace a true by exists in table and
+  vice versa. The extend column will only contain the values that are
+  considered true. Shorter tables scans, so therefore faster
+  execution. But does True/False have the minimum number of rows? I
+  don't have access to statistics, so I might guess wrong all the
+  time. I think this is an issue that's hard, but I had the problem in
+  XRTDs (sp_retrieve stored publication names) where my rewritten code
+  was much, much faster.
+
+- It would be very powerful to be able to extend with types and do an
+  its on extended types! But this does not seem to be easy. Need to
+  know exactly if extend refers to a type and what type. Did some
+  experiments in XPLAIN_EXTENSION.make and it worked somewhat:
+
+		local
+			hack: XPLAIN_EXTENSION_FUNCTION_EXPRESSION
+    do
+      ...
+			hack ?= expression
+			attributes := hack.selection.subject.type.attributes
+    end
+
+  Attributes were correct now, but the join wasn't. Join was just join
+  with extension, but should include the referred to type as well.
+
+- Can now be done with XSLT:
+  - Emit XSD schema. Start with just base types, quite useful for import
+    in my WSDL files.
+  - Emit Relax NG schema.
+
+- does updating an extension with the value of another extension using
+  an its work? I.e. get the extension of a type through an attribute?
+  Yes with SQL Server, no for others.
+
+- forbid updates where an updated column is also used in an expression
+  which updates another column. The result might not be guaranteed I
+  think. Or is always the old/original value used in such case?
+
+- Can make SQL translation a lot easier of cases like no attributes,
+  only instance id, or function attribute are treated exactly the
+  same. I.e. there should be a cursor that can return the approppriate
+  values some how. Now at many places (XML_GENERATOR,
+  SQL_GENERATOR_INTERBASE6.sp_user_result) I repeat the same code
+  again and again: testing what the situation is, and looping.
+
+- Forbid assignment of integer to string and vice versa.
+  This also includes doing a total on a character string and such.
+  I need to implement the Xplain cast procedures to make this work
+  properly.
+
+- it seems that when I rename names that clash with SQL keywords, I've
+  a problem downstream. For example my SOAP generation stuff in XRTDS
+  uses the Xplain name to generate an XML tag, but what the sp really
+  returns are SQL columns names that are translated to an XML
+  tag. Could be different in certain cases. Probably not for Transact
+  SQL though.
+
+- It seems quite general that the sequence generator is not updated
+  after an insert with an explicit identification. Examples are
+  PostgreSQL and InterBase. Perhaps write general support for this?
+  InterBase trigger is most general, even for other
+  programs. PostgreSQL support works only in Xplain scripts.
+
+- Same for Booleans. All dialects that have emulated booleans should
+  inherit from some common generator which can emit the proper code.
+
+- output clean script, remove all data from all tables. Perhaps reset
+  counters if appropriate.
+
+- if ' encountered, give some message if perhaps a " is meant?
+
+- certain databases use a prefix for temporary tables. This has been
+  hacked into XPLAIN_EXTENSION.quoted_name, but certainly isn't nice.
+
+- perhaps support for global values, i.e. gvalue or variable?
+  constants should not be updateable.
+  JHTB has given me some ideas about this.
+
+
+*************** Installation ***************
+
+- Make sure
+
+     make install
+
+  works. Works for c source variant.
+
+
+*************** Xplain itself ***************
+
+- As constant is unchangeable, so why does it appear you can set it
+  multiple times? Constant definition really should become:
+
+  constant c (A10) = "one".

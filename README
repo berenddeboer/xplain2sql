@@ -1,0 +1,17 @@
+This is xplain2sql, a Xplain to SQL converter. It's written by Berend
+de Boer <berend@pobox.com>. 
+xplain2sql support page is http://www.pobox.com/~berend/xplain2sql.
+
+Important files:
+
+- doc/xplain2sql.pdf is the manual. It also contains installation 
+  instructions.
+
+- If you don't have a pdf Reader, you can get one for free at:
+  http://www.adobe.com/Acrobat
+
+- forum.txt contains the licensing details. Basically, you can use
+  this program for any purpose, including commercial purpuses. If
+  however forum.txt doesn't fit your particular needs, contact the
+  author to negotiate something else.
+  

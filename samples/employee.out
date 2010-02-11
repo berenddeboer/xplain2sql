@@ -1,0 +1,74 @@
+CREATE TABLE
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE TABLE
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+ id_employee |   name   | home_town | id_department | salary  
+-------------+----------+-----------+---------------+---------
+ E3          | Mr. Test | Guilding  | D1            | 1500.00
+(1 row)
+
+ id_employee |   name   | id_department 
+-------------+----------+---------------
+ E3          | Mr. Test | D1
+(1 row)
+
+ id_employee |    name     | home_town | id_department 
+-------------+-------------+-----------+---------------
+ E1          | Mr. Johnson | London    | D1
+(1 row)
+
+ count 
+-------
+     2
+(1 row)
+
+ coalesce 
+----------
+  3100.00
+(1 row)
+
+ coalesce 
+----------
+  1600.00
+(1 row)
+
+ any_employee 
+--------------
+ f
+(1 row)
+
+ name 
+------
+(0 rows)
+
+CREATE TABLE
+INSERT 0 1
+ id_department | department_name | business_town | numberofemployees 
+---------------+-----------------+---------------+-------------------
+ D1            | Factory         | Guilding      |                 2
+(1 row)
+
+ id_department | department_name | business_town 
+---------------+-----------------+---------------
+(0 rows)
+
+ count 
+-------
+     0
+(1 row)
+
+CREATE TABLE
+INSERT 0 1
+UPDATE 1
+ id_department | department_name | business_town 
+---------------+-----------------+---------------
+ D1            | Factory         | Guilding
+(1 row)
+

@@ -1,0 +1,1599 @@
+2010-01-30  Berend de Boer  <berend@pobox.com>
+
+	* !Extend with logical expression code optimisation.
+
+
+2010-01-29  Berend de Boer  <berend@pobox.com>
+
+	* !Extend with any/nil function code optimisation in
+	case the extended attribute is not update in a procedure.
+
+
+2009-12-04  Berend de Boer  <berend@pobox.com>
+
+	* !MySQL 5: proper support for some function as limit can be used in
+	subqueries as well.
+
+
+2009-12-01  Berend de Boer  <berend@pobox.com>
+
+	* !PostgreSQL: minimum value for a date was set to 0000-01-01, but
+	that date is rejected with version 8.4. So minimum value is now
+	0001-01-01.
+
+
+2009-06-15  Berend de Boer  <berend@pobox.com>
+
+	* !extend with any/nil now emits a '1' instead of a column name in
+	the subselect. Works much better with MySQL's 'optimiser'.
+
+
+2009-05-29  Berend de Boer  <berend@pobox.com>
+
+	* !string(): when string() cast function was used in a string
+	concatenation, SQL output was incorrect.
+
+
+2009-05-19  Berend de Boer  <berend@pobox.com>
+
+	* !Assertion in SQL select was done with an inner join instead of a
+	left outer join. Inner join is incorrect when the assertion is a
+	some function as there might be no data.
+
+
+2009-04-20  Berend de Boer  <berend@pobox.com>
+
+	* !Supported purge of assertions.
+
+
+2009-02-11  Berend de Boer  <berend@pobox.com>
+
+	* !Optimized output for any/nil: they're now done with a left outer
+	join, instead of a subselect. This gives a huge performance boost
+	under MySQL.
+
+
+2008-12-04  Berend de Boer  <berend@pobox.com>
+
+	* !Extend optimization: if extend not updated, generate optimized
+	output. Does wonders for MySQL 5. Also fixed bug where extra
+	temporary table step was inserted unnecessarily.
+
+
+2008-11-28  Berend de Boer  <berend@pobox.com>
+
+	* Didn't generate a proper column name for get max/get min.
+
+
+2008-11-06  Berend de Boer  <berend@pobox.com>
+
+	* !MySQL 5: now drops procedures before creating them, so running
+	the script against an existing database is easier.
+
+
+2008-11-03  Berend de Boer  <berend@pobox.com>
+
+	* !MySQL 5: now drops views create for asserts, so running the
+	script against an existing database is easier.
+
+
+2008-10-22  Berend de Boer  <berend@pobox.com>
+
+	* !value statement didn't accept systemdate or loginname.
+
+
+2008-10-16  Berend de Boer  <berend@pobox.com>
+
+	* !MySQL: it seems the dual table doesn't really behave like a
+	table with a single row. The output now generates a dual itself
+	and uses that.
+
+
+2008-10-10  Berend de Boer  <berend@pobox.com>
+
+	* !MySQL: extend with where claused caused a self select against a
+	temporary table which MySQL doesn't support.
+
+
+2008-08-22  Berend de Boer  <berend@pobox.com>
+
+	* !Value inside stored procedure would not get proper type if it
+	was initialised by assigning a parameter.
+
+	* !When a value was purged, it was still listed as being in use,
+	so when reusing it again or using it inside stored procedures it
+	was not properly redeclared.
+
+
+2008-08-19  Berend de Boer  <berend@pobox.com>
+
+	* release 4.0.1 of xplain2sql.
+
+	* xplain2sql identified itself as 3.9.0-rc2.
+
+	* Fixed parser bug in value definition: the expression inside an
+	integer/datef/real/string cast could only be a constant. But any
+	expression should be allowed actually.
+
+
+2008-08-19  Berend de Boer  <berend@pobox.com>
+
+	* release 4.0.0.
+
+
+2008-08-01  Berend de Boer  <berend@pobox.com>
+
+	* XML output: emit unique="true" when an attribute has the unique
+	property.
+
+
+2008-07-24  Berend de Boer  <berend@pobox.com>
+
+	* release 3.9.0 (rc1 for release 4.0):
+
+	* DB2: set correct string concatenation operator to ||.
+
+
+2008-07-17  Berend de Boer  <berend@pobox.com>
+
+	* SQLite 3: set correct string concatenation operator
+	to ||.
+
+	* InterBase/FireBird: set correct string concatenation operator
+	to ||.
+
+
+2008-07-08  Berend de Boer  <berend@pobox.com>
+
+	* SQL code generation: output for update with where statement that
+	had an or in it, could have updated all rows in table as
+	parenthesis were missing. Example:
+
+	  update t "1" its a1 = "test" where a2 = "0" or a3 = "0".
+
+
+2008-07-07  Berend de Boer  <berend@pobox.com>
+
+	* Firebird 2.1: fixed another situation where output
+	failed. Basically have to sprinle commits now and then.
+
+
+2008-06-28  Berend de Boer  <berend@pobox.com>
+
+	* FireBird 2.1 now uses coalesce.
+
+
+2008-06-26  Berend de Boer  <berend@pobox.com>
+
+	* Beta release 3.1.2.
+
+	* Added support for FireBird 2.1. Output works, and support for
+	global tempory table added. Also emits create sequence instead of
+	create generator.
+
+	* Changed license to MIT.
+
+
+2008-06-03  Berend de Boer  <berend@pobox.com>
+
+	* PostgreSQL 8.2: start with PostgrSQL 8.2 specific output. One
+	change is that the drop type now adds if exists to cut down on the
+	number of errors.
+
+
+2008-05-29  Berend de Boer  <berend@pobox.com>
+
+	* SQL code generation: new left outer join SQL was incorrect when
+	a count extend had a where clause that used extends or attributes
+	in other tables.
+
+	* SQL code generation: didn't emit parenthesises for an extend of
+	the form:
+
+	    extend t with e = (not (b1 or b2)).
+
+	  This was translated to SQL as if the user had written:
+
+	    extend t with e = (not b1 or b2).
+
+	  Which obviously is very different.
+
+
+2008-04-08  Berend de Boer  <berend@pobox.com>
+
+	* PostgreSQL: Date type is now emitted as timestamp with time
+	zone. This will be done for all other dialects as far as they
+	support this as it allows a database where users in various time
+	zones can see times in their local time without needing conversion
+	of those times by other software.
+
+
+2008-03-21  Berend de Boer  <berend@pobox.com>
+
+	* The parser now finds names as "week 1 date" a valid name. Names
+	still have to start with a character, but numbers in names now
+	accepted as well. Leads to less contrived names in some cases.
+
+
+2008-02-23  Berend de Boer  <berend@pobox.com>
+
+	* Xplain combine function now takes any number of operands,
+	making it more convenient to use.
+
+
+2008-02-19  Berend de Boer  <berend@pobox.com>
+
+	* MySQL 5: string concatenation was done with "+", should have
+	been using the concat operator.
+
+
+2008-01-24  Berend de Boer  <berend@pobox.com>
+
+	* XML output: if an attribute is marked as optional, the optional
+	attribute is now set to true.
+
+
+2008-01-02  Berend de Boer  <berend@pobox.com>
+
+	* PostgreSQL: combine function now correctly generates the
+	PostgreSQL string concatenator.
+
+	* Value definition parsing did not allow an and/or of two
+	values. So a statement like:
+
+	  v1 = true.
+	  v2 = false.
+	  v3 = v1 and v2.
+
+	was forbidden. Solving this added a shift/reduce conflict, but
+	seems harmless at the moment.
+
+
+2007-12-29  Berend de Boer  <berend@pobox.com>
+
+	* Improved error message when per property clause is incorrect.
+
+	* Fixed a long standing bug (from the beginning?) where an extend
+	would not use a long enough column name, if there was a value
+	statement somewhere before it, and the column name had to be
+	larger than 250 characters. After the value statement, the maximum
+	number of characters was always 250.
+
+	* xplain2sql didn't handle absolute paths in include or use. It
+	does now for unix style paths.
+
+	* Slightly optimized output when an extend is created in a procedure.
+
+	* The like operator was only used when a property was compared
+	with a string and the string contained the "%" character. But if
+	you use the combine function and one of the strings has a "*" in
+	it, the like operator will now also be used instead of the
+	equals.
+
+
+2007-12-28  Berend de Boer  <berend@pobox.com>
+
+	* It's now possible to use if then else in a property list, such
+	as	:
+
+	  get t1 its if a1 then "yes" else "no".
+
+	Due to parsing issues an if instruction cannot occur as part of an
+	expression so things like 1 + if a1 then 2 else 3 won't work.
+
+
+2007-12-24  Berend de Boer  <berend@pobox.com>
+
+	* Boolean parameters to a procedure generated a parsing error when
+	used in a logical expression.
+
+
+2007-12-21  Berend de Boer  <berend@pobox.com>
+
+	* beta release 3.1.1. More testing done.
+
+	* Fixed bug in MySQL5 where update of extend using a literal
+	  produced wrong code (bug introduced after last official release).
+
+	* Fixed bug where output of function using left outer joins was
+	  wrong when another extension was involved.
+
+
+2007-12-20  Berend de Boer  <berend@pobox.com>
+
+	* XML output for the columns of a table has two new attributes:
+	references is the type to which the attribute references if the
+	attribute is a generalization. sqlReferences is the table name in
+	that case.
+
+
+2007-12-18  Berend de Boer  <berend@pobox.com>
+
+	* Domain (C2) emitted a varchar instead of char (Fidel).
+
+
+2007-12-13  Berend de Boer  <berend@pobox.com>
+
+	* Value definition did not support the type cast functions like
+	real. Having those is really useful when calling externaly
+	functions for which xplain2sql doesn't have the type information
+	so they are always defined as varchar(255). But by adding an
+	explicit cast the value will have the correct type.
+
+
+2007-12-10  Berend de Boer  <berend@pobox.com>
+
+	* PostgreSQL: can now create special procedure "trigger
+	procedure" instead of just "procedure" which generates output so
+	the stored procedure can be used as a trigger.
+
+	* beta release 3.1.0. However has undergone minimal testing.
+
+	* Literal SQL expression wasn't allowed in a value definition.
+
+
+2007-10-12  Berend de Boer  <berend@pobox.com>
+
+	* MySQL 5: return a value from within a stored procedure returned
+	an ugly column name, something as @"last_customer". Now the column
+	name looks better, but this change might break existing code.
+
+
+2007-07-03  Berend de Boer  <berend@pobox.com>
+
+	* XML output: crash when a get with a function used an expression
+	to calculate the total (total t its a * 2).
+
+	* PostgreSQL: crash when a get with a function used an expression
+	to calculate the total (total t its a * 2).
+
+
+2007-05-30  Berend de Boer  <berend@pobox.com>
+
+	* PostgreSQL: breaking change: PostgreSQL doesn't really support
+	identifiers with spaces, for example if you have a sequential
+	primary key column with a space in it, PostgreSQL will generate an
+	implicit sequence which will have a name also with a space in
+	it. But you won't be able to access that sequence ever, PostgreSQL
+	will give the strange warning 'invalid name syntax'. So PostgreSQL
+	no longer emits spaces for names, they're always replaced by
+	underscores, until this issue gets fixed.
+
+	* PostgreSQL 8.1: plsql code stored procedures is no longer
+	emited in a quoted block but it uses the $$ characters as
+	delimiter.
+
+	* PostgreSQL: get max t its some_date emitted incorrect SQL when
+	used inside a procedure.
+
+	* crash when extending a type twice with the same attribute name,
+	instead of a proper error message.
+
+
+2007-05-28  Berend de Boer  <berend@pobox.com>
+
+	* xplain2sql didn't handle an init of the form:
+
+	    init t its b = (name = "boss").
+
+	This was due to the fact that this was illegal syntax according to
+	the Xplain BNF, but there's not reason to forbid it, it's probably
+	an oversight in the official manual. Because of parsing issues,
+	logical expressions need to be between parenthesis.
+
+	* SQL optimization: most optimizers handle joins better than
+	subselect these days, especially mysql handles subselect pretty
+	badly. xplain2sql now emits (left outer) joins + a group by for
+	the count, min, max and total functions, leading to much better
+	code. The some function could be optimized in certain cases as
+	well, but that's not yet done.
+
+2007-05-25  Berend de Boer  <berend@pobox.com>
+
+	* Xplain extension to mimick SQL insert into ... select:
+
+	    get type1 its attribute1, attribute2
+	    insert type2 its attribute3, attribute4.
+
+	  It allows multiple inserts into a destination table from a
+	  source table. Useful for backups or copying configurations to an
+	  order for example.
+
+
+2007-05-24  Berend de Boer  <berend@pobox.com>
+
+	* assertion statement generated wrong code with a function
+	expression.
+
+
+2007-05-21  Berend de Boer  <berend@pobox.com>
+
+	* PostgreSQL: if an Xplain function called a user procedure to
+	return the value of an attribute, xplain2sql would crash if that
+	statement appeared inside a procedure.
+
+
+42007-05-14  Berend de Boer  <berend@pobox.com>
+
+	* assert statement generated wrong code when its expression
+	used another asserted attribute.
+
+2007-05-07  Berend de Boer  <berend@pobox.com>
+
+	* Crash when reading file from stdin (thanks Josh Purinton), as
+	in xplain2sql < ../samples/test.ddl.
+
+
+2007-04-19  Berend de Boer  <berend@pobox.com>
+
+	* Support added for extension with explicit domain. Useful when
+	representation cannot be calculated, for example if you extend by
+	calling a user defined SQL function.
+
+
+2007-04-02  Berend de Boer  <berend@pobox.com>
+
+	* MySQL 5: support for using extended attributes in where clause
+	of delete.
+
+	* SQL Server: if-then-else expression generated incorrect code.
+
+	* SQL Server: complex update fix, columns in set expression were
+	not properly prefixed, if two tables had the same column name an
+	ambiguous column name message would result.
+
+	* SQL Server: complex update of an extension generated a left
+	outer join in from clause instead of inner join.
+
+	* PostgreSQL 8.1 support added. Default pgsql is now PostgreSQL
+	8.1.
+
+	* All dialects should now allow updating of attributes
+	with any value, be it another extended attribute or an its list.
+
+	* All dialects should now allow updating of extended attributes
+	with any value, be it another extended attribute or an its list.
+
+
+2007-03-10  Berend de Boer  <berend@pobox.com>
+
+	* release 3.0.
+
+
+2007-03-08  Berend de Boer  <berend@pobox.com>
+
+	* XML output now includes the best matching XML Schema data type.
+
+	* MySQL 5: temporary tables were not dropped at the end of a
+	procedure, so explicit drops added before creating them.
+
+	* MySQL 5: wrong default value "-" when an init statement assigned
+	systemdate to a date.
+
+
+2007-03-02  Berend de Boer  <berend@pobox.com>
+
+	* beta 2.5.1.
+
+
+2007-02-09  Berend de Boer  <berend@pobox.com>
+
+	* MySQL 5: emit drop if exists statement before creating a table.
+
+
+2007-01-22  Berend de Boer  <berend@pobox.com>
+
+	* Oracle: extend output changes: no index created for temporary
+	extend table. And preserves rows accross commits, because it is
+	somewhat unclear what a commit is. It empties the table too soon
+	without it, better to retain the data.
+
+	* SQLite: assert output did not emit the proper view dialect.
+
+	* Oracle: init [default] support.
+
+	* if-then-else support in init [default] statements for dialects
+	that support triggers.
+
+
+2007-01-22  Berend de Boer  <berend@pobox.com>
+
+	* beta 2.5.0.
+
+	* Oracle output postcondition violation when compiled with ISE
+	  5.6 for type representation (I10).
+
+	* Some example Eiffel classes and style sheets added to generate
+	Eiffel middleware code using ECLI, see ecli_instance.xsl.
+
+	* Additional chapter in manual detailing how to use xplain2sql i
+	a legacy environment.
+
+	* DB2: output for procedure containing get with function was
+	incorrect.
+
+
+2007-01-20  Berend de Boer  <berend@pobox.com>
+
+	* Error reporting improved in certain cases.
+
+	* Full assertion supported added for all dialects, including
+	complex and functions.
+
+
+2006-12-18  Berend de Boer  <berend@pobox.com>
+
+	* SQL: conversion for "- (a + b)" with explicit parentheses would
+	also lead to incorrect output.
+
+	* SQL: serious issue with translation: output emitted additional
+	parentheses, but that doesn't work in the case of: 5 - 3 + 3. The
+	anser is five, but xplain2sql turned this into 5 - (3 + 3), giving
+	-1 as the answer...
+	No implicit parentheses are added anymore unless explicitly provided.
+
+
+2006-11-28  Berend de Boer  <berend@pobox.com>
+
+	* Ugly hack added: you can now use '{' the insert SQL at any point
+	in an expression. The SQL is taken literally and inserted.
+
+
+2006-09-13  Berend de Boer  <berend@pobox.com>
+
+	* Slightly different output for PostgreSQL stored
+	procedures. Names of parameters are now prefixed with 'a_' instead
+	of 'my_'.
+
+	* Value statement now also support calling existing SQL functions.
+
+
+2006-09-07  Berend de Boer  <berend@pobox.com>
+
+	* Support added for dialects that do not support a join clause in
+	the delete statement. A subselect is now emitted for such dialects.
+
+
+2006-09-05  Berend de Boer  <berend@pobox.com>
+
+	* if an attribute has been marked as optional, the SQL output now
+	does a left outer join. You shouldn't use the optional keyword in
+	applications developed from scratch in Xplain, but to support
+	legacy apps with an Xpain layer this can be quite valuable.
+
+
+2006-09-02  Berend de Boer  <berend@pobox.com>
+
+	* PostgreSQL: any value which was updated, was declared twice.
+
+
+2006-08-04  Berend de Boer  <berend@pobox.com>
+
+	* inserted keyword did not handle incorrect type.
+
+
+2006-07-28  Berend de Boer  <berend@pobox.com>
+
+	* Warning is now given when a parameter to a stored procedure is
+	not used.
+
+	* Min or max function required a property, if one was absent the
+	parser would still accept it, but crash later one for particular
+	dialects. Now the parser generates a proper error message.
+
+	* PostgreSQL: procedures with a get with function (i.e. get count
+	something) were not implemented and when used, generated incorrect
+	sql.
+
+
+2006-07-22  Berend de Boer  <berend@pobox.com>
+
+	* XML output for identifier and ncname was incorrect when the name
+	started with a number. This is possible when using quoted
+	names. But the result isn't a valid identifier in most languages.
+
+
+2006-06-24  Berend de Boer  <berend@pobox.com>
+
+	* PostgreSQL 7.3: generated stored procedures for update and
+	delete had a "return 0" statement which isn't valid for PostgreSQL
+	8 when a function returns void.
+
+
+2006-06-23  Berend de Boer  <berend@pobox.com>
+
+	* XML output: select statement now contains the name of the table
+	where the select came from.
+
+
+2006-06-21  Berend de Boer  <berend@pobox.com>
+
+	* INSTALL file listed incorrect requirements (Roger Browne).
+
+
+2006-06-16  Berend de Boer  <berend@pobox.com>
+
+	* release 2.4.
+
+
+2006-06-15  Berend de Boer  <berend@pobox.com>
+
+	* if attribute listed after per was a known base or type, but not
+	the proper attribute of the type in question, a precondition
+	violation occurred. This did not affect the release version.
+
+
+2006-06-05  Berend de Boer  <berend@pobox.com>
+
+	* PostgreSQL: incorrect code was emited when using values in a
+	stored procedure.
+
+
+2006-05-25  Berend de Boer  <berend@pobox.com>
+
+	* PostgreSQL 7.3: name and time column names don't need to be
+	treates specially as they did in earlier versions. PostgreSQL 7.2
+	output still renames a column name to "name_".
+
+
+2006-05-24  Berend de Boer  <berend@pobox.com>
+
+	* PostgreSQL: index on extend wasn't create inside a stored
+	procedure due to a wrongly inserted if statement.
+
+
+2006-05-08  Berend de Boer  <berend@pobox.com>
+
+	* New option -pkformat. Next argument is the format of the primary
+	key. By default the primary key is "id_<type name>" but with:
+
+	  -pkformat '$s_id'
+
+	this can be changed to "<type name>_id" for example. Useful when
+	trying to emulate output for an existing database. Note: in
+	Makefiles use something -pkformat '$$s_id'.
+
+
+2006-01-07  Berend de Boer  <berend@pobox.com>
+
+	* PostgreSQL output now removes the generated return type for a
+	procedure that returns a result set. If this does not exist, a
+	warning message will be printed that can be ignored. Unfortunately
+	one cannot suppress this warning, but the resulting output is much
+	easier to copy and paste when one just wants to replace a stored
+	procedure.
+
+
+2005-12-12  Berend de Boer  <berend@pobox.com>
+
+	* init expression that was a literal or constant was treated as an
+	init default expression, i.e. it could be overwritten at insert
+	time.
+
+	* Warning if an insert statement contains an assignment to an
+	attribute for which an init expression has been specified.
+
+	* Check if trajectory's lower value is higher than the upper value
+	in case the trajectory's numbers are 32 bit integers.
+
+	* Check if real trajectory fits in real domain.
+
+	* Check if integer enumeration fits in specified integer domain.
+
+	* Better error message if trajectory ("..") is used in an
+	enumeration.
+
+
+2005-12-06  Berend de Boer  <berend@pobox.com>
+
+	* Init [default] expressions didn't work for many dialects when a
+	expression was used that involved multiplication or a
+	function. For example:
+	  init default sale its discount = price * 0.10
+	would give incorrect SQL.
+
+
+2005-12-02  Berend de Boer  <berend@pobox.com>
+
+	* beta release 2.3.
+
+	* An unrecognised command-line option is now treated as a fatal
+	error.
+
+
+2005-12-01  Berend de Boer  <berend@pobox.com>
+
+	* Microsoft SQL output for a non literal init default was treated
+	as an init.
+
+	* InterBase 6 output treated a non constant init default as init.
+
+	* InterBase 6 emitted incorrect SQL in case an init expression was
+	not a constant.
+
+	* DB2 has now full init (default) support, i.e. anything
+	else than a constant value is now supported as well.
+
+	* An init (not an init default) other than a constant is now
+	converted slightly differently for some dialects. If such an init
+	had been specified, previously the column would allow a null
+	value. Now a default is specified and the trigger should set the
+	column to a proper value. Proper dialects check the null status of
+	a column after the trigger has been fired. In such cases the
+	column will always be not null. If dialects check the null status
+	of a column before firing the trigger, the column will still be
+	null.
+	Note that an init default still produces a column which allows
+	null. This in order to be able distinguish if a user has supplied
+	a value or not.
+
+
+2005-11-30  Berend de Boer  <berend@pobox.com>
+
+	* DB2 output was wrong in case an init was an expression like 33
+	   2. Defaults in DB2 can only be constants.
+
+	* PostgreSQL treated init default als init. It now treats them
+	appropriately.
+
+	* Moved trigger support from SQL_GENERATOR to
+	SQL_GENERATOR_WITH_TRIGGERS.
+
+
+2005-11-28  Berend de Boer  <berend@pobox.com>
+
+	* Moved stored procedure support from SQL_GENERATOR to
+	SQL_GENERATOR_WITH_SP. Cleans up code a bit and generators without
+	this don't have to undefine lots what shouldn't trouble them in
+	the first place.
+
+	* SQLite 3 support. Quite complete.
+
+
+2005-11-09  Berend de Boer  <berend@pobox.com>
+
+	* MySQL 5 support, very complete. Finally looks like a real
+	database! Values are now connection specific. Subselects are
+	supported. User procedures are now supported.
+
+
+2005-06-21  Berend de Boer  <berend@pobox.com>
+
+	* Scanner now uses the new typing stuff introduced by Gobo 3.2.
+
+	* Updated code to compile with latest rewrite of string formatting
+	routines in Gobo.
+
+
+2005-06-17  Berend de Boer  <berend@pobox.com>
+
+	* assert support for Transact-SQL and InterBase. Only supports
+	simple expressions (like price * quantity) and they are translated
+	to computed columns. The assert's domain restriction is not
+	checked.
+
+	* SQL Server 2000 support: -tsql or -tsql2000 actives this new
+	target. Be warned that for the (I1) and (I2) data type no longer a
+	tinyint is emitted. A tinyint has a range of 0..255, while in
+	Xplain (I1) and (I2) can be negative as well. The SQL Server 7
+	target -tsql70 still emits tinyints in order not to break existing
+	code.
+	SQL Server 2000 supports big integers (up to (I19) before
+	switching to the numeric data type). Reals can range from (R1,37)
+	to (R38,0).
+
+
+2005-06-16  Berend de Boer  <berend@pobox.com>
+
+	* If an undeclared parameter is used inside a procedure, an error
+	is now emitted, previously the xplain2sql generated (wrong)
+	code anyway.
+
+
+2005-06-15  Berend de Boer  <berend@pobox.com>
+
+	* InterBase: workaround for missing coalesce function
+	implemented. This means that functions like min or max can now be
+	used safely.
+
+
+2005-06-13  Berend de Boer  <berend@pobox.com>
+
+	* There is now a warning if an integer trajectory exceeds the
+	limit of the defined integer. I.e. if you specify the trajectory
+	(1..100) for (I2). This should be (1..99) to avoid the warning.
+
+	* InterBase: Boolean domain now includes proper checks that its
+	value can only be null, a 'T' or an 'F'.
+
+	* InterBase: use of any and nil functions in an extend in
+	InterBase generated incorrect output. The select statement in
+	InterBase needs a from table, and the output didn't use the
+	InterBase equivalent of the Oracle dual table.
+
+	* InterBase 4: support dropped.
+
+
+2005-03-01  Berend de Boer  <berend@pobox.com>
+
+	* release 2.2.
+
+
+2005-02-17  Berend de Boer  <berend@pobox.com>
+
+	* rename_sp.xsl: stored procedure that emits rename statements for
+	Microsft SQL Server in case one wants to use the new -nospprefix
+	option.
+
+
+2005-02-03  Berend de Boer  <berend@pobox.com>
+
+	* beta 2.1.1 released.
+
+	* delph_makefile.xsl: new example style sheet that shows how to
+	generate a makefile which generates all the classes that were
+	previously created with the -delphi switch.
+
+
+2005-01-25  Berend de Boer  <berend@pobox.com>
+
+	* InterBase and PostgreSQL index names are global. Method of
+	generating index names for extends could therefore easily generate
+	a non-unique index if the name of the extended attribute was the
+	same for two different tables. Now the table name is included in
+	the name as well.
+
+
+2005-01-19  Berend de Boer  <berend@pobox.com>
+
+	* All stored procedures started with the "sp_" prefix. This seems
+	to have some performance impact with Micrsoft SQL Server as it
+	looks in the master database first. It's unsure if this is
+	noticable, but there is a new option "-nospprefix" that creates
+	stored procedure names without any prefix (Jacco Eerland).
+
+	* Constraint names now only add a number to the name if the name
+	is not unique. This should help with creating update scripts
+	(Servaas Goossen). Use "-oldconstraintnames" to get the previous
+	behaviour in case the new behaviour doesn't work.
+
+
+2004-11-30  Berend de Boer  <berend@pobox.com>
+
+	* Transact SQL output: use set instead of select to change a
+	value.
+
+
+2004-10-14  Berend de Boer  <berend@pobox.com>
+
+	* Using a value in an expression inside a PostgreSQL stored
+	procedure generated incorrect code.
+
+	* Code for assigning the result of a set function to a value
+	inside a stored procedure generated incorrect code for Postgres
+	SQL.
+
+
+2004-10-13  Berend de Boer  <berend@pobox.com>
+
+	* xplain2sql now supports giving a value a new value within the
+	same scope. Previously this led to a warning and possibly
+	incorrect code generation. Full support is only provided for SQL
+	dialects that support variables in all cases (not just procedures)
+	or support dropping columns from a table.
+
+
+2004-08-06  Berend de Boer  <berend@pobox.com>
+
+	* It is now possible to create a "recompiled procedure" instead of
+	just a "procedure". Only useful for SQL Server, emits a procedure
+	with the 'with recompile' option.
+	It seems SQL Server 2000 cached execution plans for temporary
+	tables with the same names, although created in different stored
+	procedures and with wildly different content. This leads to havoc
+	in certain cases (execution times of hours).
+
+
+2004-03-04  Berend de Boer  <berend@pobox.com>
+
+	* beta 2.1 released.
+
+
+2004-03-02  Berend de Boer  <berend@pobox.com>
+
+	* Oracle output now forbids updating the primary key.
+
+	* -view option now properly quotes names (thanks Martin van
+	Dinther). But -view is not an option that adds something at the
+	moment.
+
+	* Oracle sequence now includes the maximum value allowed for the
+	type that has an auto-generated primary key. Thanks to Martin van
+	Dinther for the suggestions.
+
+	* The minimum value of an Oracle sequence does not start with 1000
+	if the primary key is of length 3 or less.
+
+	* Column number is now reported on errors or warnings.
+
+	* Line/column number is now counted differently. That fixed a
+	problem where line numbers were incorrect with multi-line strings.
+
+
+2004-02-12  Berend de Boer  <berend@pobox.com>
+
+	* Added support for the four conversion functions integer (),
+	real (), string () and datef(). xplain2sql does no checks yet, so
+	casting a "1" to a date will probably not work. And PostgreSQL
+	doesn't seem to like conversion of varchar columns to integer or
+	floats.
+
+
+2004-02-06  Berend de Boer  <berend@pobox.com>
+
+	* If you had more than one parameter for a PostgreSQL procedure,
+	the output was incorrect. Basically the second and next parameters
+	had the same value as the first parameter.
+
+
+2004-01-24  Berend de Boer  <berend@pobox.com>
+
+	* All mathematical functions are now recognized as keywords. Now
+	code is as yet generated.
+
+
+2004-01-16  Berend de Boer  <berend@dellius.nederware.nl>
+
+	* PostgreSQL output now empties an existing temporary
+	table. Temporary tables are created when an extend is created. It
+	is now possible to call a stored procedure that creates an extend
+	multiple times per session. Previously the stored procedure would
+	fail the second time, because the extend did already exist and the
+	code tried to create it again.
+
+
+2004-01-10  Berend de Boer  <berend@dellius.nederware.nl>
+
+	* PostgresSQL output caused a crash for a get statement with an
+	expression (for example a + b) inside a stored procedure.
+
+
+2003-12-24  Berend de Boer  <berend@dellius.nederware.nl>
+
+	* InterBase code does not generate default values anymore when
+	there is nothing to insert. Could happen in an insert stored
+	procedure.
+
+	* Fixed crashes in debug mode when using an empty string or when using
+	"""".
+
+
+2003-12-24  Berend de Boer  <berend@pobox.com>
+
+	* Microsoft SQL Server wants to see a like operator when comparing
+	a string to a text (memo) field.
+
+
+2003-12-23  Berend de Boer  <berend@pobox.com>
+
+	* Added support for the * and ? operators. When these two
+	characters occur in a constant string, the like operator is used
+	instead of the equality operator.
+	Using wild cards without a special operator is a mistake in my
+	opinion. Perhaps a future version will introduce the like and not
+	like operators.
+
+
+2003-12-16  Berend de Boer  <berend@pobox.com>
+
+	* If a file was included with a .use (i.e. don't generate code for
+	it) and that file had a .include, code was generated for the
+	.include and the last statement before the .include.
+
+
+2003-11-29  Berend de Boer  <berend@pobox.com>
+
+	* An alphanumeric primary key was still created with the char
+	datatype instead of the varchar datatype. Should have switched
+	when (A) was transformed to varchar (thanks to Martin van Dinther).
+
+
+2003-11-11  Berend de Boer  <berend@pobox.com>
+
+	* Transact SQL 7.0 now starts every procedure with set xact_abort
+	on. Any error inside the stored procedure will abort the procedure
+	and rollback the transaction.
+
+
+2003-11-04  Berend de Boer  <berend@pobox.com>
+
+	* Added -pgsql72 switch to emit the older Postgres SQL. Not sure
+	if everything works on 7.2 as it will not be regularly tested
+	against that version.
+
+
+2003-10-30  Berend de Boer  <berend@pobox.com>
+
+	* XML generation now includes whether an attribute is a
+	specialization in the table output and select output in a
+	procedure.
+
+
+2003-10-28  Berend de Boer  <berend@pobox.com>
+
+	* PostgreSQL now supports the some function. John Wiggins
+	notified me that this should work in PostgreSQL 7.3, and it did
+	indeed.
+
+
+2003-10-27  Berend de Boer  <berend@pobox.com>
+
+	* PostgreSQL now allows purging of constants (thanks John Wiggins
+	for the suggestion).
+
+	* PostgreSQL Procedures that return a result set now use new
+	functionality available in 7.3. The output of xplain2sql is now
+	really limited to postgreSQL 7.3.
+
+
+2003-10-15  Berend de Boer  <berend@pobox.com>
+
+	* Representation listed in xplain2sql.xml for output of the value
+	statement for a character value was erroneously still (V). It is
+	now (A).
+
+	* Error is now reported when given primary key is not integer for
+	insert on type with integer primary key.
+
+	* Dropped support old style auto primary key, i.e. "*" instead of
+	just *.
+
+	* Dropped support for -delphi and -ado.
+
+	* -inheritkey support dropped.
+
+	* Extends now always create a unique index on the primary key
+	column of the extended table. Speeds up certain queries
+	enormously. Use -noextendindex to disable this behaviour.
+
+
+2003-09-15  Berend de Boer  <berend@dellius.nederware.nl>
+
+	* Release 2.0.
+
+	* Delphi mw_ado.pas file is changed to include ADOInt, the unit
+	supplied with Delphi 5 and higher, instead of ADODB_TLB, a custom
+	generated Delphi wrapper based on the ADO type library. This means
+	that the current unit works with the XSLT script. It does no
+	longer compile with the -delphi -ado output.
+
+	* Added new script delphi_ado_class.xsl to translate a type in an
+	xplain2sql.xml file to a middleware class for Delphi. This will
+	replace the existing -ado -delphi stuff that was fairly specific
+	for a single company.
+
+
+2003-09-10  Berend de Boer  <berend@pobox.com>
+
+	* Transact-SQL 7 code emited a "distinct top 1" for the some
+	function. That distinct should not be there and in fact, it slowed
+	down queries enormously.
+
+	* Crash if attempt was made to refer to attribute of extension
+	that was a type. No crash now, you get warning that extension
+	doesn't have that attribute. This should work in a future release.
+
+
+2003-09-08  Berend de Boer  <berend@pobox.com>
+
+	* Quoted strings were not handled correctly. Quoting should be
+	done like this
+
+	  "this "" is a double quote"
+
+	However, the output did have "" instead of just a single ".
+
+
+2003-08-28  Berend de Boer  <berend@pobox.com>
+
+	* Delphi ADO generator emitted adChar for A data type. Due to
+	change to output of varchar for A data type, it now emits
+	adVarChar. Doesn't seem compatible with the -oldvarchar option I'm
+	afraid. As I no longer use this option, please let me know if this
+	is a problem for anyone.
+
+
+2003-08-20  Berend de Boer  <berend@pobox.com>
+
+	* XML output now emits the insert/update/delete parameter name
+	for every column.
+
+
+2003-08-16  Berend de Boer  <berend@pobox.com>
+
+	* When an A representation was used in the output, the XML
+	representation emitted the obsolete V representation.
+
+
+2003-08-15  Berend de Boer  <berend@pobox.com>
+
+	* release candidate 2, version 1.9.3.
+
+
+2003-08-14  Berend de Boer  <berend@pobox.com>
+
+	* Delphi ADO middleware generation changed so it compiles with
+	Delphi 7. Thanks to Jacco Eerland for suggesting this fix.
+
+
+2003-08-06  Berend de Boer  <berend@pobox.com>
+
+	* Transact SQL update output produced better code because a from
+	clause is now emitted. So no subselects are needed to retrieve
+	information.
+
+	* Because Transact-SQL supports a from clause in an update and
+	delete statement, the output for selecting a value of an extended
+	column didn't need to use subselects. And subselects are slow in
+	Transact-SQL.
+
+
+2003-07-29  Berend de Boer  <berend@pobox.com>
+
+	* Oracle doesn't have True Booleans as well. Output now turns
+	expressions into the emulated char(1).
+
+	* Output for Oracle now includes an exit statement at the end.
+
+
+2003-07-26  Berend de Boer  <berend@pobox.com>
+
+	* A count didn't have a coalesce because I thought null values
+	couldn't occur. That's wrong, in the following example attributes
+	can be null and SQL Dialects might complain about discarding null
+	values.
+
+	  get node = prev_node.
+	  count node its prev_node.
+
+	In such cases a coalesce is added to the count and all prev_nodes
+	that are null are counted as a single distinct value. This is
+	unlike SQL where a null isn't equal to any other null.
+
+
+2003-07-24  Berend de Boer  <berend@pobox.com>
+
+	* And there were more cases where a Boolean didn't work correctly
+	for SQL Server. Basic issue is that SQL Server doesn't have a True
+	Boolean data type. I hope I fixed them all now.
+
+	* Generated code for SQL Server was not correct when a Boolean
+	value was assigned to a value. Example:
+
+	   value v = (1 = 2).
+
+	Now Boolean expressions should be correctly cast to Booleans in
+	all cases.
+
+
+2003-07-22  Berend de Boer  <berend@pobox.com>
+
+	* Generated SQL for updating an extended attribute with a literal
+	value was not optimal for Microsoft SQL Server.
+
+
+2003-07-19  Berend de Boer  <berend@pobox.com>
+
+	* beta 1.9.2.
+
+2003-07-16  Berend de Boer  <berend@pobox.com>
+
+	* Oracle treats empty strings as nulls. As Xplain does not support
+	nulls, empty strings are emitted as a string with a single space.
+
+
+2003-07-14  Berend de Boer  <berend@pobox.com>
+
+	* PostgreSQL does not seem to need a from clause I
+	detected. That's good.
+
+	* Output for value statement in DB2 stored procedure worked only
+	when the XplainConstant table was created. I've detected the
+	DB2 values statement, so it should work in more cases now.
+
+	* Now uses SYSIBM.DUMMY1 for DB2 when a table with one row is
+	needed. Users need to have select permissions on this table.
+
+	* It seems the PostgreSQL setval function takes quoted
+	identifiers. Perhaps earlier versions didn't? Now emits quoted
+	identifers when correcting the auto-generated primary key if you
+	have an insert with an explicit identify.
+
+	* InterBase output now has correct insert stored procedure code
+	when there are no input parameters. Can happen when there are
+	inits on a type, so the insert can only have default values. As
+	InterBase does not support the default values clause on an insert,
+	the generated code is still incorrect though.
+
+	* inserted statement (retrieves last auto-generated pk) did not
+	generate code for InterBase.
+
+
+2003-07-12  Berend de Boer  <berend@pobox.com>
+
+	* InterBase now supports stored procedures. For the first time,
+	value statements are now really useful in InterBase. Output of a
+	stored procedure when it emits a value or an instance can be
+	different though. It should be equal, so both should return a
+	result set. But I've no idea if this works at all.
+
+
+2003-07-03  Berend de Boer  <berend@pobox.com>
+
+	* The value output in Transact SQL now has a proper column name,
+	the name of the value itself. Previously the column was unnamed.
+
+	* XML output now includes a new attribute ncname. This should be
+	the identifier in SQL, without quotes and with spaces replaced by
+	'-'. It is useful as a tag name in XML you might want to generate.
+
+
+2003-07-02  Berend de Boer  <berend@pobox.com>
+
+	* Interbase stored procedure output was incorrect if there were no
+	parameters specified.
+
+
+2003-06-24  Berend de Boer  <berend@pobox.com>
+
+	* It seems there is no Xplain syntax to delete an instance if you
+	have an instance id in a value. Therefore I invented my own. Use
+	the value between parentheses where an idstring is epxected. Example:
+
+	  value my id = 1.
+	  delete my type (my id).
+
+	should now have the desired effect.
+
+	* Unmanaged parameters had to be base or type names. That sort of
+	defeated its entire purpose. I.e. if you had parameters with
+
+	  :some name
+
+	some name had to be a known base or type name. In 1.3.1 this was
+	not necessary. And it should not be necessary.
+
+
+2003-06-10  Berend de Boer  <berend@dellius.nederware.nl>
+
+	* PostgreSQL now supports user procedures. Extends probably do not
+	work. get and value statements are fine.
+
+	* PostgreSQL output now generates insert/update/delete stored
+	procedures.
+
+	* This implies that output for PostgreSQL does now use ANSI 92
+	style joins.
+
+	* Updated PostgreSQL output to 7.3.3. Support for earlier versions
+	is dropped, but if you really need it and 7.3.3 output doesn't
+	work for you, let me know, and I'll bring it back in.
+
+
+2003-06-06  Berend de Boer  <berend@dellius.nederware.nl>
+
+	* Boolean otput for SQL Server 7 is changed so it should now
+	return a bit value instead of an integer value. This is done by
+	emitting a cast(1 as bit) instead of just a 1.
+
+	* It seems that xplain2sql is compilable again with SmartEiffel
+	1.1rc1. The last version that could do that was 1.0 beta 2.
+
+
+2003-05-06  Berend de Boer  <berend@pobox.com>
+
+	* Delete statement for Transact-SQL can use an its in its where
+	clause. This is not supported for all other dialects, but it
+	wasn't in the docs.
+
+
+2003-04-19  Berend de Boer  <berend@pobox.com>
+
+	* beta release 1.9.1.
+
+	* license updated to Eiffel Forum License, version 2. This one is
+	GPL and OSF compatible.
+
+	* Oracle output does now do stored procedures.
+
+
+2003-03-31  Berend de Boer  <berend@pobox.com>
+
+	* Output for column A is now a varchar. Breaks previous behaviour!
+	Use -oldA switch to have the behaviour where just a char was
+	outputted.
+	Use domain C to really get char output instead of varchar.
+
+
+2003-01-31  Berend de Boer  <berend@pobox.com>
+
+	* Added support for comparison to NULL. This is useful when
+	dealing with linked lists and finding the head or tail of it. I'm
+	a bit unsure what the exact Xplain way is to deal with this, but
+	the article "Semantic Modeling of Successive Events Applied to
+	Version Management" led me to believe that these are the only
+	allowed and sensible comparisons:
+
+	  get t its a = null.
+	  get t its a != null.
+
+	Any other comparison, or even order like
+
+	  get t its null = a.
+	  get t its a > null.
+
+	is rejected.
+
+
+2003-01-30  Berend de Boer  <berend@pobox.com>
+
+	* Added function id() which is replaced by the id column of the
+	table. Use of a function like this is probably extremely limited,
+	and any appearance should be viewed with utmost suspicion.
+
+	* Functions are now only parsed as functions when the next token
+	is a '('. Previously names as 'string' or 'newdate' were forbidden
+	as attribute names, because they would be recognized as
+	functions. This is now allowed.
+
+
+2003-01-29  Berend de Boer  <berend@pobox.com>
+
+	* SQL output for some used a column name that was not prefixed.
+
+
+2002-12-23  Berend de Boer  <berend@pobox.com>
+
+	* First stage of Oracle SQL dialect translation working.
+
+
+2002-12-18  Berend de Boer  <berend@pobox.com>
+
+	* Boolean assignment also didn't work for updates, i.e.:
+
+	    update t its b = (a = 1).
+
+	failed for Transact SQL as well. Works fine now.
+
+
+2002-12-17  Berend de Boer  <berend@pobox.com>
+
+	* Parser has become very strict where SQL was allowed. SQL code is
+	now only allowed where an Xplain statement is allowed. Previously
+	SQL code was dumped by the scanner, as soon as it was read, to
+	standard output, so it could end up in any place. With this
+	change, SQL code in stored procedures is now also supported.
+
+	* MS SQL Server output now drops a procedure if it already
+	exists. Makes it easier to rerun scripts.
+
+	* Added support for extend with a boolean attribute for MS SQL
+	Server. This dialect doesn't have a True Boolean data type, so now
+	the proper mapping is generated to turn a True into a 1 and a
+	False into a 0.
+
+
+2002-11-06  Berend de Boer  <berend@pobox.com>
+
+	* Output for get with function was wrong as it included a from
+	table. So you basically got the functions value times every row in
+	that table. The SQL code for a function has now been
+	rewritten. This also influences the output of extends. Output
+	looks shorter now, but I remember rewriting it already a few
+	times, because of bugs in previous implementations. So perhaps old
+	bugs pop up again )-:
+
+
+2002-11-05  Berend de Boer  <berend@pobox.com>
+
+	* delete supported in stored procedures.
+
+	* update supported in stored procedures.
+
+	* Very limited support for updating extended columns. The limit is
+	in the where clause. Basically, no where clause is allowed. Or the
+	where clause should just contain the extended column it
+	self. Updating the extended column of a given single instance also
+	works.
+
+	* extended columns can now be used in delete statement.
+
+
+2002-10-11  Berend de Boer  <berend@pobox.com>
+
+	* get statement now always outputs an order by clause. The default
+	is the instance id. This is a breaking change for code that relies
+	on some unspecified default sort order. But that code was broken
+	anyway, any change in index could have changed the sort order.
+
+
+2002-10-09  Berend de Boer  <berend@dellius.nederware.nl>
+
+	* extend names now should be unique, i.e. they should not be the
+	same as an existing base, type, value or constant. The basic
+	reason is a constant or value. For example the following code is
+	ambiguous:
+
+	  constant c (I1).
+	  type t (I1) = a.
+	  extend t with c = 1.
+	  get t where a = c.
+
+	Does the c refer to the constant or to the extension? To avoid
+	this confusion, xplain2sql now refuses potentially ambiguous
+	extension names.
+
+	* Obscure -inheritkey option made obsolete. This was the way a
+	predecessor of xplain2sq used to generate SQL. Didn't support
+	multiple inheritance though. As it is not really supported, and I
+	haven't used it for years, I'm phasing it out.
+
+	* Added support for extend inside stored procedures.
+
+
+2002-10-08  Berend de Boer  <berend@dellius.nederware.nl>
+
+	* A get statement could be translated into a select statement that
+	returned to many columns. This occurred when a join was needed in
+	the select. I.e.
+
+	  get t.
+
+	became
+
+	  select * from t
+
+	while it should have been
+
+	  select t.* from t
+
+	Not all dialects support prefixing the * with the table name, so
+	this issue is not solved. When a specific dialect has problems,
+	let me know and I attempt to generate better code for that
+	dialect. Also extended columns are not in the output, you have to
+	use its to get them. This might change in the future.
+
+	* Transact SQL code for advanced inits (that require selects) was
+	not correct, it missed a set nocount, so the insert stored
+	procedure didn't return the correct identifier or something like
+	that. Or perhaps the additional result count disturbed code that
+	read results sets.
+
+
+2002-10-07  Berend de Boer  <berend@dellius.nederware.nl>
+
+	* If an attribute has an init statement, it is no longer listed
+	as a parameter in the insert stored procedure. If it has an init
+	default statement, it still is listed.
+
+
+2002-10-04  Berend de Boer  <berend@pobox.com>
+
+	* Now literal constants can be used in inserts. Previously a
+	subselect was generated, which wasn't supported by many SQL
+	dialects.
+
+
+2002-10-03  Berend de Boer  <berend@pobox.com>
+
+	* New inserted keyword that returns the last inserted
+	auto-generated primary key, very useful in stored procedures. Use
+	as:
+
+	  insert t * its a = "something".
+	  last id = inserted t.
+
+	Note that many SQL dialects (DB2, Microsoft TSQL) only can return
+	the last inserted key, which is not type specific.
+
+	* insert statement is supported in stored procedures.
+
+	* Select of a value had set nocount on for SQL server. Not sure
+	what would happen in that case, probably receiver wouldn't see the
+	row, even if one was there.
+
+
+2002-08-21  Berend de Boer  <berend@pobox.com>
+
+	* Added support for value inside stored procedures. Only Transact
+	SQL and DB2 probably work correctly. On all platforms that do not
+	support temporary tables, value does work correctly only in the
+	single-user case.
+
+	Note that for DB2 you *must* define an Xplain constant somewhere,
+	because of some trick necessary to retrieve the value. A useful
+	thing is to define a database version constant.
+
+	* Name of table where Xplain constants were stored, was called
+	XplainVariable. This was from the time I thought constants were
+	variable, i.e. you could change them. That's not true,
+	i.e. constants get there value during the data definition phase,
+	and cannot be changed later. To better reflect this, the table is
+	now called XplainConstant.
+
+
+2002-08-16  Berend de Boer  <berend@dellius.nederware.nl>
+
+	* Support removed for old construct of instance selection in value
+	selection. See for details the first comment in 1.0.3. Only the
+	correct construct works now.
+
+	* It seems I got the parsing for insert with automatic
+	identification wrong. I asked the user to specify:
+
+	  insert t "*" its a = 1.
+
+	This should have been:
+
+	  insert t * its a = 1.
+
+	The old format is still supported, but a warning is generated.
+
+
+2002-08-14  Berend de Boer  <berend@dellius.nederware.nl>
+
+	* Added -xml option, outputs description generated code to
+	XML. This can be used in XSLT style sheet to develop code
+	generators. Format of output is in mw_xplain2sql.dtd.
+
+	* -ecli option removed. In time the -delphi option also will be
+	removed, when I have an XSLT style sheet that does the same as the
+	current code generation does.
+
+
+2002-08-13  Berend de Boer  <berend@dellius.nederware.nl>
+
+	* Added support for stored procedure. Use the new Xplain keyword
+	procedure to embed statements in a stored procedure. Only the get
+	statement is currently supported. See manual for details.
+
+	* DB2 inserts where instance identity is specified, should now
+	work correctly. Previously it was possible to insert identities,
+	but they probably would conflict with DB/2 generated values sooner
+	or later. It seems you need Fixpack 2 for this to work.
+
+
+2002-08-12  Berend de Boer  <berend@dellius.nederware.nl>
+
+	* DB2 outputs now a clob data type instead of a long varchar as
+	that more matches what is meant by a T data type. The long varchar
+	supported just 32700, now up to 1MB is supported, and can easily
+	be extended. How to do this portably, I don't know yet. Perhaps
+	specify a size after the T data type?
+
+	* DB2 has now insert, update and delete stored procedure output.
+
+
+2002-08-09  Berend de Boer  <berend@pobox.com>
+
+	* DB2 output now uses @ as command separator, else stored
+	procedure support could not be implemented. I didn't have the
+	db2udp function (whatever that is), so to active stored procedure
+	support I had to do this in my db2inst/sqllib/profile directory:
+
+	    ln -s /usr/IBMdb2/V7.1/function/db2udp .
+
+	* PostgreSQL now outputs serial8 if the primary key is longer as 9
+	digits. Not all versions of PostgreSQL covered by -postgres
+	support this, perhaps should add a new switch.
+
+
+2002-08-08  Berend de Boer  <berend@pobox.com>
+
+	* Added option -ecli, writes Eiffel classes specific for ecli to a
+	mw subdirectory. This mw subdirectory must exist. This feature is
+	unstable, not ready for general use.
+
+	* At start of script now outputs which SQL dialect it targets.
+
+	* Moved to ChangeLog for history, file History is obsolete now.

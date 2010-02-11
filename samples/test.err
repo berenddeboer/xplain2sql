@@ -1,0 +1,26 @@
+psql:../samples/test.sql:1258: ERROR:  function sp_Deletet_spc_spc_spc() does not exist
+psql:../samples/test.sql:1259: ERROR:  function sp_Insertt_spc_spc_spc() does not exist
+psql:../samples/test.sql:1260: ERROR:  function sp_Updatet_spc_spc_spc() does not exist
+psql:../samples/test.sql:1263: ERROR:  function sp_Deletet_space_space() does not exist
+psql:../samples/test.sql:1264: ERROR:  function sp_Insertt_space_space() does not exist
+psql:../samples/test.sql:1265: ERROR:  function sp_Updatet_space_space() does not exist
+psql:../samples/test.sql:1268: ERROR:  function sp_Deletetunused() does not exist
+psql:../samples/test.sql:1269: ERROR:  function sp_Inserttunused() does not exist
+psql:../samples/test.sql:1270: ERROR:  function sp_Updatetunused() does not exist
+psql:../samples/test.sql:3170: NOTICE:  type "sp_retrieve_names" does not exist, skipping
+psql:../samples/test.sql:3191: NOTICE:  type "sp_retrieve_name_ids" does not exist, skipping
+psql:../samples/test.sql:3213: NOTICE:  type "sp_retrieve_name_instance" does not exist, skipping
+psql:../samples/test.sql:3237: NOTICE:  type "sp_retrieve_names_by_text" does not exist, skipping
+psql:../samples/test.sql:3272: NOTICE:  type "sp_insert_name2" does not exist, skipping
+psql:../samples/test.sql:3309: NOTICE:  type "sp_retrieve_value1" does not exist, skipping
+psql:../samples/test.sql:3330: NOTICE:  type "sp_retrieve_value2" does not exist, skipping
+psql:../samples/test.sql:3349: NOTICE:  type "sp_retrieve_value3" does not exist, skipping
+psql:../samples/test.sql:3378: NOTICE:  type "sp_text_extend1" does not exist, skipping
+psql:../samples/test.sql:3493: NOTICE:  type "sp_testmin" does not exist, skipping
+psql:../samples/test.sql:3511: NOTICE:  type "sp_testmax" does not exist, skipping
+psql:../samples/test.sql:3529: NOTICE:  type "sp_testtotal" does not exist, skipping
+psql:../samples/test.sql:3547: NOTICE:  type "sp_testcount1" does not exist, skipping
+psql:../samples/test.sql:3565: NOTICE:  type "sp_testcount2" does not exist, skipping
+psql:../samples/test.sql:3583: NOTICE:  type "sp_testsome" does not exist, skipping
+psql:../samples/test.sql:3603: NOTICE:  type "sp_testany" does not exist, skipping
+psql:../samples/test.sql:3623: NOTICE:  type "sp_testnil" does not exist, skipping

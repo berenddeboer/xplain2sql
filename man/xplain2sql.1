@@ -1,0 +1,112 @@
+.\" Process this file with
+.\" groff -man -Tascii xplain2sql.1
+.\"
+.TH XPLAIN2SQL 1 "FEBRUARY 2005" Xplain "User Manuals"
+.SH NAME
+xplain2sql \- convert Xplain statements to many SQL dialects
+.SH SYNOPSIS
+.B xplain2sql -h
+.PP
+.B xplain2sql
+.RI [ options ]
+.I myfile.ddl
+.PP
+.B xplain2sql
+.RI [ options ]
+.I myfile.ddl
+.B >
+.I myfile.sql
+.SH DESCRIPTION
+.B xplain2sql
+can convert Xplain data definition and data manipulation and retrieval
+statements to many SQL dialects. Output is written to stdout.
+.SH EXIT STATUS
+.B xplain2sql
+exits with 0 when the translation was successful, with 1 otherwise.
+.SH GENERAL OPTIONS
+.IP -h
+List all options.
+.SH SQL DIALECT OPTIONS
+.IP -ansi
+Translate to ANSI-92 SQL.
+.IP -basic
+Translate to a very basic common subset of ANSI-92 SQL.
+.IP -db2
+Translate to the latest supported DB2 SQL dialect.
+.IP -db26
+Translate to the DB2 version 6 dialect.
+.IP -db271
+Translate to the DB2 version 7.1 dialect.
+.IP -foxpro
+Translate to FoxPro SQL.
+.IP -interbase
+Translate to the latest InterBase SQL dialect.
+.IP -interbase4
+Translate to the InterBase 4.0 SQL dialect.
+.IP -interbase6
+Translate to the InterBase 6.0 SQL dialect.
+.IP -msaccess97
+Translate to Microsoft Access '97 SQL.
+.IP -msaccess
+Translate to the latest supported Microsoft Access SQL.
+.IP -msaccess2000
+Translate to the Microsoft Access 2000 SQL.
+.IP -msql
+Translate to mini SQL.
+.IP -mygsql
+Translate to the latest supported MySQL dialect.
+.IP -mygsql322
+Translate to MySQL 3.22.
+.IP -mygsql4
+Translate to MySQL 4.0 ANSI mode.
+.IP -oracle
+Translate to the latest supported Oracle dialect.
+.IP -oracle901
+Translate to Oracle 9.0.1 SQL.
+.IP -pgsql
+Translate to the latest supported PostgreSQL dialect.
+.IP -pgsql7
+Translate to the PostgreSQL 7.0 dialect.
+.IP -pgsql72
+Translate to the PostgreSQL 7.2 dialect.
+.IP -pgsql73
+Translate to the PostgreSQL 7.3 dialect.
+.IP -tsql
+Translate to the latest supported Transact SQL (Microsoft SQL Server) dialect.
+.IP -tsql65
+Translate to Microsoft SQL Server 6.5 dialect.
+.IP -tsql70
+Translate to Microsoft SQL Server 7.0 dialect.
+.SH SQL GENERATION OPTIONS
+.IP -noauto
+Do not generate auto-generated primary keys.
+.IP -noassert
+Do not generate code to support asserts.
+.IP -nodatabase
+Do not generate code for the database command.
+.IP -noextendindex
+Do not create an index on the primary key of the temporary table
+created for an extend.
+.IP -nosp
+Do not create insert, update and delete stored procedures.
+.IP -nospprefix
+Do not prefix stored procedure names with 'sp_'. Stored procedures
+with this prefix have a supposed performance disadvantage with
+Microsoft SQL Server.
+.IP -timestamp
+Generate a timestamp column in each table, if the choosen SQL dialect
+supports this.
+.SH XML OUTPUT OPTIONS
+.IP -xml
+Write an XML description to xplain2sql.xml of the emitted SQL.
+.SH BUGS
+Not all Xplain statements are supported for all SQL dialects. See the
+manual which database supports which statement and why.
+.SH WEB SITE
+Go to
+.UR http://www.pobox.com/~berend/xplain2sql/
+http://www.pobox.com/~berend/xplain2sql/
+.UE
+for more documentation and support.
+.SH AUTHOR
+Berend de Boer <berend@pobox.com>

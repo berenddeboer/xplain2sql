@@ -1,0 +1,317 @@
+NEWS - list of user-visible changes between releases of xplain2sql
+See ChangeLog for more details.
+
+New in release 4.0.1 <2008-08-19>
+
+* License changed to MIT.
+* SQL optimization: for the count, min, max and total functions
+  xplain2sql now generates left outer joins instead of
+  subselects. This leads to much better performing code in many
+  circumstances.
+* New extension to mimick SQL's insert into ... select.
+* Extended attribute enhancements:
+  - All attributes can now be updated using an extended attribute.
+  - Extended attributes can now be updated with any value, not only
+    other attributes, but also from other extended attributes.
+  - It is now possible to define an extension with explicit
+  	domain. Useful when representation cannot be calculated, for
+  	example if you extend by calling a user defined SQL function.
+  - Fixed long standing bug where after an extend column would have
+    max 250 characters if a value statement had been used before
+    it. Now it uses as many characters as required.
+ -  wrong output for:
+      extend t with e = (not (b1 or b2)).
+    This was translated as if the user had written:
+      extend t with e = (not b1 or b2).
+* Assertion fixes and enhancements:
+   - assert statement generated wrong code when its expression used
+	   another asserted attribute.
+   - assertion statement generated wrong code with a function
+   	 expression.
+* Update with where clause: wrong code generation when an or was used
+  in the where condition.
+* Value definition:
+  - Didn't support the type cast functions like real.
+  - Literal SQL expression wasn't allowed.
+  - did not allow an and/or of twovalues such as (v1 or v2).
+  - the expression inside an integer/datef/real/string cast could only
+  	be a constant. But any expression should be allowed actually.
+* Init statements:
+    init t its b = (name = "boss").
+* It's now possible to use if then else in a property list, such as:
+    get t1 its if a1 then "yes" else "no".
+* Combine function now takes two or more parameters.
+* The parser now finds names as "week 1 date" a valid name. Names
+	still have to start with a character, but numbers in names now
+	accepted as well. Leads to less contrived names in some cases.
+* .include and .use now handle absolute paths properly if they are
+  unix style paths.
+* SQL like operator wasn't always emitted when one would expect it.
+* Domain (C2) emitted a varchar instead of char.
+* Fixed crashes:
+  - reading file from stdin
+  - when extending a type twice with the same attribute name.
+* FireBird (switch -firebord or -firebird21):
+  - Support for FireBird 2.1
+  - Support for FireBird's global temporary tables.
+* MySQL 5:
+  - support for using extended attributes in where clause of delete
+  - return a value from within a stored procedure returned an ugly
+  	column name, something as @"last_customer". Now the column name
+  	looks better, but this change might break existing code.
+  - Emits concat() function when combining strings.
+* PostgreSQL:
+  - PostgreSQL 8.2 support added. As PostgreSQL 8.1, but drop type is
+    now conditional, so less error messages in the output.
+  - -pgsql option defaults to 8.2.
+  - PostgreSQL 8.1 support added.
+  - *breaking change*: PostgreSQL doesn't really support identifiers
+  	with spaces, for example if you have a sequential primary key
+  	column with a space in it, PostgreSQL will generate an implicit
+  	sequence which will have a name also with a space in it. But you
+  	won't be able to access that sequence ever, PostgreSQL will give
+  	the strange warning 'invalid name syntax'. So PostgreSQL no longer
+  	emits spaces for names, they're always replaced by underscores,
+  	until this issue gets fixed.
+  - *possibly breaking change*: date type is now emitted as timestamp
+  	with time zone.
+  - if an Xplain function called a user procedure to return the value
+  	of an attribute, xplain2sql would crash if that statement appeared
+	  inside a procedure.
+  - get max t its some_date emitted incorrect SQL when used inside a
+    procedure.
+  - fixed crash when get with a function used an expression to
+   	calculate the total (total t its a * 2).
+  - plsql code stored procedures is no longer emited in a quoted block
+  	but it uses the $$ characters as delimiter.
+  - can now create special procedure "trigger procedure" instead of
+  	just "procedure" which generates output so the stored procedure can
+	  be used as a trigger.
+  - Emits proper string concatenator when combining strings.
+* Microsoft SQL Server:
+  - fix: complex update of an extension generated a left outer join in from
+    clause instead of inner join.
+  - fix: complex update fix, columns in set expression were not
+  	properly prefixed, if two tables had the same column name an
+  	ambiguous column name message would result.
+  - fix: if-then-else expression generated incorrect code.
+* XML Ooutput:
+  - new output in columns: attribute references mentions the Xplain
+    type, if any, the attribute references. And sqlReferences mentions
+    the SQL table name.
+  - if an attribute is marked as optional, the optional attribute is
+    now set to true.
+  - if an attribute is marked as unique, the unique attribute is
+    now set to true.
+  - crash when a get with a function used an expression to calculate
+    the total (total t its a * 2).
+
+
+New in release 3.0 <2007-03-10>
+
+* assert statement supported for all dialects.
+* if-then-else support in init [default] statements for dialects
+	that support triggers.
+* error reporting improved.
+* delete support enhanced for dialects that do not support a join clause in
+	the delete statement. A subselect is now emitted for such dialects.
+* incorrect SQL output for expressions that didn't have explicit
+  parentheses, for example the expression 5 - 3 + 3 was translated to
+  5 - (3 + 3), perhaps giving unexpected. No implicit parentheses are
+  added anymore unless explicitly provided. We now depend on the SQL
+  dialect to do the right thing...
+* if an attribute has been marked as optional, the SQL output now
+	emits a proper left outer join instead of a join.
+* XML description:
+  - select statement now contains the name of the table
+   	where the select came from.
+  - output for identifier and ncname was incorrect when the name
+  	started with a number. This is possible when using quoted
+  	names. But the result isn't a valid identifier in most languages.
+  - includes the best matching XML Schema data type.
+* PostgreSQL:
+  - slightly different output: names of parameters are now prefixed
+    with a_ instead of my_. If you have explicit SQL in your
+    PostgreSQL procedures, you'll have to correct them.
+  - any value which was updated, was declared twice.
+  - support for procedures with get with function (i.e. get count t).
+  - Emitted code is still at PostgreSQL 7.3 level, but should now work
+    fine with PostgreSQL 8. For example update and delete generated a
+    "return 0" statement which isn't valid for PostgreSQL 8 when a
+    function returns void.
+* DB2:
+  - output for procedure that had a get with a function was incorrect.
+  - string concatenation operator set.
+* MySQL 5:
+   - emit drop if exists statement before creating a table.
+   - a procedure with an extend could not be called twice in the same
+     connection, because the temporary table would already exist as MySQL
+     doesn't automatically drop them when exiting a procedure. Now
+     temporary tables are dropped if they exist, before creating them.
+   - wrong default value "-" when an init statement assigned
+	   systemdate to a date.
+* Oracle:
+  - extend output changes: no index created for temporary	extend table.
+  - init [default] support.
+* SQLite:
+  - assert output did not emit the proper view dialect.
+  - string concatenation operator set.
+* Manual: new chapter on using xplain2sql in legacy environments.
+* Middleware:
+  - New .xsl template (ecli_instance) for Eiffel and supporting classes.
+  - ecli_stored_procedure.xsl updated.
+
+
+New in 2.4 <2006-06-16>
+* complex init (not an init default) is now translated to a non-null
+  column if possible. In such a case a default clause is emitted and
+  the actual value is supplied by a trigger. Previously the column was
+  null to allow the trigger to update the value, but a default clause
+  seems to work on many dialects.
+* some assert support for Microsoft SQL and InterBase. Only simple
+  expressions (a * b) supported. Assert domain not yet checked.
+* init expression that was a literal or constant was treated as an
+	init default expression, i.e. it could be overwritten at insert
+	time.
+* init [default] expressions didn't work for many dialects when a
+	expression was used that involved multiplication or a
+	function.
+* better error messages in various cases.
+* If an undeclared parameter is used inside a procedure, an error
+	is now emitted. Previously wrong code was generated.
+* Quite complete support for SQLite 3.
+* MySQL 5 support added. Very complete, MySQL 5 is a real database.
+* Microsoft SQL:
+  - not literal init default was treated as init.
+  - some support sql Microsoft SQL 2000: large integers now use
+    bigint. The -tsql switch now emits Microsoft SQL 2000.
+* Interbase 6:
+  - non constant init default was treated as init.
+  - incorrect SQL in case init [default] was not a constant.
+  - any and nil functions are now properly supported.
+  - workaround for missing coalesce function implemented. This means
+    that functions like min or max can now be	used safely.
+  - Boolean domain now includes proper checks that its value can only
+    be null, a 'T' or an 'F'.
+* InterBase 4: support dropped.
+* DB2:
+  - incorrect SQL in case init [default] was not a constant.
+  - full init [default] support added.
+* PostgreSQL 7.3
+  - name and time column names don't need to be treates specially as
+    they did in earlier versions.
+  - output now removes the generated return type for a procedure that
+    returns a result set. Makes it easier to copy/paste output.
+* PostgreSQL:
+  - treated init default as init.
+  - incorrect code was emited when using values in a stored procedure.
+  - index on extend wasn't create inside a stored procedure due to a
+    wrongly inserted if statement.
+* new options:
+  - New option -pkformat.
+* an unrecognised command-line option is now treated as a fatal error.
+
+
+
+New in 2.2 <2005-03-01>
+
+* Column number is now reported for warnings.
+* A previously declared value can now be updated, i.e. given a new value.
+* An extend now always create a unique index on the primary key
+	column of the extended table. Speeds up certain queries
+	enormously. Use -noextendindex to disable this behaviour.
+* Support for the four conversion functions integer (), real (),
+  string () and datef().
+* All mathematical functions are now recognized as keywords, no code
+  is emitted though.
+* Added support for the * and ? operators. If these two characters
+  appear in a literal string, the comparison is done with like. An
+  unfortunate side effect of this change is that these two characters
+  can no longer be used for literal searches. You can work around this
+  by assinging the string to a value and compare using the value instead
+  of the literal string.
+* Constraint names no longer include a number unless they are
+  unique. Use the "-oldconstraintnames" option to revert to the
+  previously generated names.
+* Changes to command-line options:
+  - New option -nospprefix to emit the "sp_" prefix for stored procedure
+    names.
+  - Use the "-oldconstraintnames" option to use old style constraint names.
+  - support for -inheritkey switch is dropped.
+* New style sheets:
+  - New example style sheet delphi_makefile.xsl that shows how to
+  	generate a makefile which generates all the classes that were
+  	previously created with the -delphi switch.
+  - New style sheet rename_sp.xsl that emits rename statements for
+    Microsoft SQL Server in case the new -nospprefix option is used.
+    Give an xplain2sql.xml as input.
+* InterBase SQL:
+  - when an index was created on an extend, a non-unique name could be
+    generated fairly easily. The current method is somewhat more
+    robust, but can still be fooled.
+* Oracle:
+  - forbids updating the primary key.
+  - sequence sets maximum value for a trigger based on primary key length.
+* PostgreSQL:
+  - fix when setting a value inside an expression inside a stored procedure.
+  - fix when using a value inside an expression inside a stored procedure.
+  - output for procedures with more than one parameter was incorrect.
+  - it is now possible to call a procecure that has an extend multiple
+    times per session.
+  - supports the some function for version 7.3 or higher.
+  - purging of constants is supported.
+  - procedures that return a result set emit different code for 7.3 or
+    higher. The new aproach available in 7.3 is far more user friendly
+    and works great through an ODBC interface for example.
+  - added -pgsql72 switch to generate slightly different code.
+* Microsoft SQL Server (Transact SQL):
+  - uses set instead of select to set a value (7.0 or higher).
+  - every procedure now sets xact abort. Errors inside the procedure
+    will rollback the transaction.
+  - Use "recompiled procedure" instead of "procedure" to create a
+    procedure that has the "with recompile" option.
+  - now emits a like operator when comparing a string to a text field.
+
+
+
+New in 2.0 - <2003-09-18>
+
+* (A) domain is now translated to a VARYING CHARACTER. The (V) domain
+  is obsolete. Use the (C) domain to output just a CHARACTER data type.
+  Use the -oldA switch to revert xplain2sql to its former behavior.
+* Corrected parsing of inserts with auto generated primary key. Use
+  a * instead of a "*" to signify this.
+* extend names now should be unique, i.e. they should not be the
+	same as an existing base, type, value or constant.
+* XML output with -xml option. Generates an XML description of what
+  code has been generated for the target SQL dialect. The -delphi and
+  -ado switches will become obsolete with this.
+* The -delphi -ado output should now work with Delphi 7.
+* Limited support of using and updating extended columns in updates.
+* Use of extended columns in delete statement supported.
+* If an attribute has an init statement, it is no longer listed
+	as a parameter in the insert stored procedure.
+* Support for writing stored procedures in Xplain, see
+  manual. Supported on Microsoft SQL Server, DB/2, PostgreSQL, InterBase
+  and Oracle.
+* get statement now always outputs an order by clause. The default
+	is the instance id. This is a breaking change for code that relies
+	on some unspecified default sort order. But that code was broken
+	anyway, any change in index could have changed the sort order.
+* extended names now should be unique, i.e. they should not be the
+	same as an existing base, type, value or constant.
+* SQL code for Xplain set functions looks sometimes different. Code
+  rewritten, might cause bugs.
+* Fairly complete output for Oracle, see manual for details.
+* DB/2 output does now have insert/update/delete stored procedures.
+* PostgreSQL output does not have insert/update/delete stored procedures.
+* PostgreSQL output updated to 7.3.3. Support for earlier version is
+  dropped. Can be brought back on request.
+* Boolean return values for Microsoft SQL Server now return a bit
+  value instead of an integer.
+* Output for Microsoft SQL Server optimized. Now emits a join instead of
+  subselect when updating attributes with extended columns.
+* Support for comparisons with Null. Useful when dealing with linked
+  lists and finding the head or tail.
+* License update to Eiffel Forum License v2.
+* History file is obsolete, see ChangeLog

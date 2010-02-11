@@ -1,0 +1,37 @@
+input mp-tool;
+verbatimtex \input dplain etex
+
+beginfig(1);
+path p, q ; p := unitsquare xscaled 90 yscaled 40;
+q := p shifted (320,80); fill q withcolor white; draw q;
+label(btex \vbox{\hbox{head}\hbox{office}} etex, center q);
+q := p shifted (380,260); fill q withcolor white; draw q;
+label(btex \vbox{\hbox{current}\hbox{account}} etex, center q);
+q := p shifted (350,230); fill q withcolor white; draw q;
+label(btex \vbox{\hbox{business}\hbox{account}} etex, center q);
+q := p shifted (320,200); fill q withcolor white; draw q;
+label(btex \vbox{\hbox{saving}\hbox{account}} etex, center q);
+q := p shifted (0,260); fill q withcolor white; draw q;
+label(btex \vbox{\hbox{share}} etex, center q);
+q := p shifted (40,230); fill q withcolor white; draw q;
+label(btex \vbox{\hbox{bond}} etex, center q);
+q := p shifted (160,180); fill q withcolor white; draw q;
+label(btex \vbox{\hbox{stock}} etex, center q);
+q := p shifted (160,120); fill q withcolor white; draw q;
+label(btex \vbox{\hbox{account}} etex, center q);
+q := p shifted (160,60); fill q withcolor white; draw q;
+label(btex \vbox{\hbox{holder}} etex, center q);
+q := p shifted (160,0); fill q withcolor white; draw q;
+label(btex \vbox{\hbox{office}} etex, center q);
+q := p shifted (290,50); fill q withcolor white; draw q;
+label(btex \vbox{\hbox{branch}} etex, center q);
+q := p shifted (290,170); fill q withcolor white; draw q;
+label(btex \vbox{\hbox{mortgage}\hbox{account}} etex, center q);
+draw (160,220)--(130,230);
+draw (205,160)--(205,180);
+draw (205,100)--(205,120);
+draw (205,40)--(205,60);
+draw (250,40)--(290,50);
+draw (250,160)--(290,170);
+endfig;
+end;

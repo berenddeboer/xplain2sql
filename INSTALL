@@ -1,0 +1,20 @@
+Installation is described in the documentation, see doc/xplain2sql.pdf
+for details. If you don't have a PDF Reader, you can get the Adobe
+Acrobat Reader for free at:
+
+  http://www.adobe.com/
+
+
+Requirements:
+
+The GOBO library, version 3.4 or later: http://www.gobosoft.com/
+
+Next type
+
+	cd src
+  geant compile
+
+to create the binary xplain2sql.
+
+
+Install this binary somewhere in your path.

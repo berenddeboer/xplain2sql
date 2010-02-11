@@ -1,0 +1,4 @@
+string in enumeration exceeds representation length.
+string is: 'abc' (length: 3)
+max length is: 2
+Value 10 in integer enumeration exceeds maximum possible number 9 of domain (I1).

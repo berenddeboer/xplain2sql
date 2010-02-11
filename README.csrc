@@ -1,0 +1,21 @@
+This archive contains the xplain2sql source code in C form.
+The original sources are written with Eiffel.
+
+Compile these sources on your platform by typing:
+
+    make
+
+
+This should produce the executable xplain2sql.
+
+If you use Borland C type instead:
+
+    make xplain2sql-bcc
+
+
+I'm not sure if the source file is too large. Let
+me know if you have problems compiling it.
+
+Berend de Boer
+<berend@pobox.com>
+http://www.pobox.com/~berend/xplain2sql
