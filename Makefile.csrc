@@ -1,0 +1,26 @@
+#
+# Makefile to compile xplain2sql
+#
+# This C source has been generated from Eiffel source.
+# The Eiffel source code is available at:
+#   http://www.pobox.com/~berend/xplain2sql
+
+BCCFLAGS=$(CFLAGS) -w-
+
+all: xplain2sql
+
+xplain2sql: xplain2sql.c xplain2sql.h
+	$(CC) $(CFLAGS) xplain2sql.c -o $@ -lm
+
+# Borland C:
+xplain2sql-bcc: xplain2sql.c xplain2sql.h
+	$(CC) $(BCCFLAGS) xplain2sql.c
+
+# for BeOS
+xplain2sql-beos: xplain2sql.c xplain2sql.h
+	$(CC) $(CFLAGS) xplain2sql.c -o $@
+
+
+install:
+	install -C xplain2sql /usr/local/bin
+	install -C xplain2sql.1 /usr/local/man/man1
