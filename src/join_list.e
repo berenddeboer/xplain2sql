@@ -32,7 +32,7 @@ feature {NONE} -- Initialization
 			valid_aggregate: a_base_aggregate /= Void
 		do
 			base_aggregate := a_base_aggregate
-			create root.make (Void, False, False)
+			create root.make (Void, False, False, False)
 			debug ("xplain2sql_join")
 				print (once "%NCreating the longest chains of attributes possible.%NThe result of this process is a tree structure.%N")
 			end
@@ -55,6 +55,17 @@ feature -- Access
 
 feature -- Status
 
+	existential_join_optimisation: BOOLEAN is
+			-- Set when a join to an extend that was derived by creating
+			-- a partial table can be fuly joined instead of left outer
+			-- joined. That greatly improves performance.
+			-- Currently only extend with a boolean value can be
+			-- optimised, i..e derived via a logical expression or using
+			-- an any/nil function.
+		do
+			Result := existential_join_optimisation_count = 1
+		end
+
 	is_empty: BOOLEAN is
 			-- Is there nothing to join?
 		require
@@ -65,6 +76,25 @@ feature -- Status
 
 	is_finalized: BOOLEAN
 			-- Has `finalize' been called?
+
+
+feature -- Change
+
+	enable_existential_join_optimisation is
+			-- Allow simple stack-wise enabling/disable of existential
+			-- join optimisation.
+		do
+			existential_join_optimisation_count := existential_join_optimisation_count + 1
+		end
+
+	disable_existential_join_optimisation is
+			-- Allow simple stack-wise enabling/disable of existential
+			-- join optimisation.
+		do
+			existential_join_optimisation_count := existential_join_optimisation_count - 1
+		ensure
+			disabled: not existential_join_optimisation
+		end
 
 
 feature {NONE} -- chain handling
@@ -223,7 +253,7 @@ feature -- Main commands
 							print (spaces)
 							print (anode.item.full_name + " (strand extended)%N")
 						end
-						jnode.append_child (anode, is_upward_join, force_left_outer_join)
+						jnode.append_child (anode, is_upward_join, force_left_outer_join, existential_join_optimisation and then anode.item.attribute /= Void and then anode.item.attribute.is_logical_extension)
 						jnode := jnode.get_immediate_child (anode, is_upward_join)
 					end
 					anode := anode.next
@@ -254,6 +284,10 @@ feature -- Main commands
 			finalized: is_finalized
 		end
 
+	optimize_joins (a_predicate: XPLAIN_EXPRESSION) is
+		do
+		end
+
 
 feature -- Debug
 
@@ -270,6 +304,8 @@ feature -- Debug
 
 
 feature {NONE} -- Implementation
+
+	existential_join_optimisation_count: INTEGER
 
 	copy_role_to_next (anode: XPLAIN_ATTRIBUTE_NAME_NODE) is
 		do
@@ -296,5 +332,6 @@ feature {NONE} -- Implementation
 invariant
 
 	have_from_table: base_aggregate /= Void
+	existential_join_optimisation_count_not_too_large: existential_join_optimisation_count <= 1
 
 end

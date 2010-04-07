@@ -72,6 +72,22 @@ feature -- Status
 			end
 		end
 
+	uses_its: BOOLEAN is
+			-- Does this expression refer to `a_parameter'?
+		local
+			p: XPLAIN_EXPRESSION_NODE
+		do
+			from
+				p := parameters
+			until
+				p = Void or else
+				Result
+			loop
+				Result := p.item.uses_its
+				p := p.next
+			end
+		end
+
 	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
 			-- Does this expression refer to `a_parameter'?
 		local

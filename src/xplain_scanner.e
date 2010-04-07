@@ -12,8 +12,8 @@ indexing
 
   author:     "Berend de Boer <berend@pobox.com>"
   copyright:  "Copyright (c) 1999-2001, Berend de Boer, see forum.txt"
-  date:       "$Date: 2008/12/15 $"
-  revision:   "$Revision: #12 $"
+  date:       "$Date: 2010/02/11 $"
+  revision:   "$Revision: #13 $"
 
 class XPLAIN_SCANNER
 

@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+
+<project name="xplain2sql" default="help">
+
+	<description>
+		system:      "Translate Xplain code to SQL"
+		author:      "Berend de Boer [berend@pobox.com]"
+		copyright:   "Copyright (c) 2002-2003, Berend de Boer"
+		license:     "Eiffel Forum Freeware License v2 (see forum.txt)"
+		date:        "$Date: $"
+		revision:    "$Revision: $"
+	</description>
+
+	<inherit>
+		<parent location="${GOBO}/misc/eiffel.eant">
+			<redefine target="prepare_compile"/>
+			<redefine target="init_system"/>
+  </parent>
+  </inherit>
+
+<!-- Implementation -->
+
+	<target name="init_system">
+		<set name="system" value="xplain2sql"/>
+		<set name="system_dir" value="."/>
+	</target>
+
+	<target name="compile_release" depend="prepare_compile">
+		<description>
+			Compile '${system}' for release.
+		</description>
+		<geant target="compile_se"/>
+	</target>
+
+	<target name="prepare_compile" depend="init,xplain_parser,xplain_scanner">
+  </target>
+
+  <target name="xplain_parser">
+    <geyacc input="xplain_parser.y" output="xplain_parser.e" tokens="XPLAIN_TOKENS" verbose="verbose.txt"/>
+  </target>
+
+  <target name="xplain_scanner">
+    <gelex input="xplain_scanner.l" output="xplain_scanner.e"/>
+  </target>
+
+</project>

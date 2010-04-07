@@ -92,6 +92,11 @@ feature -- Status
 			Result := False
 		end
 
+	uses_its: BOOLEAN is
+			-- Does expression has an its list somewhere?
+		deferred
+		end
+
 	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
 			-- Does this expression refer to `a_parameter'?
 		require

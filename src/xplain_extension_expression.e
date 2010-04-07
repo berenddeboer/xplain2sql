@@ -2,9 +2,11 @@ indexing
 
 	description:
 
-		"Extension expression. Extensions have two faces.%
-		%One face is during building extensions, that's done by the %
-		%specializations. This one is used when using the extension."
+		"[
+Extension expression. Extensions have two faces.
+One face is during building extensions, that's done by the two
+specializations of this class. This one is used when using the extension.
+]"
 
 	be_carefull: "[
 		This class itself is used when a defined, completed
@@ -77,11 +79,22 @@ feature -- Access
 feature -- Status
 
 	is_logical_expression: BOOLEAN is
+			-- Is this a logical expression?
 		local
 			b: XPLAIN_B_REPRESENTATION
 		do
 			b ?= extension.representation
 			Result := b /= Void
+		end
+
+	is_nil_expression: BOOLEAN is
+			-- Is this expression based on the nil function?
+			-- All other expressions evaluate to true when stored in a
+			-- temporary, except the nil expression, which stores
+			-- False. That wrecks havoc with the logical expression
+			-- optimisation, so we need to detect that case.
+		do
+			Result := False
 		end
 
 	is_using_other_attributes (an_attribute: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
@@ -99,6 +112,12 @@ feature -- Status
 			-- output in case it is not used in updates?
 		do
 			Result := False
+		end
+
+	uses_its: BOOLEAN is
+			-- Does expression has an its list somewhere?
+		do
+			-- not applicable here, overriden by descendants
 		end
 
 	uses_non_data_attributes: BOOLEAN is

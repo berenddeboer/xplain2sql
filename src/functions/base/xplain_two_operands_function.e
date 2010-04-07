@@ -19,7 +19,8 @@ inherit
 			add_to_join,
 			has_wild_card_characters,
 			is_literal,
-			is_using_other_attributes
+			is_using_other_attributes,
+			uses_its
 		end
 
 
@@ -70,6 +71,12 @@ feature -- Status
 			Result :=
 				right.is_using_other_attributes (an_attribute) or else
 				left.is_using_other_attributes (an_attribute)
+		end
+
+	uses_its: BOOLEAN is
+			-- Does expression has an its list somewhere?
+		do
+			Result := left.uses_its or else right.uses_its
 		end
 
 	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is

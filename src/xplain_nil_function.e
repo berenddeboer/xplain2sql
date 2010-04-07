@@ -14,8 +14,14 @@ inherit
 
 	XPLAIN_EXISTENTIAL_FUNCTION
 		redefine
+			is_nil,
 			sqlextenddefault
 		end
+
+
+feature -- Status
+
+	is_nil: BOOLEAN is True
 
 
 feature -- Access

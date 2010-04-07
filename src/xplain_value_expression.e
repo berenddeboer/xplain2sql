@@ -38,7 +38,7 @@ feature {NONE} -- Initialization
 feature -- Access
 
 	value: XPLAIN_VALUE
-			-- The value.
+			-- The value
 
 
 feature -- Status
@@ -46,6 +46,12 @@ feature -- Status
 	is_literal: BOOLEAN is
 		do
 			Result := value.expression.is_literal
+		end
+
+	uses_its: BOOLEAN is
+			-- Does expression has an its list somewhere?
+		do
+			Result := value.expression.uses_its
 		end
 
 	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is

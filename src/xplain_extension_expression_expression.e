@@ -19,12 +19,14 @@ inherit
 		redefine
 			add_to_join,
 			is_literal,
+			is_logical_expression,
 			is_update_optimization_supported,
 			representation,
 			sqlselect,
 			sqlvalue,
 			outer_sqlvalue,
 			uses_non_data_attributes,
+			uses_its,
 			uses_parameter
 		end
 
@@ -53,9 +55,21 @@ feature -- Status
 			Result := expression.is_literal
 		end
 
+	is_logical_expression: BOOLEAN is
+			-- Is this a logical expression?
+		do
+			Result := expression.is_logical_expression
+		end
+
 	is_update_optimization_supported: BOOLEAN is True
 			-- Is this an extension that will benefit from optimized
 			-- output in case it is not used in updates?
+
+	uses_its: BOOLEAN is
+			-- Does expression has an its list somewhere?
+		do
+			Result := expression.uses_its
+		end
 
 	uses_non_data_attributes: BOOLEAN is
 			-- Does this extension expression use attributes of its owner
@@ -71,6 +85,7 @@ feature -- Status
 		do
 			Result := expression.uses_parameter (a_parameter)
 		end
+
 
 
 feature -- SQL generation

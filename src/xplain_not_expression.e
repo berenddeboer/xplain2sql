@@ -16,6 +16,7 @@ inherit
 		rename
 			make as make_prefix_expression
 		redefine
+			add_to_join,
 			sqlvalue
 		end
 
@@ -37,6 +38,15 @@ feature -- Initialization
 
 
 feature -- SQL generation
+
+	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST) is
+			-- Possibility of expression to add something to join part of
+			-- a select statement.
+		do
+			join_list.disable_existential_join_optimisation
+			operand.add_to_join (sqlgenerator, join_list)
+			join_list.enable_existential_join_optimisation
+		end
 
 	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
 			-- Return expression in generator syntax.

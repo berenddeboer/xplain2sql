@@ -24,6 +24,12 @@ feature -- Status
 	is_literal: BOOLEAN is True
 			-- Is this expression a literal value?
 
+	uses_its: BOOLEAN is
+			-- Does expression has an its list somewhere?
+		do
+			Result := False
+		end
+
 	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
 			-- Does this expression refer to `a_parameter'?
 		do

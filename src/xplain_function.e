@@ -14,6 +14,11 @@ deferred class
 
 feature -- Status
 
+	is_nil: BOOLEAN is
+		do
+			Result := False
+		end
+
 	is_some: BOOLEAN is
 		do
 			Result := False

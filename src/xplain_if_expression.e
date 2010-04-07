@@ -70,6 +70,15 @@ feature -- Status
 				else_specification.is_using_other_attributes (an_attribute)
 		end
 
+	uses_its: BOOLEAN is
+			-- Does expression has an its list somewhere?
+		do
+			Result :=
+				condition.uses_its or else
+				then_specification.uses_its or else
+				else_specification.uses_its
+		end
+
 	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
 			-- Does this expression refer to `a_parameter'?
 		do
@@ -86,9 +95,11 @@ feature -- SQL code
 			-- Possibility of expression to add something to join part of
 			-- a select statement.
 		do
+			join_list.disable_existential_join_optimisation
 			condition.add_to_join (sqlgenerator, join_list)
 			then_specification.add_to_join (sqlgenerator, join_list)
 			else_specification.add_to_join (sqlgenerator, join_list)
+			join_list.enable_existential_join_optimisation
 		end
 
 	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is

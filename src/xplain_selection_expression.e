@@ -12,6 +12,7 @@ class
 
 	XPLAIN_SELECTION_EXPRESSION
 
+
 inherit
 
 	XPLAIN_EXPRESSION
@@ -19,9 +20,11 @@ inherit
 			column_name
 		end
 
+
 create
 
 	make
+
 
 feature {NONE} -- Initialization
 
@@ -33,12 +36,21 @@ feature {NONE} -- Initialization
 			select_value := a_select_value
 		end
 
+
 feature -- Access
 
 	select_value: XPLAIN_SELECTION_VALUE
 
 
 feature -- Status
+
+	uses_its: BOOLEAN is
+			-- Does expression has an its list somewhere?
+		do
+			if select_value.property /= Void then
+				Result := select_value.property.uses_its
+			end
+		end
 
 	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
 			-- Does this expression refer to `a_parameter'?

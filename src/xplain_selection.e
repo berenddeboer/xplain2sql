@@ -64,7 +64,9 @@ feature -- SQL generation
 		do
 			-- add where clause
 			if predicate /= Void then
+				a_join_list.enable_existential_join_optimisation
 				predicate.add_to_join (sqlgenerator, a_join_list)
+				a_join_list.disable_existential_join_optimisation
 			end
 		end
 

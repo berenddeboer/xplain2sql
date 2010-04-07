@@ -19,17 +19,19 @@ create
 
 	make
 
-feature {NONE} -- creation
+feature {NONE} -- Initialisation
 
 	make (
-		an_item: XPLAIN_ATTRIBUTE_NAME_NODE
+		an_item: XPLAIN_ATTRIBUTE_NAME_NODE;
 		an_is_upward_join,
-		an_is_forced_left_outer_join: BOOLEAN) is
+		an_is_forced_left_outer_join,
+		an_is_forced_inner_join: BOOLEAN) is
 			-- Prepare node in tree
 		do
 			item := an_item
 			is_upward_join := an_is_upward_join
 			is_forced_left_outer_join := an_is_forced_left_outer_join
+			is_forced_inner_join := an_is_forced_inner_join
 			create next.make
 		end
 
@@ -91,14 +93,14 @@ feature -- Tree querying
 
 feature -- Tree changing
 
-	append_child (anode: XPLAIN_ATTRIBUTE_NAME_NODE; an_is_upward_join, an_is_forced_left_outer_join: BOOLEAN) is
+	append_child (anode: XPLAIN_ATTRIBUTE_NAME_NODE; an_is_upward_join, an_is_forced_left_outer_join, an_is_forced_inner_join: BOOLEAN) is
 			-- Make anode a child.
 		require
 			not_child: not has_immediate_child (anode, an_is_upward_join)
 		local
 			jnode: JOIN_TREE_NODE
 		do
-			create jnode.make (anode, an_is_upward_join, an_is_forced_left_outer_join)
+			create jnode.make (anode, an_is_upward_join, an_is_forced_left_outer_join, an_is_forced_inner_join)
 			next.put_last (jnode)
 		ensure
 			can_be_found: has_immediate_child (anode, an_is_upward_join)
@@ -158,7 +160,8 @@ feature -- JOIN_NODE generation
 						aggregate_alias,
 						aggregate_fk,
 						is_upward_join,
-						is_forced_left_outer_join)
+						is_forced_left_outer_join,
+						is_forced_inner_join)
 					create first.make (join, Void)
 					increment_usage (attribute)
 					set_prefix_table (aggregate_alias)
@@ -261,7 +264,7 @@ feature {NONE} -- Implementation
 feature -- Debugging
 
 	have_all_items_a_prefix: BOOLEAN is
-			-- True if all items have a prefix
+			-- Do all items have a prefix?
 		do
 			Result := item = Void or else item.prefix_table /= Void
 			if Result then
@@ -321,6 +324,11 @@ feature -- Debugging
 feature -- Access
 
 	is_forced_left_outer_join: BOOLEAN
+
+	is_forced_inner_join: BOOLEAN
+			-- We can force inner join when there is a predicate on an
+			-- existential extend. That's an optimisation which is
+			-- enabled in some cases.
 
 	is_upward_join: BOOLEAN
 			-- Is join actually upward instead of downward?

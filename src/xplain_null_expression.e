@@ -36,10 +36,16 @@ feature {NONE} -- Initialization
 feature -- Access
 
 	expression: XPLAIN_EXPRESSION
-			-- Properaty that is compared to Null.
+			-- Property that is compared to Null.
 
 
 feature -- Status
+
+	uses_its: BOOLEAN is
+			-- Does expression has an its list somewhere?
+		do
+			Result := expression.uses_its
+		end
 
 	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
 			-- Does this expression refer to `a_parameter'?

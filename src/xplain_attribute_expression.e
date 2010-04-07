@@ -25,7 +25,8 @@ inherit
 			sqlminvalue,
 			sqlmaxvalue,
 			sqlinitvalue,
-			sqlname
+			sqlname,
+			uses_its
 		end
 
 create
@@ -114,6 +115,12 @@ feature -- Status
 				not first.item.is_equal (an_attribute)
 		end
 
+	uses_its: BOOLEAN is
+			-- Does expression has an its list somewhere?
+		do
+			Result := first.next /= Void
+		end
+
 	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
 			-- Does this expression refer to `a_parameter'?
 		do
@@ -130,9 +137,7 @@ feature -- SQL specifics
 			-- operation then (used to generate correct correlated join
 			-- when creating extensions)
 		do
-			--if first.prefix_table = Void then
-				join_list.extend (sqlgenerator, first)
-			--end
+			join_list.extend (sqlgenerator, first)
 		end
 
 	exact_representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is

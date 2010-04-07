@@ -18,6 +18,7 @@ inherit
 			make as inherited_make
 		redefine
 			add_to_join,
+			is_nil_expression,
 			is_update_optimization_supported,
 			representation,
 			set_extension,
@@ -53,6 +54,16 @@ feature -- Access
 
 
 feature -- Status
+
+	is_nil_expression: BOOLEAN is
+			-- Is this expression based on the nil function?
+			-- All other expressions evaluate to true when stored in a
+			-- temporary, except the nil expression, which stores
+			-- False. That wrecks havoc with the logical expression
+			-- optimisation, so we need to detect that case.
+		do
+			Result := selection.function.is_nil
+		end
 
 	is_update_optimization_supported: BOOLEAN is
 			-- Is this an extension that will benefit from optimized

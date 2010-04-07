@@ -62,11 +62,7 @@ feature -- SQL generation
 
 	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
 		do
--- 			if expression.is_logical_expression then
--- 				Result := sqlgenerator.sql_expression_as_boolean_value (expression)
--- 			else
-				Result := expression.sqlvalue (sqlgenerator)
--- 			end
+			Result := expression.sqlvalue (sqlgenerator)
 		end
 
 

@@ -1077,16 +1077,9 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 		require
 			valid_extension: extension /= Void
 		local
-			--join_list: JOIN_LIST
 			emulate_coalesce: BOOLEAN
 			function_expression: XPLAIN_EXTENSION_FUNCTION_EXPRESSION
 		do
-
-			-- build join statements (applies only to expression extension)
-			--create join_list.make (extension.type)
-			--extension.expression.add_to_join (Current, join_list)
-			--join_list.finalize (Current)
-
 			-- create (temporary) table for extension
 			std.output.put_character ('%N')
 			drop_temporary_table_if_exist (extension)
@@ -2760,11 +2753,17 @@ feature -- Return sql code
 			type: XPLAIN_TYPE
 			join_list: JOIN_LIST
 			table_alias: STRING
+			optimised: BOOLEAN
 		do
 			type := an_expression.extension.type
+			optimised := an_expression.is_logical_expression and an_expression.extension.no_update_optimization
 
 			-- build join statements (applies only to expression extension)
 			create join_list.make (type)
+			if optimised then
+				-- an_expression is used in where clause
+				join_list.enable_existential_join_optimisation
+			end
 			an_expression.add_to_join (Current, join_list)
 			join_list.finalize (Current)
 
@@ -2793,7 +2792,7 @@ feature -- Return sql code
 				Result.append_string (table_alias)
 			end
 			Result.append_string (sql_select_joins (join_list))
-			if an_expression.is_logical_expression and an_expression.extension.no_update_optimization then
+			if optimised then
 				Result.append_character ('%N')
 				Result.append_string (Tab)
 				Result.append_string (once "where%N")
@@ -2844,6 +2843,8 @@ feature -- Return sql code
 			-- its (or an extend attribute, but that's also caught by
 			-- this test).
 			use_where_clause := join_list.first.next /= Void and then join_list.first.next.next /= Void
+			use_where_clause := an_expression.selection.predicate /= Void and then an_expression.selection.predicate.uses_its
+			--use_where_clause := True
 
 			-- Code
 			create Result.make (256)
@@ -3161,7 +3162,7 @@ feature -- Return sql code
 			-- return a Null value or not. If so, we need to surround it
 			-- with coalesce so we always get a scalar value. Matter of
 			-- fact, only count and some do not need it.
-			-- Because any/nil is implemented with count they don't need it either
+			-- Because any/nil is implemented with count they don't need it either.
 			surround_function_with_coalesce :=
 				CoalesceSupported and then
 				selection_list.function.needs_coalesce and then

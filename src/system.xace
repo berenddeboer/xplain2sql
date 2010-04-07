@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+
+<system name="xplain2sql">
+	<description>
+		system:      "Translate Xplain code to SQL"
+		author:      "Berend de Boer [berend@pobox.com]"
+		copyright:   "Copyright (c) 2002-2007, Berend de Boer"
+		license:     "Eiffel Forum Freeware License v2 (see forum.txt)"
+		date:        "$Date: $"
+		revision:    "$Revision: $"
+	</description>
+
+	<root class="XPLAIN2SQL" creation="make"/>
+
+	<option unless="${DEBUG}">
+    <!-- SE will crash on certain input if I enable assertions -->
+		<option name="assertion" value="none"/>
+		<option name="garbage_collector" value="none"/>
+		<option name="finalize" value="true"/>
+	</option>
+	<option if="${DEBUG}">
+		<option name="split" value="true"/>
+		<option name="debug" value="false"/>
+<!-- 		<option name="debug" value="true"/> -->
+<!-- 		<option name="debug_tag" value="xplain2sql_join"/> -->
+		<option name="assertion" value="all"/>
+		<option name="garbage_collector" value="none"/>
+		<option name="finalize" value="false"/>
+	</option>
+
+  <option if="${GOBO_EIFFEL}=se">
+    <option name="high_memory_compiler" value="true"/>
+  </option>
+
+  <cluster name="xplain2sql" location=".">
+    <cluster name="functions" prefix="functions_">
+      <option name="abstract" value="true"/>
+      <cluster name="base"/>
+      <cluster name="conversion"/>
+<!--       <cluster name="math"/> -->
+      <cluster name="string"/>
+      <cluster name="user"/>
+    </cluster>
+  </cluster>
+
+	<mount location="${GOBO}/library/string/library.xace"/>
+	<mount location="${GOBO}/library/utility/library.xace"/>
+	<mount location="${GOBO}/library/structure/library.xace"/>
+	<mount location="${GOBO}/library/pattern/library.xace"/>
+	<mount location="${GOBO}/library/parse/library.xace"/>
+	<mount location="${GOBO}/library/lexical/library.xace"/>
+	<mount location="${GOBO}/library/xml/library.xace"/>
+	<mount location="${GOBO}/library/kernel/library.xace"/>
+	<mount location="${GOBO}/library/kernel.xace"/>
+
+</system>

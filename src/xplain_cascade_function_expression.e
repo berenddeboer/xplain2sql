@@ -47,6 +47,13 @@ feature -- Access
 
 feature -- Status
 
+	uses_its: BOOLEAN is
+			-- Does expression has an its list somewhere?
+		do
+			-- Probably not applicable; don't think will be called at where we need to know this
+			Result := selection.property.uses_its or else selection.predicate.uses_its
+		end
+
 	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
 			-- Does this expression refer to `a_parameter'?
 		do

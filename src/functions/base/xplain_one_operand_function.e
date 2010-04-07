@@ -18,7 +18,8 @@ inherit
 		redefine
 			add_to_join,
 			column_name,
-			is_using_other_attributes
+			is_using_other_attributes,
+			uses_its
 		end
 
 
@@ -66,6 +67,12 @@ feature -- Status
 			-- Does this expression refer to `a_parameter'?
 		do
 			Result := operand.uses_parameter (a_parameter)
+		end
+
+	uses_its: BOOLEAN is
+			-- Does expression has an its list somewhere?
+		do
+			Result := operand.uses_its
 		end
 
 

@@ -44,6 +44,13 @@ feature -- Access
 
 feature -- Status
 
+	uses_its: BOOLEAN is
+			-- Does expression has an its list somewhere?
+		do
+			-- Might, we have no clue
+			Result := True
+		end
+
 	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
 			-- Does this expression refer to `a_parameter'?
 		do

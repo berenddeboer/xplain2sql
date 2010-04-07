@@ -89,11 +89,16 @@ feature -- Optimizations
 			an: XPLAIN_ATTRIBUTE_NAME
 		do
 			no_update_optimization := a_value
-			-- For no update optimisation not all extended values are in
+			-- For no update optimisation as not all extended values are in
 			-- the temporary table, so we have to mark this attribute as
 			-- not required, which will cause a left outer join.
-			create an.make (Void, name)
-			type.find_attribute (an).set_required (False)
+			if (no_update_optimization) then
+				create an.make (Void, name)
+				type.find_attribute (an).set_required (False)
+				-- Note that for performance reasons a join is greatly
+				-- preferred, so in the actual select we turn this into a
+				-- join for any/nil functions when possible.
+			end
 		end
 
 

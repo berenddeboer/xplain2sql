@@ -68,6 +68,12 @@ feature -- Status
 			Result := expression.is_using_other_attributes (an_attribute)
 		end
 
+	uses_its: BOOLEAN is
+			-- Does expression has an its list somewhere?
+		do
+			Result := expression.uses_its
+		end
+
 	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
 			-- Does this expression refer to `a_parameter'?
 		do

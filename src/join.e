@@ -1,6 +1,6 @@
 indexing
 
-	description: "Describes a single join statement"
+	description: "Describes a single SQL join statement."
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
@@ -25,7 +25,8 @@ feature {NONE} -- Initialization
 		aaggregate: XPLAIN_TYPE; aaggregate_alias_name: STRING
 		aaggregate_fk: STRING;
 		an_is_upward_join,
-		an_is_forced_left_outer_join: BOOLEAN) is
+		an_is_forced_left_outer_join,
+		an_is_forced_inner_join: BOOLEAN) is
 				-- Initialize.
 		require
 			an_actual_attribute_not_void: an_actual_attribute /= Void
@@ -44,6 +45,7 @@ feature {NONE} -- Initialization
 			aggregate_fk := aaggregate_fk
 			is_upward_join := an_is_upward_join
 			is_forced_left_outer_join := an_is_forced_left_outer_join
+			is_forced_inner_join := an_is_forced_inner_join
 		end
 
 feature -- SQL code
@@ -87,9 +89,14 @@ feature -- Status
 			-- Generate an inner join?
 		do
 			Result :=
-				not is_forced_left_outer_join and then
-				actual_attribute.is_required
+				is_forced_inner_join or else
+				(not is_forced_left_outer_join and then
+				actual_attribute.is_required)
 		end
+
+	is_forced_inner_join: BOOLEAN
+			-- Is inner join forced?
+			-- Happen for certain any/nil extends when used in a get.
 
 	is_forced_left_outer_join: BOOLEAN
 			-- Is left outer join forced?
