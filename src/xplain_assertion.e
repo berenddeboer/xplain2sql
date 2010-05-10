@@ -20,7 +20,8 @@ inherit
 		undefine
 			sql_select_name
 		redefine
-			create_expression
+			create_expression,
+			set_no_update_optimization
 		end
 
 	XPLAIN_TYPE
@@ -70,6 +71,7 @@ feature {NONE} -- creation
 			make_abstract_type (aname, expression.representation (sqlgenerator))
 			expression.set_extension (Current, atype.sqlname (sqlgenerator))
 			type.add_assertion (Current)
+			no_update_optimization := True
 		end
 
 
@@ -203,5 +205,15 @@ feature -- SQL code
 			Result := type.sqlpkname (sqlgenerator)
 		end
 
+
+feature -- Optimizations
+
+	set_no_update_optimization (a_value: BOOLEAN) is
+		do
+			-- Not supported for assertions
+			-- Obviously this means that we need to be written with left
+			-- outer joints when applicable (which is always I think,
+			-- except perhaps in certain some function cases)
+		end
 
 end

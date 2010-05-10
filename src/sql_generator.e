@@ -2688,11 +2688,11 @@ feature -- Return sql code
 			if subject.identification /= Void then
 				-- support for get type "1"
 				if WhereWritten then
-					code.append_string (" and%N")
+					code.append_string (once " and %N")
 				else
 					code.append_character ('%N')
 					code.append_string (Tab)
-					code.append_string ("where%N")
+					code.append_string (once "where%N")
 					WhereWritten := True
 				end
 				code.append_string (Tab)
@@ -2700,18 +2700,21 @@ feature -- Return sql code
 				code.append_string (quote_identifier (subject.type.sqlname (Current)))
 				code.append_character ('.')
 				code.append_string (quote_identifier (subject.type.sqlpkname (Current)))
-				code.append_string (" = ")
+				code.append_string (once " = ")
 				code.append_string (subject.identification.sqlvalue (Current))
 			end
 
 			if predicate /= Void then
 				if WhereWritten then
-					code.append_string (" and")
-					surround_with_parentheses := subject.identification /= Void
+					-- remainig clause can contain ors so make sure we
+					-- employ parenthesis to and properly
+					code.append_string (once " and")
+					--surround_with_parentheses := subject.identification /= Void
+					surround_with_parentheses := WhereWritten
 				else
-					code.append_string ("%N")
+					code.append_character ('%N')
 					code.append_string (Tab)
-					code.append_string ("where")
+					code.append_string (once "where")
 				end
 				code.append_string ("%N" + Tab + Tab)
 				if surround_with_parentheses then
@@ -2842,7 +2845,7 @@ feature -- Return sql code
 			-- that's only possible if the where clause doesn't have an
 			-- its (or an extend attribute, but that's also caught by
 			-- this test).
-			use_where_clause := join_list.first.next /= Void and then join_list.first.next.next /= Void
+			--use_where_clause := join_list.first.next /= Void and then join_list.first.next.next /= Void
 			use_where_clause := an_expression.selection.predicate /= Void and then an_expression.selection.predicate.uses_its
 			--use_where_clause := True
 
@@ -2905,7 +2908,7 @@ feature -- Return sql code
 			-- they need to be added to the temporary table if the extend
 			-- will be updated. If the extend is not updated, we use an
 			-- optimisation to avoid this, i.e. use joins to create the
-			-- temporary table, and left outer joins on the temporary
+			-- temporary table, and left outer joins when using the temporary
 			-- table.
 			if use_where_clause and not an_extension.no_update_optimization then
 				Result.append_string (CommandSeparator)

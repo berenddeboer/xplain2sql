@@ -147,8 +147,19 @@ feature -- SQL specifics
 	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
 			-- Assertion when used in get/value statement. Name includes
 			-- prefix of table if we have such a prefix.
+		local
+			function: XPLAIN_EXTENSION_FUNCTION_EXPRESSION
 		do
 			Result := assertion.sql_qualified_name (sqlgenerator, anode.last.prefix_table)
+			-- We assume assertion view has partial results, because
+			-- `no_update_optimisation' is enabled so we do the same as
+			-- in XPLAIN_EXTENSION.sql_qualified_name
+			function ?= assertion.expression
+			if function /= Void then
+				Result := sqlgenerator.SQLCoalesce + once "(" + Result + once ", " + function.selection.function.sqlextenddefault (sqlgenerator, function.selection.property) + once ")"
+			else
+				Result := sqlgenerator.SQLCoalesce + once "(" + Result + once ", " + sqlgenerator.SQLFalse + once ")"
+			end
 		end
 
 

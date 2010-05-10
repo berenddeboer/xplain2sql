@@ -92,7 +92,7 @@ feature -- Optimizations
 			-- For no update optimisation as not all extended values are in
 			-- the temporary table, so we have to mark this attribute as
 			-- not required, which will cause a left outer join.
-			if (no_update_optimization) then
+			if no_update_optimization then
 				create an.make (Void, name)
 				type.find_attribute (an).set_required (False)
 				-- Note that for performance reasons a join is greatly
