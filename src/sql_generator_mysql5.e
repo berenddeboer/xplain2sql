@@ -263,7 +263,7 @@ feature -- Value
 			-- Emit SQL that returns the value when asked for that value
 			-- inside a stored procedure.
 		do
-			std.output.put_string (format ("select $s as `$s`", <<a_value.quoted_name (Current), a_value.name>>))
+			std.output.put_string (format (once "select $s as `$s`", <<a_value.quoted_name (Current), a_value.name>>))
 		end
 
 	create_select_value_outside_sp (a_value: XPLAIN_VALUE) is
@@ -271,7 +271,7 @@ feature -- Value
 			-- outside a stored procedure.
 			-- Should not emit `CommandSeparator'.
 		do
-			std.output.put_string (format ("select $s", <<a_value.quoted_name (Current)>>))
+			std.output.put_string (format (once "select $s", <<a_value.quoted_name (Current)>>))
 		end
 
 	create_value_declare_inside_sp (a_value: XPLAIN_VALUE) is
