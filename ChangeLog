@@ -1,3 +1,9 @@
+2010-06-14  Berend de Boer  <berend@pobox.com>
+
+	* Assertion output was still incorrect with new extend
+	optimisation. Should use a left join when retrieving attributes.
+
+
 2010-05-11  Berend de Boer  <berend@pobox.com>
 
 	* Extend output was incorrect with new extend optimisation when
