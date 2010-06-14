@@ -62,4 +62,27 @@ get count t5 where e1 > 0.
 # count should be two
 get count t5 where e1 = 0.
 
+
+# Test if assert returns proper value
+insert user "1" its user_name = "John".
+insert user "2" its user_name = "Peter".
+insert role "1" its role_name = "Administrator".
+insert role "2" its role_name = "Sales".
+insert user role * its user = 1, role = 2.
+insert user role * its user = 2, role = 1.
+
+assert user its has permission =
+  any user role
+  where
+    role its role_name = "Administrator"
+ per
+   user.
+
+# Should return scalar value 0
+get some user "1" its has permission.
+
+# Should return scalar value 0.
+value permission = some user "1" its has permission.
+value permission.
+
 end.

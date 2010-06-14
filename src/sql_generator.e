@@ -2813,6 +2813,8 @@ feature -- Return sql code
 			expression_not_void: an_expression /= Void
 			extension_not_void: an_extension /= Void
 		do
+			-- It's better to use (left outer) joins these days, so if
+			-- possible, we'll use that.
 			if an_expression.supports_left_outer_join then
 				Result := do_sql_select_for_extension_function (an_expression, an_extension)
 			else
@@ -2845,7 +2847,6 @@ feature -- Return sql code
 			-- that's only possible if the where clause doesn't have an
 			-- its (or an extend attribute, but that's also caught by
 			-- this test).
-			--use_where_clause := join_list.first.next /= Void and then join_list.first.next.next /= Void
 			use_where_clause := an_expression.selection.predicate /= Void and then an_expression.selection.predicate.uses_its
 			--use_where_clause := True
 

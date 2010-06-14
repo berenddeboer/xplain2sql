@@ -71,6 +71,11 @@ feature {NONE} -- creation
 			make_abstract_type (aname, expression.representation (sqlgenerator))
 			expression.set_extension (Current, atype.sqlname (sqlgenerator))
 			type.add_assertion (Current)
+			-- Turn on no update optimisation, because either with (left
+			-- outer) joins or left outer joins, assertions can always
+			-- miss rows if there's a where clause.
+			-- So if an assertion is used somewhere, care must be taken
+			-- to include it with a left outer join.
 			no_update_optimization := True
 		end
 

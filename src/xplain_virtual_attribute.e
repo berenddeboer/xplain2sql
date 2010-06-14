@@ -37,18 +37,23 @@ feature {NONE} -- Initialization
 			f: XPLAIN_EXTENSION_FUNCTION_EXPRESSION
 			required: BOOLEAN
 		do
-			required := True
 			-- Assertions can usually be joined to the type, except when
 			-- the some function is used: in that case we might have a
 			-- situation where there is no data, so that must be a left
 			-- outer join which we can trigger by making this assertion
 			-- not required.
-			if an_assertion.is_function then
-				f ?= an_assertion.expression
-				if f.selection.function.is_some then
-					required := False
-				end
-			end
+			-- Another case is when a where expression is used and the
+			-- resulting view doesn't contain all rows.
+			-- Easiest now is to simply force a left outer join when
+			-- using a virtual attribute, and this can be optimised when
+			-- this proves detrimental.
+			-- 			if an_assertion.is_function or else an_assertion.expression. then
+-- 				f ?= an_assertion.expression
+-- 				if f.selection.function.is_some then
+-- 					required := False
+-- 				end
+-- 			end
+			required := False
 			inherited_make (Void, an_assertion, False, required, False, False)
 		end
 
