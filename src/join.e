@@ -38,7 +38,7 @@ feature {NONE} -- Initialization
 			join_different_tables: not aattribute_alias_name.is_equal (aaggregate_alias_name)
 		do
 			actual_attribute := an_actual_attribute
-			attribute := aattribute
+			aggregate_attribute := aattribute
 			attribute_alias_name := aattribute_alias_name
 			aggregate := aaggregate
 			aggregate_alias_name := aaggregate_alias_name
@@ -53,7 +53,7 @@ feature -- SQL code
 	attribute_table_name (sqlgenerator: SQL_GENERATOR): STRING is
 			-- SQL table name of attribute type
 		do
-			Result := attribute.sqltablename (sqlgenerator)
+			Result := aggregate_attribute.sqltablename (sqlgenerator)
 		ensure
 			have_table_name: Result /= Void and then not Result.is_empty
 		end
@@ -61,7 +61,7 @@ feature -- SQL code
 	attribute_pk (sqlgenerator: SQL_GENERATOR): STRING is
 			-- Primary key of attribute type
 		do
-			Result := attribute.sqlpkname (sqlgenerator)
+			Result := aggregate_attribute.sqlpkname (sqlgenerator)
 		ensure
 			have_pk: Result /= Void and then not Result.is_empty
 		end
@@ -70,9 +70,9 @@ feature -- SQL code
 feature -- Access
 
 	actual_attribute: XPLAIN_ATTRIBUTE
-			-- The attribute in `aggregate' that is `attribute'
+			-- The attribute in `aggregate' that is `aggregate_attribute'
 
-	attribute: XPLAIN_TYPE
+	aggregate_attribute: XPLAIN_TYPE
 			-- Resolved attribute of `aggregate'
 
 	attribute_alias_name: STRING
@@ -111,7 +111,7 @@ invariant
 	has_aggregate_alias: aggregate_alias_name /= Void and then not aggregate_alias_name.is_empty
 	join_different_tables: not attribute_alias_name.is_equal (aggregate_alias_name)
 	have_aggregate_foreign_key: aggregate_fk /= Void and then not aggregate_fk.is_empty
-	has_attribute: attribute /= Void
+	has_attribute: aggregate_attribute /= Void
 	has_aggregate: aggregate /= Void
 
 end

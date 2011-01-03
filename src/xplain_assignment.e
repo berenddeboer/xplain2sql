@@ -19,7 +19,7 @@ feature {NONE} -- Initialization
 			a_expression: XPLAIN_EXPRESSION) is
 		require
 			valid_attribute_name: a_attribute_name /= Void
-			attribute_set: a_attribute_name.attribute /= Void
+			attribute_set: a_attribute_name.type_attribute /= Void
 			valid_expression: a_expression /= Void
 		do
 			attribute_name := a_attribute_name
@@ -36,7 +36,7 @@ feature -- State
 invariant
 
 	valid_attribute_name: attribute_name /= Void
-	attribute_set: attribute_name.attribute /= Void
+	attribute_set: attribute_name.type_attribute /= Void
 	valid_expression: expression /= Void
 
 end

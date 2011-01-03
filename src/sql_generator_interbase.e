@@ -384,7 +384,7 @@ feature -- other names generators
 
 feature -- generate columns either base or type columns
 
-	init_forced_default (attribute: XPLAIN_ATTRIBUTE): BOOLEAN is
+	init_forced_default (an_attribute: XPLAIN_ATTRIBUTE): BOOLEAN is
 			-- not applicable for InterBase. Has before-insert triggers.
 		do
 			Result := False

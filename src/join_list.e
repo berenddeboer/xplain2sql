@@ -253,7 +253,7 @@ feature -- Main commands
 							print (spaces)
 							print (anode.item.full_name + " (strand extended)%N")
 						end
-						jnode.append_child (anode, is_upward_join, force_left_outer_join, existential_join_optimisation and then anode.item.attribute /= Void and then anode.item.attribute.is_logical_extension)
+						jnode.append_child (anode, is_upward_join, force_left_outer_join, existential_join_optimisation and then anode.item.type_attribute /= Void and then anode.item.type_attribute.is_logical_extension)
 						jnode := jnode.get_immediate_child (anode, is_upward_join)
 					end
 					anode := anode.next

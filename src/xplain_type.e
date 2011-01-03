@@ -111,14 +111,14 @@ feature -- SQL code
 			Result := sqlgenerator.sqlcolumnidentifier_type (Current, role)
 		end
 
-	sqlcolumndefault (sqlgenerator: SQL_GENERATOR; attribute: XPLAIN_ATTRIBUTE): STRING is
+	sqlcolumndefault (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING is
 		do
-			Result := sqlgenerator.sqlcolumndefault_type (attribute)
+			Result := sqlgenerator.sqlcolumndefault_type (an_attribute)
 		end
 
-	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; attribute: XPLAIN_ATTRIBUTE): STRING is
+	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING is
 		do
-			Result := sqlgenerator.sqlcolumnrequired_type (attribute)
+			Result := sqlgenerator.sqlcolumnrequired_type (an_attribute)
 		end
 
 feature -- Type specific sql converter wrappers
@@ -275,10 +275,10 @@ feature {XPLAIN_EXTENSION} -- Extend type
 			valid_extension: an_extension /= Void
 			extension_for_this_type: an_extension.type = Current
 		local
-			attribute: XPLAIN_EXTENSION_ATTRIBUTE
+			my_attribute: XPLAIN_EXTENSION_ATTRIBUTE
 		do
-			create attribute.make (an_extension)
-			attributes.put_last (attribute)
+			create my_attribute.make (an_extension)
+			attributes.put_last (my_attribute)
 		ensure
 			attribute_added: has_attribute (Void, an_extension.name)
 		end
@@ -318,10 +318,10 @@ feature -- Virtual attributes
 		require
 			valid_assertion: assertion /= Void
 		local
-			attribute: XPLAIN_VIRTUAL_ATTRIBUTE
+			my_attribute: XPLAIN_VIRTUAL_ATTRIBUTE
 		do
-			create attribute.make (assertion)
-			attributes.put_last (attribute)
+			create my_attribute.make (assertion)
+			attributes.put_last (my_attribute)
 		end
 
 

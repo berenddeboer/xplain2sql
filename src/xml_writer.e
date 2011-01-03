@@ -73,23 +73,23 @@ feature -- queries
 			Result := not tags.is_empty
 		end
 
-	is_valid_attribute_name (attribute: STRING): BOOLEAN is
+	is_valid_attribute_name (an_attribute: STRING): BOOLEAN is
 			-- Return True if this is a valid attribute name
 		local
 			first,
 			other: CHARACTER
 			i: INTEGER
 		do
-			Result := attribute /= Void and then not attribute.is_empty
+			Result := an_attribute /= Void and then not an_attribute.is_empty
 			if Result then
-				first := attribute.item (1)
+				first := an_attribute.item (1)
 				Result := ValidFirstChars.has (first)
 				from
 					i := 2
 				until
-					not Result or else i = attribute.count
+					not Result or else i = an_attribute.count
 				loop
-					other := attribute.item (i)
+					other := an_attribute.item (i)
 					Result := ValidOtherChars.has (other)
 					i := i + 1
 				end
@@ -221,11 +221,11 @@ feature -- commands that expand `xml'
 			end
 		end
 
-	get_attribute (attribute: STRING): STRING is
+	get_attribute (an_attribute: STRING): STRING is
 			-- Get contents of attribute `attribute' for current tag.
 			-- Returns Void if attribute doesn't exist
 		do
-			if exist_attribute (attribute) then
+			if exist_attribute (an_attribute) then
 				Result := get_value
 			end
 		end
@@ -249,16 +249,16 @@ feature -- commands that expand `xml'
 			add_data (stuff)
 		end
 
-	set_attribute (attribute, value: STRING) is
+	set_attribute (an_attribute, value: STRING) is
 			-- Set an attribute of the current tag.
 			-- `value' may not contain an entity reference.
 		require
-			valid_attribute: is_valid_attribute_name (attribute)
+			valid_attribute: is_valid_attribute_name (an_attribute)
 		do
 			if value = Void then
-				do_set_attribute (attribute, Void)
+				do_set_attribute (an_attribute, Void)
 			else
-				do_set_attribute (attribute, make_valid_attribute_value (value))
+				do_set_attribute (an_attribute, make_valid_attribute_value (value))
 			end
 		end
 
@@ -477,13 +477,13 @@ feature {NONE} -- tag attributes
 
 	attribute_count: INTEGER
 
-	add_attribute (attribute: STRING) is
+	add_attribute (an_attribute: STRING) is
 		do
 			if attributes.count = attribute_count then
 				attributes.resize (attributes.lower, attributes.upper * 2)
 				values.resize (values.lower, values.upper * 2)
 			end
-			attributes.put (attribute, attribute_count)
+			attributes.put (an_attribute, attribute_count)
 			values.put (Void, attribute_count)
 			attribute_count := attribute_count + 1
 		end
@@ -495,24 +495,24 @@ feature {NONE} -- tag attributes
 			attribute_count := 0
 		end
 
-	do_set_attribute (attribute, value: STRING) is
+	do_set_attribute (an_attribute, value: STRING) is
 		do
-			if exist_attribute (attribute) then
+			if exist_attribute (an_attribute) then
 				set_value (value)
 			else
-				add_attribute (attribute)
+				add_attribute (an_attribute)
 				set_value (value)
 			end
 		end
 
-	exist_attribute (attribute: STRING): BOOLEAN is
+	exist_attribute (an_attribute: STRING): BOOLEAN is
 		do
 			from
 				current_attribute := 0
 			until
 				Result or else current_attribute = attribute_count
 			loop
-				Result := attributes.item (current_attribute).is_equal (attribute)
+				Result := attributes.item (current_attribute).is_equal (an_attribute)
 				if not Result then
 					current_attribute := current_attribute + 1
 				end

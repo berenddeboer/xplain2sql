@@ -133,7 +133,7 @@ feature {NONE} -- Update SQL
 				if not code.is_empty or else a_skip_first then
 					code := code + ", "
 				end
-				code := code + jnode.item.attribute.quoted_name (Current)
+				code := code + jnode.item.aggregate_attribute.quoted_name (Current)
 				if not equal(tablename, jnode.item.attribute_alias_name) then
 					-- only write alias when not equal to table/view name
 					code := code + " "
@@ -154,7 +154,7 @@ feature {NONE} -- Update SQL
 			loop
 				code := code + quote_identifier(jnode.item.attribute_alias_name)
 				code := code + "."
-				code := code + quote_identifier(jnode.item.attribute.sqlpkname (Current))
+				code := code + quote_identifier(jnode.item.aggregate_attribute.sqlpkname (Current))
 				code := code + " = "
 				code := code + quote_identifier(jnode.item.aggregate_alias_name)
 				code := code + "."

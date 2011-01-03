@@ -372,7 +372,7 @@ feature {NONE} -- Write helpers
 			-- series of <column>s
 		local
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE]
-			attribute: XPLAIN_ATTRIBUTE
+			my_attribute: XPLAIN_ATTRIBUTE
 			my_type: XPLAIN_TYPE
 		do
 			-- primary key
@@ -397,39 +397,39 @@ feature {NONE} -- Write helpers
 			until
 				cursor.after
 			loop
-				attribute := cursor.item
-				if sqlgenerator.CalculatedColumnsSupported or else not attribute.is_assertion then
+				my_attribute := cursor.item
+				if sqlgenerator.CalculatedColumnsSupported or else not my_attribute.is_assertion then
 					xml.start_tag (once "column")
 					set_names (
-						attribute.full_name,
-						attribute.abstracttype.representation.domain,
-						attribute.sql_select_name (sqlgenerator),
-						attribute.abstracttype.columndatatype (sqlgenerator),
+						my_attribute.full_name,
+						my_attribute.abstracttype.representation.domain,
+						my_attribute.sql_select_name (sqlgenerator),
+						my_attribute.abstracttype.columndatatype (sqlgenerator),
 						Void,
-						attribute.abstracttype.representation.xml_schema_data_type)
-					if attribute.is_specialization then
+						my_attribute.abstracttype.representation.xml_schema_data_type)
+					if my_attribute.is_specialization then
 						xml.set_attribute (once "specialization", once "true")
 					end
-					if not attribute.is_required then
+					if not my_attribute.is_required then
 						xml.set_attribute (once "optional", once "true")
 					end
-					if attribute.is_unique then
+					if my_attribute.is_unique then
 						xml.set_attribute (once "unique", once "true")
 					end
-					if attribute.init = Void then
+					if my_attribute.init = Void then
 						xml.set_attribute (once "init", once "none")
-					elseif attribute.is_init_default then
+					elseif my_attribute.is_init_default then
 						xml.set_attribute (once "init", once "default")
 					else
 						xml.set_attribute (once "init", once "always")
 					end
-					my_type ?= attribute.abstracttype
+					my_type ?= my_attribute.abstracttype
 					if my_type /= Void then
 						xml.set_attribute (once "references", my_type.name)
 						xml.set_attribute (once "sqlReferences", my_type.quoted_name (sqlgenerator))
 					end
 					if sqlgenerator.StoredProcedureSupported then
-						xml.set_attribute (once "sqlParamName", sqlgenerator.sp_define_param_name (attribute.abstracttype.sqlcolumnidentifier (sqlgenerator, attribute.role)))
+						xml.set_attribute (once "sqlParamName", sqlgenerator.sp_define_param_name (my_attribute.abstracttype.sqlcolumnidentifier (sqlgenerator, my_attribute.role)))
 					end
 					xml.stop_tag
 				end
@@ -473,16 +473,16 @@ feature {NONE} -- Write helpers
 			end
 		end
 
-	set_sp_name (attribute, sp_name: STRING) is
+	set_sp_name (an_attribute, sp_name: STRING) is
 			-- Write modification stored procedure attributes. `sp_name'
 			-- is an unquoted name.
 		local
 			quoted_sp_name: STRING
 		do
 			quoted_sp_name := sqlgenerator.quote_identifier (sp_name)
-			xml.set_attribute (attribute, quoted_sp_name)
-			xml.set_attribute (attribute + "AsEiffelString", as_eiffel_string (quoted_sp_name))
-			xml.set_attribute (attribute + "AsCString", as_c_string (quoted_sp_name))
+			xml.set_attribute (an_attribute, quoted_sp_name)
+			xml.set_attribute (an_attribute + "AsEiffelString", as_eiffel_string (quoted_sp_name))
+			xml.set_attribute (an_attribute + "AsCString", as_c_string (quoted_sp_name))
 		end
 
 	as_c_string (s: STRING): STRING is

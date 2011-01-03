@@ -122,7 +122,7 @@ feature -- Access
 			Result := sqlpkname (sqlgenerator)
 		end
 
-	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; attribute: XPLAIN_ATTRIBUTE): STRING is
+	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING is
 		do
 			Result := Void -- not applicable
 		end

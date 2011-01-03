@@ -1792,7 +1792,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			until
 				node = Void
 			loop
-				if node.item.attribute_name.attribute.is_extension then
+				if node.item.attribute_name.type_attribute.is_extension then
 					extension ?= node.item.attribute_name.object
 					updated_extension := extension
 					-- @@BdB: Should output subselects when referring to
@@ -1890,7 +1890,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 				until
 					node = Void
 				loop
-					if not node.item.attribute_name.attribute.is_extension then
+					if not node.item.attribute_name.type_attribute.is_extension then
 						std.output.put_string (Tab)
 						std.output.put_string (Tab)
 						if SupportsQualifiedSetInUpdate and then not join_list.is_empty then
@@ -2856,7 +2856,7 @@ feature -- Return sql code
 			if an_expression.selection.function.is_existential then
 				distinct_elimination :=
 					an_expression.per_property.next = Void and then
-					an_expression.per_property.item.attribute.is_specialization
+					an_expression.per_property.item.type_attribute.is_specialization
 				if not distinct_elimination then
 					Result.append_string (once "distinct ")
 				end
@@ -3359,7 +3359,7 @@ feature -- Return sql code
 				else
 					code.append_string (once "left outer join ")
 				end
-				tablename := jnode.item.attribute.quoted_name (Current)
+				tablename := jnode.item.aggregate_attribute.quoted_name (Current)
 				code.append_string (tablename)
 				alias_name := quote_identifier (jnode.item.attribute_alias_name)
 				if not STRING_.same_string (tablename, alias_name) then
@@ -3375,7 +3375,7 @@ feature -- Return sql code
 				if jnode.item.is_upward_join then
 					code.append_string (quote_identifier (jnode.item.aggregate_fk))
 				else
-					code.append_string (quote_identifier (jnode.item.attribute.sqlpkname (Current)))
+					code.append_string (quote_identifier (jnode.item.aggregate_attribute.sqlpkname (Current)))
 				end
 				code.append_string (once " = ")
 				code.append_string (quote_identifier (jnode.item.aggregate_alias_name))
@@ -3411,7 +3411,7 @@ feature -- Return sql code
 				jnode = Void
 			loop
 				code := code + ", "
-				tablename := jnode.item.attribute.sqlname (Current)
+				tablename := jnode.item.aggregate_attribute.sqlname (Current)
 				code := code + quote_identifier(tablename)
 				if not equal(tablename, jnode.item.attribute_alias_name) then
 					-- only write alias when not equal to table/view name
@@ -3433,7 +3433,7 @@ feature -- Return sql code
 			loop
 				code := code + quote_identifier(jnode.item.attribute_alias_name)
 				code := code + "."
-				code := code + quote_identifier(jnode.item.attribute.sqlpkname (Current))
+				code := code + quote_identifier(jnode.item.aggregate_attribute.sqlpkname (Current))
 				code := code + " = "
 				code := code + quote_identifier(jnode.item.aggregate_alias_name)
 				code := code + "."

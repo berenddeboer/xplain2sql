@@ -137,7 +137,7 @@ feature -- JOIN_NODE generation
 			has_something_to_add: item /= Void or else has_children
 		local
 			join: JOIN
-			attribute: XPLAIN_TYPE
+			my_attribute: XPLAIN_TYPE
 			attribute_alias: STRING
 			aggregate_fk: STRING
 			first,
@@ -145,16 +145,16 @@ feature -- JOIN_NODE generation
 		do
 			if has_children then
 				if item /= Void then
-					attribute := item.item.type
-					attribute_alias := alias_name (sqlgenerator, attribute)
+					my_attribute := item.item.type
+					attribute_alias := alias_name (sqlgenerator, my_attribute)
 					if is_upward_join then
 						aggregate_fk := aggregate.sqlcolumnidentifier (sqlgenerator, item.item.role)
 					else
 						aggregate_fk := item.item.sqlcolumnidentifier (sqlgenerator)
 					end
 					create join.make (
-						item.item.attribute,
-						attribute,
+						item.item.type_attribute,
+						my_attribute,
 						attribute_alias,
 						aggregate,
 						aggregate_alias,
@@ -163,14 +163,14 @@ feature -- JOIN_NODE generation
 						is_forced_left_outer_join,
 						is_forced_inner_join)
 					create first.make (join, Void)
-					increment_usage (attribute)
+					increment_usage (my_attribute)
 					set_prefix_table (aggregate_alias)
 				else
 					-- This is the root node, clear table_counter
 					table_counter.wipe_out
 					increment_usage (aggregate)
 					set_prefix_table (aggregate_alias)
-					attribute := aggregate
+					my_attribute := aggregate
 					attribute_alias := aggregate_alias
 				end
 				from
@@ -180,7 +180,7 @@ feature -- JOIN_NODE generation
 				loop
 					next_join_nodes := next.item_for_iteration.generate_join_nodes (
 						sqlgenerator,
-						attribute,
+						my_attribute,
 						attribute_alias)
 					if first = Void then
 						first := next_join_nodes

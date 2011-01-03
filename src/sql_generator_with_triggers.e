@@ -60,7 +60,7 @@ feature -- create
 
 feature -- generation of init [default] expressions
 
-	init_forced_default (attribute: XPLAIN_ATTRIBUTE): BOOLEAN is
+	init_forced_default (an_attribute: XPLAIN_ATTRIBUTE): BOOLEAN is
 			-- Does this attribute have an init that has to be converted
 			-- to a after-insert style trigger?
 			-- In that case the column should either be optional or there
@@ -69,13 +69,13 @@ feature -- generation of init [default] expressions
 		do
 			Result :=
 				not ChecksNullAfterTrigger and then
-				attribute.init /= Void and then
-				not attribute.is_init_default and then
-				not attribute.init.is_constant and then
-				(not ExpressionsInDefaultClauseSupported or else not attribute.init.is_literal)
+				an_attribute.init /= Void and then
+				not an_attribute.is_init_default and then
+				not an_attribute.init.is_constant and then
+				(not ExpressionsInDefaultClauseSupported or else not an_attribute.init.is_literal)
 		end
 
-	init_forced_null (attribute: XPLAIN_ATTRIBUTE): BOOLEAN is
+	init_forced_null (an_attribute: XPLAIN_ATTRIBUTE): BOOLEAN is
 			-- Does this attribute have a init default that has to be
 			-- converted to a after-insert style trigger?
 			-- To be able to distinguish if a user has supplied a value,
@@ -87,10 +87,10 @@ feature -- generation of init [default] expressions
 		do
 			Result :=
 				not ChecksNullAfterTrigger and then
-				attribute.init /= Void and then
-				attribute.is_init_default and then
-				not attribute.init.is_constant and then
-				(not ExpressionsInDefaultClauseSupported or else not attribute.init.is_literal)
+				an_attribute.init /= Void and then
+				an_attribute.is_init_default and then
+				not an_attribute.init.is_constant and then
+				(not ExpressionsInDefaultClauseSupported or else not an_attribute.init.is_literal)
 		end
 
 	sql_init_expression (an_attribute: XPLAIN_ATTRIBUTE): STRING is
@@ -281,23 +281,23 @@ feature -- Cast expressions
 
 feature -- generate columns either base or type columns
 
-	sqlcolumnrequired_base (attribute: XPLAIN_ATTRIBUTE): STRING is
+	sqlcolumnrequired_base (an_attribute: XPLAIN_ATTRIBUTE): STRING is
 			-- Produce null or not null status of a column that is a base
 		do
-			if init_forced_null (attribute) then
+			if init_forced_null (an_attribute) then
 				Result := column_null_or_not_null (False)
 			else
-				Result := precursor (attribute)
+				Result := precursor (an_attribute)
 			end
 		end
 
-	sqlcolumnrequired_type (attribute: XPLAIN_ATTRIBUTE): STRING is
+	sqlcolumnrequired_type (an_attribute: XPLAIN_ATTRIBUTE): STRING is
 			-- Produce null or not null status of a column that refers to a type
 		do
-			if init_forced_null (attribute) then
+			if init_forced_null (an_attribute) then
 				Result := column_null_or_not_null (False)
 			else
-				Result := precursor (attribute)
+				Result := precursor (an_attribute)
 			end
 		end
 

@@ -56,12 +56,12 @@ feature -- obsolete deferred ones, should call routine in SQL_GENERATOR
 			valid_string: Result /= Void
 		end
 
-	sqlcolumndefault (sqlgenerator: SQL_GENERATOR; attribute: XPLAIN_ATTRIBUTE): STRING is
+	sqlcolumndefault (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING is
 			-- defaults at base/type level if any. Return Void if none
 		deferred
 		end
 
-	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; attribute: XPLAIN_ATTRIBUTE): STRING is
+	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING is
 			-- null or not null in create table statement. Return Void to
 			-- use database default
 		deferred

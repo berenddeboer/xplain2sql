@@ -123,7 +123,7 @@ feature -- SQL creation
 		local
 			node: XPLAIN_EXPRESSION_NODE
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE]
-			attribute: XPLAIN_ATTRIBUTE
+			my_attribute: XPLAIN_ATTRIBUTE
 		do
 			if is_stored_procedure then
 				std.output.put_string ("for ")
@@ -140,12 +140,12 @@ feature -- SQL creation
 						until
 							cursor.after
 						loop
-							attribute := cursor.item
-							if CalculatedColumnsSupported or else not attribute.is_assertion then
+							my_attribute := cursor.item
+							if CalculatedColumnsSupported or else not my_attribute.is_assertion then
 								std.output.put_string (",%N")
 								std.output.put_string (Tab)
 								std.output.put_character (':')
-								std.output.put_string (quote_valid_identifier ("column " + attribute.sql_select_name (Current)))
+								std.output.put_string (quote_valid_identifier ("column " + my_attribute.sql_select_name (Current)))
 							end
 							cursor.forth
 						end
@@ -312,7 +312,7 @@ feature -- Stored procedures
 			selection_list: XPLAIN_SELECTION_LIST
 			selection_function: XPLAIN_SELECTION_FUNCTION
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE]
-			attribute: XPLAIN_ATTRIBUTE
+			my_attribute: XPLAIN_ATTRIBUTE
 		do
 			if procedure.returns_rows then
 				std.output.put_string ("%Nreturns (%N")
@@ -333,13 +333,13 @@ feature -- Stored procedures
 								until
 									cursor.after
 								loop
-									attribute := cursor.item
-									if CalculatedColumnsSupported or else not attribute.is_assertion then
+									my_attribute := cursor.item
+									if CalculatedColumnsSupported or else not my_attribute.is_assertion then
 										std.output.put_string (",%N")
 										std.output.put_string (Tab)
-										std.output.put_string (quote_valid_identifier ("column " + attribute.sql_select_name (Current)))
+										std.output.put_string (quote_valid_identifier ("column " + my_attribute.sql_select_name (Current)))
 										std.output.put_character (' ')
-										std.output.put_string (attribute.abstracttype.representation.datatype (Current))
+										std.output.put_string (my_attribute.abstracttype.representation.datatype (Current))
 									end
 									cursor.forth
 								end

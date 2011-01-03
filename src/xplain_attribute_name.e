@@ -62,7 +62,7 @@ feature {NONE} -- Initialization
 			role := an_attribute.role
 			set_attribute (an_attribute)
 		ensure
-			attribute_set: attribute = an_attribute
+			attribute_set: type_attribute = an_attribute
 		end
 
 
@@ -108,7 +108,7 @@ feature -- Equality
 
 feature -- Type info
 
-	attribute: XPLAIN_ATTRIBUTE
+	type_attribute: XPLAIN_ATTRIBUTE
 			-- Set when attribute of a type.
 
 	object: XPLAIN_ABSTRACT_OBJECT
@@ -123,10 +123,10 @@ feature -- Type info
 			attribute_not_void: an_attribute /= Void
 			atttribute_is_resolved: an_attribute.abstracttype /= Void
 		do
-			attribute := an_attribute
-			object := attribute.abstracttype
+			type_attribute := an_attribute
+			object := type_attribute.abstracttype
 		ensure
-			attribute_set: attribute = an_attribute
+			attribute_set: type_attribute = an_attribute
 			object_set: object = an_attribute.abstracttype
 		end
 
@@ -219,6 +219,6 @@ invariant
 
 	name_not_empty: name /= Void and then not name.is_empty
 	role_void_or_not_empty: role = Void or else not role.is_empty
-	attribute_and_object_in_sync: attribute /= Void implies attribute.abstracttype = object
+	attribute_and_object_in_sync: type_attribute /= Void implies type_attribute.abstracttype = object
 
 end

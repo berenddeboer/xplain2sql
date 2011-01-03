@@ -2480,8 +2480,8 @@ feature {NONE} -- Checks
 				node = Void
 			loop
 				if
-					node.item.attribute_name.attribute.init /= Void and then
-					not node.item.attribute_name.attribute.is_init_default
+					node.item.attribute_name.type_attribute.init /= Void and then
+					not node.item.attribute_name.type_attribute.is_init_default
 				then
 					report_error (format ("Attribute $s has an init expression. Assignment specified in insert will be ignored.%N", <<node.item.attribute_name.full_name>>))
 				end

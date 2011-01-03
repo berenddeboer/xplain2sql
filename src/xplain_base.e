@@ -53,14 +53,14 @@ feature -- implementation of deferred routines
 			Result := sqlgenerator.sqlcolumnidentifier_base (Current, role)
 		end
 
-	sqlcolumndefault (sqlgenerator: SQL_GENERATOR; attribute: XPLAIN_ATTRIBUTE): STRING is
+	sqlcolumndefault (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING is
 		do
-			Result := sqlgenerator.sqlcolumndefault_base (attribute)
+			Result := sqlgenerator.sqlcolumndefault_base (an_attribute)
 		end
 
-	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; attribute: XPLAIN_ATTRIBUTE): STRING is
+	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING is
 		do
-			Result := sqlgenerator.sqlcolumnrequired_base (attribute)
+			Result := sqlgenerator.sqlcolumnrequired_base (an_attribute)
 		end
 
 end

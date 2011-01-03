@@ -85,9 +85,9 @@ feature -- Status
 			-- Can the result of this expression be a Null value?
 		do
 				check
-					have_attribute: first.last.item.attribute /= Void
+					have_attribute: first.last.item.type_attribute /= Void
 				end
-			Result := not first.last.item.attribute.is_required
+			Result := not first.last.item.type_attribute.is_required
 		end
 
 	is_logical_expression: BOOLEAN is
@@ -103,7 +103,7 @@ feature -- Status
 			-- to an attribute that is a specialization?
 			-- Used for XML generation.
 		do
-			Result := first.last.item.attribute.is_specialization
+			Result := first.last.item.type_attribute.is_specialization
 		end
 
 	is_using_other_attributes (an_attribute: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
