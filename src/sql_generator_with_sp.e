@@ -155,7 +155,10 @@ feature -- create SQL for Xplain constructs
 		local
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE_NAME]
 			param_name: STRING
+			save_declared_values: like declared_values
 		do
+			save_declared_values := declared_values
+			create declared_values.make (8)
 			sp_start (procedure)
 			std.output.put_string (procedure.quoted_name (Current))
 
@@ -209,10 +212,10 @@ feature -- create SQL for Xplain constructs
 			-- cleanup
 			procedure.cleanup_after_write
 			-- We can remove all declared values
-			declared_values.wipe_out
+			declared_values := save_declared_values
 		ensure
 			sp_finished: not is_stored_procedure
-			no_declared_values: declared_values.is_empty
+			declared_values_not_changed: declared_values.is_equal (old declared_values.twin)
 		end
 
 	frozen create_select_value (a_value: XPLAIN_VALUE) is
