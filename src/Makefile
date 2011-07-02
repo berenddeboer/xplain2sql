@@ -81,7 +81,7 @@ SAMPLEFILE=$(SAMPLEDIR)$(SAMPLENAME)
 #SAMPLEFILE=~/src/automatem/nakedbus/tools/Xplain/nakedbus_prices
 
 SQLOPTIONS=-nosp
-SQLDIALECT=-mysql
+SQLDIALECT=-pgsql
 #SQLOPTIONS=-nosp -pkformat '$$s_id' -sequenceformat '$$s_seq'
 
 # Runs the test script and attempts

@@ -49,7 +49,8 @@ inherit
 
 create
 
-	make
+	make,
+	make_start
 
 
 feature -- Access
@@ -78,7 +79,7 @@ feature {NONE} -- Implementation
 		do
 			create v.make (1, result_columns_count)
 <xsl:apply-templates select="select/column" mode="bind"/>
-			set_results (v)
+<xsl:text/>			set_results (v)
 		end
 
 	bind_input_parameters	is
@@ -87,15 +88,18 @@ feature {NONE} -- Implementation
 <xsl:apply-templates select="parameter" mode="create"/>
 <xsl:text/>		end
 
-	sql_stored_procedure_call: STRING is "<xsl:choose>
-<xsl:when test="$dialect='cli'">{call <xsl:value-of select="@sqlNameAsEiffelString"/> <xsl:if test="count(parameter)&gt;0">(<xsl:apply-templates select="parameter" mode="list"/>)</xsl:if>}</xsl:when>
-<xsl:when test="$dialect='pgsql'">select * from <xsl:value-of select="@sqlNameAsEiffelString"/> (<xsl:apply-templates select="parameter" mode="list"/>)</xsl:when>
-<xsl:when test="$dialect='mysql'">call <xsl:value-of select="@sqlNameAsEiffelString"/> (<xsl:apply-templates select="parameter" mode="list"/>)</xsl:when>
+	sql_stored_procedure_call: STRING is
+			-- SQL to call a procedure
+		do
+			Result := "<xsl:choose>
+<xsl:when test="$dialect='cli'">{call " + sql_name + " <xsl:if test="count(parameter)&gt;0">(<xsl:apply-templates select="parameter" mode="list"/>)</xsl:if>}</xsl:when>
+<xsl:when test="$dialect='pgsql'">select * from " + sql_name + " (<xsl:apply-templates select="parameter" mode="list"/>)</xsl:when>
+<xsl:when test="$dialect='mysql'">call " + sql_name + " (<xsl:apply-templates select="parameter" mode="list"/>)</xsl:when>
 <xsl:otherwise>
   <xsl:message terminate="yes">Unrecognized dialect <xsl:value-of select="$dialect"/></xsl:message>
 </xsl:otherwise>
 </xsl:choose>"
-      -- SQL to call a procedure
+		end
 
 end
 </xsl:template>
@@ -147,13 +151,13 @@ end
 <xsl:template match="column|parameter" mode="ecli-value-class">
 <xsl:variable name="domain" select="substring(@xplainDomain, 2, 1)"/>
 <xsl:choose>
-  <xsl:when test="$domain='A'">LONGVARCHAR</xsl:when>
+  <xsl:when test="$domain='A'">UTF8_STRING</xsl:when>
   <xsl:when test="$domain='B'">BOOLEAN</xsl:when>
   <xsl:when test="$domain='D'">DATE_TIME</xsl:when>
   <xsl:when test="$domain='F'">DOUBLE</xsl:when>
   <xsl:when test="$domain='I'">INTEGER</xsl:when>
   <xsl:when test="$domain='R'">DECIMAL</xsl:when>
-  <xsl:when test="$domain='T'">LONGVARCHAR</xsl:when>
+  <xsl:when test="$domain='T'">UTF8_STRING</xsl:when>
   <xsl:otherwise><xsl:message terminate="yes">UNHANDLED DOMAIN <xsl:value-of select="$domain"/></xsl:message></xsl:otherwise>
 </xsl:choose>
 </xsl:template>

@@ -50,7 +50,7 @@ all: $(CLASSES)
 
 <!-- class name -->
 <xsl:template match="storedProcedure" mode="file-name">
-  <xsl:text/>mw_<xsl:value-of select="translate(@xplainName, ' ABCDEFGHIJKLMNOPQRSTUVWXYZ', '_abcdefghijklmnopqrstuvwxyz')"/>.e<xsl:text/>
+  <xsl:text/>mw_<xsl:value-of select="translate(@xplainName, ' -ABCDEFGHIJKLMNOPQRSTUVWXYZ', '__abcdefghijklmnopqrstuvwxyz')"/>.e<xsl:text/>
 </xsl:template>
 
 
