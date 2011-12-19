@@ -143,7 +143,7 @@ end
     <xsl:variable name="before" select="substring-before(substring(@xplainDomain, 3), ',')"/>
     <xsl:variable name="after" select="substring-before(substring-after(@xplainDomain, ','), ')')"/>
     <xsl:text/> (<xsl:value-of select="$before+$after"/>, <xsl:value-of select="$after"/>)</xsl:when>
-  <xsl:when test="$domain='T'"> (16384)</xsl:when>
+  <xsl:when test="$domain='T'"> (65536)</xsl:when>
 </xsl:choose>
 </xsl:template>
 
