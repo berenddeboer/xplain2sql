@@ -97,7 +97,7 @@
 
 \setupinteraction
 	[state=start,
-	 title={xplain2sql 2.4.0 manual},
+	 title={xplain2sql 4.1.0 manual},
 	 author={Berend de Boer},
 	 subtitle={There is more than SQL},
 	 keywords={Xplain SQL conversion xplain2sql},
@@ -183,6 +183,14 @@
 % SQL generation
 %\input verb-sql.tex
 
+\setupbibtex
+  [database=/usr/local/share/texmf/bibtex/berend,
+   sort=author]
+
+\setuppublications
+  [numbering=no,
+   sort=author]
+
 % use flowcharts
 \usemodule[chart]
 
@@ -257,8 +265,8 @@ ny=1]
 \startstandardmakeup
 \hbox{
   \hbox{\vtop{\hsize 5.5cm\rightskip=0pt plus 1fill\baselineskip=24pt%
-      \ss\bfd xplain2sql 3.0 manual\par\vskip12pt%
-      \bfa 2009-December-02}}%
+      \ss\bfd xplain2sql 4.1.0 manual\par\vskip12pt%
+      \bfa 2011-December-20}}%
   \hbox{\vtop{\hrule width4pt height18pt depth5cm}}%
   \lower40pt\hbox{\vtop{\hsize 6cm\leftskip=0pt plus 1fill
 	{\setupbodyfont[24pt,rm]\it Xplain Technology Ltd}\par\color[darkgray]{by Berend de Boer}\par}}%
@@ -296,7 +304,7 @@ Xplain code, but there's no\footnote{There is also an Xplain
 product. But compared to todays tools, this is quite primitive. It's
 also a one-tier system, so therefore not accessible from modern RAD
 tools like Delphi.} way to execute it. In the Xplain book
-(see \publication[Bekke92]) some guidelines to convert Xplain to SQL
+(see \cite[Bekke1992]) some guidelines to convert Xplain to SQL
 are given. But wouldn't it be really useful to be able to convert
 Xplain to SQL automatically?
 
@@ -396,8 +404,8 @@ platforms are available at \from[myxplain2sqlpage].
 
 \subsection{Supported platforms}
 
-xplain2sql compiles on both Unix (tested on Ubuntu 9.10 and FreeBSD
-6.4) and Windows (tested on Windows 2000 sp2). Any platform with a
+xplain2sql compiles on both Unix (tested on Ubuntu 11.94 and FreeBSD
+8.2) and Windows (tested on Windows 2000 sp2). Any platform with a
 Standard C compiler should be fine.
 
 \subsection{Supported compilers}
@@ -407,14 +415,14 @@ with any Standard C compiler.
 
 If you want to compile the Eiffel sources, things are only slightly
 more difficult. You can use either \index{SmartEiffel}SmartEiffel
-1.2r7 or \index{ISE Eiffel}ISE Eiffel 6.2 or later. Earlier
+1.2r7 or \index{ISE Eiffel}ISE Eiffel 6.8 or later. Earlier
 SmartEiffel releases or the SmartEiffel 2.x fork are not supported.
 
 
 \subsection{Libraries}
 
 If you want to compile the Eiffel sources of xplain2sql, you need to
-have \index{Gobo}Gobo 3.5 or later installed on your system.
+have \index{Gobo}Gobo 3.9 or later installed on your system.
 
 
 \section{Compiling xplain2sql C source}
@@ -559,7 +567,7 @@ given. See also section~\in[sec:limits] about known limitations.
 \VL -mysql
 \VL \VL\LR
 \VL -mysql5
-\VL Output MySQL 5.0 (tested against version 5.0.51a).\VL\SR
+\VL Output MySQL 5.0 (tested against version 5.1.54).\VL\SR
 \HL
 \VL -mysql4
 \VL Output MySQL 4.0 or higher. Only data definition
@@ -577,7 +585,7 @@ given. See also section~\in[sec:limits] about known limitations.
 \VL -pgsql
 \VL \VL\LR
 \VL -pgsql81
-\VL Output PostgreSQL 8.1 sql (tested against version 8.2.7). \VL\SR
+\VL Output PostgreSQL 8.1 sql (tested against version 8.4.10). \VL\SR
 \HL
 \VL -pgsql73
 \VL Output PostgreSQL 7.3 sql (tested against version 7.3.3). \VL\SR
@@ -1861,7 +1869,7 @@ is called. In terms of the Builder pattern, the {\bf Products} that
 the Builder creates  are XPLAIN_... classes.
 
 Within the Directory, the Interpreter pattern
-(see \publication[Gamma95]) is used a lot. Simple examples are the
+(see \cite[citeulike:115158]) is used a lot. Simple examples are the
 parsing of representations, or domain restriction.
 
 An advanced application of the Interpreter pattern is the expression
@@ -1879,7 +1887,7 @@ example of {\bf Non\-terminal\-Expression} is
 	{\externalfigure[xplain_expression.png][width=\textwidth]}
 
 The {\bf Context} participant is \EClass{XPLAIN_UNIVERSE}. This class is
-implemented as a Singleton (see \publication[Gamma95]). This class
+implemented as a Singleton (see \cite[citeulike:115158]). This class
 holds all objects which have a global scope (see
 figure~\in[object:xplain_object]. Only \EClass{XPLAIN_EXTENSION} is
 not stored in \EClass{XPLAIN_UNIVERSE} because the extension scope is
@@ -1952,7 +1960,7 @@ the details.
 	{SQL Generator inheritance hierarchy}
 	{\externalfigure[sql_generator.png][,width=\textwidth]}
 
-As suggested by BM in \publication[Meyer97] (chapter 24.3) the handle
+As suggested by BM in \cite[OOSC2] (chapter 24.3) the handle
 technique is used to implement the \EClass{SQL_GENERATOR} class. A
 different approach could have been to add all sql generating code to
 \EClass{XPLAIN_PARSER} and inherit from \EClass{XPLAIN_PARSER} to get
@@ -1960,7 +1968,7 @@ the various dialects. But the handle approach is preferred. So
 \EClass{XPLAIN_PARSER} doesn't know a single bit about generation sql
 code, it just calls \EClass{SQL_GENERATOR} through its sqlgenerator
 feature at appropriate times. This approach looks like the Bridge
-pattern (see \publication[Gamma95]), but it would be a real Bridge if
+pattern (see \cite[citeulike:115158]), but it would be a real Bridge if
 the interface between \EClass{XPLAIN_PARSER} and
 \EClass{SQL_\-GE\-NE\-RA\-TOR} was abstracted, which isn't the case.
 
@@ -2019,7 +2027,7 @@ the \EClass{XPLAIN_\-PARSER} itself.
 Xplain is a non-procedural data definition and manipulation language
 invented by Johan ter Bekke and completed in 1983. xplain2sql is based on
 the most recent definitions of the language, see for example
-\publication[Bekke92]. Xplain also refers to the Xplain product, a full
+\cite[Bekke1992]. Xplain also refers to the Xplain product, a full
 implementation of a semantic database, but in this document Xplain
 always refers to the language.
 
@@ -2032,7 +2040,7 @@ section has been taken without getting permission :-)
 \section{The Xplain book}
 
 For English readers, the best introduction to Xplain is given in
-\publication[Bekke92]. I absolutely recommend this book, because it not
+\cite[Bekke1992]. I absolutely recommend this book, because it not
 only introduces Xplain, but it gives fundamental advise about database
 design and modeling. The semantic way of thinking has helped me a lot
 to tackle large design problems and create excellent database
@@ -2077,7 +2085,7 @@ basis for an education in modern data modeling techniques.
 
 \section{Short introduction to Xplain}
 
-In \publication[Bekke96] a short introduction to Xplain is given,
+In \cite[Bekke1996] a short introduction to Xplain is given,
 before showing how Xplain can be used to model successive events,
 version management in that particular case.
 
@@ -2086,8 +2094,8 @@ version management in that particular case.
 
 The semantic abstractions aggregation and generalization appeared for
 the first time in the database literature in a series of papers by
-Smith and Smith (\publication[Smith77a], \publication[Smith77b],
-\publication[Smith78]). These abstractions are considered to be
+Smith and Smith (\cite[Smith77a], \cite[Smith77b],
+\cite[Smith78]). These abstractions are considered to be
 suitable for modeling complex situations in which different types of
 relationships occur. Because of their nature, they are especially
 useful for modeling hierarchical relationships. Many examples can be
@@ -2305,7 +2313,7 @@ an emphasis on ordering aspects.
 
 \section{Employee and department}
 
-In chapter 6 of \publication[Bekke92], a simple Xplain data model is
+In chapter 6 of \cite[Bekke1992], a simple Xplain data model is
 given, see figure~\in[fig:employee]. It defines the types department
 and employee. Every employee belongs to a department, and a department
 can have 0 or more employees.
@@ -2329,7 +2337,7 @@ type employee (A3)    = name, home_town, department, salary.
 \stopXPLAIN
 
 We can now ask certain questions (all taken
-from \publication[Bekke92]) and demonstrate a feature of Xplain:
+from \cite[Bekke1992]) and demonstrate a feature of Xplain:
 
 \startitemize[n]
 \item Select data of the employee with the identification E3.
@@ -2431,7 +2439,7 @@ corresponding SQL code is far harder to read.
 
 \section{Case study: Bank}
 
-In \publication[Bekke92] three case studies are given. Parts of the
+In \cite[Bekke1992] three case studies are given. Parts of the
 first case study are given here. Also there is an example file
 supplied with the xplain2sql distribution, \type|bank.ddl| which contains
 all data definition and data manipulation presented in this case
@@ -2597,85 +2605,24 @@ MetaPost).
 
 \chapter{References}
 
-\startpublicatie[Bekke92]
-  \naam{J.H.~ter~Bekke}
-  \titel{Semantic Data Modeling}
-  \jaar{1992}
-  \plaats{Hemel Hempstead}
-  \uitgever{Prentice Hall}
-\stoppublicatie
+\placepublications[criterium=all]
 
-\startpublicatie[Bekke93]
-  \naam{J.H.~ter~Bekke}
-  \titel{Database ontwerp (Dutch)}
-  \jaar{1993}
-  \plaats{Deventer}
-  \uitgever{Kluwer Bedrijfswetenschappen}
-\stoppublicatie
+% \startpublicatie[Bekke93]
+%   \naam{J.H.~ter~Bekke}
+%   \titel{Database ontwerp (Dutch)}
+%   \jaar{1993}
+%   \plaats{Deventer}
+%   \uitgever{Kluwer Bedrijfswetenschappen}
+% \stoppublicatie
 
-\startpublicatie[Bekke96]
-  \naam{J.H.~ter~Bekke}
-  \titel{Semantic modeling of successive events applied to version management}
-  \jaar{1996}
-  \plaats{International Symposium on Cooperative Database Systems
-  for Advanced Applications, volume 1}
-  \uitgever{Heian Shrine, Kyoto}
-\stoppublicatie
-
-\startpublicatie[Bekke97]
-  \naam{J.H.~ter~Bekke}
-  \titel{Can we rely on SQL?}
-  \jaar{1997}
-  \plaats{Proceedings 8th international DEXA workshop, 378-383}
-  \plaats{Toulouse}
-  \uitgever{IEEE Computer Society}
-\stoppublicatie
-
-\startpublicatie[Bekke99]
-  \naam{J.H.~ter~Bekke}
-  \titel{Handleiding Xplain DBMS, versie 5.8 (in dutch)}
-  \jaar{1999}
-  \plaats{Delft}
-  \uitgever{Faculteit der Technische Wiskunde en Informatica, vakgroep
-  Informatiesystemen, groep Database Systemen}
-\stoppublicatie
-
-\startpublicatie[Gamma95]
-  \naam{Eric~Gamma, e.a.}
-  \titel{Design Patterns}
-  \jaar{1995}
-  \plaats{Massachusetts}
-  \uitgever{Addison-Wesley Publishing Company}
-\stoppublicatie
-
-\startpublicatie[Meyer97]
-  \naam{Bertrand Meyer}
-  \titel{Object-oriented software construction, 2nd edition}
-  \jaar{1997}
-  \plaats{New Jersey}
-  \uitgever{Prentice-Hall, Inc.}
-\stoppublicatie
-
-\startpublicatie[Smith77a]
-  \naam{J.M.~Smith and D.C.P.~Smith}
-  \titel{Database abstractions: aggregation}
-  \jaar{1977}
-  \uitgever{Communications of the ACM 6, pp. 405-413}
-\stoppublicatie
-
-\startpublicatie[Smith77b]
-  \naam{J.M.~Smith and D.C.P.~Smith}
-  \titel{Database abstractions: aggregation and generalization}
-  \jaar{1977}
-  \uitgever{ACM Transactions on Database Systems 2, pp. 105-133}
-\stoppublicatie
-
-\startpublicatie[Smith78]
-  \naam{J.M.~Smith}
-  \titel{Principals of database conceptual design}
-  \jaar{1978}
-  \uitgever{Proceedings NYU Symposium on database design, pp. 35-49}
-\stoppublicatie
+% \startpublicatie[Bekke99]
+%   \naam{J.H.~ter~Bekke}
+%   \titel{Handleiding Xplain DBMS, versie 5.8 (in dutch)}
+%   \jaar{1999}
+%   \plaats{Delft}
+%   \uitgever{Faculteit der Technische Wiskunde en Informatica, vakgroep
+%   Informatiesystemen, groep Database Systemen}
+% \stoppublicatie
 
 \stopbackmatter
 

@@ -10,3 +10,7 @@ label(btex \vbox{\hbox{department}} etex, center q);
 draw (45,40)--(45,70);
 endfig;
 end;
+
+
+
+

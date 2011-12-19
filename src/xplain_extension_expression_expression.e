@@ -103,7 +103,7 @@ feature -- SQL generation
 			Result := expression.representation (sqlgenerator)
 		end
 
-	sqlselect (sqlgenerator: SQL_GENERATOR; an_extension: XPLAIN_EXTENSION): STRING is
+	sqlselect (sqlgenerator: SQL_GENERATOR; an_extension: XPLAIN_ABSTRACT_EXTENSION): STRING is
 			-- SQL for the full select statement that emits the data used
 			-- to create extension.
 		do

@@ -1,6 +1,53 @@
 NEWS - list of user-visible changes between releases of xplain2sql
 See ChangeLog for more details.
 
+New in beta release 4.1.0 <2011-12-19>
+
+* postgresql:
+  - minimum value for a date was set to 0000-01-01, but that date is
+ 	  rejected with version 8.4. So minimum value is now 0001-01-01.
+* mysql:
+  - extend with where claused caused a self select against a temporary
+	  table which MySQL doesn't support.
+  - it seems the dual table doesn't really behave like a table with a
+   	single row. The output now generates a dual itself and uses that.
+  - now drops views create for asserts, so running the script against
+  	an existing database is easier.
+  - now drops procedures before creating them, so running the script
+  	against an existing database is easier.
+  - proper support for some function as limit can be used in
+	  subqueries as well.
+* assert statement:
+  - Assertion in SQL select was done with an inner join instead of a
+    left outer join. Inner join is incorrect when the assertion is a
+    some function as there might be no data.
+* purge statement:
+  - Support purge of assertions.
+* extend statement:
+  - optimization: if extend not updated, generate optimized
+  	output. Does wonders for MySQL 5. Also fixed bug where extra
+  	temporary table step was inserted unnecessarily.
+  - extend with any/nil now emits a '1' instead of a column name in
+	  the subselect. Works much better with MySQL's 'optimiser'.
+  - with any/nil function code optimisation in case the extended
+  	attribute is not update in a procedure.
+  - logical expression code optimisation.
+* Functions:
+  - Didn't generate a proper column name for get max/get min.
+  - Optimized output for any/nil: they're now done with a left outer
+	  join, instead of a subselect. This gives a huge performance boost
+	  under MySQL.
+  - string(): when string() cast function was used in a string
+   	concatenation, SQL output was incorrect.
+* value statement:
+  - inside stored procedure a value would not get proper type if it was
+	  initialised by assigning a parameter.
+  - When a value was purged, it was still listed as being in use, so
+    when reusing it again or using it inside stored procedures it was
+    not properly redeclared.
+  - value statement didn't accept systemdate or loginname.
+
+
 New in release 4.0.1 <2008-08-19>
 
 * License changed to MIT.

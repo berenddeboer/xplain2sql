@@ -1,3 +1,8 @@
+2011-12-19  Berend de Boer  <berend@pobox.com>
+
+	* Beta release 4.1.0
+
+
 2010-06-14  Berend de Boer  <berend@pobox.com>
 
 	* Assertion output was still incorrect with new extend
@@ -14,62 +19,62 @@
 
 2010-01-30  Berend de Boer  <berend@pobox.com>
 
-	* !Extend with logical expression code optimisation.
+	* Extend with logical expression code optimisation.
 
 
 2010-01-29  Berend de Boer  <berend@pobox.com>
 
-	* !Extend with any/nil function code optimisation in
+	* Extend with any/nil function code optimisation in
 	case the extended attribute is not update in a procedure.
 
 
 2009-12-04  Berend de Boer  <berend@pobox.com>
 
-	* !MySQL 5: proper support for some function as limit can be used in
+	* MySQL 5: proper support for some function as limit can be used in
 	subqueries as well.
 
 
 2009-12-01  Berend de Boer  <berend@pobox.com>
 
-	* !PostgreSQL: minimum value for a date was set to 0000-01-01, but
+	* PostgreSQL: minimum value for a date was set to 0000-01-01, but
 	that date is rejected with version 8.4. So minimum value is now
 	0001-01-01.
 
 
 2009-06-15  Berend de Boer  <berend@pobox.com>
 
-	* !extend with any/nil now emits a '1' instead of a column name in
+	* extend with any/nil now emits a '1' instead of a column name in
 	the subselect. Works much better with MySQL's 'optimiser'.
 
 
 2009-05-29  Berend de Boer  <berend@pobox.com>
 
-	* !string(): when string() cast function was used in a string
+	* string(): when string() cast function was used in a string
 	concatenation, SQL output was incorrect.
 
 
 2009-05-19  Berend de Boer  <berend@pobox.com>
 
-	* !Assertion in SQL select was done with an inner join instead of a
+	* Assertion in SQL select was done with an inner join instead of a
 	left outer join. Inner join is incorrect when the assertion is a
 	some function as there might be no data.
 
 
 2009-04-20  Berend de Boer  <berend@pobox.com>
 
-	* !Supported purge of assertions.
+	* Supported purge of assertions.
 
 
 2009-02-11  Berend de Boer  <berend@pobox.com>
 
-	* !Optimized output for any/nil: they're now done with a left outer
+	* Optimized output for any/nil: they're now done with a left outer
 	join, instead of a subselect. This gives a huge performance boost
 	under MySQL.
 
 
 2008-12-04  Berend de Boer  <berend@pobox.com>
 
-	* !Extend optimization: if extend not updated, generate optimized
+	* Extend optimization: if extend not updated, generate optimized
 	output. Does wonders for MySQL 5. Also fixed bug where extra
 	temporary table step was inserted unnecessarily.
 
@@ -81,40 +86,40 @@
 
 2008-11-06  Berend de Boer  <berend@pobox.com>
 
-	* !MySQL 5: now drops procedures before creating them, so running
+	* MySQL 5: now drops procedures before creating them, so running
 	the script against an existing database is easier.
 
 
 2008-11-03  Berend de Boer  <berend@pobox.com>
 
-	* !MySQL 5: now drops views create for asserts, so running the
+	* MySQL 5: now drops views create for asserts, so running the
 	script against an existing database is easier.
 
 
 2008-10-22  Berend de Boer  <berend@pobox.com>
 
-	* !value statement didn't accept systemdate or loginname.
+	* value statement didn't accept systemdate or loginname.
 
 
 2008-10-16  Berend de Boer  <berend@pobox.com>
 
-	* !MySQL: it seems the dual table doesn't really behave like a
+	* MySQL: it seems the dual table doesn't really behave like a
 	table with a single row. The output now generates a dual itself
 	and uses that.
 
 
 2008-10-10  Berend de Boer  <berend@pobox.com>
 
-	* !MySQL: extend with where claused caused a self select against a
+	* MySQL: extend with where claused caused a self select against a
 	temporary table which MySQL doesn't support.
 
 
 2008-08-22  Berend de Boer  <berend@pobox.com>
 
-	* !Value inside stored procedure would not get proper type if it
+	* Value inside stored procedure would not get proper type if it
 	was initialised by assigning a parameter.
 
-	* !When a value was purged, it was still listed as being in use,
+	* When a value was purged, it was still listed as being in use,
 	so when reusing it again or using it inside stored procedures it
 	was not properly redeclared.
 

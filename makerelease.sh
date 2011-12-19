@@ -3,7 +3,7 @@
 # BEREND, after setting the release name
 # CHECK THE NEXT THINGS AS WELL!!!
 
-releasename=xplain2sql-4.1.0
+releasename=xplain2sql-beta-4.1.0
 #releasename=xplain2sql-beta-3.9.0
 
 # CHECK THIS TO!!

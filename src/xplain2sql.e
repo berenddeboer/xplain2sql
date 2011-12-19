@@ -38,7 +38,7 @@ create
 
 feature -- identification
 
-	Version: STRING is "4.1.0"
+	Version: STRING is "beta-4.1.0"
 
 
 feature -- creation

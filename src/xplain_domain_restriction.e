@@ -24,7 +24,7 @@ feature -- Access
 
 	required: BOOLEAN
 			-- Xplain doesn't know Nulls, but we have to support them
-			-- when translating to relational databases;
+			-- when mimicking an existing relational databases
 
 feature -- SQL code
 

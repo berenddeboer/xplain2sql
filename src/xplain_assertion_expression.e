@@ -151,14 +151,19 @@ feature -- SQL specifics
 			function: XPLAIN_EXTENSION_FUNCTION_EXPRESSION
 		do
 			Result := assertion.sql_qualified_name (sqlgenerator, anode.last.prefix_table)
-			-- We assume assertion view has partial results, because
-			-- `no_update_optimisation' is enabled so we do the same as
-			-- in XPLAIN_EXTENSION.sql_qualified_name
+			-- Asserts can have partial results when some function is
+			-- used as there might be no data in that case.
 			function ?= assertion.expression
 			if function /= Void then
 				Result := sqlgenerator.SQLCoalesce + once "(" + Result + once ", " + function.selection.function.sqlextenddefault (sqlgenerator, function.selection.property) + once ")"
 			else
-				Result := sqlgenerator.SQLCoalesce + once "(" + Result + once ", " + sqlgenerator.SQLFalse + once ")"
+				-- This shouldn't happen as it is not a some function so
+				-- we always have data, but just emit the value of the
+				-- assertion.
+				-- In case sqlgenerator doesn't have a coalesce, we won't bother
+				if sqlgenerator.SQLCoalesce /= Void then
+					Result := sqlgenerator.SQLCoalesce + once "(" + Result + once ", " + assertion.expression.sqlvalue (sqlgenerator) + once ")"
+				end
 			end
 		end
 

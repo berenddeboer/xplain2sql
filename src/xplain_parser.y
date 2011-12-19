@@ -2409,7 +2409,7 @@ feature {NONE} -- Checks for validness of parsed code
 				if my_attribute = Void then
 					Result := universe.find_object (first.item.name)
 					if Result = Void then
-						report_error ( format("Object `$s' is not an attribute of type `$s', nor a value or constant.", <<first.item.name, subject_type.name>>))
+						report_error ( format("`$s' is not an attribute of type `$s', nor a value or constant.", <<first.item.name, subject_type.name>>))
 						abort
 					else
 						-- check if value/variable

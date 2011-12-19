@@ -29,4 +29,4 @@ clean:
 	mv temp.pdf $@
 
 .mp.1:
-	mpost $<
+	mpost -mem=metafun.mem $<
