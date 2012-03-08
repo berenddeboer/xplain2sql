@@ -1,6 +1,6 @@
 Summary: xplain2sql can translate Xplain statements to various SQL dialects
 Name: xplain2sql-beta
-Version: 3.1.2
+Version: 4.1.0
 Release: 1
 URL: http://www.pobox.com/~berend/xplain2sql/
 Source: %{name}-%{version}-csrc.tar.gz
