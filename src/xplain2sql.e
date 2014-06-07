@@ -1,11 +1,9 @@
-indexing
+note
 
 	description: "Xplain2SQL root class."
 
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 1999-2005 Berend de Boer, see forum.txt"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #18 $"
+	copyright:  "Copyright (c) 1999-2014 Berend de Boer, see LICENSE"
 
 class
 
@@ -38,7 +36,7 @@ create
 
 feature -- identification
 
-	Version: STRING is "beta-4.1.0"
+	Version: STRING is "beta-4.1.1"
 
 
 feature -- creation
@@ -328,9 +326,12 @@ feature -- help
 			std.error.put_string ("-mysql5          output MySQL 5.0 ANSI mode%N")
 			std.error.put_string ("-oracle%N")
 			std.error.put_string ("-oracle901       output Oracle 9.0.1%N")
-			std.error.put_string ("-pgsql%N")
 			std.error.put_string ("-pgsql7%N")
 			std.error.put_string ("-pgsql73         output PostgreSQL 7.3%N")
+			std.error.put_string ("-pgsql81         output PostgreSQL 8.1%N")
+			std.error.put_string ("-pgsql%N")
+			std.error.put_string ("-pgsql8%N")
+			std.error.put_string ("-pgsql82         output PostgreSQL 8.2%N")
 			std.error.put_string ("-sqlite%N")
 			std.error.put_string ("-sqlite3         output SQLite 3 SQL%N")
 			std.error.put_string ("-tsql%N")
