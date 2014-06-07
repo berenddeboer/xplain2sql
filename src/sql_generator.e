@@ -392,6 +392,13 @@ feature -- extend options
 			Result := False
 		end
 
+	can_write_extend_as_view (an_extension: XPLAIN_EXTENSION): BOOLEAN
+		require
+			extension_not_void: an_extension /= Void
+		do
+			Result := ViewsSupported
+		end
+
 
 feature -- Constants and values
 
@@ -773,7 +780,11 @@ feature -- Convert Xplain definition to sql, you usually do not redefine these
 	write_extend (extension: XPLAIN_EXTENSION) is
 			-- Code for extend statement.
 		do
-			create_extend (extension)
+			if can_write_extend_as_view (extension) then
+				create_extend_view (extension)
+			else
+				create_extend (extension)
+			end
 			if CreateExtendIndex then
 				create_extend_create_index (extension)
 			end
@@ -1131,7 +1142,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			end
 		end
 
-	create_extend_create_table (extension: XPLAIN_EXTENSION) is
+		create_extend_create_table (extension: XPLAIN_EXTENSION) is
 			-- Output sql code to create a separate table to hold the
 			-- extension.
 		require
@@ -1180,6 +1191,34 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			a_pk_name := an_extension.q_sqlpkname (Current)
 			std.output.put_string (format ("create unique index $s on $s ($s)", <<a_index_name, a_table_name, a_pk_name>>))
 			std.output.put_string (CommandSeparator)
+			std.output.put_character ('%N')
+		end
+
+	create_extend_view (an_extension: XPLAIN_EXTENSION) is
+			-- Write extend as a view.
+		require
+			extension_not_void: an_extension /= Void
+			view_supported: ViewsSupported
+		do
+			-- view part
+			std.output.put_character ('%N')
+			drop_view_if_exist (an_extension.sqlname (Current));
+			std.output.put_character ('%N')
+			std.output.put_string (CreateViewSQL)
+			std.output.put_string (quote_valid_identifier (an_extension.sqlname (Current)))
+			if ViewColumnsSupported then
+				std.output.put_string (" (")
+				std.output.put_string (an_extension.type.q_sqlpkname (Current))
+				std.output.put_string (", ")
+				std.output.put_string (quote_valid_identifier (an_extension.name))
+				std.output.put_character (')')
+			end
+			std.output.put_string (" as%N")
+
+			-- select part
+			std.output.put_string (an_extension.expression.sqlselect (Current, an_extension))
+			std.output.put_string (CommandSeparator)
+			std.output.put_character ('%N')
 			std.output.put_character ('%N')
 		end
 

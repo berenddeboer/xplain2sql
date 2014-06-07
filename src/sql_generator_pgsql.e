@@ -153,7 +153,11 @@ feature -- Write
 	write_extend (extension: XPLAIN_EXTENSION) is
 			-- Code for extend statement.
 		do
-			create_extend (extension)
+			if can_write_extend_as_view (extension) then
+				create_extend_view (extension)
+			else
+				create_extend (extension)
+			end
 			-- no need to create index here as in precursor, done at
 			-- different place.
 		end
