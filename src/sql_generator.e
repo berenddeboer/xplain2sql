@@ -282,6 +282,7 @@ feature -- Table options
 		end
 
 	ViewsSupported: BOOLEAN is
+			-- Does this backend support views?
 		once
 			Result := True
 		end
@@ -289,6 +290,7 @@ feature -- Table options
 	ViewsEnabled: BOOLEAN
 
 	CreateViews: BOOLEAN is
+			-- Should a view be written for every type?
 		do
 			Result := ViewsSupported and ViewsEnabled
 		end
