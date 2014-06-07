@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -6,9 +6,6 @@ indexing
 
 	author: "Berend de Boer <berend@pobox.com>"
 	copyright: "Copyright (c) 2005, Berend de Boer and others"
-	license: "Eiffel Forum License v2 (see forum.txt)"
-	date: "$Date: 2010/02/11 $"
-	revision: "$Revision: #4 $"
 
 
 deferred class
@@ -32,32 +29,32 @@ inherit
 
 feature -- Supports
 
-	NamedParametersSupported: BOOLEAN is
+	NamedParametersSupported: BOOLEAN
 			-- Can stored procedures use named parameters?
 		once
 			Result := True
 		end
 
-	OutputParametersSupported: BOOLEAN is
+	OutputParametersSupported: BOOLEAN
 			-- Does this dialect support output parametesr?
 		once
 			Result := True
 		end
 
-	SupportsDomainsInStoredProcedures: BOOLEAN is
+	SupportsDomainsInStoredProcedures: BOOLEAN
 			-- Notably InterBase 4 supports domains, but not as the type of
 			-- parameters in a stored procedure.
 		do
 			Result := DomainsSupported
 		end
 
-	StoredProcedureSupported: BOOLEAN is
+	StoredProcedureSupported: BOOLEAN
 			-- Are stored procedures supported?
 		once
 			Result := True
 		end
 
-	StoredProcedureUserDeclarationBeforeBody: BOOLEAN is
+	StoredProcedureUserDeclarationBeforeBody: BOOLEAN
 			-- Must any value and other declarations be put before the
 			-- procedure body begins?
 			-- I.e. this is before the "begin" statement usually.
@@ -68,7 +65,7 @@ feature -- Supports
 
 feature -- SQL pieces for stored procedures
 
-	StoredProcedureParamListStart: STRING is
+	StoredProcedureParamListStart: STRING
 			-- Zero or more characters denoting start of list of parameters.
 		do
 			Result := " ("
@@ -76,14 +73,14 @@ feature -- SQL pieces for stored procedures
 			valid_result: Result /= Void
 		end
 
-	StoredProcedureParamListStartRequired: BOOLEAN is
+	StoredProcedureParamListStartRequired: BOOLEAN
 			-- True if start of a parameter list like '(' is required. It
 			-- is for DB/2, it isn't for Oracle for example.
 		do
 			Result := True
 		end
 
-	StoredProcedureParamListEnd: STRING is
+	StoredProcedureParamListEnd: STRING
 			-- Zero or more characters denoting end of list of parameters.
 		do
 			Result := ")"
@@ -91,7 +88,7 @@ feature -- SQL pieces for stored procedures
 			valid_result: Result /= Void
 		end
 
-	StoredProcedureReturnParamListStart: STRING is
+	StoredProcedureReturnParamListStart: STRING
 			-- Code to emit for the output parameters (always last), use
 			-- in case return parameters are a separate section.
 		do
@@ -103,7 +100,7 @@ feature -- SQL pieces for stored procedures
 
 feature -- What to create
 
-	CreateStoredProcedure: BOOLEAN is
+	CreateStoredProcedure: BOOLEAN
 			-- Should insert/update or delete stored procedures be
 			-- created?
 		do
@@ -115,7 +112,7 @@ feature -- What to create
 
 feature -- Convert Xplain definition to sql, you usually do not redefine these
 
-	write_procedure (procedure: XPLAIN_PROCEDURE) is
+	write_procedure (procedure: XPLAIN_PROCEDURE)
 			-- Write a stored procedure.
 		do
 			conditional_drop_procedure (procedure.sqlname (Current))
@@ -126,7 +123,7 @@ feature -- Convert Xplain definition to sql, you usually do not redefine these
 			procedure.warn_about_unused_parameters
 		end
 
-	write_type (type: XPLAIN_TYPE) is
+	write_type (type: XPLAIN_TYPE)
 		do
 			precursor (type)
 			if CreateStoredProcedure then
@@ -147,7 +144,7 @@ feature -- Convert Xplain definition to sql, you usually do not redefine these
 
 feature -- create SQL for Xplain constructs
 
-	create_procedure (procedure: XPLAIN_PROCEDURE) is
+	create_procedure (procedure: XPLAIN_PROCEDURE)
 			-- Output code for a user defined stored procedure.
 		require
 			procedure_not_void: procedure /= Void
@@ -218,7 +215,7 @@ feature -- create SQL for Xplain constructs
 			declared_values_not_changed: declared_values.is_equal (old declared_values.twin)
 		end
 
-	frozen create_select_value (a_value: XPLAIN_VALUE) is
+	frozen create_select_value (a_value: XPLAIN_VALUE)
 			-- Xplain value statement that returns the value of `a_value'.
 		do
 			if is_stored_procedure then
@@ -230,7 +227,7 @@ feature -- create SQL for Xplain constructs
 			std.output.put_character ('%N')
 		end
 
-	frozen create_value_declare (a_value: XPLAIN_VALUE) is
+	frozen create_value_declare (a_value: XPLAIN_VALUE)
 			-- Emit code to declare the value if it does not already
 			-- exist. If it exists and its data type is changed,
 			-- redeclare it.
@@ -243,7 +240,7 @@ feature -- create SQL for Xplain constructs
 			declared_values.force (a_value, a_value.name)
 		end
 
-	frozen create_value_assign (a_value: XPLAIN_VALUE) is
+	frozen create_value_assign (a_value: XPLAIN_VALUE)
 		do
 			if is_stored_procedure then
 				create_value_assign_inside_sp (a_value)
@@ -255,7 +252,7 @@ feature -- create SQL for Xplain constructs
 
 feature -- create stored procedures
 
-	create_sp_delete (type: XPLAIN_TYPE) is
+	create_sp_delete (type: XPLAIN_TYPE)
 		require
 			allow_sp_delete: CreateStoredProcedure
 			procedure_not_started: not is_stored_procedure
@@ -323,7 +320,7 @@ feature -- create stored procedures
 			sp_end
 		end
 
-	create_sp_insert (type: XPLAIN_TYPE) is
+	create_sp_insert (type: XPLAIN_TYPE)
 		require
 			valid_type: type /= Void
 			allow_sp_insert: CreateStoredProcedure
@@ -563,7 +560,7 @@ feature -- create stored procedures
 			sp_end
 		end
 
-	create_sp_update (type: XPLAIN_TYPE) is
+	create_sp_update (type: XPLAIN_TYPE)
 		require
 			valid_type: type /= Void
 			allow_sp_update: CreateStoredProcedure
@@ -678,7 +675,7 @@ feature -- create stored procedures
 
 feature -- SQL parts
 
-	frozen sqlgetvalue (a_value: XPLAIN_VALUE): STRING is
+	frozen sqlgetvalue (a_value: XPLAIN_VALUE): STRING
 			-- SQL expression to retrieve the value of a value
 		do
 			if is_stored_procedure then
@@ -691,7 +688,7 @@ feature -- SQL parts
 
 feature -- SQL code inside procedures
 
-	conditional_drop_procedure (name: STRING) is
+	conditional_drop_procedure (name: STRING)
 			-- Drop procedure, but only if it exists, should never
 			-- generate an error or warning.
 		require
@@ -701,7 +698,7 @@ feature -- SQL code inside procedures
 			-- no support by default
 		end
 
-	create_select_value_inside_sp (a_value: XPLAIN_VALUE) is
+	create_select_value_inside_sp (a_value: XPLAIN_VALUE)
 			-- Emit SQL that returns the value when asked for that value
 			-- inside a stored procedure.
 			-- We can assume the value is declared inside the stored
@@ -714,7 +711,7 @@ feature -- SQL code inside procedures
 		deferred
 		end
 
-	create_value_declare_inside_sp (a_value: XPLAIN_VALUE) is
+	create_value_declare_inside_sp (a_value: XPLAIN_VALUE)
 			-- Emit SQL code to declare `a_value' inside a stored procedure.
 		require
 			value_not_void: a_value /= Void
@@ -723,7 +720,7 @@ feature -- SQL code inside procedures
 		deferred
 		end
 
-	create_value_assign_inside_sp (a_value: XPLAIN_VALUE) is
+	create_value_assign_inside_sp (a_value: XPLAIN_VALUE)
 			-- Emit code to assign `a_value'.`expression' to `a_value'
 			-- inside a stored procedure.
 		require
@@ -733,7 +730,7 @@ feature -- SQL code inside procedures
 		deferred
 		end
 
-	sqlgetvalue_inside_sp (a_value: XPLAIN_VALUE): STRING is
+	sqlgetvalue_inside_sp (a_value: XPLAIN_VALUE): STRING
 			-- SQL expression that returns the value of a value inside a
 			-- stored procedure
 		require
@@ -744,7 +741,7 @@ feature -- SQL code inside procedures
 			sql_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	do_drop_procedure (a_name: STRING) is
+	do_drop_procedure (a_name: STRING)
 			-- Drop procedure `a_name', `a_name' is a valid sp identifier,
 			-- and not yet quoted.
 		require
@@ -758,21 +755,21 @@ feature -- SQL code inside procedures
 			std.output.put_character ('%N')
 		end
 
-	sp_before_end_delete is
+	sp_before_end_delete
 			-- Chance to emit something just before `sp_end' is called in
 			-- `create_sp_delete'.
 		do
 			-- do nothing
 		end
 
-	sp_before_end_update is
+	sp_before_end_update
 			-- Chance to emit something just before `sp_end' is called in
 			-- `create_sp_update'.
 		do
 			-- do nothing
 		end
 
-	sp_body_statements (procedure: XPLAIN_PROCEDURE) is
+	sp_body_statements (procedure: XPLAIN_PROCEDURE)
 			-- Output statements in a stored procedure.
 		require
 			procedure_not_void: procedure /= Void
@@ -787,14 +784,14 @@ feature -- SQL code inside procedures
 			end
 		end
 
-	sp_body_start is
+	sp_body_start
 			-- Begin a procedure body.
 			-- Should leave cursor on a new line.
 		do
 			std.output.put_string ("begin%N")
 		end
 
-	sp_define_in_param (name: STRING): STRING is
+	sp_define_in_param (name: STRING): STRING
 			-- Return `name' formatted as an sp input parameter, as it
 			-- should appear in the header/definition of a stored
 			-- procedure.
@@ -806,7 +803,7 @@ feature -- SQL code inside procedures
 			Result := sp_define_param_name (name)
 		end
 
-	sp_define_param_name (name: STRING): STRING is
+	sp_define_param_name (name: STRING): STRING
 			-- Return `name' formatted as the name of the parameter as it
 			-- appears in the header, and hopefully as it is known to
 			-- clients. It must be quoted, if it can be quoted.
@@ -814,7 +811,7 @@ feature -- SQL code inside procedures
 			Result := no_space_identifier (name)
 		end
 
-	sp_define_out_param (name: STRING): STRING is
+	sp_define_out_param (name: STRING): STRING
 			-- Return `name' formatted as an output parameter, as it
 			-- should appear in the header/definition of a stored
 			-- procedure. See also `sp_define_in_param'.
@@ -828,7 +825,7 @@ feature -- SQL code inside procedures
 			result_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sp_delete_name (type: XPLAIN_TYPE): STRING is
+	sp_delete_name (type: XPLAIN_TYPE): STRING
 			-- Name of stored procedure that deletes an instance of a type
 		do
 			Result := sp_name (once_delete + type.sqlname (Current))
@@ -836,7 +833,7 @@ feature -- SQL code inside procedures
 
 	sp_delete_declaration (
 			type: XPLAIN_TYPE;
-			param_name: STRING) is
+			param_name: STRING)
 			-- Emit any declarations for `sp_delete_insert' between
 			-- procedure header and body.
 		require
@@ -845,7 +842,7 @@ feature -- SQL code inside procedures
 			-- nothing
 		end
 
-	sp_end is
+	sp_end
 			-- Write statements, if any, to end a stored procedure.
 		require
 			sp_started: is_stored_procedure
@@ -858,7 +855,7 @@ feature -- SQL code inside procedures
 			sp_stopped: not is_stored_procedure
 		end
 
-	sp_get_auto_generated_primary_key (type: XPLAIN_TYPE): STRING is
+	sp_get_auto_generated_primary_key (type: XPLAIN_TYPE): STRING
 			-- Statement that returns the generated primary key into the
 			-- output parameters. Statement should end with CommandSeperator.
 		deferred
@@ -867,7 +864,7 @@ feature -- SQL code inside procedures
 			result_not_void: Result /= Void
 		end
 
-	sp_header_end is
+	sp_header_end
 			-- Emit code to end stored procedure declaration. Many
 			-- dialects have an "as" for example.
 			-- Should leave cursor on a new line.
@@ -878,7 +875,7 @@ feature -- SQL code inside procedures
 	sp_insert_declaration (
 			type: XPLAIN_TYPE;
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE];
-			has_input_parameters: BOOLEAN) is
+			has_input_parameters: BOOLEAN)
 			-- Emit any declarations for `sp_create_insert' between
 			-- procedure header and body.
 			-- `cursor' contains the data attributes of `type'.
@@ -891,13 +888,13 @@ feature -- SQL code inside procedures
 			-- nothing
 		end
 
-	sp_insert_name (type: XPLAIN_TYPE): STRING is
+	sp_insert_name (type: XPLAIN_TYPE): STRING
 			-- Name of stored procedure that inserts an instance of a type
 		do
 			Result := sp_name (once_insert + type.sqlname (Current))
 		end
 
-	sp_name (name: STRING): STRING is
+	sp_name (name: STRING): STRING
 			-- Turn an Xplain name into a stored procedure name.
 		do
 			if sp_prefix.is_empty then
@@ -907,7 +904,7 @@ feature -- SQL code inside procedures
 			end
 		end
 
-	sp_result_parameter (a_procedure: XPLAIN_PROCEDURE) is
+	sp_result_parameter (a_procedure: XPLAIN_PROCEDURE)
 			-- Emit the result parameter of the stored procedure, if
 			-- applicable.
 			-- For example DB/2 and Oracle needs to know if rows are returned.
@@ -916,7 +913,7 @@ feature -- SQL code inside procedures
 			-- nothing
 		end
 
-	sp_return_parameter_format_string: STRING is
+	sp_return_parameter_format_string: STRING
 			-- Format a parameter as a return parameter.
 		once
 			Result := "$s $s"
@@ -925,7 +922,7 @@ feature -- SQL code inside procedures
 			-- result_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sp_start (a_procedure: XPLAIN_PROCEDURE) is
+	sp_start (a_procedure: XPLAIN_PROCEDURE)
 			-- Write statements to start a procedure, including the
 			-- "create procedure " statement itself (including space).
 			-- If `a_procedure' is Void, it is an auto-generated
@@ -942,7 +939,7 @@ feature -- SQL code inside procedures
 	sp_update_declaration (
 			type: XPLAIN_TYPE;
 			pk_param_name: STRING;
-			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE]) is
+			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE])
 			-- Emit any declarations for `sp_create_update' between
 			-- procedure header and body.
 			-- `cursor' contains the data attributes of `type'.
@@ -953,13 +950,13 @@ feature -- SQL code inside procedures
 			-- nothing
 		end
 
-	sp_update_name (type: XPLAIN_TYPE): STRING is
+	sp_update_name (type: XPLAIN_TYPE): STRING
 			-- Name of stored procedure that updates an instance of a type
 		do
 			Result := sp_name (once_update + type.sqlname (Current))
 		end
 
-	sp_use_param (name: STRING): STRING is
+	sp_use_param (name: STRING): STRING
 			-- Return stored procedure parameter `name' formatted
 			-- according to the dialects convention when using
 			-- parameters in sql code. It is usually prefixed by '@' or
@@ -970,7 +967,7 @@ feature -- SQL code inside procedures
 			Result := sp_define_param_name (name)
 		end
 
-	sp_user_declaration (procedure: XPLAIN_PROCEDURE) is
+	sp_user_declaration (procedure: XPLAIN_PROCEDURE)
 			-- Any declarations needed in a user procedure like
 			-- declarations for the value statement or cursors.
 			-- Exact location depends on
@@ -981,7 +978,7 @@ feature -- SQL code inside procedures
 			-- nothing
 		end
 
-	sp_user_result (procedure: XPLAIN_PROCEDURE) is
+	sp_user_result (procedure: XPLAIN_PROCEDURE)
 			-- Output any stuff before header ends in case of a user
 			-- defined stored procedure.
 		require
@@ -993,13 +990,13 @@ feature -- SQL code inside procedures
 
 feature -- Drop statements
 
-	drop_procedure (procedure: XPLAIN_PROCEDURE) is
+	drop_procedure (procedure: XPLAIN_PROCEDURE)
 			-- Drop procedure `procedure'.
 		do
 			do_drop_procedure (procedure.sqlname (Current))
 		end
 
-	drop_sp (type: XPLAIN_TYPE) is
+	drop_sp (type: XPLAIN_TYPE)
 			-- Drop table modification stored procedures.
 		require
 			allow_sp: CreateStoredProcedure
@@ -1013,7 +1010,7 @@ feature -- Drop statements
 			end
 		end
 
-	drop_table (type: XPLAIN_TYPE) is
+	drop_table (type: XPLAIN_TYPE)
 		do
 			if CreateStoredProcedure then
 				drop_sp (type)
@@ -1021,7 +1018,7 @@ feature -- Drop statements
 			precursor (type)
 		end
 
-	drop_value (a_value: XPLAIN_VALUE) is
+	drop_value (a_value: XPLAIN_VALUE)
 			-- Remove value.
 		do
 			-- Assume that inside a stored procedure the representation
@@ -1039,7 +1036,7 @@ feature -- Drop statements
 
 feature -- Identifiers
 
-	make_valid_sp_identifier (name: STRING): STRING is
+	make_valid_sp_identifier (name: STRING): STRING
 			-- Return a valid stored procedure identifier for a given
 			-- name.  Certain databases allow quoted names, but don't
 			-- allow spaces (DB/2).
