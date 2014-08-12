@@ -1,3 +1,8 @@
+2014-06-07  Berend de Boer  <berend@pobox.com>
+
+	* Extend: now generates view instead of (temporary) table when not used inside a procedure.
+
+
 2011-12-19  Berend de Boer  <berend@pobox.com>
 
 	* Beta release 4.1.0
