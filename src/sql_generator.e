@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -24,9 +24,7 @@ indexing
 		%    attributes in that case."
 
 	author:	"Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 1999-2009, Berend de Boer, see forum.txt"
-	date:		"$Date: 2010/02/11 $"
-	revision:	"$Revision: #21 $"
+	copyright:  "Copyright (c) 1999-2014, Berend de Boer, see forum.txt"
 
 
 deferred class
@@ -302,6 +300,7 @@ feature -- Table options
 			Result := "create view "
 		ensure
 			not_empty: Result /= Void and then not Result.is_empty
+			ends_with_space: not Result.is_empty implies Result.item (Result.count).is_space
 		end
 
 	TemporaryTablesSupported: BOOLEAN is
