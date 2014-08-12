@@ -33,7 +33,7 @@
 <xsl:variable name="class-name">
   <xsl:apply-templates select="." mode="class-name"/>
 </xsl:variable>
-<xsl:text/>indexing
+<xsl:text/>note
 
 	description: "Generated middleware code for Xplain procedure <xsl:value-of select="@xplainName"/> to be used with ECLI."
   bugs: "PostgreSQL specific code right now."
@@ -55,12 +55,12 @@ create
 
 feature -- Access
 
-	expected_columns_count: INTEGER is <xsl:value-of select="count(select/column)"/>
+	expected_columns_count: INTEGER = <xsl:value-of select="count(select/column)"/>
 			-- Expected number of columns returned by `execute'
 
-	name: STRING is "<xsl:value-of select="$procedureName"/>"
+	name: STRING = "<xsl:value-of select="$procedureName"/>"
 
-	sql_name: STRING is "<xsl:value-of select="@sqlNameAsEiffelString"/>"
+	sql_name: STRING = "<xsl:value-of select="@sqlNameAsEiffelString"/>"
 
 
 feature -- Columns
@@ -72,7 +72,7 @@ feature -- Parameters
 
 feature {NONE} -- Implementation
 
-	bind_columns is
+	bind_columns
 			-- Bind column names to returned columns and check results.
 		local
 			v: ARRAY [ECLI_VALUE]
@@ -82,13 +82,13 @@ feature {NONE} -- Implementation
 <xsl:text/>			set_results (v)
 		end
 
-	bind_input_parameters	is
+	bind_input_parameters
 			-- Create `parameters' and put them in `directed_parameters'.
 		do
 <xsl:apply-templates select="parameter" mode="create"/>
 <xsl:text/>		end
 
-	sql_stored_procedure_call: STRING is
+	sql_stored_procedure_call: STRING
 			-- SQL to call a procedure
 		do
 			Result := "<xsl:choose>
@@ -143,7 +143,7 @@ end
     <xsl:variable name="before" select="substring-before(substring(@xplainDomain, 3), ',')"/>
     <xsl:variable name="after" select="substring-before(substring-after(@xplainDomain, ','), ')')"/>
     <xsl:text/> (<xsl:value-of select="$before+$after"/>, <xsl:value-of select="$after"/>)</xsl:when>
-  <xsl:when test="$domain='T'"> (65536)</xsl:when>
+  <xsl:when test="$domain='T'"> (1048576)</xsl:when>
 </xsl:choose>
 </xsl:template>
 
