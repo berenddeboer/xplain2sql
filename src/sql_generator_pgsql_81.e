@@ -28,7 +28,8 @@ inherit
 			as_string,
 			plpgsql_block_demarcation,
 			sp_end,
-			safe_sql
+			safe_sql,
+			CreateViewSQL
 		end
 
 
@@ -39,16 +40,30 @@ create
 
 feature -- About this generator
 
-	target_name: STRING is
+	target_name: STRING
 			-- Name and version of dialect
 		once
 			Result := "PostgreSQL 8.1"
 		end
 
 
+feature -- View options
+
+	CreateViewSQL: STRING
+			-- SQL statement to start creating a view; should end with
+			-- some form of space
+		once
+			if is_stored_procedure then
+				Result := "create or replace temporary view "
+			else
+				Result := precursor
+			end
+		end
+
+
 feature -- Identifiers
 
-	MaxIdentifierLength: INTEGER is
+	MaxIdentifierLength: INTEGER
 			-- Default length for PostgreSQL 8.1
 		once
 			Result := 63
@@ -57,7 +72,7 @@ feature -- Identifiers
 
 feature -- update options
 
-	SupportsJoinInUpdate: BOOLEAN is
+	SupportsJoinInUpdate: BOOLEAN
 			-- Does this dialect support a from clause in an update statement?
 		do
 			Result := True
@@ -66,7 +81,7 @@ feature -- update options
 
 feature -- Literal
 
-	as_string (s: STRING): STRING is
+	as_string (s: STRING): STRING
 			-- Return `s' as string by surrounding it with quotes. Makes
 			-- sure `s' is properly quoted, so don't use together with
 			-- `safe_string'!
@@ -87,7 +102,7 @@ feature -- Literal
 
 feature {NONE} -- Update SQL
 
-	output_update_from_clause (a_subject: XPLAIN_SUBJECT; a_join_list: JOIN_LIST) is
+	output_update_from_clause (a_subject: XPLAIN_SUBJECT; a_join_list: JOIN_LIST)
 			-- PostgreSQL way of having joins in an update statement.
 		do
 			std.output.put_character ('%N')
@@ -96,7 +111,7 @@ feature {NONE} -- Update SQL
 			std.output.put_string (sql_update_joins (False, a_join_list))
 		end
 
-	output_update_extend_from_clause (a_subject: XPLAIN_SUBJECT; a_join_list: JOIN_LIST) is
+	output_update_extend_from_clause (a_subject: XPLAIN_SUBJECT; a_join_list: JOIN_LIST)
 			-- PostgreSQL way of having joins in an update statement.
 		do
 			std.output.put_character ('%N')
@@ -106,7 +121,7 @@ feature {NONE} -- Update SQL
 			std.output.put_string (sql_update_joins (True, a_join_list))
 		end
 
-	sql_update_joins (a_skip_first: BOOLEAN; join_list: JOIN_LIST): STRING is
+	sql_update_joins (a_skip_first: BOOLEAN; join_list: JOIN_LIST): STRING
 			-- `join_list' as join statements suitable for PostgreSQL
 			-- update from clause.
 		require
@@ -175,9 +190,9 @@ feature {NONE} -- Update SQL
 
 feature -- Stored procedure support
 
-	plpgsql_block_demarcation: STRING is "$$"
+	plpgsql_block_demarcation: STRING = "$$"
 
-	sp_end is
+	sp_end
 			-- Write statements, if any, to end a stored procedure.
 		do
 			is_stored_procedure := False
@@ -193,7 +208,7 @@ feature -- Stored procedure support
 
 feature {NONE} -- SQL parts
 
-	safe_sql (s: STRING): STRING is
+	safe_sql (s: STRING): STRING
 			-- ' characters in `s' are quoted if necessary
 		do
 			Result := s

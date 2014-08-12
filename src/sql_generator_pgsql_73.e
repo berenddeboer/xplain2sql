@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -9,9 +9,7 @@ indexing
 		%2. Constants are parsed as float8 and do not map to numeric datatypes."
 
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 2003, Berend de Boer"
-	date:       "$Date: 2010/02/11 $"
-	revision:   "$Revision: #7 $"
+	copyright:  "Copyright (c) 2003-2014, Berend de Boer"
 
 class
 
@@ -35,23 +33,26 @@ create
 
 feature -- About this generator
 
-	target_name: STRING is
+	target_name: STRING
 			-- Name and version of dialect
 		once
 			Result := "PostgreSQL 7.3.3"
 		end
 
 
-feature -- Table options
+feature -- View options
 
-	CreateViewSQL: STRING is "create or replace view "
+	CreateViewSQL: STRING
 			-- SQL statement to start creating a view; should end with
 			-- some form of space
+		once
+			Result := "create or replace view "
+		end
 
 
 feature -- Stored procedure support
 
-	drop_sp_type (a_procedure: XPLAIN_PROCEDURE) is
+	drop_sp_type (a_procedure: XPLAIN_PROCEDURE)
 			-- Drop the type of records the procedure
 			-- returns. Unfortunately we cannot test if the type exists
 			-- so you have to ignore the error message if the type does
@@ -67,7 +68,7 @@ feature -- Stored procedure support
 			std.output.put_character ('%N')
 		end
 
-	create_sp_type (a_procedure: XPLAIN_PROCEDURE) is
+	create_sp_type (a_procedure: XPLAIN_PROCEDURE)
 			-- Create the type of records the procedure returns.
 		require
 			procedure_not_void: a_procedure /= Void
@@ -82,7 +83,7 @@ feature -- Stored procedure support
 			std.output.put_character ('%N')
 		end
 
-	sp_result_parameter (a_procedure: XPLAIN_PROCEDURE) is
+	sp_result_parameter (a_procedure: XPLAIN_PROCEDURE)
 			-- Emit the result parameter of the stored procedure, if
 			-- applicable.
 			-- For example DB/2/Oracle needs to know if rows are returned.
@@ -107,7 +108,7 @@ feature -- Stored procedure support
 			end
 		end
 
-	sp_return_cursor is
+	sp_return_cursor
 			-- Code that returns all rows in a cursor to a client.
 			-- Only one select statement is allowed per procedure.
 		do
@@ -123,7 +124,7 @@ feature -- Stored procedure support
 			std.output.put_string (once "return")
 		end
 
-	sp_start (a_procedure: XPLAIN_PROCEDURE) is
+	sp_start (a_procedure: XPLAIN_PROCEDURE)
 			-- Write statements to start a procedure, including the
 			-- "create procedure " statement itself (including space).
 		do
@@ -136,7 +137,7 @@ feature -- Stored procedure support
 			std.output.put_string ("create or replace function ")
 		end
 
-	sp_start_cursor is
+	sp_start_cursor
 			-- Code that starts a cursor for a select statement.
 			-- Only one select statement is allowed per procedure.
 		do
@@ -144,13 +145,13 @@ feature -- Stored procedure support
 			CommandSeparator.wipe_out
 		end
 
-	sp_type_name (a_procedure: XPLAIN_PROCEDURE): STRING is
+	sp_type_name (a_procedure: XPLAIN_PROCEDURE): STRING
 			-- Name of type that is result of a function that returns sets.
 		do
 			Result := a_procedure.quoted_name (Current)
 		end
 
-	sp_user_declaration (procedure: XPLAIN_PROCEDURE) is
+	sp_user_declaration (procedure: XPLAIN_PROCEDURE)
 			-- Emit value declarations.
 		do
 			precursor (procedure)
