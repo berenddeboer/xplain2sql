@@ -1,0 +1,6 @@
+src/verbose.txt
+src/xplain2sql
+*.melted
+src/xplain_parser.e
+src/xplain_scanner.e
+src/xplain_tokens.e
