@@ -4,3 +4,7 @@ src/xplain2sql
 src/xplain_parser.e
 src/xplain_scanner.e
 src/xplain_tokens.e
+src/compile_ge.xace
+src/compile_ise.ecf
+*.err
+*.out
