@@ -42,12 +42,9 @@ feature -- About this generator
 
 feature -- View options
 
-	CreateViewSQL: STRING
+	CreateViewSQL: STRING = "create or replace view "
 			-- SQL statement to start creating a view; should end with
 			-- some form of space
-		once
-			Result := "create or replace view "
-		end
 
 
 feature -- Stored procedure support

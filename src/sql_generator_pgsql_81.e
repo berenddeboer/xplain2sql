@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -7,8 +7,6 @@ indexing
 	author: "Berend de Boer <berend@pobox.com>"
 	copyright: "Copyright (c) 2007, Berend de Boer"
 	license: "Eiffel Forum License v2 (see forum.txt)"
-	date: "$Date: 2010/02/11 $"
-	revision: "$Revision: #3 $"
 
 
 class
@@ -28,8 +26,7 @@ inherit
 			as_string,
 			plpgsql_block_demarcation,
 			sp_end,
-			safe_sql,
-			CreateViewSQL
+			safe_sql
 		end
 
 
@@ -44,20 +41,6 @@ feature -- About this generator
 			-- Name and version of dialect
 		once
 			Result := "PostgreSQL 8.1"
-		end
-
-
-feature -- View options
-
-	CreateViewSQL: STRING
-			-- SQL statement to start creating a view; should end with
-			-- some form of space
-		once
-			if is_stored_procedure then
-				Result := "create or replace temporary view "
-			else
-				Result := precursor
-			end
 		end
 
 
