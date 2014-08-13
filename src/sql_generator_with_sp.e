@@ -23,7 +23,8 @@ inherit
 			drop_table,
 			drop_value,
 			sqlgetvalue,
-			write_type
+			write_type,
+			can_write_extend_as_view
 		end
 
 
@@ -1055,11 +1056,21 @@ feature -- Access
 			-- Are we currently generating output inside a stored procedure?
 
 
+feature -- Extend options
+
+	can_write_extend_as_view (an_extension: XPLAIN_EXTENSION): BOOLEAN
+		do
+			Result := ViewsSupported and then not is_stored_procedure
+		ensure then
+			no_views_in_stored_procedure: is_stored_procedure implies not Result
+		end
+
+
 feature {NONE} -- Once strings
 
-	once_delete: STRING is "Delete"
-	once_insert: STRING is "Insert"
-	once_update: STRING is "Update"
+	once_delete: STRING = "Delete"
+	once_insert: STRING = "Insert"
+	once_update: STRING = "Update"
 
 
 invariant

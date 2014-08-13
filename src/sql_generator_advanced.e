@@ -32,7 +32,8 @@ inherit
 			drop_table,
 			drop_value,
 			sqlgetvalue,
-			write_type
+			write_type,
+			can_write_extend_as_view
 		end
 
 

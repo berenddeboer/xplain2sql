@@ -1,3 +1,9 @@
+2014-08-14  Berend de Boer  <berend@pobox.com>
+
+	* Fixed bug: view was always created inside stored procedure, but
+  	  should have stayed a temporary table.
+
+
 2014-06-07  Berend de Boer  <berend@pobox.com>
 
 	* Extend: now generates view instead of (temporary) table when not used inside a procedure.
