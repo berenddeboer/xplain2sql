@@ -42,8 +42,8 @@ all: $(CLASSES)
 
 <xsl:template match="storedProcedure" mode="rule">
 <xsl:apply-templates select="." mode="file-name"/>: <xsl:value-of select="$xplain2sql-file-name"/><xsl:text> </xsl:text><xsl:value-of select="$make-procedure-file-name"/>
-&#x09;xsltproc -o temp.e -stringparam procedureName "<xsl:value-of select="@xplainName"/>" -stringparam dialect <xsl:value-of select="$dialect"/><xsl:text> </xsl:text><xsl:value-of select="$make-procedure-file-name"/><xsl:text> </xsl:text><xsl:value-of select="$xplain2sql-file-name"/>
-&#x09;mv temp.e $@
+&#x09;xsltproc -o $@.tmp -stringparam procedureName "<xsl:value-of select="@xplainName"/>" -stringparam dialect <xsl:value-of select="$dialect"/><xsl:text> </xsl:text><xsl:value-of select="$make-procedure-file-name"/><xsl:text> </xsl:text><xsl:value-of select="$xplain2sql-file-name"/>
+&#x09;mv $@.tmp $@
 
 </xsl:template>
 
