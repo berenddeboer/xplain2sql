@@ -46,6 +46,7 @@ New in beta release 4.1.0 <2011-12-19>
     when reusing it again or using it inside stored procedures it was
     not properly redeclared.
   - value statement didn't accept systemdate or loginname.
+* procedures: a view was created instead of using a temporary table.
 
 
 New in release 4.0.1 <2008-08-19>

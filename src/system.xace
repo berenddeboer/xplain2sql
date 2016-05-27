@@ -11,7 +11,7 @@
 	<root class="XPLAIN2SQL" creation="make"/>
 
 	<option unless="${DEBUG}">
-		<option name="assertion" value="none"/>
+		<option name="assertion" value="all"/>
 		<option name="garbage_collector" value="none"/>
 		<option name="finalize" value="true"/>
 	</option>

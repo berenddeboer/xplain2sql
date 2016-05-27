@@ -29,7 +29,7 @@
 		<description>
 			Compile '${system}' for release.
 		</description>
-		<geant target="compile_se"/>
+		<geant target="compile_ise"/>
 	</target>
 
 	<target name="prepare_compile" depend="init,xplain_parser,xplain_scanner">

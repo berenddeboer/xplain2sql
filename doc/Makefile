@@ -25,7 +25,7 @@ clean:
 	rm -f mpgraph.* *.1 *.mpx
 
 .tex.pdf:
-	texexec --result=temp.pdf --output=pdftex $<
+	context --result=temp.pdf $<
 	mv temp.pdf $@
 
 .mp.1:

@@ -3,7 +3,7 @@
 # BEREND, after setting the release name
 # CHECK THE NEXT THINGS AS WELL!!!
 
-releasename=xplain2sql-beta-4.1.0
+releasename=xplain2sql-beta-4.1.3
 #releasename=xplain2sql-beta-3.9.0
 
 # CHECK THIS TO!!
@@ -15,17 +15,21 @@ releasename=xplain2sql-beta-4.1.0
 # 4. check NEWS
 
 # make sure documentation is up-to-date
-cd doc
-make
-if [ $? -gt 0 ]; then exit 1; fi
-cd ..
+# 2016-04-22: no longer builds
+# cd doc
+# make
+# if [ $? -gt 0 ]; then exit 1; fi
+# cd ..
 
 # make sure the created classes are there
 cd src
-make xplain_scanner.e
-if [ $? -gt 0 ]; then exit 1; fi
-make xplain_parser.e
-if [ $? -gt 0 ]; then exit 1; fi
+# make xplain_scanner.e
+# if [ $? -gt 0 ]; then exit 1; fi
+# make xplain_parser.e
+# if [ $? -gt 0 ]; then exit 1; fi
+# cd ..
+# 2016-04-22: won't compile with ge
+geant compile_ise_debug
 cd ..
 
 # we want an i386 version only, so make sure we have the default CFLAGS.
@@ -56,6 +60,7 @@ if [ $? -gt 0 ]; then exit 1; fi
 
 # test release
 # make with .y and .l
+unset GOBO_BUILD_PREFIX
 cd xplain2sql
 make
 if [ $? -gt 0 ]; then exit 1; fi

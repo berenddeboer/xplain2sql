@@ -1,3 +1,8 @@
+2016-04-23  Berend de Boer  <berend@pobox.com>
+
+	* Beta release 4.1.3.
+
+
 2014-08-14  Berend de Boer  <berend@pobox.com>
 
 	* Fixed bug: view was always created inside stored procedure, but
@@ -11,7 +16,7 @@
 
 2011-12-19  Berend de Boer  <berend@pobox.com>
 
-	* Beta release 4.1.0
+	* Beta release 4.1.0.
 
 
 2010-06-14  Berend de Boer  <berend@pobox.com>
