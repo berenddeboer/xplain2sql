@@ -7,7 +7,7 @@ Acrobat Reader for free at:
 
 Requirements:
 
-The GOBO library, version 3.4 or later: http://www.gobosoft.com/
+Current version of the GOBO library, see http://www.gobosoft.com/
 
 Next type
 
@@ -18,3 +18,7 @@ to create the binary xplain2sql.
 
 
 Install this binary somewhere in your path.
+
+
+If you have ISE Eiffel, opening src/xplain2sql.ecf and compiling the
+project should also work.

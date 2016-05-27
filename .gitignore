@@ -8,3 +8,10 @@ src/compile_ge.xace
 src/compile_ise.ecf
 *.err
 *.out
+doc/*.log
+doc/xplain2sql.pdf
+builddir
+samples/test2.ddl
+*.tar.gz
+*.zip
+src/EIFGENs
