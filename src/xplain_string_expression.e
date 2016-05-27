@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Constant string expression."
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -27,7 +27,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (a_value: STRING) is
+	make (a_value: STRING)
 		require
 			value_not_void: a_value /= Void
 		do
@@ -43,7 +43,7 @@ feature -- Access
 
 feature -- Status
 
-	has_wild_card_characters: BOOLEAN is
+	has_wild_card_characters: BOOLEAN
 			-- Does the expression contain the Xplain wildcard characters
 			-- '*' and '?'?
 		do
@@ -52,19 +52,19 @@ feature -- Status
 			definition: Result = value.has ('*') or else value.has ('?')
 		end
 
-	is_constant: BOOLEAN is True
+	is_constant: BOOLEAN = True
 			-- Is this expression a constant value?
 
-	is_string_expression: BOOLEAN is True
+	is_string_expression: BOOLEAN = True
 			-- Is this a string?
 
-	uses_its: BOOLEAN is
+	uses_its: BOOLEAN
 			-- Does expression has an its list somewhere?
 		do
 			Result := False
 		end
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		do
 			Result := False
@@ -73,7 +73,7 @@ feature -- Status
 
 feature -- SQL code
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 		do
 			if value.count = 0 then
 				Result := sqlgenerator.value_representation_char (1)
@@ -82,13 +82,13 @@ feature -- SQL code
 			end
 		end
 
-	sqlvalue (mygenerator: SQL_GENERATOR): STRING is
+	sqlvalue (mygenerator: SQL_GENERATOR): STRING
 			-- Just `value'
 		do
 			Result := mygenerator.as_string (value)
 		end
 
-	sqlvalue_as_wildcard (mygenerator: SQL_GENERATOR): STRING is
+	sqlvalue_as_wildcard (mygenerator: SQL_GENERATOR): STRING
 			-- `value' formatted for SQL like expression
 		local
 			s: STRING

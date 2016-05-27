@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -23,7 +23,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (a_name: STRING; a_domain: XPLAIN_REPRESENTATION) is
+	make (a_name: STRING; a_domain: XPLAIN_REPRESENTATION)
 		require
 			name_not_empty: a_name /= Void and then not a_name.is_empty
 		do

@@ -1,4 +1,4 @@
-indexing
+note
 
   description: "not expression. Has to be treated specially for dialects that don't have a True Boolean"
   author:     "Berend de Boer <berend@pobox.com>"
@@ -28,7 +28,7 @@ create
 
 feature -- Initialization
 
-	make (an_operand: XPLAIN_EXPRESSION) is
+	make (an_operand: XPLAIN_EXPRESSION)
 		require
 			valid_operand: an_operand /= Void
 		do
@@ -39,7 +39,7 @@ feature -- Initialization
 
 feature -- SQL generation
 
-	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST) is
+	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST)
 			-- Possibility of expression to add something to join part of
 			-- a select statement.
 		do
@@ -48,7 +48,7 @@ feature -- SQL generation
 			join_list.enable_existential_join_optimisation
 		end
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Return expression in generator syntax.
 		do
 			Result := sqlgenerator.sql_not_expression (operand)
@@ -57,6 +57,6 @@ feature -- SQL generation
 
 feature {NONE} -- Implementation
 
-	once_not: STRING is "not"
+	once_not: STRING = "not"
 
 end

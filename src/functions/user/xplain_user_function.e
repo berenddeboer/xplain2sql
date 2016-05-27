@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -35,7 +35,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (a_name: STRING; a_parameters: XPLAIN_EXPRESSION_NODE) is
+	make (a_name: STRING; a_parameters: XPLAIN_EXPRESSION_NODE)
 			-- Initialize.
 		require
 			name_not_empty: a_name /= Void and then not a_name.is_empty
@@ -55,7 +55,7 @@ feature -- Access
 
 feature -- Status
 
-	is_using_other_attributes (an_attribute: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	is_using_other_attributes (an_attribute: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to other attributes as `an_attribute'?
 			-- It is used to output better optimized SQL code.
 		local
@@ -72,7 +72,7 @@ feature -- Status
 			end
 		end
 
-	uses_its: BOOLEAN is
+	uses_its: BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		local
 			p: XPLAIN_EXPRESSION_NODE
@@ -88,7 +88,7 @@ feature -- Status
 			end
 		end
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		local
 			p: XPLAIN_EXPRESSION_NODE
@@ -107,7 +107,7 @@ feature -- Status
 
 feature -- SQL code
 
-	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST) is
+	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST)
 			-- Possibility of expression to add something to join part of
 			-- a select statement.
 		local
@@ -123,7 +123,7 @@ feature -- SQL code
 			end
 		end
 
-	column_name: STRING is
+	column_name: STRING
 			-- The Xplain based column heading name, if any; it is used
 			-- by PostgreSQL output to create the proper function type
 			-- for example. The XML_GENERATOR uses it to give clients
@@ -132,14 +132,14 @@ feature -- SQL code
 			Result := name
 		end
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- The representation of this user function
 		do
 			-- TODO: don't know representation
 			Result := sqlgenerator.value_representation_char (250)
 		end
 
-	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING is
+	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING
 			-- Expression in sql syntax used in init statements. Equal to
 			-- `sqlvalue' in many cases, but usually if you refer to
 			-- an attribute of `a_type' it has to be prefixed by "new." for
@@ -148,7 +148,7 @@ feature -- SQL code
 			Result := sqlvalue (sqlgenerator)
 		end
 
-	sqlname (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlname (sqlgenerator: SQL_GENERATOR): STRING
 			-- Try to come up with the most likely column name for this
 			-- expression, only applicable for attributes. If nothing
 			-- found, return Void.
@@ -156,7 +156,7 @@ feature -- SQL code
 			Result := name
 		end
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Expression in generator syntax
 		local
 			p: XPLAIN_EXPRESSION_NODE

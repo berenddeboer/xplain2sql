@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -23,14 +23,14 @@ create
 
 feature
 
-	value_representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	value_representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 		do
 			Result := sqlgenerator.value_representation_boolean
 		end
 
 feature
 
-	sqldomainconstraint(sqlgenerator: SQL_GENERATOR; column_name: STRING): STRING is
+	sqldomainconstraint(sqlgenerator: SQL_GENERATOR; column_name: STRING): STRING
 		do
 			result := sqlgenerator.sqlcheck_boolean (Current, column_name)
 		end

@@ -1,4 +1,4 @@
-indexing
+note
 
   description: "Expression where a Boolean value is supposed to be True. As I didn't know a word for it, it's not not."
   author:     "Berend de Boer <berend@pobox.com>"
@@ -26,12 +26,12 @@ create
 
 feature -- SQL generation
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 		do
 			Result := expression.representation (sqlgenerator)
 		end
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Return expression in generator syntax.
 		do
 			Result := sqlgenerator.sql_notnot_expression (expression)

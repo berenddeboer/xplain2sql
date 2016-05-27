@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Traverses over universe to return all constants."
 
@@ -25,13 +25,13 @@ create
 
 feature -- Access
 
-	item_as_constant: XPLAIN_VARIABLE is
+	item_as_constant: XPLAIN_VARIABLE
 			-- As item, but typed.
 		do
 			Result ?= item
 		end
 
-	name_in_query (sqlgenerator: SQL_GENERATOR): STRING is
+	name_in_query (sqlgenerator: SQL_GENERATOR): STRING
 			-- Name as it occurs in select statements.
 		do
 			Result := item_as_constant.quoted_name (sqlgenerator)
@@ -39,7 +39,7 @@ feature -- Access
 
 feature {NONE} -- Check
 
-	skip_this_item: BOOLEAN is
+	skip_this_item: BOOLEAN
 			-- Is `item' an XPLAIN_VARIABLE?
 		do
 			Result := item_as_constant = Void

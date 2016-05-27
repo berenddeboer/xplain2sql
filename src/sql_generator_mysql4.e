@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Produces mySQL 4.0 output. Assumes running in ANSI mode!"
 
@@ -31,7 +31,7 @@ create
 
 feature -- About this generator
 
-	target_name: STRING is
+	target_name: STRING
 			-- Name and version of dialect
 		once
 			Result := "mySQL 4.0, ANSI mode"
@@ -39,7 +39,7 @@ feature -- About this generator
 
 feature -- table options
 
-	AutoPrimaryKeyConstraint: STRING is
+	AutoPrimaryKeyConstraint: STRING
 		once
 			Result := "identity " + PrimaryKeyConstraint
 		end
@@ -47,7 +47,7 @@ feature -- table options
 
 feature -- SQL creation statements
 
-	create_use_database (database: STRING) is
+	create_use_database (database: STRING)
 			-- start using a certain database
 		do
 			write_one_line_comment ("This script assumes ANSI SQL mode has been enabled.")
@@ -56,7 +56,7 @@ feature -- SQL creation statements
 
 feature -- Drop statements, should fail gracefully if things are not supported
 
-	drop_table_if_exist (type: XPLAIN_TYPE) is
+	drop_table_if_exist (type: XPLAIN_TYPE)
 			-- Generate a statement that drops this table, but only if it exists,
 			-- No warning must be generated if the table does not exist at
 			-- run-time
@@ -70,7 +70,7 @@ feature -- Drop statements, should fail gracefully if things are not supported
 
 feature -- identifiers
 
-	quote_identifier (identifier: STRING): STRING is
+	quote_identifier (identifier: STRING): STRING
 			-- return identifier, optionally surrounded by quotes if identifier
 			-- contains spaces and rdbms supports spaces in identifiers
 		do

@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -23,7 +23,7 @@ create
 
 feature
 
-	to_sqlcode (sqlgenerator: SQL_GENERATOR): STRING is
+	to_sqlcode (sqlgenerator: SQL_GENERATOR): STRING
 			-- Return integer suitable for sql in enumeration.
 		do
 			Result := item.out

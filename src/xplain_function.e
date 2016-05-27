@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Xplain abstract function"
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -14,17 +14,17 @@ deferred class
 
 feature -- Status
 
-	is_nil: BOOLEAN is
+	is_nil: BOOLEAN
 		do
 			Result := False
 		end
 
-	is_some: BOOLEAN is
+	is_some: BOOLEAN
 		do
 			Result := False
 		end
 
-	property_required: INTEGER is
+	property_required: INTEGER
 			-- Does function need the presence of a property?
 			-- 0: forbidden; 1: must be presented; 2: don't care either way
 		deferred
@@ -35,27 +35,27 @@ feature -- Status
 
 feature -- Access
 
-	name: STRING is
+	name: STRING
 			-- Xplain name of function
 		deferred
 		ensure
 			name_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	needs_coalesce: BOOLEAN is
+	needs_coalesce: BOOLEAN
 			-- Need to give a default value in case function can return a
 			-- Null.
 		do
 			Result := True
 		end
 
-	needs_distinct: BOOLEAN is
+	needs_distinct: BOOLEAN
 			-- Does function need a distinct clause (count function)
 		do
 			Result := False
 		end
 
-	needs_limit (sqlgenerator: SQL_GENERATOR): BOOLEAN is
+	needs_limit (sqlgenerator: SQL_GENERATOR): BOOLEAN
 			-- Can the function return more than one value, so we need to
 			-- top it off?
 		require
@@ -67,7 +67,7 @@ feature -- Access
 	representation (
 			sqlgenerator: SQL_GENERATOR;
 			type: XPLAIN_TYPE;
-			expression: XPLAIN_EXPRESSION): XPLAIN_REPRESENTATION is
+			expression: XPLAIN_EXPRESSION): XPLAIN_REPRESENTATION
 			-- What's the Xplain representation for this function?
 		require
 			have_sqlgenerator: sqlgenerator /= Void
@@ -78,7 +78,7 @@ feature -- Access
 			has_representation: Result /= Void
 		end
 
-	sqlextenddefault (sqlgenerator: SQL_GENERATOR; expression: XPLAIN_EXPRESSION): STRING is
+	sqlextenddefault (sqlgenerator: SQL_GENERATOR; expression: XPLAIN_EXPRESSION): STRING
 			-- default to use for extension when function can return a Null value
 		require
 			have_sqlgenerator: sqlgenerator /= Void
@@ -86,7 +86,7 @@ feature -- Access
 			Result := "Null"
 		end
 
-	sp_function_type (sqlgenerator: SQL_GENERATOR; a_selection: XPLAIN_SELECTION_FUNCTION; an_emit_path: BOOLEAN): STRING is
+	sp_function_type (sqlgenerator: SQL_GENERATOR; a_selection: XPLAIN_SELECTION_FUNCTION; an_emit_path: BOOLEAN): STRING
 			-- Callback to generator to retrieve function type for
 			-- PostgreSQL functions.
 		require
@@ -108,7 +108,7 @@ feature -- Access
 			end
 		end
 
-	sqlfunction (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlfunction (sqlgenerator: SQL_GENERATOR): STRING
 			-- SQL function statement for this function.
 		require
 			have_sqlgenerator: sqlgenerator /= Void
@@ -118,7 +118,7 @@ feature -- Access
 
 feature -- Status
 
-	is_existential: BOOLEAN is
+	is_existential: BOOLEAN
 			-- Is this function an any or nil function?
 		do
 			Result := False

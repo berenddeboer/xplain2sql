@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 		"Produces general MySQL output."
@@ -33,58 +33,58 @@ inherit
 
 feature -- identifiers
 
-	MaxIdentifierLength: INTEGER is
+	MaxIdentifierLength: INTEGER
 		once
 			Result := 64
 		end
 
 feature -- table options
 
-	AutoPrimaryKeySupported: BOOLEAN is once Result := True end
+	AutoPrimaryKeySupported: BOOLEAN once Result := True end
 
-	ConstraintNameSupported: BOOLEAN is
+	ConstraintNameSupported: BOOLEAN
 		once
 			Result := False
 		end
 
-	CheckConstraintSupported: BOOLEAN is
+	CheckConstraintSupported: BOOLEAN
 		once
 			Result := False
 		end
 
-	InlineUniqueConstraintSupported: BOOLEAN is
+	InlineUniqueConstraintSupported: BOOLEAN
 		once
 			Result := False
 		end
 
-	TemporaryTablesSupported: BOOLEAN is once Result := True end
+	TemporaryTablesSupported: BOOLEAN once Result := True end
 
 
 feature -- Booleans
 
-	SQLTrue: STRING is once Result := "'T'" end
-	SQLFalse: STRING is once Result := "'F'" end
+	SQLTrue: STRING once Result := "'T'" end
+	SQLFalse: STRING once Result := "'F'" end
 
 
 feature -- type specification for xplain types
 
-	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING is
+	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING
 		do
 			Result := "char(1)"
 		end
 
-	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING is
+	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING
 		do
 			Result := "datetime"
 		end
 
-	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING is
+	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING
 			-- platform dependent approximate numeric data type
 		do
 			Result := "double"
 		end
 
-	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING is
+	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING
 		do
 			inspect representation.length
 			when 1 .. 2 then
@@ -111,17 +111,17 @@ feature -- type specification for xplain types
 			end
 		end
 
-	datatype_money (representation: XPLAIN_M_REPRESENTATION): STRING is
+	datatype_money (representation: XPLAIN_M_REPRESENTATION): STRING
 		do
 			Result := "numeric(12,4)"
 		end
 
-	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING is
+	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING
 		do
 			Result := "longblob"
 		end
 
-	datatype_text (representation: XPLAIN_T_REPRESENTATION): STRING is
+	datatype_text (representation: XPLAIN_T_REPRESENTATION): STRING
 		do
 			Result := "longtext"
 		end

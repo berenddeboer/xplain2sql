@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 		"Parent class to produces output for Microsoft Transact SQL%
@@ -72,9 +72,9 @@ inherit
 
 feature -- Command separation
 
-	CommandSeparator: STRING is once Result := "" end
+	CommandSeparator: STRING once Result := "" end
 
-	end_with_go is
+	end_with_go
 			-- some statements should terminate with go
 		require
 			cursor_start: -- we're at end of last generated line
@@ -84,18 +84,18 @@ feature -- Command separation
 
 feature -- identifiers
 
-	MaxTemporaryTableNameLength: INTEGER is
+	MaxTemporaryTableNameLength: INTEGER
 		deferred
 		end
 
-	IdentifierWithSpacesSupported: BOOLEAN is
+	IdentifierWithSpacesSupported: BOOLEAN
 		once
 			Result := True
 		end
 
 feature -- domain options
 
-	CreateDomainCheck: BOOLEAN is
+	CreateDomainCheck: BOOLEAN
 			-- the create rule is no longer supported by this converter
 			-- the code is still there but needs to be patched a bit
 			-- because it outputs wrong code
@@ -103,29 +103,29 @@ feature -- domain options
 			Result := False
 		end
 
-	RulePrefix: STRING is "Rule"
+	RulePrefix: STRING = "Rule"
 
 
 feature -- table options
 
-	AutoPrimaryKeySupported: BOOLEAN is once Result := True end
+	AutoPrimaryKeySupported: BOOLEAN once Result := True end
 
-	PrimaryKeyConstraint: STRING is
+	PrimaryKeyConstraint: STRING
 		once
 			Result := "not null primary key nonclustered"
 		end
-	AutoPrimaryKeyConstraint: STRING is
+	AutoPrimaryKeyConstraint: STRING
 		once
 			Result := "identity " + PrimaryKeyConstraint
 		end
 
-	TimestampSupported: BOOLEAN is True
+	TimestampSupported: BOOLEAN = True
 			-- Does this dialect support the creation of time stamps in a table?
 
 
 feature -- init [default] options
 
-	ChecksNullAfterTrigger: BOOLEAN is
+	ChecksNullAfterTrigger: BOOLEAN
 			-- Does this dialect check for nulls in columns after a
 			-- trigger has been fired?
 		once
@@ -136,7 +136,7 @@ feature -- init [default] options
 
 feature -- index options
 
-	ClusteredIndexSupported: BOOLEAN is
+	ClusteredIndexSupported: BOOLEAN
 			-- sql generator can create clustered indexes
 		once
 			Result := True
@@ -145,21 +145,21 @@ feature -- index options
 
 feature -- Stored procedure options
 
-	StoredProcedureParamListStartRequired: BOOLEAN is False
+	StoredProcedureParamListStartRequired: BOOLEAN = False
 			-- True if start of a parameter list like '(' is required. It
 			-- is for DB/2, it isn't for Oracle for example.
 
 
 feature -- select options
 
-	ExistentialFromNeeded: BOOLEAN is False
+	ExistentialFromNeeded: BOOLEAN = False
 			-- Certain systems do not like a from clause in certain
 			-- kinds of selects
 
 
 feature -- update/delete options
 
-	SupportsJoinInUpdate: BOOLEAN is
+	SupportsJoinInUpdate: BOOLEAN
 			-- Does this dialect support a from clause in an update statement?
 		do
 			Result := True
@@ -168,10 +168,10 @@ feature -- update/delete options
 
 feature -- Booleans
 
-	SQLTrue: STRING is once Result := "1" end
-	SQLFalse: STRING is once Result := "0" end
+	SQLTrue: STRING once Result := "1" end
+	SQLFalse: STRING once Result := "0" end
 
-	SupportsTrueBoolean: BOOLEAN is
+	SupportsTrueBoolean: BOOLEAN
 		do
 			Result := False
 		end
@@ -179,24 +179,24 @@ feature -- Booleans
 
 feature -- Strings
 
-	sql_string_combine_separator: STRING is " + "
+	sql_string_combine_separator: STRING = " + "
 
 
 feature -- TransactSQL specific SQL creation statements
 
-	create_assertion (an_assertion: XPLAIN_ASSERTION) is
+	create_assertion (an_assertion: XPLAIN_ASSERTION)
 		do
 			precursor (an_assertion)
 			end_with_go
 		end
 
-	create_constant (variable: XPLAIN_VARIABLE) is
+	create_constant (variable: XPLAIN_VARIABLE)
 		do
 			precursor (variable)
 			end_with_go
 		end
 
-	create_delete (subject: XPLAIN_SUBJECT; predicate: XPLAIN_EXPRESSION) is
+	create_delete (subject: XPLAIN_SUBJECT; predicate: XPLAIN_EXPRESSION)
 			-- Emit Transact-SQL delete statement which supports joins in
 			-- the delete statement itself.
 		local
@@ -222,7 +222,7 @@ feature -- TransactSQL specific SQL creation statements
 			std.output.put_character ('%N')
 		end
 
-	create_domain (base: XPLAIN_BASE)  is
+	create_domain (base: XPLAIN_BASE)
 		local
 			s: STRING
 		do
@@ -252,7 +252,7 @@ feature -- TransactSQL specific SQL creation statements
 			end
 		end
 
-	create_echo (str: STRING) is
+	create_echo (str: STRING)
 			-- output string while parsing sql script
 		do
 			std.output.put_string ("%Nprint '")
@@ -260,7 +260,7 @@ feature -- TransactSQL specific SQL creation statements
 			std.output.put_string ("'%N")
 		end
 
-	create_extend (extension: XPLAIN_EXTENSION) is
+	create_extend (extension: XPLAIN_EXTENSION)
 		local
 			join_list: JOIN_LIST
 			f: XPLAIN_EXTENSION_FUNCTION_EXPRESSION
@@ -320,7 +320,7 @@ feature -- TransactSQL specific SQL creation statements
 			set_nocount_off
 		end
 
-	create_init (type: XPLAIN_TYPE) is
+	create_init (type: XPLAIN_TYPE)
 		local
 			join_list: JOIN_LIST
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE]
@@ -408,13 +408,13 @@ feature -- TransactSQL specific SQL creation statements
 			end_with_go
 		end
 
-	create_index (index: XPLAIN_INDEX) is
+	create_index (index: XPLAIN_INDEX)
 		do
 			precursor (index)
 			end_with_go
 		end
 
-	create_insert (type: XPLAIN_TYPE; id: XPLAIN_EXPRESSION; assignment_list: XPLAIN_ASSIGNMENT_NODE) is
+	create_insert (type: XPLAIN_TYPE; id: XPLAIN_EXPRESSION; assignment_list: XPLAIN_ASSIGNMENT_NODE)
 		local
 			auto_identifier: BOOLEAN
 		do
@@ -438,26 +438,26 @@ feature -- TransactSQL specific SQL creation statements
 			end
 		end
 
-	create_primary_key_generator (type: XPLAIN_TYPE) is
+	create_primary_key_generator (type: XPLAIN_TYPE)
 		do
 			-- supported through identity constraint
 		end
 
-	frozen create_select_value_inside_sp (a_value: XPLAIN_VALUE) is
+	frozen create_select_value_inside_sp (a_value: XPLAIN_VALUE)
 			-- Emit SQL that returns the value when asked for that value
 			-- inside a stored procedure.
 		do
 			do_create_select_value (a_value)
 		end
 
-	frozen create_select_value_outside_sp (a_value: XPLAIN_VALUE) is
+	frozen create_select_value_outside_sp (a_value: XPLAIN_VALUE)
 			-- Emit SQL that returns the value when asked for that value
 			-- outside a stored procedure.
 		do
 			do_create_select_value (a_value)
 		end
 
-	do_create_select_value (a_value: XPLAIN_VALUE) is
+	do_create_select_value (a_value: XPLAIN_VALUE)
 			-- Emit SQL that returns the value when asked for that value.
 		do
 			std.output.put_string ("select ")
@@ -466,13 +466,13 @@ feature -- TransactSQL specific SQL creation statements
 			std.output.put_string (quote_identifier (a_value.name))
 		end
 
-	create_table (type: XPLAIN_TYPE) is
+	create_table (type: XPLAIN_TYPE)
 		do
 			precursor (type)
 			end_with_go
 		end
 
-	create_use_database (database: STRING) is
+	create_use_database (database: STRING)
 			-- Use a database.
 		do
 			-- need two uses, bug somewhere in SQL Server 6.5??
@@ -493,19 +493,19 @@ feature -- TransactSQL specific SQL creation statements
 			std.output.put_character ('%N')
 		end
 
-	frozen create_value_declare_inside_sp (a_value: XPLAIN_VALUE) is
+	frozen create_value_declare_inside_sp (a_value: XPLAIN_VALUE)
 			-- Emit SQL code to declare `a_value' inside a stored procedure.
 		do
 			do_create_value_declare (a_value)
 		end
 
-	frozen create_value_declare_outside_sp (a_value: XPLAIN_VALUE) is
+	frozen create_value_declare_outside_sp (a_value: XPLAIN_VALUE)
 			-- Emit SQL code to declare `a_value' outside a stored procedure.
 		do
 			do_create_value_declare (a_value)
 		end
 
-	do_create_value_declare (a_value: XPLAIN_VALUE) is
+	do_create_value_declare (a_value: XPLAIN_VALUE)
 			-- Emit SQL code to declare `a_value'.
 		require
 			value_not_void: a_value /= Void
@@ -523,19 +523,19 @@ feature -- TransactSQL specific SQL creation statements
 			std.output.put_character ('%N')
 		end
 
-	frozen create_value_assign_inside_sp (a_value: XPLAIN_VALUE) is
+	frozen create_value_assign_inside_sp (a_value: XPLAIN_VALUE)
 			-- Assign a value to `a_value' inside a stored procedure.
 		do
 			do_create_value_assign (a_value)
 		end
 
-	frozen create_value_assign_outside_sp (a_value: XPLAIN_VALUE) is
+	frozen create_value_assign_outside_sp (a_value: XPLAIN_VALUE)
 			-- Assign a value to `a_value' outside a stored procedure.
 		do
 			do_create_value_assign (a_value)
 		end
 
-	do_create_value_assign (a_value: XPLAIN_VALUE) is
+	do_create_value_assign (a_value: XPLAIN_VALUE)
 			-- Assign a value to `a_value'.
 		require
 			value_not_void: a_value /= Void
@@ -554,7 +554,7 @@ feature -- TransactSQL specific SQL creation statements
 
 feature -- drop statements
 
-	drop_domain (base: XPLAIN_BASE) is
+	drop_domain (base: XPLAIN_BASE)
 		do
 			std.output.put_character ('%N')
 			std.output.put_string ("exec sp_droptype ")
@@ -563,17 +563,17 @@ feature -- drop statements
 			end_with_go
 		end
 
-	drop_primary_key_generator (type: XPLAIN_TYPE) is
+	drop_primary_key_generator (type: XPLAIN_TYPE)
 		do
 			-- nothing
 		end
 
-	drop_value (value: XPLAIN_VALUE) is
+	drop_value (value: XPLAIN_VALUE)
 		do
 			-- values are automatically dropped at end of session
 		end
 
-	drop_constant (a_constant: XPLAIN_VARIABLE) is
+	drop_constant (a_constant: XPLAIN_VARIABLE)
 			-- Drop a constant, not supported on SQL Server 6.5.
 		do
 			precursor (a_constant)
@@ -582,23 +582,23 @@ feature -- drop statements
 
 feature -- type specification for xplain types
 
-	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING is
+	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING
 		once
 			Result := "bit"
 		end
 
-	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING is
+	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING
 		once
 			Result := "datetime"
 		end
 
-	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING is
+	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING
 			-- platform dependent approximate numeric data type
 		once
 			Result := "float(15)"
 		end
 
-	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING is
+	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING
 		do
 			inspect representation.length
 			when 1 .. 2 then
@@ -621,17 +621,17 @@ feature -- type specification for xplain types
 			end
 		end
 
-	datatype_money (representation: XPLAIN_M_REPRESENTATION): STRING is
+	datatype_money (representation: XPLAIN_M_REPRESENTATION): STRING
 		once
 			Result := "money"
 		end
 
-	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING is
+	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING
 		once
 			Result := "image"
 		end
 
-	datatype_text (representation: XPLAIN_T_REPRESENTATION): STRING is
+	datatype_text (representation: XPLAIN_T_REPRESENTATION): STRING
 		once
 			Result := "text"
 		end
@@ -639,7 +639,7 @@ feature -- type specification for xplain types
 
 feature -- constraints
 
-	sqlcheck_notempty (a_pattern: XPLAIN_DOMAIN_RESTRICTION; column_name: STRING): STRING is
+	sqlcheck_notempty (a_pattern: XPLAIN_DOMAIN_RESTRICTION; column_name: STRING): STRING
 		local
 			s: STRING
 		do
@@ -651,21 +651,21 @@ feature -- constraints
 
 feature -- Select certain things
 
-	sqlgetvalue_inside_sp (value: XPLAIN_VALUE): STRING is
+	sqlgetvalue_inside_sp (value: XPLAIN_VALUE): STRING
 			-- SQL expression that returns the value of a value inside a
 			-- stored procedure
 		do
 			Result := value.sqlname (Current)
 		end
 
-	sqlgetvalue_outside_sp (value: XPLAIN_VALUE): STRING is
+	sqlgetvalue_outside_sp (value: XPLAIN_VALUE): STRING
 			-- SQL expression that returns the value of a value outside a
 			-- stored procedure
 		do
 			Result := value.sqlname (Current)
 		end
 
-	sql_last_auto_generated_primary_key	(type: XPLAIN_TYPE): STRING is
+	sql_last_auto_generated_primary_key	(type: XPLAIN_TYPE): STRING
 			-- Return code to get the last auto-generated primary
 			-- key. For TSQL this is not type specific.
 		once
@@ -675,7 +675,7 @@ feature -- Select certain things
 
 feature -- domain specific methods
 
-	domain_identifier (base: XPLAIN_BASE): STRING is
+	domain_identifier (base: XPLAIN_BASE): STRING
 		local
 			s: STRING
 		do
@@ -684,7 +684,7 @@ feature -- domain specific methods
 			Result := s
 		end
 
-	rule_identifier (base: XPLAIN_BASE): STRING is
+	rule_identifier (base: XPLAIN_BASE): STRING
 		local
 			s: STRING
 		do
@@ -694,7 +694,7 @@ feature -- domain specific methods
 
 feature -- table specific methods
 
-	table_has_identity_column (type: XPLAIN_TYPE): BOOLEAN is
+	table_has_identity_column (type: XPLAIN_TYPE): BOOLEAN
 			-- return True if primary key of this table has identity constraint
 		do
 			Result :=
@@ -705,21 +705,21 @@ feature -- table specific methods
 
 feature -- trigger names
 
-	init_trigger_name (type: XPLAIN_TYPE): STRING is
+	init_trigger_name (type: XPLAIN_TYPE): STRING
 		do
 			Result := "tr_" + type.sqlname(Current) + "Init"
 		end
 
 feature -- value specific methods
 
-	value_identifier (value: XPLAIN_VALUE): STRING is
+	value_identifier (value: XPLAIN_VALUE): STRING
 		do
 			Result := no_space_identifier ("@" + value.name)
 		end
 
 feature -- Extension
 
-	extension_name (extension: XPLAIN_EXTENSION): STRING is
+	extension_name (extension: XPLAIN_EXTENSION): STRING
 			-- Return name of temporary table.
 		local
 			s: STRING
@@ -732,7 +732,7 @@ feature -- Extension
 			end
 		end
 
-	output_update_from_clause (a_subject: XPLAIN_SUBJECT; a_join_list: JOIN_LIST) is
+	output_update_from_clause (a_subject: XPLAIN_SUBJECT; a_join_list: JOIN_LIST)
 			-- Some dialects support a from + join clause in an update
 			-- statement. This gives that dialects a chance to write that
 			-- clause so updates can refer to any attribute without using
@@ -745,7 +745,7 @@ feature -- Extension
 			std.output.put_string (sql_select_joins (a_join_list))
 		end
 
-	output_update_extend_from_clause (a_subject: XPLAIN_SUBJECT; a_join_list: JOIN_LIST) is
+	output_update_extend_from_clause (a_subject: XPLAIN_SUBJECT; a_join_list: JOIN_LIST)
 			-- Some dialects support a from + join clause in an update
 			-- statement. This gives that dialects a chance to write that
 			-- clause so updates of an extended attribute can use any
@@ -762,7 +762,7 @@ feature -- Extension
 
 feature -- Return sql code
 
-	sql_expression_as_boolean_value (expression: XPLAIN_EXPRESSION): STRING is
+	sql_expression_as_boolean_value (expression: XPLAIN_EXPRESSION): STRING
 			-- Return SQL code for extension that is a logical
 			-- expression. For SQL dialects that don't support Booleans,
 			-- it might need to map the Boolean result to a 'T' or 'F'
@@ -771,7 +771,7 @@ feature -- Return sql code
 			Result := format ("case when $s then 1 else 0 end", <<expression.sqlvalue (Current)>>)
 		end
 
-	sql_infix_expression (a_left: XPLAIN_EXPRESSION; an_operator: STRING; a_right: XPLAIN_EXPRESSION): STRING is
+	sql_infix_expression (a_left: XPLAIN_EXPRESSION; an_operator: STRING; a_right: XPLAIN_EXPRESSION): STRING
 		local
 			text_column: BOOLEAN
 			sql_operator: STRING
@@ -797,26 +797,26 @@ feature -- Return sql code
 
 feature -- stored procedure names and parameter conventions
 
-	sp_body_start is
+	sp_body_start
 			-- Begin a procedure body.
 			-- Should leave cursor on a new line.
 		do
 			std.output.put_character ('%N')
 		end
 
-	sp_define_param_name (name: STRING): STRING is
+	sp_define_param_name (name: STRING): STRING
 			-- TSQL parameters are prefixed with a '@'.
 		do
 			Result := "@" + no_space_identifier (name)
 		end
 
-	sp_end is
+	sp_end
 		do
 			is_stored_procedure := False
 			end_with_go
 		end
 
-	sp_get_auto_generated_primary_key (type: XPLAIN_TYPE): STRING is
+	sp_get_auto_generated_primary_key (type: XPLAIN_TYPE): STRING
 		do
 			create Result.make (64)
 			Result.wipe_out
@@ -829,13 +829,13 @@ feature -- stored procedure names and parameter conventions
 			Result.append_string (sql_last_auto_generated_primary_key (type))
 		end
 
-	sp_return_parameter_format_string: STRING is
+	sp_return_parameter_format_string: STRING
 			-- Format a parameter as a return parameter.
 		once
 			Result := "$s $s output"
 		end
 
-	sp_start (a_procedure: XPLAIN_PROCEDURE) is
+	sp_start (a_procedure: XPLAIN_PROCEDURE)
 		do
 			std.output.put_character ('%N')
 			end_with_go -- make sure this is the first command in the batch
@@ -844,12 +844,12 @@ feature -- stored procedure names and parameter conventions
 
 feature -- TSQL specific settings
 
-	set_nocount_on is
+	set_nocount_on
 		do
 			std.output.put_string (once_nocount_on)
 		end
 
-	set_nocount_off is
+	set_nocount_off
 		do
 			std.output.put_string (once_nocount_off)
 		end
@@ -857,11 +857,11 @@ feature -- TSQL specific settings
 
 feature {NONE} -- Once strings
 
-	once_domain_t: STRING is "(T)"
-	once_nocount_on: STRING is "set nocount on%N"
-	once_nocount_off: STRING is "set nocount off%N"
-	once_equal: STRING is "="
-	once_not_equal: STRING is "<>"
+	once_domain_t: STRING = "(T)"
+	once_nocount_on: STRING = "set nocount on%N"
+	once_nocount_off: STRING = "set nocount off%N"
+	once_equal: STRING = "="
+	once_not_equal: STRING = "<>"
 
 
 end

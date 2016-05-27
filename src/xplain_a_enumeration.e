@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -38,7 +38,7 @@ create
 
 feature
 
-	make (afirst: XPLAIN_A_NODE) is
+	make (afirst: XPLAIN_A_NODE)
 		do
 			make_xplain_domain_restriction (True)
 			first := afirst
@@ -46,7 +46,7 @@ feature
 
 feature
 
-	sqldomainconstraint (sqlgenerator: SQL_GENERATOR; column_name: STRING): STRING is
+	sqldomainconstraint (sqlgenerator: SQL_GENERATOR; column_name: STRING): STRING
 			-- return SQL search condition something like
 			-- "check value in ('a','b','c')"
 		do
@@ -55,7 +55,7 @@ feature
 
 feature
 
-	check_attachment (sqlgenerator: SQL_GENERATOR; a_representation: XPLAIN_REPRESENTATION) is
+	check_attachment (sqlgenerator: SQL_GENERATOR; a_representation: XPLAIN_REPRESENTATION)
 			-- Print warning if a value in enumeration does not fit in max
 			-- base type length.
 		local

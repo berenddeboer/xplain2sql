@@ -59,7 +59,7 @@ inherit
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		local
 			tester: UC_STRING_EQUALITY_TESTER
 		do
@@ -84,7 +84,7 @@ feature {NONE} -- Initialization
 
 feature -- About this generator
 
-	target_name: STRING is
+	target_name: STRING
 			-- Name and version of dialect
 		deferred
 		ensure
@@ -93,9 +93,9 @@ feature -- About this generator
 
 feature -- Text output options
 
-	Tab: STRING is "  " -- a tab is 2 spaces
+	Tab: STRING = "  " -- a tab is 2 spaces
 
-	TabTab: STRING is
+	TabTab: STRING
 		once
 			Result := Tab + Tab
 		end
@@ -103,16 +103,16 @@ feature -- Text output options
 
 feature -- SQL Comments
 
-	OneLineCommentPrefix: STRING is once Result := "--" end
-	MultiLineCommentPrefix: STRING is once Result := "/*" end
-	MultiLineCommentPostfix: STRING is once Result :=	"*/" end
+	OneLineCommentPrefix: STRING once Result := "--" end
+	MultiLineCommentPrefix: STRING once Result := "/*" end
+	MultiLineCommentPostfix: STRING once Result :=	"*/" end
 
-	NoOneLineCommentsSupported: BOOLEAN is
+	NoOneLineCommentsSupported: BOOLEAN
 		once Result := OneLineCommentPrefix = Void end
 
 feature -- Command separation
 
-	CommandSeparator: STRING is
+	CommandSeparator: STRING
 		once
 			Result := ";"
 		ensure
@@ -121,14 +121,14 @@ feature -- Command separation
 
 feature -- Identifiers
 
-	MaxConstraintIdentifierLength: INTEGER is
+	MaxConstraintIdentifierLength: INTEGER
 		do
 			Result := MaxIdentifierLength
 		ensure
 			max_identifier_length_positive: Result > 0
 		end
 
-	IdentifierWithSpacesSupported: BOOLEAN is
+	IdentifierWithSpacesSupported: BOOLEAN
 			-- Are spaces allowed in names?
 		once
 			Result := False
@@ -145,7 +145,7 @@ feature -- Database options
 
 feature -- Domain options
 
-	DomainsSupported: BOOLEAN is
+	DomainsSupported: BOOLEAN
 			-- Does this dialect support creation of user defined data types?
 		once
 			Result := True
@@ -153,27 +153,27 @@ feature -- Domain options
 
 	DomainsEnabled: BOOLEAN
 
-	CreateDomains: BOOLEAN is
+	CreateDomains: BOOLEAN
 		once
 			Result := DomainsSupported and DomainsEnabled
 		end
 
-	DomainCheckSupported: BOOLEAN is
+	DomainCheckSupported: BOOLEAN
 			-- can constraints be attached to domains
 		once Result := True end
 
-	CreateDomainCheck: BOOLEAN is
+	CreateDomainCheck: BOOLEAN
 			-- attach constraints to domain
 		once
 			Result := CreateDomains and DomainCheckSupported
 		end
 
-	DomainNullDefault: BOOLEAN is once Result := False end
+	DomainNullDefault: BOOLEAN once Result := False end
 			-- return True if domains/UDT's are Null when nothing specified
-	DomainNullAllowed: BOOLEAN is once Result := True end
-	DomainNotNullAllowed: BOOLEAN is once Result	:= True end
+	DomainNullAllowed: BOOLEAN once Result := True end
+	DomainNotNullAllowed: BOOLEAN once Result	:= True end
 
-	DomainNamePrefix: STRING is once Result := "T" end
+	DomainNamePrefix: STRING once Result := "T" end
 
 
 feature -- Table options
@@ -184,7 +184,7 @@ feature -- Table options
 			-- null.
 			-- When this option is False, every column may be Null.
 
-	AutoPrimaryKeySupported: BOOLEAN is
+	AutoPrimaryKeySupported: BOOLEAN
 			-- Does this dialect support auto-generated primary keys?
 		once
 			Result := False
@@ -193,13 +193,13 @@ feature -- Table options
 	AutoPrimaryKeyEnabled: BOOLEAN
 			-- Has user enabled creation of auto-generated primary keys?
 
-	CreateAutoPrimaryKey: BOOLEAN is
+	CreateAutoPrimaryKey: BOOLEAN
 			-- Should auto-generated primary keys be created?
 		once
 			Result := AutoPrimaryKeySupported and AutoPrimaryKeyEnabled
 		end
 
-	ExpressionsInDefaultClauseSupported: BOOLEAN is
+	ExpressionsInDefaultClauseSupported: BOOLEAN
 			-- Does the SQL dialect support expressions (1 + 1 for
 			-- example) in the default clause?
 			-- MySQL 5 is an example of a database that doesn't.
@@ -207,18 +207,18 @@ feature -- Table options
 			Result := True
 		end
 
-	PrimaryKeyConstraint: STRING is
+	PrimaryKeyConstraint: STRING
 		once
 			Result := "not null primary key"
 		end
 
-	AutoPrimaryKeyConstraint: STRING is
+	AutoPrimaryKeyConstraint: STRING
 			-- The SQL that enables an autoincrementing primary key
 		once
 			Result := PrimaryKeyConstraint
 		end
 
-	sequence_name_format: STRING is "$s_$s_seq"
+	sequence_name_format: STRING = "$s_$s_seq"
 			-- Format of name of generated sequence if a dialect has the
 			-- concept of sequences and names for sequences
 
@@ -226,23 +226,23 @@ feature -- Table options
 			-- Does `sequence_name_format' take just the primary key
 			-- column name as parameter?
 
-	ConstraintNameSupported: BOOLEAN is
+	ConstraintNameSupported: BOOLEAN
 		once
 			Result := True
 		end
 
-	CheckConstraintSupported: BOOLEAN is
+	CheckConstraintSupported: BOOLEAN
 		once
 			Result := True
 		end
 
-	UniqueConstraintSupported: BOOLEAN is
+	UniqueConstraintSupported: BOOLEAN
 			-- is the unique constraint (keyword) supported
 		once
 			Result := True
 		end
 
-	InlineUniqueConstraintSupported: BOOLEAN is
+	InlineUniqueConstraintSupported: BOOLEAN
 			-- can we use unique directly after the column or should it be separate
 		once
 			Result := True
@@ -253,9 +253,9 @@ feature -- Table options
 	OldConstraintNames: BOOLEAN
 			-- Use old-style constraint names
 
-	TimestampDatatype: STRING is once Result := "timestamp" end
+	TimestampDatatype: STRING once Result := "timestamp" end
 
-	TimestampSupported: BOOLEAN is
+	TimestampSupported: BOOLEAN
 			-- Does this dialect support the creation of time stamps in a table?
 		once
 			Result := False
@@ -263,7 +263,7 @@ feature -- Table options
 
 	TimestampEnabled: BOOLEAN
 
-	CreateTimestamp: BOOLEAN is
+	CreateTimestamp: BOOLEAN
 		do
 			Result :=
 				TimestampSupported and TimestampEnabled
@@ -272,14 +272,14 @@ feature -- Table options
 	StoredProcedureEnabled: BOOLEAN
 			-- Option that can be enabled/disabled by the user.
 
-	ViewColumnsSupported: BOOLEAN is
+	ViewColumnsSupported: BOOLEAN
 			-- Does the dialect require a list of columns after the view
 			-- name?
 		do
 			Result := True
 		end
 
-	ViewsSupported: BOOLEAN is
+	ViewsSupported: BOOLEAN
 			-- Does this backend support views?
 		once
 			Result := True
@@ -287,13 +287,13 @@ feature -- Table options
 
 	ViewsEnabled: BOOLEAN
 
-	CreateViews: BOOLEAN is
+	CreateViews: BOOLEAN
 			-- Should a view be written for every type?
 		do
 			Result := ViewsSupported and ViewsEnabled
 		end
 
-	CreateViewSQL: STRING is
+	CreateViewSQL: STRING
 			-- SQL statement to start creating a view; should end with
 			-- some form of space
 		once
@@ -303,13 +303,13 @@ feature -- Table options
 			ends_with_space: not Result.is_empty implies Result.item (Result.count).is_space
 		end
 
-	TemporaryTablesSupported: BOOLEAN is
+	TemporaryTablesSupported: BOOLEAN
 			-- Does this dialect support the 'create temporary table'?
 		once
 			Result := False
 		end
 
-	CreateTemporaryTableStatement: STRING is
+	CreateTemporaryTableStatement: STRING
 			-- The create statement to start creating a temporary table.
 		once
 			if TemporaryTablesSupported then
@@ -321,7 +321,7 @@ feature -- Table options
 			CreateTemporaryTableStatement_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	FinishTemporaryTableStatement: STRING is
+	FinishTemporaryTableStatement: STRING
 			-- String to output when temporary table definition is finished
 		do
 			Result := ""
@@ -329,7 +329,7 @@ feature -- Table options
 			not_void: Result /= Void
 		end
 
-	FinishTemporaryValueTableStatement: STRING is
+	FinishTemporaryValueTableStatement: STRING
 			-- Oracle doesn't like alter tables when using on commit
 			-- preserve rows
 		do
@@ -338,7 +338,7 @@ feature -- Table options
 			not_void: Result /= Void
 		end
 
-	TemporaryTablePrefix: STRING is
+	TemporaryTablePrefix: STRING
 			-- Optional prefix for temporary tables, should include a '.'
 			-- if that is the separator.
 		do
@@ -347,19 +347,19 @@ feature -- Table options
 			TemporaryTablePrefix_not_void: Result /= Void
 		end
 
-	TableNamePrefix: STRING is once Result := "T" end
+	TableNamePrefix: STRING once Result := "T" end
 
-	primary_key_format: STRING is "id_$s"
+	primary_key_format: STRING = "id_$s"
 			-- Format of primary key of a table
 
-	ColumnNullDefault: BOOLEAN is once Result := True end
-	ColumnNullAllowed: BOOLEAN is once Result := True end
-	ColumnNotNullAllowed: BOOLEAN is once Result := True end
+	ColumnNullDefault: BOOLEAN once Result := True end
+	ColumnNullAllowed: BOOLEAN once Result := True end
+	ColumnNotNullAllowed: BOOLEAN once Result := True end
 
 
 feature -- init [default] options
 
-	init_necessary (type: XPLAIN_TYPE): BOOLEAN is
+	init_necessary (type: XPLAIN_TYPE): BOOLEAN
 			-- Does `type' has an init that cannot be solved with a
 			-- default clause in the create table statement.
 		require
@@ -373,7 +373,7 @@ feature -- init [default] options
 
 feature -- extend options
 
-	CreateExtendIndex: BOOLEAN is
+	CreateExtendIndex: BOOLEAN
 		do
 			Result := ExtendIndexSupported and then ExtendIndex
 		end
@@ -382,7 +382,7 @@ feature -- extend options
 			-- Create an index on the primary key if a temporary table is
 			-- created for an extend.
 
-	ExtendIndexSupported: BOOLEAN is
+	ExtendIndexSupported: BOOLEAN
 		do
 			-- Default was True, now made false so we can set the primary
 			-- key constraint, which might actually work better for
@@ -401,14 +401,14 @@ feature -- extend options
 
 feature -- Constants and values
 
-	ConstantTableName: STRING is "XplainConstant"
+	ConstantTableName: STRING = "XplainConstant"
 
-	CreateTemporaryValueTable: BOOLEAN is
+	CreateTemporaryValueTable: BOOLEAN
 		do
 			Result := TemporaryTablesSupported
 		end
 
-	ValueTableName: STRING is
+	ValueTableName: STRING
 		once
 			if CreateTemporaryValueTable then
 				Result := TemporaryTablePrefix + "XplainValue"
@@ -420,20 +420,20 @@ feature -- Constants and values
 
 feature -- Stored procedure options
 
-	CreateStoredProcedure: BOOLEAN is
+	CreateStoredProcedure: BOOLEAN
 			-- Should insert/update or delete stored procedures be
 			-- created?
 		deferred
 		end
 
-	NamedParametersSupported: BOOLEAN is
+	NamedParametersSupported: BOOLEAN
 			-- Can stored procedures use named parameters?
 		deferred
 		ensure
 			consistent: Result implies StoredProcedureSupported
 		end
 
-	SupportsDomainsInStoredProcedures: BOOLEAN is
+	SupportsDomainsInStoredProcedures: BOOLEAN
 			-- Notably InterBase 4 supports domains, but not as the type of
 			-- parameters in a stored procedure.
 		deferred
@@ -442,7 +442,7 @@ feature -- Stored procedure options
 			supports_domains: Result implies DomainsSupported
 		end
 
-	StoredProcedureSupported: BOOLEAN is
+	StoredProcedureSupported: BOOLEAN
 			-- Are stored procedures supported?
 		deferred
 		end
@@ -450,18 +450,18 @@ feature -- Stored procedure options
 
 feature -- index options
 
-	IndexSupported: BOOLEAN is
+	IndexSupported: BOOLEAN
 			-- sql generator has index support
 		once
 			Result := True
 		end
 
-	CreateIndex: BOOLEAN is
+	CreateIndex: BOOLEAN
 		once
 			Result := IndexSupported
 		end
 
-	ClusteredIndexSupported: BOOLEAN is
+	ClusteredIndexSupported: BOOLEAN
 			-- sql generator can create clustered indexes
 		once
 			Result := False
@@ -470,12 +470,12 @@ feature -- index options
 
 feature -- select options
 
-	ANSI92JoinsSupported: BOOLEAN is
+	ANSI92JoinsSupported: BOOLEAN
 		once
 			Result := True
 		end
 
-	ExistentialFromNeeded: BOOLEAN is
+	ExistentialFromNeeded: BOOLEAN
 			-- Is a from clause in a selection statement required?
 			-- It's better if you don't need it. Define
 			-- `ExistentialFromTable' for a work around.
@@ -483,7 +483,7 @@ feature -- select options
 			Result := True
 		end
 
-	ExistentialFromTable: STRING is
+	ExistentialFromTable: STRING
 			-- Name of the dual table (Oracle) or sysibm.sysdumm1 (DB2)
 			-- to be used in a select statement where a from is required;
 			-- The name of the get table is used when this routine
@@ -497,7 +497,7 @@ feature -- select options
 
 feature -- insert options
 
-	SupportsDefaultValues: BOOLEAN is
+	SupportsDefaultValues: BOOLEAN
 			-- Does the dialect supports the 'default values' clause in an
 			-- insert statement?
 		do
@@ -507,14 +507,14 @@ feature -- insert options
 
 feature -- update options
 
-	SupportsQualifiedSetInUpdate: BOOLEAN is
+	SupportsQualifiedSetInUpdate: BOOLEAN
 			-- Can column names in set expression be qualified?
 			-- This must be done in certain cases to avoid ambiguous updates.
 		do
 			Result := False
 		end
 
-	SupportsJoinInUpdate: BOOLEAN is
+	SupportsJoinInUpdate: BOOLEAN
 			-- Does this dialect support joins in an update
 			-- statement?
 		do
@@ -524,7 +524,7 @@ feature -- update options
 
 feature -- purge options
 
-	DropColumnSupported: BOOLEAN is
+	DropColumnSupported: BOOLEAN
 			-- Does this dialect support dropping of columns?
 		once
 			Result := True
@@ -533,10 +533,10 @@ feature -- purge options
 
 feature -- Booleans
 
-	SQLTrue: STRING is once Result := "True" end
-	SQLFalse: STRING is once Result := "False" end
+	SQLTrue: STRING once Result := "True" end
+	SQLFalse: STRING once Result := "False" end
 
-	SupportsTrueBoolean: BOOLEAN is
+	SupportsTrueBoolean: BOOLEAN
 			-- Does this dialect support first-class Booleans?
 			-- Or do they have to be emulated?
 			-- Interestingly, most dialects don't support it.
@@ -550,7 +550,7 @@ feature -- Date/time
 	TimeZoneEnabled: BOOLEAN
 			-- Emit datetime with timezone
 
-	minimum_date_value: STRING is
+	minimum_date_value: STRING
 		once
 			Result := "0001-01-01"
 		end
@@ -558,28 +558,28 @@ feature -- Date/time
 
 feature -- Strings
 
-	sql_string_combine_start: STRING is
+	sql_string_combine_start: STRING
 		once
 			Result := ""
 		ensure
 			sql_string_combine_start_not_void: sql_string_combine_start /= Void
 		end
 
-	sql_string_combine_separator: STRING is
+	sql_string_combine_separator: STRING
 		once
 			Result := ", "
 		ensure
 			sql_string_combine_separator_not_void: sql_string_combine_separator /= Void
 		end
 
-	sql_string_combine_end: STRING is
+	sql_string_combine_end: STRING
 		once
 			Result := ""
 		ensure
 			sql_string_combine_end_not_void: sql_string_combine_end /= Void
 		end
 
-	sql_like_operator: STRING is
+	sql_like_operator: STRING
 			-- Preferably a case-insensitive like operator
 		once
 			Result := "like"
@@ -590,13 +590,13 @@ feature -- Strings
 
 feature -- min/max
 
-	SQLMinInt: STRING is "-2147483647"
-	SQLMaxInt: STRING is	"2147483647"
+	SQLMinInt: STRING = "-2147483647"
+	SQLMaxInt: STRING =	"2147483647"
 
 
 feature -- Numeric precision
 
-	max_numeric_precision: INTEGER is
+	max_numeric_precision: INTEGER
 			-- Maximum precision of the numeric data type
 		once
 			Result := 28
@@ -607,12 +607,12 @@ feature -- Numeric precision
 
 feature -- functions
 
-	SQLCoalesce: STRING is
+	SQLCoalesce: STRING
 		once
 			Result := "coalesce"
 		end
 
-	CoalesceSupported: BOOLEAN is
+	CoalesceSupported: BOOLEAN
 		once
 			Result := SQLCoalesce /= Void
 		end
@@ -622,14 +622,14 @@ feature -- Assertions
 
 	AssertEnabled: BOOLEAN
 
-	CreateAssert: BOOLEAN is
+	CreateAssert: BOOLEAN
 		once
 			Result :=
 				(CalculatedColumnsSupported or else ViewsSupported) and
 				AssertEnabled
 		end
 
-	asserted_format_string: STRING is
+	asserted_format_string: STRING
 		require
 			assert_supported: CalculatedColumnsSupported
 		do
@@ -664,7 +664,7 @@ feature {NONE} -- Implementation
 
 feature -- Interactive i/o
 
-	echo (str: STRING) is
+	echo (str: STRING)
 			-- output to stderr
 		do
 			std.error.put_string (str)
@@ -673,7 +673,7 @@ feature -- Interactive i/o
 
 feature -- Comments
 
-	write_one_line_comment (line: STRING) is
+	write_one_line_comment (line: STRING)
 			-- write a one line comment, convert to multi line comment if
 			-- target sql doesn't support one line comments
 		require
@@ -702,7 +702,7 @@ feature -- Comments
 
 feature -- Convert Xplain definition to sql, you usually do not redefine these
 
-	write_assertion (an_assertion: XPLAIN_ASSERTION) is
+	write_assertion (an_assertion: XPLAIN_ASSERTION)
 		require
 			assertion_not_void: an_assertion /= Void
 		do
@@ -711,42 +711,42 @@ feature -- Convert Xplain definition to sql, you usually do not redefine these
 			end
 		end
 
-	write_base (base: XPLAIN_BASE) is
+	write_base (base: XPLAIN_BASE)
 		do
 			if CreateDomains then
 				create_domain (base)
 			end
 		end
 
-	write_constant (constant: XPLAIN_VARIABLE) is
+	write_constant (constant: XPLAIN_VARIABLE)
 		do
 			create_constant (constant)
 		end
 
-	write_constant_assignment (constant: XPLAIN_VARIABLE; expression: XPLAIN_EXPRESSION) is
+	write_constant_assignment (constant: XPLAIN_VARIABLE; expression: XPLAIN_EXPRESSION)
 		do
 			create_constant_assignment (constant, expression)
 		end
 
-	write_delete (subject: XPLAIN_SUBJECT; predicate: XPLAIN_EXPRESSION) is
+	write_delete (subject: XPLAIN_SUBJECT; predicate: XPLAIN_EXPRESSION)
 			-- Code for delete statement.
 		do
 			create_delete (subject, predicate)
 		end
 
-	write_drop (object: XPLAIN_ABSTRACT_OBJECT) is
+	write_drop (object: XPLAIN_ABSTRACT_OBJECT)
 		do
 			object.write_drop (Current)
 		end
 
-	write_drop_assertion (an_assertion: XPLAIN_ASSERTION) is
+	write_drop_assertion (an_assertion: XPLAIN_ASSERTION)
 		require
 			an_assertion_not_void: an_assertion /= Void
 		do
 			create_drop_assertion (an_assertion)
 		end
 
-	write_drop_column (a_type: XPLAIN_TYPE; an_attribute: XPLAIN_ATTRIBUTE) is
+	write_drop_column (a_type: XPLAIN_TYPE; an_attribute: XPLAIN_ATTRIBUTE)
 			-- Drop a column from a table.
 		require
 			type_not_void: a_type /= Void
@@ -756,7 +756,7 @@ feature -- Convert Xplain definition to sql, you usually do not redefine these
 			create_drop_column (a_type, an_attribute)
 		end
 
-	write_drop_extension (an_extension: XPLAIN_EXTENSION) is
+	write_drop_extension (an_extension: XPLAIN_EXTENSION)
 			-- Drop the extension.
 		require
 			extension_not_void: an_extension /= Void
@@ -764,19 +764,19 @@ feature -- Convert Xplain definition to sql, you usually do not redefine these
 			create_drop_extension (an_extension)
 		end
 
-	write_echo (str: STRING) is
+	write_echo (str: STRING)
 			-- output string while parsing sql script
 		do
 			create_echo (str)
 		end
 
-	write_end (database: STRING) is
+	write_end (database: STRING)
 			-- The final end.
 		do
 			create_end (database)
 		end
 
-	write_extend (extension: XPLAIN_EXTENSION) is
+	write_extend (extension: XPLAIN_EXTENSION)
 			-- Code for extend statement.
 		do
 			if can_write_extend_as_view (extension) then
@@ -793,13 +793,13 @@ feature -- Convert Xplain definition to sql, you usually do not redefine these
 		a_selection: XPLAIN_SELECTION_LIST
 		an_insert_type: XPLAIN_TYPE
 		an_auto_primary_key: BOOLEAN
-		an_assignment_list: XPLAIN_ATTRIBUTE_NAME_NODE) is
+		an_assignment_list: XPLAIN_ATTRIBUTE_NAME_NODE)
 			-- Get into a table.
 		do
 			create_get_insert (a_selection, an_insert_type, an_auto_primary_key, an_assignment_list)
 		end
 
-	write_index (index: XPLAIN_INDEX) is
+	write_index (index: XPLAIN_INDEX)
 		require
 			valid_index: index /= Void
 		do
@@ -808,7 +808,7 @@ feature -- Convert Xplain definition to sql, you usually do not redefine these
 			end
 		end
 
-	write_init (type: XPLAIN_TYPE) is
+	write_init (type: XPLAIN_TYPE)
 			-- If necessary, emit initialisations that cannot be supprted
 			-- by a DEFAULT clause in the CREATE TABLE statement.
 		require
@@ -816,55 +816,55 @@ feature -- Convert Xplain definition to sql, you usually do not redefine these
 		deferred
 		end
 
-	write_insert (type: XPLAIN_TYPE; id: XPLAIN_EXPRESSION; assignment_list: XPLAIN_ASSIGNMENT_NODE) is
+	write_insert (type: XPLAIN_TYPE; id: XPLAIN_EXPRESSION; assignment_list: XPLAIN_ASSIGNMENT_NODE)
 		do
 			create_insert (type, id, assignment_list)
 		end
 
-	write_procedure (procedure: XPLAIN_PROCEDURE) is
+	write_procedure (procedure: XPLAIN_PROCEDURE)
 			-- Write a stored procedure.
 		deferred
 		end
 
-	write_select (selection: XPLAIN_SELECTION) is
+	write_select (selection: XPLAIN_SELECTION)
 			-- Write various select statements.
 		do
 			selection.write_select (Current)
 		end
 
-	write_select_function (selection_list: XPLAIN_SELECTION_FUNCTION) is
+	write_select_function (selection_list: XPLAIN_SELECTION_FUNCTION)
 			-- Write get with function.
 		do
 			create_select_function (selection_list)
 		end
 
-	write_select_instance (selection_list: XPLAIN_SELECTION_INSTANCE) is
+	write_select_instance (selection_list: XPLAIN_SELECTION_INSTANCE)
 		require
 			select_list_not_void: selection_list /= Void
 		do
 			create_select_instance (selection_list)
 		end
 
-	write_select_list (selection_list: XPLAIN_SELECTION_LIST) is
+	write_select_list (selection_list: XPLAIN_SELECTION_LIST)
 			-- Write get with zero or more attributes.
 		do
 			create_select_list (selection_list)
 		end
 
-	write_select_value (a_value: XPLAIN_VALUE) is
+	write_select_value (a_value: XPLAIN_VALUE)
 			-- Write statement to display value content.
 		do
 			create_select_value (a_value)
 		end
 
-	write_sql (sql: STRING) is
+	write_sql (sql: STRING)
 			-- Literal SQL.
 		do
 			std.output.put_string (sql)
 			std.output.put_character ('%N')
 		end
 
-	write_type (type: XPLAIN_TYPE) is
+	write_type (type: XPLAIN_TYPE)
 		do
 			drop_table_if_exist (type)
 			create_table (type)
@@ -880,12 +880,12 @@ feature -- Convert Xplain definition to sql, you usually do not redefine these
 	write_update (
 			subject: XPLAIN_SUBJECT;
 			assignment_list: XPLAIN_ASSIGNMENT_NODE;
-			predicate: XPLAIN_EXPRESSION) is
+			predicate: XPLAIN_EXPRESSION)
 		do
 			create_update (subject, assignment_list, predicate)
 		end
 
-	write_use_database (database: STRING) is
+	write_use_database (database: STRING)
 		require
 			valid_name: database /= Void
 		do
@@ -894,7 +894,7 @@ feature -- Convert Xplain definition to sql, you usually do not redefine these
 			end
 		end
 
-	write_value (value: XPLAIN_VALUE) is
+	write_value (value: XPLAIN_VALUE)
 		do
 			create_value (value)
 		end
@@ -902,7 +902,7 @@ feature -- Convert Xplain definition to sql, you usually do not redefine these
 
 feature {NONE} -- Actual creation of sql statements, you may redefine these
 
-	create_assertion (an_assertion: XPLAIN_ASSERTION) is
+	create_assertion (an_assertion: XPLAIN_ASSERTION)
 		require
 			assertion_not_void: an_assertion /= Void
 			view_supported: ViewsSupported
@@ -929,7 +929,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			std.output.put_character ('%N')
 		end
 
-	create_constant (variable: XPLAIN_VARIABLE) is
+	create_constant (variable: XPLAIN_VARIABLE)
 			-- Emit code to define an Xplain constant.
 		require
 			valid_variable: variable /= Void
@@ -960,7 +960,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			std.output.put_character ('%N')
 		end
 
-	create_constant_assignment (variable: XPLAIN_VARIABLE; expression: XPLAIN_EXPRESSION) is
+	create_constant_assignment (variable: XPLAIN_VARIABLE; expression: XPLAIN_EXPRESSION)
 			-- Emit code to assign a value to a previously created Xplain
 			-- constant.
 		do
@@ -977,7 +977,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			std.output.put_character ('%N')
 		end
 
-	create_delete (subject: XPLAIN_SUBJECT; predicate: XPLAIN_EXPRESSION) is
+	create_delete (subject: XPLAIN_SUBJECT; predicate: XPLAIN_EXPRESSION)
 			-- Emit SQL delete statement.
 		require
 			subject_not_void: subject /= Void
@@ -1020,7 +1020,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			std.output.put_character ('%N')
 		end
 
-	create_domain (base: XPLAIN_BASE)  is
+	create_domain (base: XPLAIN_BASE)
 		require
 			sql_with_domains: DomainsSupported
 		local
@@ -1044,7 +1044,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			std.output.put_character ('%N')
 		end
 
-	create_drop_assertion (an_assertion: XPLAIN_ASSERTION) is
+	create_drop_assertion (an_assertion: XPLAIN_ASSERTION)
 		require
 			an_assertion_not_void: an_assertion /= Void
 		do
@@ -1054,7 +1054,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			std.output.put_character ('%N')
 		end
 
-	create_drop_column (a_type: XPLAIN_TYPE; an_attribute: XPLAIN_ATTRIBUTE) is
+	create_drop_column (a_type: XPLAIN_TYPE; an_attribute: XPLAIN_ATTRIBUTE)
 			-- Drop a column from a table.
 		require
 			type_not_void: a_type /= Void
@@ -1064,7 +1064,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			drop_column (a_type.quoted_name (Current), an_attribute.sql_select_name (Current))
 		end
 
-	create_drop_extension (an_extension: XPLAIN_EXTENSION) is
+	create_drop_extension (an_extension: XPLAIN_EXTENSION)
 			-- Drop the extension.
 		require
 			extension_not_void: an_extension /= Void
@@ -1072,18 +1072,18 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			drop_temporary_table_if_exist (an_extension)
 		end
 
-	create_echo (str: STRING) is
+	create_echo (str: STRING)
 			-- Output string while parsing sql script.
 		do
 			-- default is not supported
 		end
 
-	create_end (database: STRING) is
+	create_end (database: STRING)
 		do
 			-- do nothing for most databases
 		end
 
-	create_extend (extension: XPLAIN_EXTENSION) is
+	create_extend (extension: XPLAIN_EXTENSION)
 			-- Code to create the temporary table to hold the extension and
 			-- fill it.
 		require
@@ -1141,7 +1141,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			end
 		end
 
-		create_extend_create_table (extension: XPLAIN_EXTENSION) is
+		create_extend_create_table (extension: XPLAIN_EXTENSION)
 			-- Output sql code to create a separate table to hold the
 			-- extension.
 		require
@@ -1172,7 +1172,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			std.output.put_character ('%N')
 		end
 
-	create_extend_create_index (an_extension: XPLAIN_EXTENSION) is
+	create_extend_create_index (an_extension: XPLAIN_EXTENSION)
 			-- Output SQL code to add an index to the temporary table
 			-- that holds the extension. Some tests indicated that it was
 			-- faster to create an index after having filled the table,
@@ -1193,7 +1193,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			std.output.put_character ('%N')
 		end
 
-	create_extend_view (an_extension: XPLAIN_EXTENSION) is
+	create_extend_view (an_extension: XPLAIN_EXTENSION)
 			-- Write extend as a view.
 		require
 			extension_not_void: an_extension /= Void
@@ -1225,7 +1225,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 		a_selection: XPLAIN_SELECTION_LIST
 		an_insert_type: XPLAIN_TYPE
 		an_auto_primary_key: BOOLEAN
-		an_assignment_list: XPLAIN_ATTRIBUTE_NAME_NODE) is
+		an_assignment_list: XPLAIN_ATTRIBUTE_NAME_NODE)
 			-- Emit insert into table (column, ...) select.
 		require
 			selection_not_void: a_selection /= Void
@@ -1299,7 +1299,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			end
 		end
 
-	create_index (index: XPLAIN_INDEX) is
+	create_index (index: XPLAIN_INDEX)
 			-- create the index statement
 		local
 			anode: XPLAIN_ATTRIBUTE_NAME_NODE
@@ -1332,7 +1332,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			std.output.put_character ('%N')
 		end
 
-	create_insert (type: XPLAIN_TYPE; id: XPLAIN_EXPRESSION; assignment_list: XPLAIN_ASSIGNMENT_NODE) is
+	create_insert (type: XPLAIN_TYPE; id: XPLAIN_EXPRESSION; assignment_list: XPLAIN_ASSIGNMENT_NODE)
 			-- Generate SQL insert statement. If id not Void, it contains
 			-- a user supplied instance identification.
 		require
@@ -1409,7 +1409,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			end
 		end
 
-	create_predicate (subject: XPLAIN_SUBJECT; predicate: XPLAIN_EXPRESSION) is
+	create_predicate (subject: XPLAIN_SUBJECT; predicate: XPLAIN_EXPRESSION)
 			-- generate a where clause
 		require
 			subject_not_void: subject /= Void
@@ -1421,7 +1421,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			local_state_reset: not WhereWritten
 		end
 
-	create_primary_key_generator (type: XPLAIN_TYPE) is
+	create_primary_key_generator (type: XPLAIN_TYPE)
 			-- Dialects that need some sort of sequence + before/after
 			-- insert trigger to handle auto-generated primary keys.
 		require
@@ -1431,7 +1431,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 		deferred
 		end
 
-	create_select_function (selection_list: XPLAIN_SELECTION_FUNCTION) is
+	create_select_function (selection_list: XPLAIN_SELECTION_FUNCTION)
 			-- Output a select function that returns a scalar value.
 		require
 			select_list_not_void: selection_list /= Void
@@ -1442,7 +1442,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			std.output.put_character ('%N')
 		end
 
-	create_select_instance (selection_list: XPLAIN_SELECTION_INSTANCE) is
+	create_select_instance (selection_list: XPLAIN_SELECTION_INSTANCE)
 		require
 			select_list_not_void: selection_list /= Void
 		do
@@ -1451,12 +1451,12 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			std.output.put_character ('%N')
 		end
 
-	create_select_list (selection_list: XPLAIN_SELECTION_LIST) is
+	create_select_list (selection_list: XPLAIN_SELECTION_LIST)
 		do
 			do_create_select_list (selection_list, False)
 		end
 
-	do_create_select_list (selection_list: XPLAIN_SELECTION_LIST; a_self_insert: BOOLEAN) is
+	do_create_select_list (selection_list: XPLAIN_SELECTION_LIST; a_self_insert: BOOLEAN)
 			-- Insert a blank line and output the familiar select statement.
 		require
 			selection_list_not_void: selection_list /= Void
@@ -1512,7 +1512,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			std.output.put_character ('%N')
 		end
 
-	do_do_create_select_list (selection_list: XPLAIN_SELECTION_LIST; a_self_insert: BOOLEAN) is
+	do_do_create_select_list (selection_list: XPLAIN_SELECTION_LIST; a_self_insert: BOOLEAN)
 			-- Select statement without order by and without command separator.
 		require
 			selection_list_not_void: selection_list /= Void
@@ -1619,7 +1619,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			std.output.put_character ('%N')
 		end
 
-	create_select_value (a_value: XPLAIN_VALUE) is
+	create_select_value (a_value: XPLAIN_VALUE)
 			-- Xplain value statement that returns the value of `a_value'.
 		require
 			valid_value: a_value /= Void
@@ -1630,7 +1630,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			std.output.put_character ('%N')
 		end
 
-	create_select_value_outside_sp (a_value: XPLAIN_VALUE) is
+	create_select_value_outside_sp (a_value: XPLAIN_VALUE)
 			-- Emit SQL that returns the value when asked for that value
 			-- outside a stored procedure.
 			-- Should not emit `CommandSeparator'.
@@ -1642,7 +1642,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			std.output.put_string (format ("select $s from $s", <<a_value.quoted_name (Current), ValueTableName>>))
 		end
 
-	create_sync_auto_generated_primary_key_with_supplied_value (type: XPLAIN_TYPE; user_identification: INTEGER) is
+	create_sync_auto_generated_primary_key_with_supplied_value (type: XPLAIN_TYPE; user_identification: INTEGER)
 			-- On some systems, auto-generated primary keys and user
 			-- supplied identifications don't work well together. Output
 			-- some code to correct the situation, if possible for `type'
@@ -1659,7 +1659,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			-- do nothing
 		end
 
-	create_table (type: XPLAIN_TYPE) is
+	create_table (type: XPLAIN_TYPE)
 			-- Generate SQL create table statement.
 		local
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE]
@@ -1802,7 +1802,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 	create_update (
 			subject: XPLAIN_SUBJECT;
 			assignment_list: XPLAIN_ASSIGNMENT_NODE;
-			predicate: XPLAIN_EXPRESSION) is
+			predicate: XPLAIN_EXPRESSION)
 		require
 			subject_not_void: subject /= Void
 			assignment_list_not_void: assignment_list /= Void
@@ -1964,14 +1964,14 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			not_in_update: not InUpdateStatement
 		end
 
-	create_use_database (database: STRING) is
+	create_use_database (database: STRING)
 			-- Start using a certain database.
 		require
 			valid_database: database /= Void
 		deferred
 		end
 
-	frozen create_value (value: XPLAIN_VALUE) is
+	frozen create_value (value: XPLAIN_VALUE)
 			-- Output sql code to create a value and store an expression in it.
 		require
 			valid_value: value /= Void
@@ -1980,7 +1980,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			create_value_assign (value)
 		end
 
-	optional_create_value_declare (a_value: XPLAIN_VALUE) is
+	optional_create_value_declare (a_value: XPLAIN_VALUE)
 			-- Emit code to declare the value if it does not already
 			-- exist. If it exists and its data type is changed,
 			-- redeclare it.
@@ -1997,7 +1997,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			end
 		end
 
-	create_value_declare (a_value: XPLAIN_VALUE) is
+	create_value_declare (a_value: XPLAIN_VALUE)
 			-- Emit code to declare the value if it does not already
 			-- exist. If it exists and its data type is changed,
 			-- redeclare it.
@@ -2011,7 +2011,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			declared: is_value_declared (a_value)
 		end
 
-	create_value_declare_outside_sp (a_value: XPLAIN_VALUE) is
+	create_value_declare_outside_sp (a_value: XPLAIN_VALUE)
 			-- Emit SQL code to declare `a_value' outside a stored procedure.
 		require
 			value_not_void: a_value /= Void
@@ -2026,7 +2026,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			end
 		end
 
-	create_value_alter_table (value: XPLAIN_VALUE) is
+	create_value_alter_table (value: XPLAIN_VALUE)
 			-- Output sql code to alter the value table with a new
 			-- column, if that value does not already exist.
 		require
@@ -2043,7 +2043,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			std.output.put_character ('%N')
 		end
 
-	create_value_create_table (value: XPLAIN_VALUE) is
+	create_value_create_table (value: XPLAIN_VALUE)
 			-- Output sql code to create a table to hold values.
 		require
 			value_not_void: value /= Void
@@ -2079,7 +2079,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			table_does_exist: ValueTableCreated
 		end
 
-	create_value_assign (a_value: XPLAIN_VALUE) is
+	create_value_assign (a_value: XPLAIN_VALUE)
 		require
 			value_not_void: a_value /= Void
 			declared: is_value_declared (a_value)
@@ -2087,7 +2087,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			create_value_assign_outside_sp (a_value)
 		end
 
-	create_value_assign_outside_sp (a_value: XPLAIN_VALUE) is
+	create_value_assign_outside_sp (a_value: XPLAIN_VALUE)
 			-- Assign a value to `a_value' outside a stored procedure.
 		require
 			value_not_void: a_value /= Void
@@ -2107,7 +2107,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			std.output.put_character ('%N')
 		end
 
-	create_view (type: XPLAIN_TYPE) is
+	create_view (type: XPLAIN_TYPE)
 		require
 			type_not_void: type /= Void
 			views: ViewsSupported
@@ -2123,7 +2123,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			std.output.put_character ('%N')
 		end
 
-	forbid_update_of_primary_key (type: XPLAIN_TYPE) is
+	forbid_update_of_primary_key (type: XPLAIN_TYPE)
 			-- Generate code, if necessary, that forbids updating of the
 			-- primary key column of the table generated for `type'.
 		require
@@ -2135,7 +2135,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 
 feature -- Drop statements, should fail gracefully if things are not supported
 
-	drop_column (tablename, columnname: STRING) is
+	drop_column (tablename, columnname: STRING)
 			-- Generate code to drop some column from some table
 			-- used to purge attributes/variable/values.
 			-- Table name should be quoted, column name should be unquoted.
@@ -2155,7 +2155,7 @@ feature -- Drop statements, should fail gracefully if things are not supported
 			no_no_columns: -- what happens if table doesn't have any columns any more??
 		end
 
-	drop_constant (a_constant: XPLAIN_VARIABLE) is
+	drop_constant (a_constant: XPLAIN_VARIABLE)
 			-- Remove constant.
 		require
 			constant_not_void: a_constant /= Void
@@ -2164,7 +2164,7 @@ feature -- Drop statements, should fail gracefully if things are not supported
 			drop_column (ConstantTableName, constant_identifier (a_constant))
 		end
 
-	drop_domain (base: XPLAIN_BASE) is
+	drop_domain (base: XPLAIN_BASE)
 		do
 			if CreateDomains then
 				std.output.put_character ('%N')
@@ -2175,20 +2175,20 @@ feature -- Drop statements, should fail gracefully if things are not supported
 			end
 		end
 
-	drop_primary_key_generator (type: XPLAIN_TYPE) is
+	drop_primary_key_generator (type: XPLAIN_TYPE)
 		require
 			auto_pk: AutoPrimaryKeySupported
 		deferred
 		end
 
-	drop_procedure (procedure: XPLAIN_PROCEDURE) is
+	drop_procedure (procedure: XPLAIN_PROCEDURE)
 			-- Drop procedure `procedure'.
 		require
 			procedure_not_void: procedure /= Void
 		deferred
 		end
 
-	drop_table (type: XPLAIN_TYPE) is
+	drop_table (type: XPLAIN_TYPE)
 			-- Drop table, primary key generator and such.
 		require
 			type_not_void: type /= Void
@@ -2209,7 +2209,7 @@ feature -- Drop statements, should fail gracefully if things are not supported
 			std.output.put_character ('%N')
 		end
 
-	drop_table_if_exist (type: XPLAIN_TYPE) is
+	drop_table_if_exist (type: XPLAIN_TYPE)
 			-- Generate a statement that drops this table, but only if it exists.
 			-- No warning must be generated if the table does not exist at
 			-- run-time.
@@ -2219,7 +2219,7 @@ feature -- Drop statements, should fail gracefully if things are not supported
 			-- assume this is not supported
 		end
 
-	drop_temporary_table_if_exist (extension: XPLAIN_EXTENSION) is
+	drop_temporary_table_if_exist (extension: XPLAIN_EXTENSION)
 			-- Drop the temporary table created for `extension'.
 			-- Usually, implemention of this method is a hack. It should
 			-- not be needed if a dialect supports temporary tables.
@@ -2229,7 +2229,7 @@ feature -- Drop statements, should fail gracefully if things are not supported
 			-- ignore
 		end
 
-	drop_value (a_value: XPLAIN_VALUE) is
+	drop_value (a_value: XPLAIN_VALUE)
 			-- Remove value.
 		require
 			value_not_void: a_value /= Void
@@ -2242,7 +2242,7 @@ feature -- Drop statements, should fail gracefully if things are not supported
 			not_declared: not is_value_declared (a_value)
 		end
 
-	drop_view_if_exist (a_name: STRING) is
+	drop_view_if_exist (a_name: STRING)
 			-- Generate a statement that drops a view table, but only if
 			-- it exists, no warning must be generated if the table does
 			-- not exist at run-time.
@@ -2255,17 +2255,17 @@ feature -- Drop statements, should fail gracefully if things are not supported
 
 feature -- ANSI SQL type specification for Xplain types
 
-	datatype_char (representation: XPLAIN_C_REPRESENTATION): STRING is
+	datatype_char (representation: XPLAIN_C_REPRESENTATION): STRING
 		do
 			Result := "character(" + representation.length.out + ")"
 		end
 
-	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING is
+	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING
 		once
 			Result := "integer"
 		end
 
-	datatype_numeric (representation: XPLAIN_R_REPRESENTATION): STRING is
+	datatype_numeric (representation: XPLAIN_R_REPRESENTATION): STRING
 			-- Exact numeric data type.
 		local
 			precision, scale: INTEGER
@@ -2283,7 +2283,7 @@ feature -- ANSI SQL type specification for Xplain types
 			Result := "numeric(" + precision.out + "," + scale.out + ")"
 		end
 
-	datatype_pk_char (representation: XPLAIN_PK_A_REPRESENTATION): STRING is
+	datatype_pk_char (representation: XPLAIN_PK_A_REPRESENTATION): STRING
 		do
 			Result :=
 				datatype_varchar (representation) +
@@ -2291,7 +2291,7 @@ feature -- ANSI SQL type specification for Xplain types
 				PrimaryKeyConstraint
 		end
 
-	datatype_pk_int (representation: XPLAIN_PK_I_REPRESENTATION): STRING is
+	datatype_pk_int (representation: XPLAIN_PK_I_REPRESENTATION): STRING
 		do
 			if CreateAutoPrimaryKey then
 				Result :=
@@ -2306,7 +2306,7 @@ feature -- ANSI SQL type specification for Xplain types
 			end
 		end
 
-	datatype_varchar (representation: XPLAIN_A_REPRESENTATION): STRING is
+	datatype_varchar (representation: XPLAIN_A_REPRESENTATION): STRING
 		do
 			Result := "character varying(" + representation.length.out + ")"
 		end
@@ -2314,7 +2314,7 @@ feature -- ANSI SQL type specification for Xplain types
 
 feature -- Generate constraints definitions
 
-	sqlcheck_between (trajectory: XPLAIN_TRAJECTORY; column_name: STRING): STRING is
+	sqlcheck_between (trajectory: XPLAIN_TRAJECTORY; column_name: STRING): STRING
 			-- Portable SQL code for the SQL between statement;
 			-- attempts to avoid output of decimal digits if this is not
 			-- applicable.
@@ -2323,14 +2323,14 @@ feature -- Generate constraints definitions
 									<<column_name, trajectory.min, trajectory.max>>)
 		end
 
-	sqlcheck_boolean (restriction: XPLAIN_B_RESTRICTION; column_name: STRING): STRING is
+	sqlcheck_boolean (restriction: XPLAIN_B_RESTRICTION; column_name: STRING): STRING
 			-- SQL code for domain restriction for booleans
 		do
 			-- Not implemented it seems??
 			Result := Void
 		end
 
-	sqlcheck_in (list: XPLAIN_ENUMERATION_NODE [ANY]; column_name: STRING): STRING is
+	sqlcheck_in (list: XPLAIN_ENUMERATION_NODE [ANY]; column_name: STRING): STRING
 		local
 			s: STRING
 			node: XPLAIN_ENUMERATION_NODE[ANY]
@@ -2349,14 +2349,14 @@ feature -- Generate constraints definitions
 			Result := s
 		end
 
-	sqlcheck_like (a_pattern: XPLAIN_A_PATTERN; a_column_name: STRING): STRING is
+	sqlcheck_like (a_pattern: XPLAIN_A_PATTERN; a_column_name: STRING): STRING
 		require
 			column_name_not_empty: a_column_name /= Void and then not a_column_name.is_empty
 		do
 			Result := format ("($s like '$s')", <<a_column_name, a_pattern.pattern>>)
 		end
 
-	sqlcheck_notempty (a_pattern: XPLAIN_DOMAIN_RESTRICTION; a_column_name: STRING): STRING is
+	sqlcheck_notempty (a_pattern: XPLAIN_DOMAIN_RESTRICTION; a_column_name: STRING): STRING
 		require
 			column_name_not_empty: a_column_name /= Void and then not a_column_name.is_empty
 		do
@@ -2365,7 +2365,7 @@ feature -- Generate constraints definitions
 
 feature -- Expression that returns the contents of a variable/value
 
-	sqlgetvalue (a_value: XPLAIN_VALUE): STRING is
+	sqlgetvalue (a_value: XPLAIN_VALUE): STRING
 			-- SQL expression to retrieve the value of a value
 		require
 			valid: a_value /= Void
@@ -2376,7 +2376,7 @@ feature -- Expression that returns the contents of a variable/value
 		end
 
 
-	sqlgetvalue_outside_sp (a_value: XPLAIN_VALUE): STRING is
+	sqlgetvalue_outside_sp (a_value: XPLAIN_VALUE): STRING
 			-- SQL expression to retrieve the value of a value
 		require
 			valid: a_value /= Void
@@ -2395,7 +2395,7 @@ feature -- Expression that returns the contents of a variable/value
 			sql_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sqlgetconstant (variable: XPLAIN_VARIABLE): STRING is
+	sqlgetconstant (variable: XPLAIN_VARIABLE): STRING
 			-- SQL expression to retrieve the value of a constant
 		do
 			if variable.value = Void then
@@ -2413,7 +2413,7 @@ feature -- Expression that returns the contents of a variable/value
 
 feature -- generate columns either base or type columns
 
-	sqlcolumnidentifier_base (base: XPLAIN_BASE; role: STRING): STRING is
+	sqlcolumnidentifier_base (base: XPLAIN_BASE; role: STRING): STRING
 			-- Column name for a `base'
 		require
 			base_not_void: base /= Void
@@ -2433,7 +2433,7 @@ feature -- generate columns either base or type columns
 			result_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sqlcolumnidentifier_type (type: XPLAIN_TYPE; role: STRING): STRING is
+	sqlcolumnidentifier_type (type: XPLAIN_TYPE; role: STRING): STRING
 			-- Column name for a `type'
 		require
 			type_not_void: type /= Void
@@ -2450,7 +2450,7 @@ feature -- generate columns either base or type columns
 			result_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	columndatatype_base (base: XPLAIN_BASE): STRING is
+	columndatatype_base (base: XPLAIN_BASE): STRING
 			-- should return a quoted name if necessary
 		do
 			if CreateDomains then
@@ -2460,12 +2460,12 @@ feature -- generate columns either base or type columns
 			end
 		end
 
-	columndatatype_type (type: XPLAIN_TYPE): STRING is
+	columndatatype_type (type: XPLAIN_TYPE): STRING
 		do
 			Result := type.representation.datatype (Current)
 		end
 
-	columndatatype_assertion (assertion: XPLAIN_ASSERTION): STRING is
+	columndatatype_assertion (assertion: XPLAIN_ASSERTION): STRING
 			-- Data type of assertion; data type is implicit so this
 			-- returns a valid SQL expression like "computed by price *
 			-- amount"
@@ -2473,7 +2473,7 @@ feature -- generate columns either base or type columns
 			Result := format (asserted_format_string, <<assertion.expression.sqlvalue (Current)>>)
 		end
 
-	sqlcolumndefault_base (an_attribute: XPLAIN_ATTRIBUTE): STRING is
+	sqlcolumndefault_base (an_attribute: XPLAIN_ATTRIBUTE): STRING
 			-- Produce SQL that defines the default for a base column
 		do
 			if
@@ -2485,7 +2485,7 @@ feature -- generate columns either base or type columns
 			end
 		end
 
-	sqlcolumndefault_type (an_attribute: XPLAIN_ATTRIBUTE): STRING is
+	sqlcolumndefault_type (an_attribute: XPLAIN_ATTRIBUTE): STRING
 			-- Produce SQL that defines default for a type column
 		do
 			if an_attribute.init /= Void and then an_attribute.init.is_literal then
@@ -2493,7 +2493,7 @@ feature -- generate columns either base or type columns
 			end
 		end
 
-	sqlcolumnrequired_base (an_attribute: XPLAIN_ATTRIBUTE): STRING is
+	sqlcolumnrequired_base (an_attribute: XPLAIN_ATTRIBUTE): STRING
 			-- Produce null or not null status of a column that is a base
 		do
 			if an_attribute.overrule_required then
@@ -2505,7 +2505,7 @@ feature -- generate columns either base or type columns
 			end
 		end
 
-	sqlcolumnrequired_type (an_attribute: XPLAIN_ATTRIBUTE): STRING is
+	sqlcolumnrequired_type (an_attribute: XPLAIN_ATTRIBUTE): STRING
 			-- Produce null or not null status of a column that refers to a type
 		do
 			if an_attribute.overrule_required then
@@ -2515,7 +2515,7 @@ feature -- generate columns either base or type columns
 			end
 		end
 
-	init_forced_default (an_attribute: XPLAIN_ATTRIBUTE): BOOLEAN is
+	init_forced_default (an_attribute: XPLAIN_ATTRIBUTE): BOOLEAN
 			-- Does this attribute have an init that has to be converted
 			-- to a after-insert style trigger?
 		require
@@ -2523,7 +2523,7 @@ feature -- generate columns either base or type columns
 		deferred
 		end
 
-	init_forced_null (an_attribute: XPLAIN_ATTRIBUTE): BOOLEAN is
+	init_forced_null (an_attribute: XPLAIN_ATTRIBUTE): BOOLEAN
 			-- Does this attribute have a init default that has to be
 			-- converted to a after-insert style trigger?
 		require
@@ -2534,23 +2534,23 @@ feature -- generate columns either base or type columns
 
 feature -- Functions
 
-	sqlfunction_any: STRING is once Result := SQLTrue end
-	sqlfunction_count: STRING is once Result := "count" end
-	sqlfunction_max: STRING is once Result := "max" end
-	sqlfunction_min: STRING is once Result := "min" end
-	sqlfunction_nil: STRING is once Result := SQLFalse end
-	sqlfunction_some: STRING is once Result := "" end
-	sqlfunction_total: STRING is once Result := "sum" end
+	sqlfunction_any: STRING once Result := SQLTrue end
+	sqlfunction_count: STRING once Result := "count" end
+	sqlfunction_max: STRING once Result := "max" end
+	sqlfunction_min: STRING once Result := "min" end
+	sqlfunction_nil: STRING once Result := SQLFalse end
+	sqlfunction_some: STRING once Result := "" end
+	sqlfunction_total: STRING once Result := "sum" end
 
 
 feature -- ANSI niladic functions
 
-	sqlsysfunction_current_timestamp: STRING is
+	sqlsysfunction_current_timestamp: STRING
 		once
 			Result := "CURRENT_TIMESTAMP"
 		end
 
-	sqlsysfunction_system_user: STRING is
+	sqlsysfunction_system_user: STRING
 		once
 			Result := "SYSTEM_USER"
 		end
@@ -2558,7 +2558,7 @@ feature -- ANSI niladic functions
 
 feature -- Return sql code
 
-	sql_expression_as_boolean_value (expression: XPLAIN_EXPRESSION): STRING is
+	sql_expression_as_boolean_value (expression: XPLAIN_EXPRESSION): STRING
 			-- Return SQL code for expression that is a logical
 			-- expression. For SQL dialects that don't support Booleans,
 			-- it might need to map the Boolean result to a 'T' or 'F'
@@ -2571,7 +2571,7 @@ feature -- Return sql code
 			not_void: Result /= Void
 		end
 
-	sql_extension_function (an_expression: XPLAIN_EXTENSION_FUNCTION_EXPRESSION): STRING is
+	sql_extension_function (an_expression: XPLAIN_EXTENSION_FUNCTION_EXPRESSION): STRING
 		require
 			expression_not_void: an_expression /= Void
 		do
@@ -2582,7 +2582,7 @@ feature -- Return sql code
 			end
 		end
 
-	sql_infix_expression (a_left: XPLAIN_EXPRESSION; an_operator: STRING; a_right: XPLAIN_EXPRESSION): STRING is
+	sql_infix_expression (a_left: XPLAIN_EXPRESSION; an_operator: STRING; a_right: XPLAIN_EXPRESSION): STRING
 			-- SQL expression for multiplication/division, etc.
 		require
 			valid_left: a_left /= Void
@@ -2618,7 +2618,7 @@ feature -- Return sql code
 			sql_infix_expression_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sql_infix_expression_as_wildcard (a_left: XPLAIN_EXPRESSION; an_operator: STRING; a_right: XPLAIN_EXPRESSION): STRING is
+	sql_infix_expression_as_wildcard (a_left: XPLAIN_EXPRESSION; an_operator: STRING; a_right: XPLAIN_EXPRESSION): STRING
 			-- SQL infix expression when a wildcard is involved
 		require
 			valid_left: a_left /= Void
@@ -2640,7 +2640,7 @@ feature -- Return sql code
 			sql_infix_expression_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sql_combine_expression (a_list: XPLAIN_EXPRESSION_NODE): STRING is
+	sql_combine_expression (a_list: XPLAIN_EXPRESSION_NODE): STRING
 			-- SQL expression to combine strings
 		require
 			list_not_empty: a_list /= Void
@@ -2665,7 +2665,7 @@ feature -- Return sql code
 			sql_combine_expression_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sql_combine_expression_as_wildcard (a_list: XPLAIN_EXPRESSION_NODE): STRING is
+	sql_combine_expression_as_wildcard (a_list: XPLAIN_EXPRESSION_NODE): STRING
 			-- SQL expression to combine strings, potentially resulting
 			-- in a wildcard
 		require
@@ -2691,7 +2691,7 @@ feature -- Return sql code
 			sql_combine_expression_as_wildcard_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sql_not_expression (expression: XPLAIN_EXPRESSION): STRING is
+	sql_not_expression (expression: XPLAIN_EXPRESSION): STRING
 			-- Return the SQL code that this `expression' is not True.
 		do
 			if SupportsTrueBoolean then
@@ -2703,7 +2703,7 @@ feature -- Return sql code
 			sql_not_expression_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sql_notnot_expression (expression: XPLAIN_EXPRESSION): STRING is
+	sql_notnot_expression (expression: XPLAIN_EXPRESSION): STRING
 			-- Return the SQL code that this `expression' is True.
 		do
 			if SupportsTrueBoolean then
@@ -2715,7 +2715,7 @@ feature -- Return sql code
 			sql_notnot_expression_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sql_predicate (subject: XPLAIN_SUBJECT; predicate: XPLAIN_EXPRESSION): STRING is
+	sql_predicate (subject: XPLAIN_SUBJECT; predicate: XPLAIN_EXPRESSION): STRING
 			-- Generate a where clause.
 		require
 			subject_not_void: subject /= Void
@@ -2772,7 +2772,7 @@ feature -- Return sql code
 			local_state_reset: not WhereWritten
 		end
 
-	sql_last_auto_generated_primary_key	(type: XPLAIN_TYPE): STRING is
+	sql_last_auto_generated_primary_key	(type: XPLAIN_TYPE): STRING
 			-- Return code to get the last auto-generated primary key for
 			-- `type'. Certain SQL dialects can only return the last
 			-- generated key, so this code is not guaranteed to be `type'
@@ -2789,7 +2789,7 @@ feature -- Return sql code
 			not_void: Result /= Void
 		end
 
-	sql_select_for_extension_expression (an_expression: XPLAIN_EXTENSION_EXPRESSION): STRING is
+	sql_select_for_extension_expression (an_expression: XPLAIN_EXTENSION_EXPRESSION): STRING
 			-- SQL for the full select statement that emits the data used
 			-- to create an extension based on an attribute expression.
 		local
@@ -2846,7 +2846,7 @@ feature -- Return sql code
 			not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sql_select_for_extension_function (an_expression: XPLAIN_EXTENSION_FUNCTION_EXPRESSION; an_extension: XPLAIN_ABSTRACT_EXTENSION): STRING is
+	sql_select_for_extension_function (an_expression: XPLAIN_EXTENSION_FUNCTION_EXPRESSION; an_extension: XPLAIN_ABSTRACT_EXTENSION): STRING
 			-- SQL for the full select statement that emits the data used
 			-- to create an extension based on a function.
 		require
@@ -2862,7 +2862,7 @@ feature -- Return sql code
 			end
 		end
 
-	do_sql_select_for_extension_function (an_expression: XPLAIN_EXTENSION_FUNCTION_EXPRESSION; an_extension: XPLAIN_ABSTRACT_EXTENSION): STRING is
+	do_sql_select_for_extension_function (an_expression: XPLAIN_EXTENSION_FUNCTION_EXPRESSION; an_extension: XPLAIN_ABSTRACT_EXTENSION): STRING
 			-- SQL for the full select statement that emits the data used
 			-- to create an extension based on a function.
 		require
@@ -2961,7 +2961,7 @@ feature -- Return sql code
 			not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sql_extend_insert_missing_rows (an_expression: XPLAIN_EXTENSION_FUNCTION_EXPRESSION; an_extension: XPLAIN_ABSTRACT_EXTENSION): STRING is
+	sql_extend_insert_missing_rows (an_expression: XPLAIN_EXTENSION_FUNCTION_EXPRESSION; an_extension: XPLAIN_ABSTRACT_EXTENSION): STRING
 			-- An extend with a where clause will make the initial insert
 			-- into the temporary table to be only a partial on. Missing
 			-- rows are added here. But MySQL does not support self
@@ -3000,7 +3000,7 @@ feature -- Return sql code
 			Result.append_string (once ")")
 		end
 
-	sql_select_function_as_subselect (selection_list: XPLAIN_SELECTION_FUNCTION): STRING is
+	sql_select_function_as_subselect (selection_list: XPLAIN_SELECTION_FUNCTION): STRING
 			-- Full sql code for a subselect with function;
 			-- Code is not surrounded by any parentheses.
 		require
@@ -3187,7 +3187,7 @@ feature -- Return sql code
 			Result := code
 		end
 
-	sql_select_function_as_left_outer_join (an_expression: XPLAIN_EXTENSION_FUNCTION_EXPRESSION): STRING is
+	sql_select_function_as_left_outer_join (an_expression: XPLAIN_EXTENSION_FUNCTION_EXPRESSION): STRING
 			-- SQL expression for this Xplain function, does not include
 			-- the left outer join code which should be added by the
 			-- statements that can have an XPLAIN_SELECTION_FUNCTION.
@@ -3288,7 +3288,7 @@ feature -- Return sql code
 			end
 		end
 
-	sql_select_function_limit_before (selection_list: XPLAIN_SELECTION_FUNCTION): STRING is
+	sql_select_function_limit_before (selection_list: XPLAIN_SELECTION_FUNCTION): STRING
 			-- Code that limits a select to return a single value. Output
 			-- is placed in front of the select statement.
 			-- Returns empty for no output.
@@ -3300,7 +3300,7 @@ feature -- Return sql code
 			not_void: Result /= Void
 		end
 
-	sql_select_function_limit_after: STRING is
+	sql_select_function_limit_after: STRING
 			-- Code that limits a select to return a single value. Output
 			-- is placed after the select statement.
 			-- Returns empty for no output.
@@ -3310,7 +3310,7 @@ feature -- Return sql code
 			result_not_void: Result /= Void
 		end
 
-	sql_select_instance (selection_list: XPLAIN_SELECTION_INSTANCE): STRING is
+	sql_select_instance (selection_list: XPLAIN_SELECTION_INSTANCE): STRING
 		-- Return sql code for select of a single instance.
 		require
 			valid_selection: selection_list /= Void
@@ -3362,7 +3362,7 @@ feature -- Return sql code
 			local_state_reset: not WhereWritten
 		end
 
-	sql_select_joins (join_list: JOIN_LIST): STRING is
+	sql_select_joins (join_list: JOIN_LIST): STRING
 			-- SQL join statement either in the new ANSI SQL 92 form or
 			-- in the older format
 		require
@@ -3376,7 +3376,7 @@ feature -- Return sql code
 			end
 		end
 
-	sql_select_joins_ansi92 (join_list: JOIN_LIST): STRING is
+	sql_select_joins_ansi92 (join_list: JOIN_LIST): STRING
 			-- `join_list' as ANSI-92 style join statements
 		require
 			cursos_pos: True -- at end of line
@@ -3432,7 +3432,7 @@ feature -- Return sql code
 			cursos_pos: -- cursor after last generated character
 		end
 
-	sql_select_joins_oldstyle (join_list: JOIN_LIST): STRING is
+	sql_select_joins_oldstyle (join_list: JOIN_LIST): STRING
 			-- return old style join statements
 		require
 			cursos_pos: True -- at end of line
@@ -3491,7 +3491,7 @@ feature -- Return sql code
 			cursos_pos: -- cursor after last generated character
 		end
 
-	sql_subselect_for_attribute (an_its_list: XPLAIN_ATTRIBUTE_NAME_NODE): STRING is
+	sql_subselect_for_attribute (an_its_list: XPLAIN_ATTRIBUTE_NAME_NODE): STRING
 			-- SQL code to return a complex attribute using a subselect;
 			-- Used in update statements for dialects that don't support
 			-- complex updates.
@@ -3551,7 +3551,7 @@ feature -- Return sql code
 			Result.append_string (once " )")
 		end
 
-	sql_subselect_for_extension (extension: XPLAIN_ABSTRACT_EXTENSION): STRING is
+	sql_subselect_for_extension (extension: XPLAIN_ABSTRACT_EXTENSION): STRING
 			-- Extension value using subselect to join to type
 		do
 			create Result.make (512)
@@ -3583,7 +3583,7 @@ feature -- Return sql code
 
 feature -- Some sp functions that are needed by clients
 
-	sp_define_in_param (name: STRING): STRING is
+	sp_define_in_param (name: STRING): STRING
 			-- Return `name' formatted as an sp input parameter, as it
 			-- should appear in the header/definition of a stored
 			-- procedure.
@@ -3599,7 +3599,7 @@ feature -- Some sp functions that are needed by clients
 			result_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sp_define_param_name (name: STRING): STRING is
+	sp_define_param_name (name: STRING): STRING
 			-- Return `name' formatted as the name of the parameter as it
 			-- appears in the header, and hopefully as it is known to
 			-- clients. It must be quoted, if it can be quoted.
@@ -3610,7 +3610,7 @@ feature -- Some sp functions that are needed by clients
 			result_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sp_delete_name (type: XPLAIN_TYPE): STRING is
+	sp_delete_name (type: XPLAIN_TYPE): STRING
 			-- Name of stored procedure that deletes an instance of a type
 		require
 			type_not_void: type /= Void
@@ -3619,7 +3619,7 @@ feature -- Some sp functions that are needed by clients
 			result_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sp_function_type_for_selection (selection: XPLAIN_SELECTION; an_emit_path: BOOLEAN): STRING is
+	sp_function_type_for_selection (selection: XPLAIN_SELECTION; an_emit_path: BOOLEAN): STRING
 			-- The function type for output of a get statement.
 			-- Required for PostgreSQL output.
 		require
@@ -3630,7 +3630,7 @@ feature -- Some sp functions that are needed by clients
 			function_type_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sp_function_type_for_selection_list (selection: XPLAIN_SELECTION_LIST; an_emit_path: BOOLEAN): STRING is
+	sp_function_type_for_selection_list (selection: XPLAIN_SELECTION_LIST; an_emit_path: BOOLEAN): STRING
 			-- The function type for output of a get statement.
 			-- Required for PostgreSQL output.
 		require
@@ -3641,7 +3641,7 @@ feature -- Some sp functions that are needed by clients
 			function_type_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sp_function_type_for_selection_value (a_column_name: STRING; a_representation: XPLAIN_REPRESENTATION; an_emit_path: BOOLEAN): STRING is
+	sp_function_type_for_selection_value (a_column_name: STRING; a_representation: XPLAIN_REPRESENTATION; an_emit_path: BOOLEAN): STRING
 			-- The function type for output of a get statement.
 			-- Required for PostgreSQL output.
 		require
@@ -3653,7 +3653,7 @@ feature -- Some sp functions that are needed by clients
 			function_type_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sp_insert_name (type: XPLAIN_TYPE): STRING is
+	sp_insert_name (type: XPLAIN_TYPE): STRING
 			-- Name of stored procedure that inserts an instance of a type
 		require
 			type_not_void: type /= Void
@@ -3662,7 +3662,7 @@ feature -- Some sp functions that are needed by clients
 			result_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sp_name (name: STRING): STRING is
+	sp_name (name: STRING): STRING
 			-- Turn an Xplain name into a stored procedure name.
 		require
 			name_not_empty: name /= Void and then not name.is_empty
@@ -3671,10 +3671,10 @@ feature -- Some sp functions that are needed by clients
 			result_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sp_prefix: STRING is "sp_"
+	sp_prefix: STRING = "sp_"
 			-- Prefix for `sp_name'
 
-	sp_update_name (type: XPLAIN_TYPE): STRING is
+	sp_update_name (type: XPLAIN_TYPE): STRING
 			-- Name of stored procedure that updates an instance of a type
 		require
 			type_not_void: type /= Void
@@ -3683,7 +3683,7 @@ feature -- Some sp functions that are needed by clients
 			result_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sp_use_param (name: STRING): STRING is
+	sp_use_param (name: STRING): STRING
 			-- Return stored procedure parameter `name' formatted
 			-- according to the dialects convention when using
 			-- parameters in sql code. It is usually prefixed by '@' or
@@ -3700,7 +3700,7 @@ feature -- Some sp functions that are needed by clients
 
 feature -- Identifiers
 
-	make_valid_identifier (name: STRING): STRING is
+	make_valid_identifier (name: STRING): STRING
 			-- The valid identifier for a given Xplain name;
 			-- override when certain `name's conflict with keywords, even
 			-- when quoted.
@@ -3720,7 +3720,7 @@ feature -- Identifiers
 			result_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	make_valid_constraint_identifier (name: STRING): STRING is
+	make_valid_constraint_identifier (name: STRING): STRING
 			-- Return a valid identifier for a constraint.
 		local
 			s: STRING
@@ -3733,7 +3733,7 @@ feature -- Identifiers
 			Result := make_valid_identifier (s)
 		end
 
-	quote_identifier (an_identifier: STRING): STRING is
+	quote_identifier (an_identifier: STRING): STRING
 			-- `an_identifier', optionally surrounded by quotes if
 			-- identifier contains spaces and rdbms supports spaces in
 			-- identifiers;
@@ -3751,7 +3751,7 @@ feature -- Identifiers
 			no_spaces: not IdentifierWithSpacesEnabled implies not Result.has (' ')
 		end
 
-	quote_valid_identifier (identifier: STRING): STRING is
+	quote_valid_identifier (identifier: STRING): STRING
 			-- Make identifier valid, and quote it.
 		require
 			identifier_not_empty:
@@ -3766,7 +3766,7 @@ feature -- Identifiers
 
 feature -- Formatting numbers
 
-	double_to_string (d: DOUBLE): STRING is
+	double_to_string (d: DOUBLE): STRING
 			-- convert double to string, output only decimal digits if necessary
 		local
 			s: STRING
@@ -3781,7 +3781,7 @@ feature -- Formatting numbers
 
 feature -- Domain specific methods
 
-	domain_identifier (base: XPLAIN_BASE): STRING is
+	domain_identifier (base: XPLAIN_BASE): STRING
 		local
 			s: STRING
 		do
@@ -3789,7 +3789,7 @@ feature -- Domain specific methods
 			Result := make_valid_identifier(s)
 		end
 
-	domain_null_or_not_null (domain_restriction: XPLAIN_DOMAIN_RESTRICTION): STRING is
+	domain_null_or_not_null (domain_restriction: XPLAIN_DOMAIN_RESTRICTION): STRING
 			-- will this domain be null or not null?
 		require
 			supported: DomainsSupported
@@ -3827,7 +3827,7 @@ feature -- Domain specific methods
 
 feature -- Table specific methods
 
-	check_if_required (type: XPLAIN_ABSTRACT_TYPE): BOOLEAN is
+	check_if_required (type: XPLAIN_ABSTRACT_TYPE): BOOLEAN
 			-- returns True if it is a good thing to make this base/type
 			-- a required attribute.
 			-- Xplain doesn't have Nulls, but for blobs it's best to
@@ -3842,7 +3842,7 @@ feature -- Table specific methods
 			end
 		end
 
-	constraint_names: DS_SET [STRING] is
+	constraint_names: DS_SET [STRING]
 			-- List of generated constraint names.
 		local
 			et: KL_STRING_EQUALITY_TESTER
@@ -3854,7 +3854,7 @@ feature -- Table specific methods
 			constraint_names_not_void: Result /= Void
 		end
 
-	create_table_name (type: XPLAIN_TYPE): STRING is
+	create_table_name (type: XPLAIN_TYPE): STRING
 			-- Table identifier to use in create table statement
 		local
 			s: STRING
@@ -3868,7 +3868,7 @@ feature -- Table specific methods
 			end
 		end
 
-	table_name (type: XPLAIN_TYPE): STRING is
+	table_name (type: XPLAIN_TYPE): STRING
 			-- Table identifier to use in select/insert/etc statements
 		do
 			if CreateViews then
@@ -3878,7 +3878,7 @@ feature -- Table specific methods
 			end
 		end
 
-	table_pk_name (type: XPLAIN_TYPE): STRING is
+	table_pk_name (type: XPLAIN_TYPE): STRING
 		require
 			type_not_void: type /= Void
 		local
@@ -3890,7 +3890,7 @@ feature -- Table specific methods
 			table_pk_name_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	table_has_auto_pk (type: XPLAIN_TYPE): BOOLEAN is
+	table_has_auto_pk (type: XPLAIN_TYPE): BOOLEAN
 			-- Does this type have an auto-generated primary key?
 		require
 			type_not_void: type /= Void
@@ -3900,7 +3900,7 @@ feature -- Table specific methods
 				type.representation.is_integer
 		end
 
-	table_ts_name (type: XPLAIN_TYPE): STRING is
+	table_ts_name (type: XPLAIN_TYPE): STRING
 			-- Name of the timestamp column
 		require
 			type_not_void: type /= Void
@@ -3912,7 +3912,7 @@ feature -- Table specific methods
 			valid_identifier: equal (Result, make_valid_identifier (Result))
 		end
 
-	column_constraint_name (owner: XPLAIN_TYPE; an_attribute: XPLAIN_ATTRIBUTE): STRING is
+	column_constraint_name (owner: XPLAIN_TYPE; an_attribute: XPLAIN_ATTRIBUTE): STRING
 			-- A unique constraint name. If called twice, a different
 			-- name could be returned.
 			-- That it is unique should be guaranteed by a
@@ -3968,7 +3968,7 @@ feature -- Table specific methods
 			result_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	column_null_or_not_null (required: BOOLEAN): STRING is
+	column_null_or_not_null (required: BOOLEAN): STRING
 			-- return null or not null, to be used when creating a column
 		do
 			if required then
@@ -4000,7 +4000,7 @@ feature -- Table specific methods
 		end
 
 	sqlcolumnconstraint_base (restriction: XPLAIN_DOMAIN_RESTRICTION
-									column_name: STRING): STRING is
+									column_name: STRING): STRING
 			-- return base column constraint except if constraint already
 			-- specified on domain
 		local
@@ -4022,7 +4022,7 @@ feature -- Table specific methods
 			end
 		end
 
-	sqlcolumnconstraint_type (restriction: XPLAIN_DOMAIN_RESTRICTION; type: XPLAIN_TYPE): STRING is
+	sqlcolumnconstraint_type (restriction: XPLAIN_DOMAIN_RESTRICTION; type: XPLAIN_TYPE): STRING
 			-- returns a references constraint
 			-- should reference the view or table? Probably depends on
 			-- security model
@@ -4033,7 +4033,7 @@ feature -- Table specific methods
 
 feature -- Index name
 
-	index_name (index: XPLAIN_INDEX): STRING is
+	index_name (index: XPLAIN_INDEX): STRING
 		do
 			Result := "idx_" + index.type.sqlname (Current) + "_" + index.name
 			Result := make_valid_identifier (Result)
@@ -4042,7 +4042,7 @@ feature -- Index name
 
 feature -- Variable specific features
 
-	constant_identifier (variable: XPLAIN_VARIABLE): STRING is
+	constant_identifier (variable: XPLAIN_VARIABLE): STRING
 		require
 			variable_not_void: variable /= Void
 		do
@@ -4054,7 +4054,7 @@ feature -- Variable specific features
 
 feature -- Value specific features
 
-	is_value_data_type_changed (a_value: XPLAIN_VALUE): BOOLEAN is
+	is_value_data_type_changed (a_value: XPLAIN_VALUE): BOOLEAN
 			-- Is value's representation different from the declared
 			-- representation?
 		require
@@ -4069,7 +4069,7 @@ feature -- Value specific features
 			Result := not old_data_type.is_equal (new_data_type)
 		end
 
-	is_value_declared (a_value: XPLAIN_VALUE): BOOLEAN is
+	is_value_declared (a_value: XPLAIN_VALUE): BOOLEAN
 			-- Is value already declared?
 		require
 			value_not_void: a_value /= Void
@@ -4077,7 +4077,7 @@ feature -- Value specific features
 			Result := declared_values.has (a_value.name)
 		end
 
-	value_identifier (a_value: XPLAIN_VALUE): STRING is
+	value_identifier (a_value: XPLAIN_VALUE): STRING
 			-- Value identifier, unquoted
 		require
 			value_not_void: a_value /= Void
@@ -4087,7 +4087,7 @@ feature -- Value specific features
 			value_identifier_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	quoted_value_identifier (a_value: XPLAIN_VALUE): STRING is
+	quoted_value_identifier (a_value: XPLAIN_VALUE): STRING
 			-- Value identifier, quoted
 		require
 			value_not_void: a_value /= Void
@@ -4100,7 +4100,7 @@ feature -- Value specific features
 
 feature -- Value representations
 
-	value_representation_boolean: XPLAIN_B_REPRESENTATION is
+	value_representation_boolean: XPLAIN_B_REPRESENTATION
 		local
 			restriction: XPLAIN_REQUIRED
 		once
@@ -4112,7 +4112,7 @@ feature -- Value representations
 			has_domain_restriction: Result.domain_restriction /= Void
 		end
 
-	value_representation_char (a_minimum_length: INTEGER): XPLAIN_A_REPRESENTATION is
+	value_representation_char (a_minimum_length: INTEGER): XPLAIN_A_REPRESENTATION
 			-- Representation for value with a character expression.
 		require
 			minimum_length_positive: a_minimum_length > 0
@@ -4134,7 +4134,7 @@ feature -- Value representations
 			has_domain_restriction: Result.domain_restriction /= Void
 		end
 
-	value_representation_current_timestamp: XPLAIN_D_REPRESENTATION is
+	value_representation_current_timestamp: XPLAIN_D_REPRESENTATION
 		local
 			restriction: XPLAIN_REQUIRED
 		once
@@ -4146,7 +4146,7 @@ feature -- Value representations
 			has_domain_restriction: Result.domain_restriction /= Void
 		end
 
-	value_representation_date: XPLAIN_D_REPRESENTATION is
+	value_representation_date: XPLAIN_D_REPRESENTATION
 		local
 			restriction: XPLAIN_REQUIRED
 		once
@@ -4158,7 +4158,7 @@ feature -- Value representations
 			has_domain_restriction: Result.domain_restriction /= Void
 		end
 
-	value_representation_float: XPLAIN_F_REPRESENTATION is
+	value_representation_float: XPLAIN_F_REPRESENTATION
 		local
 			restriction: XPLAIN_REQUIRED
 		do
@@ -4170,7 +4170,7 @@ feature -- Value representations
 			has_domain_restriction: Result.domain_restriction /= Void
 		end
 
-	value_representation_integer (a_minimum_length: INTEGER): XPLAIN_I_REPRESENTATION is
+	value_representation_integer (a_minimum_length: INTEGER): XPLAIN_I_REPRESENTATION
 		local
 			length: INTEGER
 			restriction: XPLAIN_REQUIRED
@@ -4188,7 +4188,7 @@ feature -- Value representations
 			has_domain_restriction: Result.domain_restriction /= Void
 		end
 
-	value_representation_money: XPLAIN_M_REPRESENTATION is
+	value_representation_money: XPLAIN_M_REPRESENTATION
 		local
 			restriction: XPLAIN_REQUIRED
 		once
@@ -4200,7 +4200,7 @@ feature -- Value representations
 			has_domain_restriction: Result.domain_restriction /= Void
 		end
 
-	value_representation_system_user: XPLAIN_A_REPRESENTATION is
+	value_representation_system_user: XPLAIN_A_REPRESENTATION
 		once
 			Result := value_representation_char (64)
 		ensure
@@ -4208,7 +4208,7 @@ feature -- Value representations
 			has_domain_restriction: Result.domain_restriction /= Void
 		end
 
-	value_representation_text: XPLAIN_T_REPRESENTATION is
+	value_representation_text: XPLAIN_T_REPRESENTATION
 			-- Representation for value with a character expression.
 		local
 			restriction: XPLAIN_REQUIRED
@@ -4224,7 +4224,7 @@ feature -- Value representations
 
 feature -- Cast expressions
 
-	sql_cast_to_date (an_expression: XPLAIN_EXPRESSION): STRING is
+	sql_cast_to_date (an_expression: XPLAIN_EXPRESSION): STRING
 			-- SQL expression to cast `an_expression' to a date
 		do
 			Result := do_sql_cast_to_date (an_expression.sqlvalue (Current))
@@ -4232,7 +4232,7 @@ feature -- Cast expressions
 			cast_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sql_cast_to_integer (an_expression: XPLAIN_EXPRESSION): STRING is
+	sql_cast_to_integer (an_expression: XPLAIN_EXPRESSION): STRING
 			-- SQL expression to cast `an_expression' to an integer
 		do
 			Result := do_sql_cast_to_integer (an_expression.sqlvalue (Current))
@@ -4240,7 +4240,7 @@ feature -- Cast expressions
 			cast_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sql_cast_to_real (an_expression: XPLAIN_EXPRESSION): STRING is
+	sql_cast_to_real (an_expression: XPLAIN_EXPRESSION): STRING
 			-- SQL expression to cast `an_expression' to a real
 		do
 			Result := do_sql_cast_to_real (an_expression.sqlvalue (Current))
@@ -4248,7 +4248,7 @@ feature -- Cast expressions
 			cast_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sql_cast_to_string (an_expression: XPLAIN_EXPRESSION): STRING is
+	sql_cast_to_string (an_expression: XPLAIN_EXPRESSION): STRING
 			-- SQL expression to cast `an_expression' to a string
 		do
 			Result := do_sql_cast_to_string (an_expression.sqlvalue (Current))
@@ -4259,7 +4259,7 @@ feature -- Cast expressions
 
 feature {NONE} -- Cast expressions implementation
 
-	do_sql_cast_to_date (an_sql_expression: STRING): STRING is
+	do_sql_cast_to_date (an_sql_expression: STRING): STRING
 			-- SQL expression to cast `an_expression' to a date
 		require
 			an_sql_expression_not_empty: an_sql_expression /= Void and then not an_sql_expression.is_empty
@@ -4272,7 +4272,7 @@ feature {NONE} -- Cast expressions implementation
 			cast_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	do_sql_cast_to_integer (an_sql_expression: STRING): STRING is
+	do_sql_cast_to_integer (an_sql_expression: STRING): STRING
 			-- SQL expression to cast `an_expression' to an integer
 		require
 			an_sql_expression_not_empty: an_sql_expression /= Void and then not an_sql_expression.is_empty
@@ -4285,7 +4285,7 @@ feature {NONE} -- Cast expressions implementation
 			cast_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	do_sql_cast_to_real (an_sql_expression: STRING): STRING is
+	do_sql_cast_to_real (an_sql_expression: STRING): STRING
 			-- SQL expression to cast `an_expression' to a real
 		require
 			an_sql_expression_not_empty: an_sql_expression /= Void and then not an_sql_expression.is_empty
@@ -4298,7 +4298,7 @@ feature {NONE} -- Cast expressions implementation
 			cast_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	do_sql_cast_to_string (an_sql_expression: STRING): STRING is
+	do_sql_cast_to_string (an_sql_expression: STRING): STRING
 			-- SQL expression to cast `an_expression' to a string
 		require
 			an_sql_expression_not_empty: an_sql_expression /= Void and then not an_sql_expression.is_empty
@@ -4317,7 +4317,7 @@ feature {NONE} -- Cast expressions implementation
 
 feature -- Extension specific methods
 
-	extension_index_name (an_extension: XPLAIN_EXTENSION): STRING is
+	extension_index_name (an_extension: XPLAIN_EXTENSION): STRING
 			-- Name of index on temporary table to speed up join to that table
 		require
 			extension_not_void: an_extension /= Void
@@ -4327,7 +4327,7 @@ feature -- Extension specific methods
 			not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	extension_name (an_extension: XPLAIN_EXTENSION): STRING is
+	extension_name (an_extension: XPLAIN_EXTENSION): STRING
 			-- Name of temporary table where extension is stored
 		require
 			extension_not_void: an_extension /= Void
@@ -4347,7 +4347,7 @@ feature -- Extension specific methods
 
 feature {NONE} -- Update SQL
 
-	output_update_from_clause (a_subject: XPLAIN_SUBJECT; a_join_list: JOIN_LIST) is
+	output_update_from_clause (a_subject: XPLAIN_SUBJECT; a_join_list: JOIN_LIST)
 			-- Some dialects support a from + join clause in an update
 			-- statement. This gives that dialects a chance to write that
 			-- clause so updates can refer to any attribute without using
@@ -4360,7 +4360,7 @@ feature {NONE} -- Update SQL
 			-- do nothing
 		end
 
-	output_update_extend_from_clause (a_subject: XPLAIN_SUBJECT; a_join_list: JOIN_LIST) is
+	output_update_extend_from_clause (a_subject: XPLAIN_SUBJECT; a_join_list: JOIN_LIST)
 			-- TSQL/PostgreSQL specific call to do
 			-- `output_update_extend_join_clause'.
 		require
@@ -4371,7 +4371,7 @@ feature {NONE} -- Update SQL
 			-- do nothing
 		end
 
-	output_update_extend_join_clause (a_subject: XPLAIN_SUBJECT; an_extension: XPLAIN_EXTENSION; a_join_list: JOIN_LIST) is
+	output_update_extend_join_clause (a_subject: XPLAIN_SUBJECT; an_extension: XPLAIN_EXTENSION; a_join_list: JOIN_LIST)
 			-- Output from clause and optional join to necessary tables
 			-- when updating extended table.
 			-- If a dialect doesn't support it, just the update for the
@@ -4384,7 +4384,7 @@ feature {NONE} -- Update SQL
 			std.output.put_string (an_extension.quoted_name (Current))
 		end
 
-	output_update_join_clause (a_subject: XPLAIN_SUBJECT; a_join_list: JOIN_LIST) is
+	output_update_join_clause (a_subject: XPLAIN_SUBJECT; a_join_list: JOIN_LIST)
 			-- Output join to necessary tables for an update statement.
 			-- If a dialect doesn't support it, just the update for
 			-- the extended table is emitted and it will need
@@ -4399,7 +4399,7 @@ feature {NONE} -- Update SQL
 
 feature -- Assertion specific methods
 
-	assert_implemented_as_view (an_assertion: XPLAIN_ASSERTION): BOOLEAN is
+	assert_implemented_as_view (an_assertion: XPLAIN_ASSERTION): BOOLEAN
 		require
 			views_supported: ViewsSupported
 		do
@@ -4409,7 +4409,7 @@ feature -- Assertion specific methods
 				(an_assertion.is_function)
 		end
 
-	assertion_name (an_assertion: XPLAIN_ASSERTION): STRING is
+	assertion_name (an_assertion: XPLAIN_ASSERTION): STRING
 			-- Name of temporary table where extension is stored
 		require
 			assertion_not_void: an_assertion /= Void
@@ -4422,7 +4422,7 @@ feature -- Assertion specific methods
 
 feature -- Literal
 
-	as_string (s: STRING): STRING is
+	as_string (s: STRING): STRING
 			-- Return `s' as string by surrounding it with quotes. Makes
 			-- sure `s' is properly quoted, so don't use together with
 			-- `safe_string'!
@@ -4440,7 +4440,7 @@ feature -- Literal
 			end
 		end
 
-	safe_string (s: STRING): STRING is
+	safe_string (s: STRING): STRING
 			-- Make sure the ' character in `s', if any, is properly quoted.
 		require
 			s_not_empty: s /= Void and then not s.is_empty
@@ -4483,7 +4483,7 @@ feature -- Options
 			AIdentifierWithSpacesEnabled,
 			ATimestampEnabled,
 			ATimeZoneEnabled,
-			AViewsEnabled: BOOLEAN) is
+			AViewsEnabled: BOOLEAN)
 			-- Set SQL generator options.
 		do
 			AssertEnabled := AAssertEnabled
@@ -4502,7 +4502,7 @@ feature -- Options
 			end
 		end
 
-	set_primary_key_format (a_primary_key_format: STRING) is
+	set_primary_key_format (a_primary_key_format: STRING)
 			-- Set `primary_key_format'.
 		require
 			not_empty: a_primary_key_format /= Void and then not a_primary_key_format.is_empty
@@ -4514,7 +4514,7 @@ feature -- Options
 			set: STRING_.same_string (primary_key_format, a_primary_key_format)
 		end
 
-	set_sequence_name_format (a_sequence_name_format: STRING) is
+	set_sequence_name_format (a_sequence_name_format: STRING)
 			-- Set `sequence_name_format'.
 		require
 			not_empty: a_sequence_name_format /= Void and then not a_sequence_name_format.is_empty

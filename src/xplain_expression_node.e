@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Xplain linked list of expressions"
 
@@ -26,7 +26,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (a_item: XPLAIN_EXPRESSION; a_new_name: STRING; a_next: like Current) is
+	make (a_item: XPLAIN_EXPRESSION; a_new_name: STRING; a_next: like Current)
 		require
 			item_not_void: a_item /= Void
 			new_name_is_void_or_not_empty: a_new_name = Void or else not a_new_name.is_empty
@@ -38,7 +38,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	column_name: STRING is
+	column_name: STRING
 			-- The Xplain based column heading name; it is used by
 			-- PostgreSQL output to create the proper function type for
 			-- example. The XML_GENERATOR uses it to give clients some
@@ -55,7 +55,7 @@ feature -- Access
 			result_is_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	path_name: STRING is
+	path_name: STRING
 			-- XML path name, keeping Xplain structure intact; user for
 			-- path procedures
 		require
@@ -77,7 +77,7 @@ feature -- Access
 
 feature -- Commands
 
-	give_column_names (a_position: INTEGER) is
+	give_column_names (a_position: INTEGER)
 			-- Give this expression and all others following it a
 			-- generated column name, if the expression doesn't have a
 			-- column name and `new_name' is not set. It uses `a_position' to

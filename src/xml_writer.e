@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Class that generates an XML string."
 
@@ -24,12 +24,12 @@ create
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		do
 			make_with_capacity (1024)
 		end
 
-	make_with_capacity (a_capacity: INTEGER) is
+	make_with_capacity (a_capacity: INTEGER)
 		do
 			create my_xml.make (a_capacity)
 			create tags.make
@@ -41,39 +41,39 @@ feature {NONE} -- Initialization
 
 feature -- constants from the XML specification, should be Unicode...
 
-	ValidFirstChars: STRING is "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_:"
+	ValidFirstChars: STRING = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_:"
 			-- which characters are valid as the first character
 
-	ValidOtherChars: STRING is "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_:.-0123456789"
+	ValidOtherChars: STRING = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_:.-0123456789"
 			-- which characters are valid as second etc characters
 
 
 feature -- queries
 
-	is_a_parent (tag: STRING): BOOLEAN is
+	is_a_parent (tag: STRING): BOOLEAN
 			-- True if `tag' is a container (parent) at the current level
 			-- That can be a just started tag, or a tag higher up
 		do
 			Result := tags.has (tag)
 		end
 
-	is_header_written: BOOLEAN is
+	is_header_written: BOOLEAN
 		do
 			Result := header_written
 		end
 
-	is_started (tag: STRING): BOOLEAN is
+	is_started (tag: STRING): BOOLEAN
 			-- True if this tag has just been started
 		do
 			Result := tags.item.is_equal (tag)
 		end
 
-	is_tag_started: BOOLEAN is
+	is_tag_started: BOOLEAN
 		do
 			Result := not tags.is_empty
 		end
 
-	is_valid_attribute_name (an_attribute: STRING): BOOLEAN is
+	is_valid_attribute_name (an_attribute: STRING): BOOLEAN
 			-- Return True if this is a valid attribute name
 		local
 			first,
@@ -96,13 +96,13 @@ feature -- queries
 			end
 		end
 
-	unfinished_xml: STRING is
+	unfinished_xml: STRING
 			-- the `xml' in progress
 		do
 			Result := my_xml
 		end
 
-	xml: STRING is
+	xml: STRING
 			-- the result
 		require
 			building_finished: not is_tag_started
@@ -113,7 +113,7 @@ feature -- queries
 
 feature -- influence state
 
-	clear is
+	clear
 			-- start fresh
 		do
 			xml.wipe_out
@@ -130,7 +130,7 @@ feature -- influence state
 
 feature -- commands that expand `xml'
 
-	add_header (encoding: STRING) is
+	add_header (encoding: STRING)
 		require
 			valid_point_for_header: not is_header_written
 		do
@@ -141,17 +141,17 @@ feature -- commands that expand `xml'
 			header_written := True
 		end
 
-	add_header_iso_8859_1_encoding is
+	add_header_iso_8859_1_encoding
 		do
 			add_header ("ISO-8859-1")
 		end
 
-	add_header_utf_8_encoding is
+	add_header_utf_8_encoding
 		do
 			add_header ("UTF-8")
 		end
 
-	add_data (data: STRING) is
+	add_data (data: STRING)
 			-- write data in the current tag
 			-- invalid characters like < or > are quoted
 		require
@@ -167,7 +167,7 @@ feature -- commands that expand `xml'
 			end
 		end
 
-	add_entity (name: STRING) is
+	add_entity (name: STRING)
 		do
 			assure_last_tag_written
 			extend ("&")
@@ -175,7 +175,7 @@ feature -- commands that expand `xml'
 			extend (";")
 		end
 
-	add_raw (raw_data: STRING) is
+	add_raw (raw_data: STRING)
 			-- write `data' straight in the current tag, meta characters
 			-- are not quoted.
 		require
@@ -187,7 +187,7 @@ feature -- commands that expand `xml'
 			end
 		end
 
-	add_system_doctype (root_tag, system_id: STRING) is
+	add_system_doctype (root_tag, system_id: STRING)
 		require
 			have_header: is_header_written
 			valid_root_tag: root_tag /= Void and then not root_tag.is_empty
@@ -201,7 +201,7 @@ feature -- commands that expand `xml'
 			new_line
 		end
 
-	add_tag (tag, data: STRING) is
+	add_tag (tag, data: STRING)
 			-- shortcut for `add_tag', `add_data' and `stop_tag'
 		require
 			have_header: is_header_written
@@ -212,7 +212,7 @@ feature -- commands that expand `xml'
 			stop_tag
 		end
 
-	extend (stuff: STRING) is
+	extend (stuff: STRING)
 			-- add anything to the current `xml' string, you're on your own here!
 			-- all changes to `my_xml' are made from here
 		do
@@ -221,7 +221,7 @@ feature -- commands that expand `xml'
 			end
 		end
 
-	get_attribute (an_attribute: STRING): STRING is
+	get_attribute (an_attribute: STRING): STRING
 			-- Get contents of attribute `attribute' for current tag.
 			-- Returns Void if attribute doesn't exist
 		do
@@ -230,26 +230,26 @@ feature -- commands that expand `xml'
 			end
 		end
 
-	put_new_line is
+	put_new_line
 			-- write a new line at the current position
 		do
 			assure_last_tag_written
 			new_line
 		end
 
-	put (a: ANY) is
+	put (a: ANY)
 			-- write data within the current tag
 		do
 			add_data (a.out)
 		end
 
-	puts (stuff: STRING) is
+	puts (stuff: STRING)
 			-- write data within the current tag
 		do
 			add_data (stuff)
 		end
 
-	set_attribute (an_attribute, value: STRING) is
+	set_attribute (an_attribute, value: STRING)
 			-- Set an attribute of the current tag.
 			-- `value' may not contain an entity reference.
 		require
@@ -262,7 +262,7 @@ feature -- commands that expand `xml'
 			end
 		end
 
-	start_tag (tag: STRING) is
+	start_tag (tag: STRING)
 			-- start a new tag
 		require
 			have_header: is_header_written
@@ -273,7 +273,7 @@ feature -- commands that expand `xml'
 			tag_written := False
 		end
 
-	stop_tag is
+	stop_tag
 			-- stop last started tag
 		require
 			tag_is_started: is_tag_started
@@ -295,7 +295,7 @@ feature -- commands that expand `xml'
 
 feature -- quote unsafe characters
 
-	replace_content_meta_characters (s: STRING) is
+	replace_content_meta_characters (s: STRING)
 			-- replace all characters in s that have a special meaning in
 			-- XML. These characters are < and &
 		local
@@ -325,13 +325,13 @@ feature -- quote unsafe characters
 
 feature -- comments
 
-	start_comment is
+	start_comment
 		do
 			assure_last_tag_written
 			extend ("<!--")
 		end
 
-	stop_comment is
+	stop_comment
 		do
 			extend ("-->")
 		end
@@ -339,7 +339,7 @@ feature -- comments
 
 feature {NONE} -- internal xml change
 
-	assure_last_tag_written is
+	assure_last_tag_written
 			-- starting a tag is a delayed activity. This routine makes
 			-- sure the tag is really written
 		local
@@ -387,14 +387,14 @@ feature {NONE} -- internal xml change
 			tag_must_be_explictly_closed: not may_close_tag
 		end
 
-	empty_tag_closing_chars: STRING is
+	empty_tag_closing_chars: STRING
 			-- which characters to use for an empty tag?
 			-- XHTML applications like an additional space
 		do
 			Result := "/>"
 		end
 
-	indent is
+	indent
 		local
 			spaces: STRING
 		do
@@ -404,7 +404,7 @@ feature {NONE} -- internal xml change
 			end
 		end
 
-	make_valid_attribute_value (value: STRING): STRING is
+	make_valid_attribute_value (value: STRING): STRING
 		local
 			i: INTEGER
 		do
@@ -434,7 +434,7 @@ feature {NONE} -- internal xml change
 			end
 		end
 
-	new_line is
+	new_line
 			-- write a new line now
 			-- cannot be called indiscriminately, but only when a pending
 			-- tag has been written. Use `put_new_line' for a safe variant
@@ -442,7 +442,7 @@ feature {NONE} -- internal xml change
 			extend ("%N")
 		end
 
-	new_line_after_closing_tag (a_tag: STRING) is
+	new_line_after_closing_tag (a_tag: STRING)
 			-- outputs a new line, called when `a_tag' is closed
 			-- can be overridden to start a new line only occasionally
 			-- For XHTML documents a new line is treated as a single
@@ -453,7 +453,7 @@ feature {NONE} -- internal xml change
 			new_line
 		end
 
-	new_line_before_starting_tag (a_tag: STRING) is
+	new_line_before_starting_tag (a_tag: STRING)
 			-- outputs a new line, called when `a_tag' is about to begin.
 		require
 			valid_tag: a_tag /= Void and then not a_tag.is_empty
@@ -477,7 +477,7 @@ feature {NONE} -- tag attributes
 
 	attribute_count: INTEGER
 
-	add_attribute (an_attribute: STRING) is
+	add_attribute (an_attribute: STRING)
 		do
 			if attributes.count = attribute_count then
 				attributes.resize (attributes.lower, attributes.upper * 2)
@@ -488,14 +488,14 @@ feature {NONE} -- tag attributes
 			attribute_count := attribute_count + 1
 		end
 
-	clear_attributes is
+	clear_attributes
 		do
 			attributes.clear_all
 			values.clear_all
 			attribute_count := 0
 		end
 
-	do_set_attribute (an_attribute, value: STRING) is
+	do_set_attribute (an_attribute, value: STRING)
 		do
 			if exist_attribute (an_attribute) then
 				set_value (value)
@@ -505,7 +505,7 @@ feature {NONE} -- tag attributes
 			end
 		end
 
-	exist_attribute (an_attribute: STRING): BOOLEAN is
+	exist_attribute (an_attribute: STRING): BOOLEAN
 		do
 			from
 				current_attribute := 0
@@ -521,21 +521,21 @@ feature {NONE} -- tag attributes
 			Result implies valid_current_attribute
 		end
 
-	get_value: STRING is
+	get_value: STRING
 		require
 			valid_index: valid_current_attribute
 		do
 			Result := values.item (current_attribute)
 		end
 
-	set_value (value: STRING) is
+	set_value (value: STRING)
 		require
 			valid_index: valid_current_attribute
 		do
 			values.put (value, current_attribute)
 		end
 
-	valid_current_attribute: BOOLEAN is
+	valid_current_attribute: BOOLEAN
 		do
 			Result :=
 				current_attribute >= 0 and
@@ -554,7 +554,7 @@ feature {NONE} -- private state
 			-- True if a tag may be closed immediately, i.e. written as
 			-- <tag/> when it is started
 
-	on_new_line: BOOLEAN is
+	on_new_line: BOOLEAN
 			-- True if cursor is on new line
 		do
 			Result :=
@@ -569,15 +569,15 @@ feature {NONE} -- private state
 
 feature {NONE} -- attribute value sanitize
 
-	QuoteAmp: STRING is "&amp;"
-	QuoteLt: STRING is "&lt;"
-	QuoteGt: STRING is "&gt;"
-	QuoteQuote: STRING is "&quot;"
+	QuoteAmp: STRING = "&amp;"
+	QuoteLt: STRING = "&lt;"
+	QuoteGt: STRING = "&gt;"
+	QuoteQuote: STRING = "&quot;"
 
-	PartQuoteAmp: STRING is "amp;"
-	PartQuoteLt: STRING is "lt;"
-	PartQuoteGt: STRING is "gt;"
-	PartQuoteQuote: STRING is "quot;"
+	PartQuoteAmp: STRING = "amp;"
+	PartQuoteLt: STRING = "lt;"
+	PartQuoteGt: STRING = "gt;"
+	PartQuoteQuote: STRING = "quot;"
 
 
 invariant

@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -23,7 +23,7 @@ inherit
 
 feature -- init [default]
 
-	init_forced_default (an_attribute: XPLAIN_ATTRIBUTE): BOOLEAN is
+	init_forced_default (an_attribute: XPLAIN_ATTRIBUTE): BOOLEAN
 			-- Does this attribute have an init that has to be converted
 			-- to a after-insert style trigger?
 		do
@@ -31,7 +31,7 @@ feature -- init [default]
 			Result := False
 		end
 
-	init_forced_null (an_attribute: XPLAIN_ATTRIBUTE): BOOLEAN is
+	init_forced_null (an_attribute: XPLAIN_ATTRIBUTE): BOOLEAN
 			-- Does this attribute have a init default that has to be
 			-- converted to a after-insert style trigger?
 		do
@@ -42,7 +42,7 @@ feature -- init [default]
 
 feature -- write
 
-	write_init (type: XPLAIN_TYPE) is
+	write_init (type: XPLAIN_TYPE)
 		do
 			if init_necessary (type) then
 				std.error.put_string ("This SQL dialect does not support all defined initializations for " + type.name + ".%N")

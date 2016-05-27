@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Set function cascade expression."
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -26,7 +26,7 @@ feature {NONE} -- Initialization
 
 	make (
 			a_selection: XPLAIN_SELECTION_FUNCTION;
-			a_grouping_attributes: XPLAIN_ATTRIBUTE_NAME_NODE) is
+			a_grouping_attributes: XPLAIN_ATTRIBUTE_NAME_NODE)
 		require
 			selection_not_void: a_selection /= Void
 			grouping_attributes_not_void: a_grouping_attributes /= Void
@@ -47,14 +47,14 @@ feature -- Access
 
 feature -- Status
 
-	uses_its: BOOLEAN is
+	uses_its: BOOLEAN
 			-- Does expression has an its list somewhere?
 		do
 			-- Probably not applicable; don't think will be called at where we need to know this
 			Result := selection.property.uses_its or else selection.predicate.uses_its
 		end
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		do
 			Result := selection.uses_parameter (a_parameter)
@@ -63,12 +63,12 @@ feature -- Status
 
 feature -- SQL
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 		do
 			-- to be implemented
 		end
 
-	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING is
+	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING
 			-- Expression in sql syntax used in init statements. Equal to
 			-- `sqlvalue' in many cases, but usually if you refer to
 			-- attributes of the type it has to be prefixed by "new." for
@@ -77,7 +77,7 @@ feature -- SQL
 			Result := sqlvalue (sqlgenerator)
 		end
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Expression in generator syntax.
 		do
 			Result := "not yet implemented"

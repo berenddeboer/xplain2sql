@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Xplain if property equal to NULL expression."
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -24,7 +24,7 @@ create
 
 feature {NONE} -- Implementation
 
-	compare_with_null: STRING is " is null"
+	compare_with_null: STRING = " is null"
 
 
 end

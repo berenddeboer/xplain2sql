@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Produces mySQL 5.0 output."
 
@@ -71,7 +71,7 @@ create
 
 feature -- About this generator
 
-	target_name: STRING is
+	target_name: STRING
 			-- Name and version of dialect
 		once
 			Result := "MySQL 5.0, ANSI mode"
@@ -80,7 +80,7 @@ feature -- About this generator
 
 feature -- identifiers
 
-	MaxIdentifierLength: INTEGER is
+	MaxIdentifierLength: INTEGER
 		once
 			Result := 64
 		end
@@ -88,19 +88,19 @@ feature -- identifiers
 
 feature -- Domain options
 
-	DomainsSupported: BOOLEAN is once Result := False end
+	DomainsSupported: BOOLEAN once Result := False end
 
 
 feature -- Date/time
 
-	minimum_date_value: STRING is "0001-01-01"
+	minimum_date_value: STRING = "0001-01-01"
 			-- Need year 1 for mysql # 5.0.32-Debian_7etch6-log;
 			-- It seems 5.0.51a-3ubuntu5.3-log handles year 0 though.
 
 
 feature -- Numeric precision
 
-	max_numeric_precision: INTEGER is
+	max_numeric_precision: INTEGER
 			-- Maximum precision of the numeric data type
 		once
 			Result := 65
@@ -109,7 +109,7 @@ feature -- Numeric precision
 
 feature -- Database
 
-	create_use_database (database: STRING) is
+	create_use_database (database: STRING)
 			-- Switch to ANSI mode for this connection.
 		do
 			std.output.put_string ("set session sql_mode='ansi,strict_all_tables'")
@@ -131,31 +131,31 @@ feature -- Database
 
 feature -- Table options
 
-	AutoPrimaryKeySupported: BOOLEAN is True
+	AutoPrimaryKeySupported: BOOLEAN = True
 			-- Does this dialect support auto-generated primary keys?
 
-	AutoPrimaryKeyConstraint: STRING is
+	AutoPrimaryKeyConstraint: STRING
 			-- The SQL that enables an autoincrementing primary key
 		once
 			Result := "auto_increment " + PrimaryKeyConstraint
 		end
 
-	ConstraintNameSupported: BOOLEAN is
+	ConstraintNameSupported: BOOLEAN
 		once
 			Result := False
 		end
 
-	ExpressionsInDefaultClauseSupported: BOOLEAN is False
+	ExpressionsInDefaultClauseSupported: BOOLEAN = False
 			-- Does the SQL dialect support expressions (1 + 1 for
 			-- example) in the default clause?
 			-- MySQL 5 is an example of a database that doesn't.
 
-	TemporaryTablesSupported: BOOLEAN is once Result := True end
+	TemporaryTablesSupported: BOOLEAN once Result := True end
 
 
 feature -- init [default] options
 
-	ChecksNullAfterTrigger: BOOLEAN is
+	ChecksNullAfterTrigger: BOOLEAN
 			-- Does this dialect check for nulls in columns after a
 			-- trigger has been fired?
 		once
@@ -165,7 +165,7 @@ feature -- init [default] options
 
 feature -- select options
 
-	ExistentialFromTable: STRING is "xplain_dual"
+	ExistentialFromTable: STRING = "xplain_dual"
 			-- Name of the dual table; for MySQL we have to generate one,
 			-- because MySQL's existing one has weird effects, and
 			-- doesn't seem to work well.
@@ -173,7 +173,7 @@ feature -- select options
 
 feature -- insert options
 
-	SupportsDefaultValues: BOOLEAN is
+	SupportsDefaultValues: BOOLEAN
 			-- Does the dialect supports the 'default values' clause in an
 			-- insert statement?
 		once
@@ -182,14 +182,14 @@ feature -- insert options
 
 feature -- update options
 
-	SupportsQualifiedSetInUpdate: BOOLEAN is
+	SupportsQualifiedSetInUpdate: BOOLEAN
 			-- Can column names in set expression be qualified?
 			-- This must be done in certain cases to avoid ambiguous updates.
 		do
 			Result := True
 		end
 
-	SupportsJoinInUpdate: BOOLEAN is
+	SupportsJoinInUpdate: BOOLEAN
 			-- Does this dialect support a from clause in an update statement?
 		do
 			Result := True
@@ -198,16 +198,16 @@ feature -- update options
 
 feature -- Strings
 
-	sql_string_combine_start: STRING is "concat("
+	sql_string_combine_start: STRING = "concat("
 
-	sql_string_combine_separator: STRING is ", "
+	sql_string_combine_separator: STRING = ", "
 
-	sql_string_combine_end: STRING is ")"
+	sql_string_combine_end: STRING = ")"
 
 
 feature -- Table SQL
 
-	create_init (type: XPLAIN_TYPE) is
+	create_init (type: XPLAIN_TYPE)
 		local
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE]
 			comma: STRING
@@ -238,7 +238,7 @@ feature -- Table SQL
 			std.output.put_string ("%N%N")
 		end
 
-	create_primary_key_generator (type: XPLAIN_TYPE) is
+	create_primary_key_generator (type: XPLAIN_TYPE)
 		do
 			-- not necessary
 		end
@@ -246,7 +246,7 @@ feature -- Table SQL
 
 feature -- Auto primary key SQL
 
-	sql_last_auto_generated_primary_key	(type: XPLAIN_TYPE): STRING is
+	sql_last_auto_generated_primary_key	(type: XPLAIN_TYPE): STRING
 			-- Return code to get the last auto-generated primary
 			-- key. For TSQL this is not type specific.
 		once
@@ -259,14 +259,14 @@ feature -- Auto primary key SQL
 
 feature -- Value
 
-	create_select_value_inside_sp (a_value: XPLAIN_VALUE) is
+	create_select_value_inside_sp (a_value: XPLAIN_VALUE)
 			-- Emit SQL that returns the value when asked for that value
 			-- inside a stored procedure.
 		do
 			std.output.put_string (format (once "select $s as `$s`", <<a_value.quoted_name (Current), a_value.name>>))
 		end
 
-	create_select_value_outside_sp (a_value: XPLAIN_VALUE) is
+	create_select_value_outside_sp (a_value: XPLAIN_VALUE)
 			-- Emit SQL that returns the value when asked for that value
 			-- outside a stored procedure.
 			-- Should not emit `CommandSeparator'.
@@ -274,19 +274,19 @@ feature -- Value
 			std.output.put_string (format (once "select $s", <<a_value.quoted_name (Current)>>))
 		end
 
-	create_value_declare_inside_sp (a_value: XPLAIN_VALUE) is
+	create_value_declare_inside_sp (a_value: XPLAIN_VALUE)
 			-- Emit SQL code to declare `a_value' inside a stored procedure.
 		do
 			-- Values don't need to be declared.
 		end
 
-	create_value_declare_outside_sp (a_value: XPLAIN_VALUE) is
+	create_value_declare_outside_sp (a_value: XPLAIN_VALUE)
 			-- Emit SQL code to declare `a_value' outside a stored procedure.
 		do
 			-- Values don't need to be declared.
 		end
 
-	create_value_assign_inside_sp (a_value: XPLAIN_VALUE) is
+	create_value_assign_inside_sp (a_value: XPLAIN_VALUE)
 			-- Emit code to assign `a_value'.`expression' to `a_value'
 			-- inside a stored procedure.
 		do
@@ -295,7 +295,7 @@ feature -- Value
 			std.output.put_character ('%N')
 		end
 
-	create_value_assign_outside_sp (a_value: XPLAIN_VALUE) is
+	create_value_assign_outside_sp (a_value: XPLAIN_VALUE)
 			-- Assign a value to `a_value' outside a stored procedure.
 		do
 			std.output.put_string (format ("set $s := ($s)", <<a_value.quoted_name (Current), a_value.expression.outer_sqlvalue (Current)>>))
@@ -303,7 +303,7 @@ feature -- Value
 			std.output.put_character ('%N')
 		end
 
-	quoted_value_identifier (a_value: XPLAIN_VALUE): STRING is
+	quoted_value_identifier (a_value: XPLAIN_VALUE): STRING
 			-- Value identifier, quoted;
 			-- MySQL wants the '@' outside the quote
 		local
@@ -315,14 +315,14 @@ feature -- Value
 			Result.append_string (s)
 		end
 
-	sqlgetvalue_inside_sp (a_value: XPLAIN_VALUE): STRING is
+	sqlgetvalue_inside_sp (a_value: XPLAIN_VALUE): STRING
 			-- SQL expression that returns the value of a value inside a
 			-- stored procedure
 		do
 			Result := a_value.quoted_name (Current)
 		end
 
-	sqlgetvalue_outside_sp (a_value: XPLAIN_VALUE): STRING is
+	sqlgetvalue_outside_sp (a_value: XPLAIN_VALUE): STRING
 			-- SQL expression to retrieve the value of a value
 		do
 			Result := a_value.quoted_name (Current)
@@ -331,7 +331,7 @@ feature -- Value
 
 feature -- Extends
 
-	sql_extend_insert_missing_rows (an_expression: XPLAIN_EXTENSION_FUNCTION_EXPRESSION; an_extension: XPLAIN_ABSTRACT_EXTENSION): STRING is
+	sql_extend_insert_missing_rows (an_expression: XPLAIN_EXTENSION_FUNCTION_EXPRESSION; an_extension: XPLAIN_ABSTRACT_EXTENSION): STRING
 			-- An extend with a where clause will make the initial insert
 			-- into the temporary table to be only a partial on. Missing
 			-- rows are added here. But MySQL does not support self
@@ -390,7 +390,7 @@ feature -- Extends
 
 feature -- Updates
 
-	output_update_extend_join_clause (a_subject: XPLAIN_SUBJECT; an_extension: XPLAIN_EXTENSION; a_join_list: JOIN_LIST) is
+	output_update_extend_join_clause (a_subject: XPLAIN_SUBJECT; an_extension: XPLAIN_EXTENSION; a_join_list: JOIN_LIST)
 			-- Output join to necessary tables when updating extended table.
 		do
 			if a_join_list /= Void then
@@ -401,7 +401,7 @@ feature -- Updates
 			end
 		end
 
-	output_update_join_clause (a_subject: XPLAIN_SUBJECT; a_join_list: JOIN_LIST) is
+	output_update_join_clause (a_subject: XPLAIN_SUBJECT; a_join_list: JOIN_LIST)
 			-- Output join to necessary tables for an update statement.
 			-- If a dialect doesn't support it, just the update for
 			-- the extended table is emitted and it will need
@@ -414,7 +414,7 @@ feature -- Updates
 
 feature -- Deletes
 
-	create_delete (subject: XPLAIN_SUBJECT; predicate: XPLAIN_EXPRESSION) is
+	create_delete (subject: XPLAIN_SUBJECT; predicate: XPLAIN_EXPRESSION)
 			-- Emit MySQL delete statement which supports joins in
 			-- the delete statement itself.
 		local
@@ -444,7 +444,7 @@ feature -- Deletes
 feature -- Functions
 
 
-	sql_select_function_limit_before (selection_list: XPLAIN_SELECTION_FUNCTION): STRING is
+	sql_select_function_limit_before (selection_list: XPLAIN_SELECTION_FUNCTION): STRING
 			-- Code that limits a select to return a single value. Output
 			-- is placed in front of the select statement.
 			-- Returns empty for no output.
@@ -452,7 +452,7 @@ feature -- Functions
 			Result := " "
 		end
 
-	sql_select_function_limit_after: STRING is
+	sql_select_function_limit_after: STRING
 			-- Code that limits a select to return a single value. Output
 			-- is placed after the select statement.
 			-- Returns empty for no output.
@@ -462,7 +462,7 @@ feature -- Functions
 
 feature -- Stored procedure SQL
 
-	conditional_drop_procedure (name: STRING) is
+	conditional_drop_procedure (name: STRING)
 			-- Drop procedure, but only if it exists, should never
 			-- generate an error or warning.
 		do
@@ -471,7 +471,7 @@ feature -- Stored procedure SQL
 			std.output.put_character ('%N')
 		end
 
-	sp_define_out_param (name: STRING): STRING is
+	sp_define_out_param (name: STRING): STRING
 			-- Return `name' formatted as an output parameter, as it
 			-- should appear in the header/definition of a stored
 			-- procedure. See also `sp_define_in_param'.
@@ -479,7 +479,7 @@ feature -- Stored procedure SQL
 			Result := "out " + sp_define_param_name (name)
 		end
 
-	sp_define_param_name (name: STRING): STRING is
+	sp_define_param_name (name: STRING): STRING
 			-- Return `name' formatted as the name of the parameter as it
 			-- appears in the header, and hopefully as it is known to
 			-- clients. It must be quoted, if it can be quoted.
@@ -487,7 +487,7 @@ feature -- Stored procedure SQL
 			Result := quote_identifier (name)
 		end
 
-	sp_end is
+	sp_end
 		local
 			s: STRING
 		do
@@ -502,7 +502,7 @@ feature -- Stored procedure SQL
 			std.output.put_string ("%N%N")
 		end
 
-	sp_get_auto_generated_primary_key (type: XPLAIN_TYPE): STRING is
+	sp_get_auto_generated_primary_key (type: XPLAIN_TYPE): STRING
 			-- Statement that returns the generated primary key into the
 			-- output parameters. Statement should end with CommandSeperator.
 		do
@@ -515,13 +515,13 @@ feature -- Stored procedure SQL
 			Result.append_string (CommandSeparator)
 		end
 
-	sp_header_end is
+	sp_header_end
 			-- Emit code to end stored procedure declaration.
 		do
 			std.output.put_character ('%N')
 		end
 
-	sp_start (a_procedure: XPLAIN_PROCEDURE) is
+	sp_start (a_procedure: XPLAIN_PROCEDURE)
 			-- Start MySQL procedure.
 		do
 			std.output.put_string ("delimiter //%N")
@@ -531,23 +531,23 @@ feature -- Stored procedure SQL
 
 feature -- type specification for xplain types
 
-	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING is
+	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING
 		do
 			Result := "boolean"
 		end
 
-	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING is
+	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING
 		do
 			Result := "datetime"
 		end
 
-	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING is
+	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING
 			-- platform dependent approximate numeric data type
 		do
 			Result := "double"
 		end
 
-	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING is
+	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING
 		do
 			inspect representation.length
 			when 1 .. 2 then
@@ -574,17 +574,17 @@ feature -- type specification for xplain types
 			end
 		end
 
-	datatype_money (representation: XPLAIN_M_REPRESENTATION): STRING is
+	datatype_money (representation: XPLAIN_M_REPRESENTATION): STRING
 		do
 			Result := "numeric(12,4)"
 		end
 
-	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING is
+	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING
 		do
 			Result := "longblob"
 		end
 
-	datatype_text (representation: XPLAIN_T_REPRESENTATION): STRING is
+	datatype_text (representation: XPLAIN_T_REPRESENTATION): STRING
 		do
 			Result := "longtext"
 		end
@@ -592,12 +592,12 @@ feature -- type specification for xplain types
 
 feature -- drop statements
 
-	drop_primary_key_generator (type: XPLAIN_TYPE) is
+	drop_primary_key_generator (type: XPLAIN_TYPE)
 		do
 			-- not necessary
 		end
 
-	drop_table_if_exist (type: XPLAIN_TYPE) is
+	drop_table_if_exist (type: XPLAIN_TYPE)
 			-- Generate a statement that drops this table, but only if it exists,
 			-- No warning must be generated if the table does not exist at
 			-- run-time
@@ -608,7 +608,7 @@ feature -- drop statements
 			std.output.put_character ('%N')
 		end
 
-	drop_temporary_table_if_exist (extension: XPLAIN_EXTENSION) is
+	drop_temporary_table_if_exist (extension: XPLAIN_EXTENSION)
 			-- Drop the temporary table created for `extension'.
 		do
 			std.output.put_string ("drop temporary table if exists ")
@@ -617,7 +617,7 @@ feature -- drop statements
 			std.output.put_character ('%N')
 		end
 
-	drop_view_if_exist (a_name: STRING) is
+	drop_view_if_exist (a_name: STRING)
 			-- Generate a statement that drops a view table, but only if
 			-- it exists, no warning must be generated if the table does
 			-- not exist at run-time.
@@ -631,7 +631,7 @@ feature -- drop statements
 
 feature -- identifiers
 
-	quote_identifier (identifier: STRING): STRING is
+	quote_identifier (identifier: STRING): STRING
 			-- return identifier, optionally surrounded by quotes if identifier
 			-- contains spaces and rdbms supports spaces in identifiers
 		do

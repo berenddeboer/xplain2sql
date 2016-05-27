@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Enhanced Xplain function id()"
 	usage: "To be used when id is queried in where clause, for example you want to exclude certain ids from retrieval."
@@ -25,7 +25,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (a_type: XPLAIN_TYPE) is
+	make (a_type: XPLAIN_TYPE)
 			-- Return primary key info for `a_type'.
 		require
 			a_type_not_void: a_type /= Void
@@ -44,13 +44,13 @@ feature -- Access
 
 feature -- Status
 
-	uses_its: BOOLEAN is
+	uses_its: BOOLEAN
 			-- Does expression has an its list somewhere?
 		do
 			Result := False
 		end
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		do
 			Result := False
@@ -59,7 +59,7 @@ feature -- Status
 
 feature -- SQL output
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- Return correct representation for this expression.
 			-- Used to generate representations for value and extend statements.
 		do
@@ -67,7 +67,7 @@ feature -- SQL output
 			Result := type.representation
 		end
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Return expression in generator syntax.
 		do
 			create Result.make_from_string (type.quoted_name (sqlgenerator))

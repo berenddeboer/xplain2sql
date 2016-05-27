@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Traverses over universe to return all bases."
 
@@ -25,13 +25,13 @@ create
 
 feature -- Access
 
-	item_as_base: XPLAIN_BASE is
+	item_as_base: XPLAIN_BASE
 			-- As item, but typed.
 		do
 			Result ?= item
 		end
 
-	name_in_query (sqlgenerator: SQL_GENERATOR): STRING is
+	name_in_query (sqlgenerator: SQL_GENERATOR): STRING
 			-- Name as it occurs in select statements.
 		do
 			Result := item_as_base.q_sql_select_name (sqlgenerator, Void)
@@ -39,7 +39,7 @@ feature -- Access
 
 feature {NONE} -- Check
 
-	skip_this_item: BOOLEAN is
+	skip_this_item: BOOLEAN
 			-- Is `item' an XPLAIN_BASE?
 		do
 			Result := item_as_base = Void

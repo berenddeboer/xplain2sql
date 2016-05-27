@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Produces Microsoft Access 2000 SQL output"
 
@@ -18,13 +18,13 @@ inherit
 			AutoPrimaryKeyConstraint
 		end
 
-creation
+create
 
 	make
 
 feature -- About this generator
 
-	target_name: STRING is
+	target_name: STRING
 			-- Name and version of dialect
 		once
 			Result := "Microsoft Access 2000"
@@ -32,7 +32,7 @@ feature -- About this generator
 
 feature -- table options
 
-	AutoPrimaryKeyConstraint: STRING is
+	AutoPrimaryKeyConstraint: STRING
 		once
 			Result := "counter not null primary key"
 		end

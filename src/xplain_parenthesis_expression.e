@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -32,12 +32,12 @@ create
 
 feature -- Access
 
-	name: STRING is "()"
+	name: STRING = "()"
 
 
 feature -- SQL code
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- The representation of left operand. Maybe should be
 			-- improved to infer better? If you add int and double, should
 			-- return double I think.
@@ -50,7 +50,7 @@ feature -- SQL code
 			Result := expression.representation (sqlgenerator)
 		end
 
-	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING is
+	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING
 			-- Expression in sql syntax used in init statements. Equal to
 			-- `sqlvalue' in many cases, but usually if you refer to
 			-- attributes of the type it has to be prefixed by "new." for
@@ -63,7 +63,7 @@ feature -- SQL code
 			end
 		end
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Return string.
 		do
 			if expression.is_constant then

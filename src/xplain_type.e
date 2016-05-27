@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Xplain type"
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -27,7 +27,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (aname: STRING; arepresentation: XPLAIN_PK_REPRESENTATION; a_attributes: XPLAIN_ATTRIBUTE_NODE) is
+	make (aname: STRING; arepresentation: XPLAIN_PK_REPRESENTATION; a_attributes: XPLAIN_ATTRIBUTE_NODE)
 		require
 			valid_attributes: -- every attribute has abstracttype /= Void
 			-- when it is Void, it's a self reference
@@ -71,7 +71,7 @@ feature -- make sure unique names can be generated
 
 	constraint_number: INTEGER
 
-	next_constraint_number is
+	next_constraint_number
 		do
 			constraint_number := constraint_number + 1
 		end
@@ -79,12 +79,12 @@ feature -- make sure unique names can be generated
 
 feature -- purge type
 
-	write_drop (sqlgenerator: SQL_GENERATOR) is
+	write_drop (sqlgenerator: SQL_GENERATOR)
 		do
 			sqlgenerator.drop_table (Current)
 		end
 
-	write_drop_attribute (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE) is
+	write_drop_attribute (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE)
 			-- Remove attribute from type and write SQL code to remove it.
 		require
 			sqlgenerator_not_void: sqlgenerator /= Void
@@ -99,49 +99,49 @@ feature -- purge type
 
 feature -- SQL access
 
-	columndatatype (mygenerator: ABSTRACT_GENERATOR): STRING is
+	columndatatype (mygenerator: ABSTRACT_GENERATOR): STRING
 		do
 			Result := mygenerator.columndatatype_type (Current)
 		end
 
 feature -- SQL code
 
-	sqlcolumnidentifier (sqlgenerator: SQL_GENERATOR; role: STRING): STRING is
+	sqlcolumnidentifier (sqlgenerator: SQL_GENERATOR; role: STRING): STRING
 		do
 			Result := sqlgenerator.sqlcolumnidentifier_type (Current, role)
 		end
 
-	sqlcolumndefault (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING is
+	sqlcolumndefault (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING
 		do
 			Result := sqlgenerator.sqlcolumndefault_type (an_attribute)
 		end
 
-	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING is
+	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING
 		do
 			Result := sqlgenerator.sqlcolumnrequired_type (an_attribute)
 		end
 
 feature -- Type specific sql converter wrappers
 
-	sqlpkname (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlpkname (sqlgenerator: SQL_GENERATOR): STRING
 			-- Return primary key column name of this type.
 		do
 			Result := sqlgenerator.table_pk_name (Current)
 		end
 
-	q_sqlpkname (sqlgenerator: SQL_GENERATOR): STRING is
+	q_sqlpkname (sqlgenerator: SQL_GENERATOR): STRING
 			-- Quoted `sqlpkname'.
 		do
 			Result := sqlgenerator.quote_identifier (sqlpkname (sqlgenerator))
 		end
 
-	sqltablename (sqlgenerator: SQL_GENERATOR): STRING is
+	sqltablename (sqlgenerator: SQL_GENERATOR): STRING
 			-- Return actual table name of this type.
 		do
 			Result := sqlgenerator.create_table_name (Current)
 		end
 
-	sqlname (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlname (sqlgenerator: SQL_GENERATOR): STRING
 			-- The identifier to reference this type in sql;
 			-- use it in select statements and such.
 		do
@@ -150,7 +150,7 @@ feature -- Type specific sql converter wrappers
 
 feature -- questions about the type itself
 
-	contains_one_is_a_relation: BOOLEAN is
+	contains_one_is_a_relation: BOOLEAN
 			-- used when generating primary key for a specialization
 		local
 			number_of_specializations: INTEGER
@@ -169,7 +169,7 @@ feature -- questions about the type itself
 			Result := number_of_specializations = 1
 		end
 
-	generalization: XPLAIN_TYPE is
+	generalization: XPLAIN_TYPE
 		require
 			has_single_supertype: contains_one_is_a_relation
 		do
@@ -185,7 +185,7 @@ feature -- questions about the type itself
 			end
 		end
 
-	has_auto_pk (sqlgenerator: SQL_GENERATOR): BOOLEAN is
+	has_auto_pk (sqlgenerator: SQL_GENERATOR): BOOLEAN
 			-- Is the instance identification auto-generated?
 		require
 			sqlgenerator_not_void: sqlgenerator /= Void
@@ -195,7 +195,7 @@ feature -- questions about the type itself
 			must_be_integer:  Result implies representation.is_integer
 		end
 
-	has_non_constant_init: BOOLEAN is
+	has_non_constant_init: BOOLEAN
 			-- Is there an attribute with an init that is not a constant?
 		do
 			from
@@ -210,7 +210,7 @@ feature -- questions about the type itself
 			end
 		end
 
-	has_non_literal_init: BOOLEAN is
+	has_non_literal_init: BOOLEAN
 			-- Is there an attribute with an init that is not literal?
 		do
 			from
@@ -225,7 +225,7 @@ feature -- questions about the type itself
 			end
 		end
 
-	has_updatable_attributes: BOOLEAN is
+	has_updatable_attributes: BOOLEAN
 			-- Are there attributes that can be set by an update
 			-- statement?
 		do
@@ -235,7 +235,7 @@ feature -- questions about the type itself
 
 feature -- Attribute handling
 
-	find_attribute (attribute_name: XPLAIN_ATTRIBUTE_NAME): XPLAIN_ATTRIBUTE is
+	find_attribute (attribute_name: XPLAIN_ATTRIBUTE_NAME): XPLAIN_ATTRIBUTE
 			-- Attribute if type has an attribute with this name
 		require
 			valid_attribute_name: attribute_name /= Void
@@ -254,7 +254,7 @@ feature -- Attribute handling
 			end
 		end
 
-	has_attribute (a_role, a_name: STRING): BOOLEAN is
+	has_attribute (a_role, a_name: STRING): BOOLEAN
 			-- Has this type an attribute by this role and name?
 		local
 			an: XPLAIN_ATTRIBUTE_NAME
@@ -267,7 +267,7 @@ feature -- Attribute handling
 
 feature {XPLAIN_EXTENSION} -- Extend type
 
-	add_extension (an_extension: XPLAIN_EXTENSION) is
+	add_extension (an_extension: XPLAIN_EXTENSION)
 			-- Temporary attribute, defined by extend. It's the
 			-- responsibility of the extend to add the extension to its
 			-- type.
@@ -286,7 +286,7 @@ feature {XPLAIN_EXTENSION} -- Extend type
 
 feature {XPLAIN_EXTEND_STATEMENT} -- Extend type
 
-	remove_extension (extension: XPLAIN_EXTENSION) is
+	remove_extension (extension: XPLAIN_EXTENSION)
 			-- Drop extension from type.
 		require
 			valid_extension: extension /= Void
@@ -313,7 +313,7 @@ feature {XPLAIN_EXTEND_STATEMENT} -- Extend type
 
 feature -- Virtual attributes
 
-	add_assertion (assertion: XPLAIN_ASSERTION) is
+	add_assertion (assertion: XPLAIN_ASSERTION)
 			-- Computed attribute, defined by assert.
 		require
 			valid_assertion: assertion /= Void
@@ -327,7 +327,7 @@ feature -- Virtual attributes
 
 feature -- Specific cursors
 
-	new_all_attributes_cursor (sqlgenerator: SQL_GENERATOR): DS_BILINEAR_CURSOR [XPLAIN_ATTRIBUTE] is
+	new_all_attributes_cursor (sqlgenerator: SQL_GENERATOR): DS_BILINEAR_CURSOR [XPLAIN_ATTRIBUTE]
 			-- Cursor for all attributes present in a `create table'
 			-- statement according to `sqlgenerator' settings and
 			-- possibilities, except the primary key column.
@@ -341,7 +341,7 @@ feature -- Specific cursors
 			result_not_void: Result /= Void
 		end
 
-	new_data_attributes_cursor (sqlgenerator: SQL_GENERATOR): DS_BILINEAR_CURSOR [XPLAIN_ATTRIBUTE] is
+	new_data_attributes_cursor (sqlgenerator: SQL_GENERATOR): DS_BILINEAR_CURSOR [XPLAIN_ATTRIBUTE]
 			-- Cursor for columns that can be updated. This excludes
 			-- calculated columns (assertions). Extended columns can be
 			-- updated, but are excluded. There might be constraints in
@@ -355,7 +355,7 @@ feature -- Specific cursors
 			result_not_void: Result /= Void
 		end
 
-	new_init_attributes_cursor (sqlgenerator: SQL_GENERATOR): DS_BILINEAR_CURSOR [XPLAIN_ATTRIBUTE] is
+	new_init_attributes_cursor (sqlgenerator: SQL_GENERATOR): DS_BILINEAR_CURSOR [XPLAIN_ATTRIBUTE]
 			-- Cursor for attributes with initialization.
 		require
 			valid_sqlgenerator: sqlgenerator /= Void

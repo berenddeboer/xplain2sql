@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "loginname variable expression"
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -19,7 +19,7 @@ inherit
 
 feature
 
-	column_name: STRING is
+	column_name: STRING
 			-- The Xplain based column heading name, if any. It is used
 			-- by PostgreSQL output to create the proper function type
 			-- for example. The XML_GENERATOR uses it to give clients
@@ -28,12 +28,12 @@ feature
 			Result := "login name"
 		end
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 		do
 			Result := sqlgenerator.value_representation_system_user
 		end
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 		do
 			Result := sqlgenerator.sqlsysfunction_system_user
 		end

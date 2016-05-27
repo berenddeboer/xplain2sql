@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 		"Xplain node for linked list of attribute names"
@@ -33,7 +33,7 @@ feature
 
 feature
 
-	set_prefix_table (a_prefix: STRING) is
+	set_prefix_table (a_prefix: STRING)
 		require
 			valid_prefix: a_prefix /= Void
 		do

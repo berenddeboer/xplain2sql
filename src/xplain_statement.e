@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Describes a single Xplain statement like type, get or insert."
 
@@ -15,7 +15,7 @@ deferred class
 
 feature -- Commands
 
-	cleanup is
+	cleanup
 			-- When statement is used in procedure, values and extends
 			-- are temporal and should be removed from the universe.
 			-- Override in descendents to do the proper cleanup.
@@ -23,20 +23,20 @@ feature -- Commands
 			-- Nothing
 		end
 
-	optimize_for_procedure (a_procedure : XPLAIN_PROCEDURE) is
+	optimize_for_procedure (a_procedure : XPLAIN_PROCEDURE)
 		require
 			procedure_not_void: a_procedure /= Void
 		do
 		end
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Is parameter `a_parameter' used by this statement?
 		require
 			parameter_not_void: a_parameter /= Void
 		deferred
 		end
 
-	write (a_generator: ABSTRACT_GENERATOR) is
+	write (a_generator: ABSTRACT_GENERATOR)
 			-- Write output according to this generator.
 		require
 			generator_not_void: a_generator /= Void
@@ -46,7 +46,7 @@ feature -- Commands
 
 feature -- Status
 
-	updates_attribute (a_type: XPLAIN_TYPE; an_attribute_name: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	updates_attribute (a_type: XPLAIN_TYPE; an_attribute_name: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this statement update the attribute `an_attribute_name'
 			-- of type ``a_type'?
 		require

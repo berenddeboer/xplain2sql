@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Traverses over all Xplain attributes that should be %
 	%in a create table statement."
@@ -30,7 +30,7 @@ create {XPLAIN_TYPE}
 
 feature {NONE} -- Initialization
 
-	make (type: XPLAIN_TYPE; sqlgenerator: SQL_GENERATOR) is
+	make (type: XPLAIN_TYPE; sqlgenerator: SQL_GENERATOR)
 		require
 			type_not_void: type /= Void
 			sqlgenerator_not_void: sqlgenerator /= Void
@@ -48,7 +48,7 @@ feature -- Access
 
 feature -- Filter checks
 
-	is_generated_attribute: BOOLEAN is
+	is_generated_attribute: BOOLEAN
 			-- Is current item included in the filter?
 		local
 			assertion: XPLAIN_ASSERTION

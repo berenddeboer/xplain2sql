@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Xplain integer representation"
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -35,7 +35,7 @@ create
 
 feature
 
-	undefined_datatype (mygenerator: ABSTRACT_GENERATOR): STRING is
+	undefined_datatype (mygenerator: ABSTRACT_GENERATOR): STRING
 		require
 			fail: False
 		do
@@ -44,18 +44,18 @@ feature
 
 feature  -- SQL access
 
-	datatype (mygenerator: ABSTRACT_GENERATOR): STRING is
+	datatype (mygenerator: ABSTRACT_GENERATOR): STRING
 			-- return sql foreign key data type
 		do
 			result := mygenerator.datatype_ref_int (Current)
 		end
 
-	pkdatatype (mygenerator: ABSTRACT_GENERATOR): STRING is
+	pkdatatype (mygenerator: ABSTRACT_GENERATOR): STRING
 		do
 			result := mygenerator.datatype_pk_int (Current)
 		end
 
-	xml_schema_data_type: STRING is
+	xml_schema_data_type: STRING
 		do
 			Result := "positiveInteger"
 		end
@@ -63,7 +63,7 @@ feature  -- SQL access
 
 feature -- Access
 
-	is_integer: BOOLEAN is True
+	is_integer: BOOLEAN = True
 			-- This is a integer based primary key.
 
 end

@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -58,7 +58,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (sqlgenerator: SQL_GENERATOR; a_type: XPLAIN_TYPE; an_attribute: XPLAIN_EXTEND_ATTRIBUTE; a_expression: XPLAIN_EXTENSION_EXPRESSION) is
+	make (sqlgenerator: SQL_GENERATOR; a_type: XPLAIN_TYPE; an_attribute: XPLAIN_EXTEND_ATTRIBUTE; a_expression: XPLAIN_EXTENSION_EXPRESSION)
 			-- Extend `a_type' with attribute `aname' using expression
 			-- `aexpression'
 		require
@@ -93,12 +93,12 @@ feature {NONE} -- Initialization
 			type_set: type = a_type
 		end
 
-	OuterTableName: STRING is "access_type"
+	OuterTableName: STRING = "access_type"
 
 
 feature -- Expression builder support
 
-	create_expression (node: XPLAIN_ATTRIBUTE_NAME_NODE): XPLAIN_EXPRESSION is
+	create_expression (node: XPLAIN_ATTRIBUTE_NAME_NODE): XPLAIN_EXPRESSION
 			-- Return a new suitable expression for extension.
 			-- Note that the property expression is only valid to build this
 			-- extension. When the extension itself is used in an expression,
@@ -110,24 +110,24 @@ feature -- Expression builder support
 
 feature -- Access
 
-	columndatatype (mygenerator: ABSTRACT_GENERATOR): STRING is
+	columndatatype (mygenerator: ABSTRACT_GENERATOR): STRING
 			-- Representation when used as base.
 		do
 			Result := abstract_representation.datatype (mygenerator)
 		end
 
-	sqlcolumnidentifier (sqlgenerator: SQL_GENERATOR; role: STRING): STRING is
+	sqlcolumnidentifier (sqlgenerator: SQL_GENERATOR; role: STRING): STRING
 			-- return name used for joins
 		do
 			Result := sqlpkname (sqlgenerator)
 		end
 
-	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING is
+	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING
 		do
 			Result := Void -- not applicable
 		end
 
-	sql_qualified_name (sqlgenerator: SQL_GENERATOR; prefix_override: STRING): STRING is
+	sql_qualified_name (sqlgenerator: SQL_GENERATOR; prefix_override: STRING): STRING
 			-- Extension specific column name used in subselects
 		local
 			function: XPLAIN_EXTENSION_FUNCTION_EXPRESSION
@@ -153,7 +153,7 @@ feature -- Access
 			end
 		end
 
-	sql_alias (sqlgenerator: SQL_GENERATOR): STRING is
+	sql_alias (sqlgenerator: SQL_GENERATOR): STRING
 			-- Used in `do_do_create_select_list' if output comes from an
 			-- optimised extension and therefore doesn't have a nice
 			-- colum name. With this the column name can be forced even
@@ -168,13 +168,13 @@ feature -- Access
 
 feature -- SQL code
 
-	sql_insert_name (sqlgenerator: SQL_GENERATOR; role: STRING): STRING is
+	sql_insert_name (sqlgenerator: SQL_GENERATOR; role: STRING): STRING
 			-- Name of base/type/extension when used in an update statement.
 		do
 			Result := sqlgenerator.make_valid_identifier (name)
 		end
 
-	sql_select_name (sqlgenerator: SQL_GENERATOR; role: STRING): STRING is
+	sql_select_name (sqlgenerator: SQL_GENERATOR; role: STRING): STRING
 			-- Name of base/type/extension when used in a select or order
 			-- by statement.
 			-- Note that it probably needs to be prefixed by its
@@ -183,19 +183,19 @@ feature -- SQL code
 			Result := sqlgenerator.make_valid_identifier (name)
 		end
 
-	sqlname (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlname (sqlgenerator: SQL_GENERATOR): STRING
 			-- Name of table (view?) where extension is stored
 		do
 			Result := sqlgenerator.extension_name (Current)
 		end
 
-	sqlpkname (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlpkname (sqlgenerator: SQL_GENERATOR): STRING
 			-- Primary key column name of this type
 		do
 			Result := type.sqlpkname (sqlgenerator)
 		end
 
-	quoted_name (sqlgenerator: SQL_GENERATOR): STRING is
+	quoted_name (sqlgenerator: SQL_GENERATOR): STRING
 			-- As `sqlname', but quoted (i.e. with double quotes for example)
 			-- quoted here is different from `sqlname', bad fix
 		do
@@ -207,7 +207,7 @@ feature -- SQL code
 
 feature -- purge extension
 
-	write_drop (sqlgenerator: SQL_GENERATOR) is
+	write_drop (sqlgenerator: SQL_GENERATOR)
 		do
 			-- can we drop an extension??
 			-- sqlgenerator.drop_extension (Current)

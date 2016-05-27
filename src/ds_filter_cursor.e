@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Gobo cursor that finds it ok to traverse over a filtered subset of the data."
 
@@ -30,7 +30,7 @@ feature -- Status report
 
 feature -- Cursor movement
 
-	forth is
+	forth
 			-- Move cursor to next position included in the filter.
 		do
 			is_first := False
@@ -44,7 +44,7 @@ feature -- Cursor movement
 			end
 		end
 
-	start is
+	start
 			-- Move cursor to first position included in the filter.
 		do
 			is_first := not container.is_empty
@@ -60,7 +60,7 @@ feature -- Cursor movement
 
 feature -- Filter check
 
-	is_included: BOOLEAN is
+	is_included: BOOLEAN
 			-- Is current item included in the filter?
 		require
 			not_after: not after

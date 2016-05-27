@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 		"Xplain node to describe sort order in get statement."
@@ -28,7 +28,7 @@ create
 
 feature -- Creation
 
-	make (a_item: XPLAIN_ATTRIBUTE_NAME_NODE; a_ascending: BOOLEAN; a_next: like Current) is
+	make (a_item: XPLAIN_ATTRIBUTE_NAME_NODE; a_ascending: BOOLEAN; a_next: like Current)
 		require
 			has_item: a_item /= Void
 			a_item_contains_types: a_item.item.abstracttype_if_known /= Void

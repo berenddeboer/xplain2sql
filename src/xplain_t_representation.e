@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -25,13 +25,13 @@ inherit
 
 feature  -- Public state
 
-	domain: STRING is "(T)"
+	domain: STRING = "(T)"
 			-- Give Xplain domain as string.
 
 
 feature -- Status
 
-	is_blob (sqlgenerator: SQL_GENERATOR): BOOLEAN is
+	is_blob (sqlgenerator: SQL_GENERATOR): BOOLEAN
 			-- We need to be careful with storage space for blobs
 		do
 			Result := True
@@ -40,7 +40,7 @@ feature -- Status
 
 feature
 
-	value_representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	value_representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 		do
 			Result := sqlgenerator.value_representation_text
 		end
@@ -48,31 +48,31 @@ feature
 
 feature -- Access
 
-	datatype (mygenerator: ABSTRACT_GENERATOR): STRING is
+	datatype (mygenerator: ABSTRACT_GENERATOR): STRING
 			-- return sql data type, call sql_generator to return this
 		do
 			result := mygenerator.datatype_text (Current)
 		end
 
-	default_value: STRING is ""
+	default_value: STRING = ""
 			-- A default value to be used when a complex init is used and
 			-- the column is not null and needs some value because the
 			-- SQL dialect does not have the necessary before-insert
 			-- trigger.
 
-	max_value (sqlgenerator: SQL_GENERATOR): STRING is
+	max_value (sqlgenerator: SQL_GENERATOR): STRING
 			-- maximum value that fits in this representation
 		do
 			std.error.put_string ("A (T) base doesn't have a maximum value.%N")
 		end
 
-	min_value (sqlgenerator: SQL_GENERATOR): STRING is
+	min_value (sqlgenerator: SQL_GENERATOR): STRING
 			-- minimum value that fits in this representation
 		do
 			std.error.put_string ("A (T) base doesn't have a minimum value.%N")
 		end
 
-	xml_schema_data_type: STRING is
+	xml_schema_data_type: STRING
 			-- Best matching XML schema data type
 		do
 			Result := "string"

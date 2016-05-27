@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Describes the Xplain extend statement."
 
@@ -28,7 +28,7 @@ create
 
 feature -- Initialization
 
-	make (a_extension: XPLAIN_EXTENSION) is
+	make (a_extension: XPLAIN_EXTENSION)
 		require
 			have_extension: a_extension /= Void
 		do
@@ -38,14 +38,14 @@ feature -- Initialization
 
 feature -- Commands
 
-	cleanup is
+	cleanup
 			-- After stored procedure has been written, the extend is
 			-- removed from the type.
 		do
 			extension.type.remove_extension (extension)
 		end
 
-	optimize_for_procedure (a_procedure : XPLAIN_PROCEDURE) is
+	optimize_for_procedure (a_procedure : XPLAIN_PROCEDURE)
 		local
 			cursor: DS_BILINEAR_CURSOR [XPLAIN_STATEMENT]
 			updated: BOOLEAN
@@ -73,13 +73,13 @@ feature -- Commands
 			end
 		end
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Is parameter `a_parameter' used by this statement?
 		do
 			Result := extension.expression.uses_parameter (a_parameter)
 		end
 
-	write (a_generator: ABSTRACT_GENERATOR) is
+	write (a_generator: ABSTRACT_GENERATOR)
 			-- Write output according to this generator.
 		do
 			a_generator.write_extend (extension)

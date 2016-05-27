@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -21,7 +21,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		do
 			create statements.make
 		end
@@ -35,7 +35,7 @@ feature -- Statement list
 
 feature -- add objects
 
-	add (statement: XPLAIN_STATEMENT) is
+	add (statement: XPLAIN_STATEMENT)
 		require
 			statement_not_void: statement /= Void
 		do
@@ -49,7 +49,7 @@ feature -- add objects
 
 feature {NONE} -- Singleton part
 
-	frozen singleton_memory: XPLAIN_STATEMENTS is
+	frozen singleton_memory: XPLAIN_STATEMENTS
 		once
 			Result := Current
 		end

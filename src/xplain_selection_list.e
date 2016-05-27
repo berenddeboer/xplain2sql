@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "selection of multiple values"
 	author:      "Berend de Boer <berend@pobox.com>"
@@ -32,7 +32,7 @@ feature {NONE} -- Initialization
 			a_subject: XPLAIN_SUBJECT
 			an_expression_list: XPLAIN_EXPRESSION_NODE
 			a_predicate: XPLAIN_EXPRESSION
-			a_sort_order: XPLAIN_SORT_NODE) is
+			a_sort_order: XPLAIN_SORT_NODE)
 		require
 			subject_not_void: a_subject /= Void
 		do
@@ -52,7 +52,7 @@ feature -- Access
 	identification_text: STRING
 			-- Text that is output before the type identification column
 
-	show_only_identifier_column: BOOLEAN is
+	show_only_identifier_column: BOOLEAN
 			-- Does user asks for get t its ""?
 		local
 			se: XPLAIN_STRING_EXPRESSION
@@ -71,7 +71,7 @@ feature -- Access
 
 feature -- Status
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Is parameter `a_parameter' used by this statement?
 		local
 			node: like expression_list
@@ -91,7 +91,7 @@ feature -- Status
 
 feature -- SQL generation
 
-	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST) is
+	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST)
 			-- Retrieval statement can make sure the join_list is up to
 			-- date.
 		local
@@ -122,19 +122,19 @@ feature -- SQL generation
 			end
 		end
 
-	set_identification_text (a_text: STRING) is
+	set_identification_text (a_text: STRING)
 		do
 			identification_text := a_text
 		end
 
-	sp_function_type (sqlgenerator: SQL_GENERATOR; an_emit_path: BOOLEAN): STRING is
+	sp_function_type (sqlgenerator: SQL_GENERATOR; an_emit_path: BOOLEAN): STRING
 			-- Callback in generator to generate function type for
 			-- PostgreSQL functions.
 		do
 			Result := sqlgenerator.sp_function_type_for_selection_list (Current, an_emit_path)
 		end
 
-	write_select (a_generator: ABSTRACT_GENERATOR) is
+	write_select (a_generator: ABSTRACT_GENERATOR)
 		do
 			a_generator.write_select_list (Current)
 		end

@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 		"Produces ANSI-SQL-92 output. %
@@ -34,7 +34,7 @@ create
 
 feature -- About this generator
 
-	target_name: STRING is
+	target_name: STRING
 			-- Name and version of dialect
 		once
 			Result := "ANSI-92 SQL"
@@ -43,33 +43,33 @@ feature -- About this generator
 
 feature -- Identifiers
 
-	IdentifierWithSpacesSupported: BOOLEAN is once Result := True end
+	IdentifierWithSpacesSupported: BOOLEAN once Result := True end
 
 
 feature -- table options
 
-	TemporaryTablesSupported: BOOLEAN is once Result := True end
+	TemporaryTablesSupported: BOOLEAN once Result := True end
 
 
 feature -- type specification for xplain types
 
-	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING is
+	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING
 		do
 			Result := "boolean"
 		end
 
-	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING is
+	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING
 		do
 			Result := "timestamp with time zone"
 		end
 
-	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING is
+	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING
 			-- platform dependent approximate numeric data type
 		do
 			Result := "double precision"
 		end
 
-	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING is
+	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING
 		do
 			inspect representation.length
 			when 1 .. 4 then
@@ -84,7 +84,7 @@ feature -- type specification for xplain types
 
 feature -- Identifiers
 
-	quote_identifier (identifier: STRING): STRING is
+	quote_identifier (identifier: STRING): STRING
 			-- Identifier surrounded by quotes
 		do
 			Result := "%"" + identifier + "%""

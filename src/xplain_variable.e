@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Xplain constant (previously variable)"
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -20,7 +20,7 @@ create
 
 feature
 
-	create_expression (node: XPLAIN_ATTRIBUTE_NAME_NODE): XPLAIN_EXPRESSION is
+	create_expression (node: XPLAIN_ATTRIBUTE_NAME_NODE): XPLAIN_EXPRESSION
 			-- return suitable expression for variable
 		do
 			create {XPLAIN_VARIABLE_EXPRESSION} Result.make (node.item.variable)
@@ -28,7 +28,7 @@ feature
 
 feature -- Names
 
-	sqlname (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlname (sqlgenerator: SQL_GENERATOR): STRING
 			-- Name as known in sql code.
 		do
 			Result := sqlgenerator.constant_identifier (Current)
@@ -36,7 +36,7 @@ feature -- Names
 
 feature -- Drop statement
 
-	write_drop (sqlgenerator: SQL_GENERATOR) is
+	write_drop (sqlgenerator: SQL_GENERATOR)
 		do
 			sqlgenerator.drop_constant (Current)
 		end
@@ -46,7 +46,7 @@ feature -- Constant state
 	value: XPLAIN_EXPRESSION
 			-- last set value, Void if no value given.
 
-	set_value (new_value: XPLAIN_EXPRESSION) is
+	set_value (new_value: XPLAIN_EXPRESSION)
 		require
 			new_value_not_void: new_value /= Void
 		do

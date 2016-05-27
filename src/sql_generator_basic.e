@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Produces very basic ANSI SQL output"
 
@@ -26,7 +26,7 @@ create
 
 feature -- About this generator
 
-	target_name: STRING is
+	target_name: STRING
 			-- Name and version of dialect
 		once
 			Result := "Subset of ANSI-92 SQL"
@@ -34,51 +34,51 @@ feature -- About this generator
 
 feature -- SQL Comments
 
-	OneLineCommentPrefix: STRING is once Result := Void end
+	OneLineCommentPrefix: STRING once Result := Void end
 
 feature -- identifiers
 
-	MaxIdentifierLength: INTEGER is
+	MaxIdentifierLength: INTEGER
 		once
 			Result := 30
 		end
 
 feature -- table options
 
-	AutoPrimaryKeySupported: BOOLEAN is once Result := False end
+	AutoPrimaryKeySupported: BOOLEAN once Result := False end
 
-	ViewsSupported: BOOLEAN is once Result := False end
+	ViewsSupported: BOOLEAN once Result := False end
 
 
 feature -- type specification for xplain types
 
-	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING is
+	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING
 		do
 			Result := "integer"
 		end
 
-	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING is
+	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING
 		do
 			Result := "varchar(20)"
 		end
 
-	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING is
+	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING
 			-- platform dependent approximate numeric data type
 		do
 			Result := "float";
 		end
 
-	datatype_money (representation: XPLAIN_M_REPRESENTATION): STRING is
+	datatype_money (representation: XPLAIN_M_REPRESENTATION): STRING
 		do
 			Result := "numeric(12,4)"
 		end
 
-	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING is
+	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING
 		do
 			Result := "not supported"
 		end
 
-	datatype_text (representation: XPLAIN_T_REPRESENTATION): STRING is
+	datatype_text (representation: XPLAIN_T_REPRESENTATION): STRING
 		do
 			Result := "not supported"
 		end

@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Xplain primary key character representation"
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -34,7 +34,7 @@ create
 
 feature
 
-	undefined_datatype (mygenerator: ABSTRACT_GENERATOR): STRING is
+	undefined_datatype (mygenerator: ABSTRACT_GENERATOR): STRING
 		require else
 			fail: False
 		do
@@ -43,7 +43,7 @@ feature
 
 feature  -- SQL access
 
-	pkdatatype (mygenerator: ABSTRACT_GENERATOR): STRING is
+	pkdatatype (mygenerator: ABSTRACT_GENERATOR): STRING
 			-- return data type, call mygenerator to return this
 		do
 			result := mygenerator.datatype_pk_char (Current)
@@ -51,7 +51,7 @@ feature  -- SQL access
 
 feature -- Access
 
-	is_integer: BOOLEAN is False
+	is_integer: BOOLEAN = False
 			-- This is a integer based primary key.
 
 end

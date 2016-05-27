@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Describes the Xplain get statement."
 
@@ -24,7 +24,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (a_selection: XPLAIN_SELECTION) is
+	make (a_selection: XPLAIN_SELECTION)
 		require
 			have_selection: a_selection /= Void
 		do
@@ -34,7 +34,7 @@ feature {NONE} -- Initialization
 
 feature -- Generate output
 
-	write (a_generator: ABSTRACT_GENERATOR) is
+	write (a_generator: ABSTRACT_GENERATOR)
 			-- Write output according to this generator.
 		do
 			a_generator.write_select (selection)
@@ -48,7 +48,7 @@ feature -- Access
 
 feature --  Status
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Is parameter `a_parameter' used by this statement?
 		do
 			Result := selection.uses_parameter (a_parameter)

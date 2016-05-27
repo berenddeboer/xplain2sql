@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Describes the Xplain value selection statement."
 
@@ -24,7 +24,7 @@ create
 
 feature -- Initialization
 
-	make (a_value: XPLAIN_VALUE) is
+	make (a_value: XPLAIN_VALUE)
 		require
 			have_value: a_value /= Void
 		do
@@ -34,7 +34,7 @@ feature -- Initialization
 
 feature -- Generate output
 
-	write (a_generator: ABSTRACT_GENERATOR) is
+	write (a_generator: ABSTRACT_GENERATOR)
 			-- Write output according to this generator.
 		do
 			a_generator.write_select_value (value)
@@ -43,7 +43,7 @@ feature -- Generate output
 
 feature --  Status
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Is parameter `a_parameter' used by this statement?
 		do
 			-- no

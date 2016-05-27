@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Literal SQL."
 
@@ -24,7 +24,7 @@ create
 
 feature -- Initialization
 
-	make (a_sql: STRING) is
+	make (a_sql: STRING)
 		do
 			sql := a_sql
 		end
@@ -32,7 +32,7 @@ feature -- Initialization
 
 feature -- Generate output
 
-	write (a_generator: ABSTRACT_GENERATOR) is
+	write (a_generator: ABSTRACT_GENERATOR)
 			-- Write output according to this generator.
 		do
 			if sql /= Void then
@@ -40,7 +40,7 @@ feature -- Generate output
 			end
 		end
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		do
 			-- We don't know, might do

@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -21,7 +21,7 @@ feature
 
 feature
    
-   set_owner (aowner: XPLAIN_TYPE) is
+   set_owner (aowner: XPLAIN_TYPE)
       do
          owner := aowner
       end       

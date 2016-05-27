@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -28,17 +28,17 @@ inherit
 
 feature -- Status
 
-	is_existential: BOOLEAN is True
+	is_existential: BOOLEAN = True
 			-- Is this function an any or nil function?
 
-	property_required: INTEGER is 2
+	property_required: INTEGER = 2
 			-- Does function need the presence of a property?
 			-- 0: forbidden; 1: must be presented; 2: don't care either way
 
 
 feature -- Access
 
-	needs_limit (sqlgenerator: SQL_GENERATOR): BOOLEAN is
+	needs_limit (sqlgenerator: SQL_GENERATOR): BOOLEAN
 			-- We need to return a single value in case an
 			-- ExistentialFrom is needed (else all rows are selected).
 		do
@@ -48,13 +48,13 @@ feature -- Access
 	representation (
 			 sqlgenerator: SQL_GENERATOR;
 			 type: XPLAIN_TYPE;
-			 expression: XPLAIN_EXPRESSION): XPLAIN_REPRESENTATION is
+			 expression: XPLAIN_EXPRESSION): XPLAIN_REPRESENTATION
 			-- What's the xplain representation for this function?
 		do
 			Result := sqlgenerator.value_representation_boolean
 		end
 
-	sp_function_type (sqlgenerator: SQL_GENERATOR; a_selection: XPLAIN_SELECTION_FUNCTION; an_emit_path: BOOLEAN): STRING is
+	sp_function_type (sqlgenerator: SQL_GENERATOR; a_selection: XPLAIN_SELECTION_FUNCTION; an_emit_path: BOOLEAN): STRING
 			-- Callback to generator to retrieve function type for
 			-- PostgreSQL functions.
 		do

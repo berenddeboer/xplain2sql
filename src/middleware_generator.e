@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -22,7 +22,7 @@ inherit
 
 feature -- Main routines
 
-	dump_type (type: XPLAIN_TYPE; sqlgenerator: SQL_GENERATOR) is
+	dump_type (type: XPLAIN_TYPE; sqlgenerator: SQL_GENERATOR)
 			-- Called to write code for a type.
 		require
 			type_not_void: type /= Void
@@ -30,7 +30,7 @@ feature -- Main routines
 		deferred
 		end
 
-	dump_statements (statements: XPLAIN_STATEMENTS; sqlgenerator: SQL_GENERATOR) is
+	dump_statements (statements: XPLAIN_STATEMENTS; sqlgenerator: SQL_GENERATOR)
 			-- Given a list of all executed statements, do something with it.
 		require
 			statements_not_void: statements /= Void
@@ -40,12 +40,12 @@ feature -- Main routines
 
 feature -- code writing
 
-	get_column_value (column_name: STRING): STRING is
+	get_column_value (column_name: STRING): STRING
 			-- Get value for a certain column.
 		deferred
 		end
 
-	get_column_value_string (column_name: STRING): STRING is
+	get_column_value_string (column_name: STRING): STRING
 			-- Get value for a certain column if it is a string.
 		deferred
 		end

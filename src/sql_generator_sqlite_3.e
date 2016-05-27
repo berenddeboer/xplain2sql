@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -59,7 +59,7 @@ create
 
 feature -- About this generator
 
-	target_name: STRING is
+	target_name: STRING
 			-- Name and version of dialect
 		once
 			Result := "SQLite 3"
@@ -68,7 +68,7 @@ feature -- About this generator
 
 feature -- Domain options
 
-	DomainsSupported: BOOLEAN is
+	DomainsSupported: BOOLEAN
 			-- Does this dialect support creation of user defined data types?
 		once
 			Result := False
@@ -77,30 +77,30 @@ feature -- Domain options
 
 feature -- Identifier capabilities
 
-	MaxIdentifierLength: INTEGER is 256
+	MaxIdentifierLength: INTEGER = 256
 			-- Maximum length of identifiers;
 			-- Not sure if SQLite has any limit here.
 
 
 feature -- Table options
 
-	AutoPrimaryKeySupported: BOOLEAN is True
+	AutoPrimaryKeySupported: BOOLEAN = True
 			-- Does this dialect support auto-generated primary keys?
 
-	AutoPrimaryKeyConstraint: STRING is
+	AutoPrimaryKeyConstraint: STRING
 			-- The SQL that enables an autoincrementing primary key
 		once
 			Result := PrimaryKeyConstraint + " autoincrement"
 		end
 
-	ViewColumnsSupported: BOOLEAN is False
+	ViewColumnsSupported: BOOLEAN = False
 			-- Does the dialect require a list of columns after the view
 			-- name?
 
 
 feature -- init [default] options
 
-	ChecksNullAfterTrigger: BOOLEAN is
+	ChecksNullAfterTrigger: BOOLEAN
 			-- Does this dialect check for nulls in columns after a
 			-- trigger has been fired?
 		once
@@ -111,10 +111,10 @@ feature -- init [default] options
 
 feature -- Booleans
 
-	SQLTrue: STRING is once Result := "1" end
-	SQLFalse: STRING is once Result := "0" end
+	SQLTrue: STRING once Result := "1" end
+	SQLFalse: STRING once Result := "0" end
 
-	SupportsTrueBoolean: BOOLEAN is False
+	SupportsTrueBoolean: BOOLEAN = False
 			-- Does this dialect support first-class Booleans?
 			-- Or do they have to be emulated?
 			-- Interestingly, most dialects don't support it.
@@ -122,12 +122,12 @@ feature -- Booleans
 
 feature -- Strings
 
-	sql_string_combine_separator: STRING is " || "
+	sql_string_combine_separator: STRING = " || "
 
 
 feature -- purge options
 
-	DropColumnSupported: BOOLEAN is
+	DropColumnSupported: BOOLEAN
 			-- Does this dialect support dropping of columns?
 		once
 			Result := False
@@ -136,7 +136,7 @@ feature -- purge options
 
 feature -- create statements
 
-	create_init (type: XPLAIN_TYPE) is
+	create_init (type: XPLAIN_TYPE)
 		local
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE]
 			comma: STRING
@@ -174,12 +174,12 @@ feature -- create statements
 			std.output.put_string ("%N%N")
 		end
 
-	create_primary_key_generator (type: XPLAIN_TYPE) is
+	create_primary_key_generator (type: XPLAIN_TYPE)
 		do
 			-- nothing
 		end
 
-	create_use_database (database: STRING) is
+	create_use_database (database: STRING)
 			-- start using a certain database
 		do
 			-- nothing
@@ -188,7 +188,7 @@ feature -- create statements
 
 feature -- drop statements
 
-	drop_primary_key_generator (type: XPLAIN_TYPE) is
+	drop_primary_key_generator (type: XPLAIN_TYPE)
 		do
 			-- nothing
 		end
@@ -196,7 +196,7 @@ feature -- drop statements
 
 feature -- Stored procedures
 
-	sp_get_auto_generated_primary_key (type: XPLAIN_TYPE): STRING is
+	sp_get_auto_generated_primary_key (type: XPLAIN_TYPE): STRING
 			-- Statement that returns the generated primary key into the
 			-- output parameters. Statement should end with CommandSeperator.
 		do
@@ -206,45 +206,45 @@ feature -- Stored procedures
 
 feature -- Data types
 
-	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING is
+	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING
 		do
 			Result := "integer"
 		end
 
-	datatype_char (representation: XPLAIN_C_REPRESENTATION): STRING is
+	datatype_char (representation: XPLAIN_C_REPRESENTATION): STRING
 		do
 			Result := "text"
 		end
 
-	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING is
+	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING
 		do
 			-- datetime not really supported, no idea how to handle this
 			Result := "text"
 		end
 
-	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING is
+	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING
 			-- Platform dependent approximate numeric data type using
 			-- largest size available on that platform.
 		do
 			Result := "real"
 		end
 
-	datatype_money (representation: XPLAIN_M_REPRESENTATION): STRING is
+	datatype_money (representation: XPLAIN_M_REPRESENTATION): STRING
 		do
 			Result := "real"
 		end
 
-	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING is
+	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING
 		do
 			Result := "blob"
 		end
 
-	datatype_text (representation: XPLAIN_T_REPRESENTATION): STRING is
+	datatype_text (representation: XPLAIN_T_REPRESENTATION): STRING
 		do
 			Result := "blob"
 		end
 
-	datatype_varchar (representation: XPLAIN_A_REPRESENTATION): STRING is
+	datatype_varchar (representation: XPLAIN_A_REPRESENTATION): STRING
 		do
 			Result := "text"
 		end

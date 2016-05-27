@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -32,7 +32,7 @@ inherit
 
 feature -- Comparison
 
-	is_equal (other: like Current): BOOLEAN is
+	is_equal (other: like Current): BOOLEAN
 			-- Is `other' attached to an object of the same type
 			-- as current object and identical to it?
 		do
@@ -46,7 +46,7 @@ feature -- Comparison
 
 feature -- Status
 
-	is_blob (sqlgenerator: SQL_GENERATOR): BOOLEAN is
+	is_blob (sqlgenerator: SQL_GENERATOR): BOOLEAN
 			-- We need to be careful with storage space for blobs.
 		require
 			sqlgenerator_not_void: sqlgenerator /= Void
@@ -54,7 +54,7 @@ feature -- Status
 			Result := False
 		end
 
-	write_with_quotes: BOOLEAN is
+	write_with_quotes: BOOLEAN
 			-- Should values of this type be surrounded by quotes?
 		do
 			Result := True
@@ -63,7 +63,7 @@ feature -- Status
 
 feature -- Access
 
-	domain: STRING is
+	domain: STRING
 			-- Give Xplain domain as string like (I4) or (B).
 		deferred
 		ensure
@@ -73,7 +73,7 @@ feature -- Access
 
 	domain_restriction: XPLAIN_DOMAIN_RESTRICTION
 
-	value_representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	value_representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- Representation suitable for the value statement. This
 			-- means returning the most general form for this
 			-- representation, i.e. for (I2) return (I9), for (R3,2)
@@ -89,7 +89,7 @@ feature -- Access
 			valid_result: Result /= Void
 		end
 
-	xml_schema_data_type: STRING is
+	xml_schema_data_type: STRING
 			-- Best matching XML schema data type
 		deferred
 		ensure
@@ -99,7 +99,7 @@ feature -- Access
 
 feature -- Change
 
-	set_domain_restriction (sqlgenerator: SQL_GENERATOR; adomain_restriction: XPLAIN_DOMAIN_RESTRICTION) is
+	set_domain_restriction (sqlgenerator: SQL_GENERATOR; adomain_restriction: XPLAIN_DOMAIN_RESTRICTION)
 		require
 			valid_generator: sqlgenerator /= Void
 			valid_restriction: adomain_restriction /= Void
@@ -112,7 +112,7 @@ feature -- Change
 
 feature  -- SQL code
 
-	datatype (mygenerator: ABSTRACT_GENERATOR): STRING is
+	datatype (mygenerator: ABSTRACT_GENERATOR): STRING
 			-- Data type according to `mygenerator';
 			-- used for data type in create table definitions, stored procedures,
 			-- or middleware.
@@ -124,7 +124,7 @@ feature  -- SQL code
 			valid_string: Result /= Void
 		end
 
-	default_value: STRING is
+	default_value: STRING
 			-- A default value to be used when a complex init is used and
 			-- the column is not null and needs some value because the
 			-- SQL dialect does not have the necessary before-insert
@@ -134,7 +134,7 @@ feature  -- SQL code
 			value_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	max_value (sqlgenerator: SQL_GENERATOR): STRING is
+	max_value (sqlgenerator: SQL_GENERATOR): STRING
 			-- Maximum value that fits in this representation.
 		require
 			sqlgenerator_not_void: sqlgenerator /= Void
@@ -143,7 +143,7 @@ feature  -- SQL code
 			min_value_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	min_value (sqlgenerator: SQL_GENERATOR): STRING is
+	min_value (sqlgenerator: SQL_GENERATOR): STRING
 			-- Minimum value that fits in this representation.
 		require
 			sqlgenerator_not_void: sqlgenerator /= Void
@@ -155,7 +155,7 @@ feature  -- SQL code
 
 feature -- Middleware specific routines
 
-	mw_column_value (mygenerator: MIDDLEWARE_GENERATOR; column_name: STRING): STRING is
+	mw_column_value (mygenerator: MIDDLEWARE_GENERATOR; column_name: STRING): STRING
 			-- Return piece of code to get contents.
 			-- Getting values is usually type specific,
 			-- not column_name specific.
@@ -163,12 +163,12 @@ feature -- Middleware specific routines
 			Result := mygenerator.get_column_value (column_name)
 		end
 
-	mw_needs_precision: BOOLEAN is
+	mw_needs_precision: BOOLEAN
 		do
 			Result := False
 		end
 
-	mw_numeric_scale: INTEGER is
+	mw_numeric_scale: INTEGER
 		require
 			is_numeric: mw_needs_precision
 		do
@@ -177,7 +177,7 @@ feature -- Middleware specific routines
 			Result >= 0
 		end
 
-	mw_precision: INTEGER is
+	mw_precision: INTEGER
 		require
 			is_numeric: mw_needs_precision
 		do

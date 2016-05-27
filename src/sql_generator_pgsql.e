@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 		"Produces PostgreSQL 7.X output. Older versions not really supported."
@@ -66,27 +66,27 @@ inherit
 
 feature -- domain options
 
-	DomainsSupported: BOOLEAN is once Result := False end
+	DomainsSupported: BOOLEAN once Result := False end
 
 feature -- identifiers
 
-	MaxIdentifierLength: INTEGER is
+	MaxIdentifierLength: INTEGER
 		once
 			Result := 31
 		end
 
-	IdentifierWithSpacesSupported: BOOLEAN is once Result := False end
+	IdentifierWithSpacesSupported: BOOLEAN once Result := False end
 
 feature -- table options
 
-	AutoPrimaryKeySupported: BOOLEAN is once Result := True end
+	AutoPrimaryKeySupported: BOOLEAN once Result := True end
 
-	AutoPrimaryKeyConstraint: STRING is
+	AutoPrimaryKeyConstraint: STRING
 		once
 			Result := "serial primary key"
 		end
 
-	TemporaryTablesSupported: BOOLEAN is
+	TemporaryTablesSupported: BOOLEAN
 		once
 			Result := True
 		end
@@ -94,33 +94,33 @@ feature -- table options
 
 feature -- select options
 
-	ExistentialFromNeeded: BOOLEAN is False
+	ExistentialFromNeeded: BOOLEAN = False
 			-- Is a from clause in a selection statement required?
 			-- It's better if you don't need it. Define
 			-- `ExistentialFromTable' for a work around.
 
-	ExistentialFromTable: STRING is "dual"
+	ExistentialFromTable: STRING = "dual"
 			-- For portability Postgres has this table. But you don't
 			-- have to use it.
 
 
 feature -- ansi niladic functions
 
-	sqlsysfunction_system_user: STRING is
+	sqlsysfunction_system_user: STRING
 		once
 			Result := "CURRENT_USER"
 		end
 
 feature -- Strings
 
-	sql_string_combine_separator: STRING is " || "
+	sql_string_combine_separator: STRING = " || "
 
-	sql_like_operator: STRING is "ilike"
+	sql_like_operator: STRING = "ilike"
 
 
 feature -- Auto primary key
 
-	sql_last_auto_generated_primary_key	(type: XPLAIN_TYPE): STRING is
+	sql_last_auto_generated_primary_key	(type: XPLAIN_TYPE): STRING
 			-- Return code to get the last auto-generated primary
 			-- key. It's not type specific.
 		local
@@ -140,17 +140,17 @@ feature -- Auto primary key
 
 feature -- Stored procedures
 
-	NamedParametersSupported: BOOLEAN is False
+	NamedParametersSupported: BOOLEAN = False
 			-- Can stored procedures use named parameters?
 			-- PostgreSQL does not support them.
 
-	OutputParametersSupported: BOOLEAN is False
+	OutputParametersSupported: BOOLEAN = False
 			-- PostgreSQL does not support them.
 
 
 feature -- Write
 
-	write_extend (extension: XPLAIN_EXTENSION) is
+	write_extend (extension: XPLAIN_EXTENSION)
 			-- Code for extend statement.
 		do
 			if can_write_extend_as_view (extension) then
@@ -165,7 +165,7 @@ feature -- Write
 
 feature -- SQL creation statements
 
-	create_echo (str: STRING) is
+	create_echo (str: STRING)
 			-- Output string while parsing sql script.
 		do
 			std.output.put_string ("%Nselect '")
@@ -174,7 +174,7 @@ feature -- SQL creation statements
 			std.output.put_string (CommandSeparator)
 		end
 
-	create_extend_create_table (extension: XPLAIN_EXTENSION) is
+	create_extend_create_table (extension: XPLAIN_EXTENSION)
 		local
 			s: STRING
 		do
@@ -193,7 +193,7 @@ feature -- SQL creation statements
 			end
 		end
 
-	create_init (type: XPLAIN_TYPE) is
+	create_init (type: XPLAIN_TYPE)
 		local
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE]
 			function_name: STRING
@@ -243,12 +243,12 @@ feature -- SQL creation statements
 			std.output.put_string ("%N%N")
 		end
 
-	create_primary_key_generator (type: XPLAIN_TYPE) is
+	create_primary_key_generator (type: XPLAIN_TYPE)
 		do
 			-- Supported by serial data type.
 		end
 
-	create_select_function (selection_list: XPLAIN_SELECTION_FUNCTION) is
+	create_select_function (selection_list: XPLAIN_SELECTION_FUNCTION)
 		do
 			if is_stored_procedure then
 				sp_start_cursor
@@ -261,7 +261,7 @@ feature -- SQL creation statements
 			end
 		end
 
-	create_select_list (selection_list: XPLAIN_SELECTION_LIST) is
+	create_select_list (selection_list: XPLAIN_SELECTION_LIST)
 		do
 			if is_stored_procedure then
 				sp_start_cursor
@@ -274,7 +274,7 @@ feature -- SQL creation statements
 			end
 		end
 
-	create_select_value_inside_sp (a_value: XPLAIN_VALUE) is
+	create_select_value_inside_sp (a_value: XPLAIN_VALUE)
 			-- Emit SQL that returns the value when asked for that value
 			-- inside a stored procedure.
 		do
@@ -287,7 +287,7 @@ feature -- SQL creation statements
 			sp_return_cursor
 		end
 
-	create_sync_auto_generated_primary_key_with_supplied_value (type: XPLAIN_TYPE; user_identification: INTEGER) is
+	create_sync_auto_generated_primary_key_with_supplied_value (type: XPLAIN_TYPE; user_identification: INTEGER)
 			-- Update sequence. Perhaps can be done with trigger, but I'm
 			-- not sure of that.
 		local
@@ -303,13 +303,13 @@ feature -- SQL creation statements
 			std.output.put_string ("%N")
 		end
 
-	create_use_database (database: STRING) is
+	create_use_database (database: STRING)
 			-- start using a certain database
 		do
 			-- not supported
 		end
 
-	create_value_declare_inside_sp (a_value: XPLAIN_VALUE) is
+	create_value_declare_inside_sp (a_value: XPLAIN_VALUE)
 			-- Emit code to declare `a_value' inside a stored procedure.
 		do
 			-- Only emit declaration at top, redeclaration not supported.
@@ -323,7 +323,7 @@ feature -- SQL creation statements
 			end
 		end
 
-	create_value_assign_inside_sp (a_value: XPLAIN_VALUE) is
+	create_value_assign_inside_sp (a_value: XPLAIN_VALUE)
 			-- Emit code to assign `a_value'.`expression' to `a_value'
 			-- inside a stored procedure.
 		do
@@ -338,13 +338,13 @@ feature -- SQL creation statements
 
 feature -- drop statements
 
-	drop_primary_key_generator (type: XPLAIN_TYPE) is
+	drop_primary_key_generator (type: XPLAIN_TYPE)
 		do
 			-- not applicable
 			-- 2004-01-16: No? See my todo.txt.
 		end
 
-	drop_table_if_exist (type: XPLAIN_TYPE) is
+	drop_table_if_exist (type: XPLAIN_TYPE)
 			-- Generate a statement that drops this table, but only if it exists,
 			-- No warning must be generated if the table does not exist at
 			-- run-time. Works only inside stored procedures for PostgreSQL.
@@ -360,12 +360,12 @@ feature -- drop statements
 
 feature -- type specification for xplain types
 
-	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING is
+	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING
 		once
 			Result := "boolean"
 		end
 
-	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING is
+	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING
 		once
 			-- datetime is for an earlier version??
 			--Result := "datetime"
@@ -376,13 +376,13 @@ feature -- type specification for xplain types
 			end
 		end
 
-	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING is
+	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING
 			-- platform dependent approximate numeric data type
 		once
 			Result := "float8"
 		end
 
-	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING is
+	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING
 		do
 			inspect representation.length
 			when 1 .. 4 then
@@ -396,17 +396,17 @@ feature -- type specification for xplain types
 			end
 		end
 
-	datatype_money (representation: XPLAIN_M_REPRESENTATION): STRING is
+	datatype_money (representation: XPLAIN_M_REPRESENTATION): STRING
 		once
 			Result := "numeric(12,4)"
 		end
 
-	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING is
+	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING
 		once
 			Result := "text"
 		end
 
-	datatype_pk_int (representation: XPLAIN_PK_I_REPRESENTATION): STRING is
+	datatype_pk_int (representation: XPLAIN_PK_I_REPRESENTATION): STRING
 		do
 			if CreateAutoPrimaryKey then
 				if representation.length < 10 then
@@ -419,7 +419,7 @@ feature -- type specification for xplain types
 			end
 		end
 
-	datatype_text (representation: XPLAIN_T_REPRESENTATION): STRING is
+	datatype_text (representation: XPLAIN_T_REPRESENTATION): STRING
 		once
 			Result := "text"
 		end
@@ -427,7 +427,7 @@ feature -- type specification for xplain types
 
 feature -- Get a variable/value
 
-	sqlgetvalue_inside_sp (value: XPLAIN_VALUE): STRING is
+	sqlgetvalue_inside_sp (value: XPLAIN_VALUE): STRING
 			-- SQL expression that returns the value of a value inside a
 			-- stored procedure
 		do
@@ -437,7 +437,7 @@ feature -- Get a variable/value
 
 feature -- Identifiers
 
-	quote_identifier (identifier: STRING): STRING is
+	quote_identifier (identifier: STRING): STRING
 			-- return identifier, optionally surrounded by quotes if identifier
 			-- contains spaces and rdbms supports spaces in identifiers
 		local
@@ -471,7 +471,7 @@ feature -- Identifiers
 
 feature -- some support
 
-	sql_select_function_limit_before (selection_list: XPLAIN_SELECTION_FUNCTION): STRING is
+	sql_select_function_limit_before (selection_list: XPLAIN_SELECTION_FUNCTION): STRING
 			-- Code that limits a select to return a single value. Output
 			-- is placed in front of the select statement.
 			-- Returns empty for no output.
@@ -480,7 +480,7 @@ feature -- some support
 			Result := ""
 		end
 
-	sql_select_function_limit_after: STRING is
+	sql_select_function_limit_after: STRING
 			-- Code that limits a select to return a single value. Output
 			-- is placed after the select statement.
 			-- Returns empty for no output.
@@ -492,7 +492,7 @@ feature -- some support
 
 feature -- Stored procedure support
 
-	plpgsql_block_demarcation: STRING is
+	plpgsql_block_demarcation: STRING
 			-- What character(s) to use to start a plsql block
 		once
 			Result := "'"
@@ -500,7 +500,7 @@ feature -- Stored procedure support
 			not_void: Result /= Void
 		end
 
-	do_drop_procedure (name: STRING) is
+	do_drop_procedure (name: STRING)
 			-- Drop procedure `name', `name' is a valid sp identifier,
 			-- and not yet quoted.
 		do
@@ -513,7 +513,7 @@ feature -- Stored procedure support
 			std.output.put_character ('%N')
 		end
 
-	sp_define_param_name (name: STRING): STRING is
+	sp_define_param_name (name: STRING): STRING
 			-- Return `name' formatted as the name of the parameter as it
 			-- appears in the header, and hopefully as it is known to
 			-- clients.
@@ -523,7 +523,7 @@ feature -- Stored procedure support
 
 	sp_delete_declaration (
 			type: XPLAIN_TYPE;
-			param_name: STRING) is
+			param_name: STRING)
 			-- Emit any declarations for `sp_delete_insert' between
 			-- procedure header and body.
 		do
@@ -535,7 +535,7 @@ feature -- Stored procedure support
 			std.output.put_character ('%N')
 		end
 
-	sp_end is
+	sp_end
 			-- Write statements, if any, to end a stored procedure.
 		do
 			is_stored_procedure := False
@@ -547,7 +547,7 @@ feature -- Stored procedure support
 			std.output.put_character ('%N')
 		end
 
-	sp_function_type_for_selection_list (selection: XPLAIN_SELECTION_LIST; an_emit_path: BOOLEAN): STRING is
+	sp_function_type_for_selection_list (selection: XPLAIN_SELECTION_LIST; an_emit_path: BOOLEAN): STRING
 			-- The function type for output of a get statement.
 			-- Required for PostgreSQL output.
 		local
@@ -614,7 +614,7 @@ feature -- Stored procedure support
 			end
 		end
 
-	sp_function_type_for_selection_value (a_column_name: STRING; representation: XPLAIN_REPRESENTATION; an_emit_path: BOOLEAN): STRING is
+	sp_function_type_for_selection_value (a_column_name: STRING; representation: XPLAIN_REPRESENTATION; an_emit_path: BOOLEAN): STRING
 			-- The function type for output of a get statement.
 			-- Required for PostgreSQL output.
 		do
@@ -629,7 +629,7 @@ feature -- Stored procedure support
 			Result.append_string (representation.datatype (Current))
 		end
 
-	sp_get_auto_generated_primary_key (type: XPLAIN_TYPE): STRING is
+	sp_get_auto_generated_primary_key (type: XPLAIN_TYPE): STRING
 			-- Statement that returns the generated primary key into the
 			-- output parameters. Statement should end with CommandSeperator.
 		do
@@ -639,7 +639,7 @@ feature -- Stored procedure support
 			Result.append_string (CommandSeparator)
 		end
 
-	sp_header_end is
+	sp_header_end
 			-- Emit code to end stored procedure declaration. Many
 			-- dialects have an "as" for example
 		do
@@ -649,7 +649,7 @@ feature -- Stored procedure support
 	sp_insert_declaration (
 			type: XPLAIN_TYPE;
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE];
-			has_input_parameters: BOOLEAN) is
+			has_input_parameters: BOOLEAN)
 			-- Emit any declarations for `sp_create_insert' between
 			-- procedure header and body.
 		local
@@ -683,7 +683,7 @@ feature -- Stored procedure support
 			end
 		end
 
-	sp_return_cursor is
+	sp_return_cursor
 			-- Code that returns all rows in a cursor to a client.
 			-- Only one select statement is allowed per procedure.
 			-- Statement should NOT end with a separator.
@@ -694,7 +694,7 @@ feature -- Stored procedure support
 			CommandSeperator_set: not CommandSeparator.is_empty
 		end
 
-	sp_start_cursor is
+	sp_start_cursor
 			-- Code that starts a cursor for a select statement.
 			-- Only one select statement is allowed per procedure.
 		deferred
@@ -702,7 +702,7 @@ feature -- Stored procedure support
 			CommandSeparator_reset: CommandSeparator.is_empty
 		end
 
-	sp_type_name (a_procedure: XPLAIN_PROCEDURE): STRING is
+	sp_type_name (a_procedure: XPLAIN_PROCEDURE): STRING
 		require
 			procedure_not_void: a_procedure /= Void
 			procedure_returns_rows: a_procedure.returns_rows
@@ -714,7 +714,7 @@ feature -- Stored procedure support
 	sp_update_declaration (
 			type: XPLAIN_TYPE;
 			pk_param_name: STRING;
-			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE]) is
+			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE])
 		local
 			i: INTEGER
 			param_name: STRING
@@ -743,7 +743,7 @@ feature -- Stored procedure support
 			end
 		end
 
-	sp_user_declaration (procedure: XPLAIN_PROCEDURE) is
+	sp_user_declaration (procedure: XPLAIN_PROCEDURE)
 			-- Emit value declarations.
 		local
 			value_statement: XPLAIN_VALUE_STATEMENT
@@ -797,7 +797,7 @@ feature -- Stored procedure support
 
 feature -- Literal
 
-	as_string (s: STRING): STRING is
+	as_string (s: STRING): STRING
 			-- Return `s' as string by surrounding it with quotes. Makes
 			-- sure `s' is properly quoted, so don't use together with
 			-- `safe_string'!
@@ -813,7 +813,7 @@ feature -- Literal
 
 feature -- Extension specific methods
 
-	extension_index_name (an_extension: XPLAIN_EXTENSION): STRING is
+	extension_index_name (an_extension: XPLAIN_EXTENSION): STRING
 			-- Name of index on temporary table to speed up join to that table
 		do
 			Result := quote_valid_identifier ("idx_" + an_extension.type.name + "_" + an_extension.name)
@@ -822,7 +822,7 @@ feature -- Extension specific methods
 
 feature {NONE} -- SQL parts
 
-	end_if is
+	end_if
 			-- Emit end if
 		do
 			std.output.put_string ("end if")
@@ -830,7 +830,7 @@ feature {NONE} -- SQL parts
 			std.output.put_character ('%N')
 		end
 
-	safe_sql (s: STRING): STRING is
+	safe_sql (s: STRING): STRING
 			-- ' characters in `s' are quoted if necessary
 		do
 			Result := safe_string (s)
@@ -839,9 +839,9 @@ feature {NONE} -- SQL parts
 
 feature {NONE} -- PostgreSQL templates
 
-	conditionally_drop_table_template: STRING is "if exists(select * from pg_class where relkind = 'r' and relname= '$s' and pg_table_is_visible (oid)) = 't' then%N%Tdrop table $s;%Nend if;%N";
+	conditionally_drop_table_template: STRING = "if exists(select * from pg_class where relkind = 'r' and relname= '$s' and pg_table_is_visible (oid)) = 't' then%N%Tdrop table $s;%Nend if;%N";
 
-	truncate_temporary_table_template: STRING is "if exists(select * from pg_class where relkind = 'r' and relname= '$s' and pg_table_is_visible (oid)) = 't' then%N%Tdelete from $s;%Nelse%N";
+	truncate_temporary_table_template: STRING = "if exists(select * from pg_class where relkind = 'r' and relname= '$s' and pg_table_is_visible (oid)) = 't' then%N%Tdelete from $s;%Nelse%N";
 
 
 feature {NONE} -- Implementation

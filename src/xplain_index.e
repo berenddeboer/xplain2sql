@@ -1,4 +1,4 @@
-indexing
+note
 
    description: "Xplain index"
    author:     "Berend de Boer <berend@pobox.com>"
@@ -25,7 +25,7 @@ feature -- type attributes
 feature -- initialization
 
    make (a_type: XPLAIN_TYPE; a_name: STRING; a_unique, a_clustered: BOOLEAN; 
-         a_first_attribute: XPLAIN_ATTRIBUTE_NAME_NODE) is
+         a_first_attribute: XPLAIN_ATTRIBUTE_NAME_NODE)
       require
          valid_type: a_type /= Void
          valid_name: a_name /= Void

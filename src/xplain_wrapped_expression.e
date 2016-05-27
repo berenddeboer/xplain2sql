@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Expression that wraps another expression. Does some default behaviour to operate correctly in such cases."
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -28,7 +28,7 @@ inherit
 
 feature {NONE} -- Initialization
 
-	make (a_expression: XPLAIN_EXPRESSION) is
+	make (a_expression: XPLAIN_EXPRESSION)
 		require
 			expression_not_void: a_expression /= Void
 		do
@@ -38,43 +38,43 @@ feature {NONE} -- Initialization
 
 feature -- Status
 
-	is_constant: BOOLEAN is
+	is_constant: BOOLEAN
 		do
 			Result := expression.is_constant
 		end
 
-	is_literal: BOOLEAN is
+	is_literal: BOOLEAN
 			-- Is this a literal expression?
 		do
 			Result := expression.is_literal
 		end
 
-	is_logical_constant: BOOLEAN is
+	is_logical_constant: BOOLEAN
 			-- Is this the True or False constant?
 		do
 			Result := expression.is_logical_constant
 		end
 
-	is_logical_expression: BOOLEAN is
+	is_logical_expression: BOOLEAN
 			-- Is this a logical expression?
 		do
 			Result := expression.is_logical_expression
 		end
 
-	is_using_other_attributes (an_attribute: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	is_using_other_attributes (an_attribute: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to other attributes as `an_attribute'?
 			-- It is used to output better optimized SQL code.
 		do
 			Result := expression.is_using_other_attributes (an_attribute)
 		end
 
-	uses_its: BOOLEAN is
+	uses_its: BOOLEAN
 			-- Does expression has an its list somewhere?
 		do
 			Result := expression.uses_its
 		end
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		do
 			Result := expression.uses_parameter (a_parameter)
@@ -89,14 +89,14 @@ feature -- Access
 
 feature -- SQL generation
 
-	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST) is
+	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST)
 			-- Possibility of expression to add something to join part of
 			-- a select statement.
 		do
 			expression.add_to_join (sqlgenerator, join_list)
 		end
 
-	column_name: STRING is
+	column_name: STRING
 			-- The Xplain based column heading name, if any. It is used
 			-- by XML_GENERATOR to give clients some idea what the column
 			-- name of a select is going to be.
@@ -104,7 +104,7 @@ feature -- SQL generation
 			Result := expression.column_name
 		end
 
-	sqlname (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlname (sqlgenerator: SQL_GENERATOR): STRING
 			-- Try to come up with the most likely column name for this
 			-- expression, only applicable for attributes. If nothing
 			-- found, return Void.
@@ -112,7 +112,7 @@ feature -- SQL generation
 			Result := expression.sqlname (sqlgenerator)
 		end
 
-	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING is
+	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING
 			-- Expression in sql syntax used in init statements. Equal to
 			-- `sqlvalue' in many cases, but usually if you refer to
 			-- attributes of the type it has to be prefixed by "new." for
@@ -121,7 +121,7 @@ feature -- SQL generation
 			Result := expression.sqlinitvalue (sqlgenerator)
 		end
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Return expression in generator syntax.
 		do
 			Result := expression.sqlvalue (sqlgenerator)

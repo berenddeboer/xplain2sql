@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Traverses over real Xplain attributes, i.e. ones that %
 	%can be written to. Virtual attributes and extends are skipped."
@@ -30,7 +30,7 @@ create {XPLAIN_TYPE}
 
 feature {NONE} -- Initialization
 
-	make (type: XPLAIN_TYPE; sqlgenerator: SQL_GENERATOR) is
+	make (type: XPLAIN_TYPE; sqlgenerator: SQL_GENERATOR)
 		require
 			type_not_void: type /= Void
 			sqlgenerator_not_void: sqlgenerator /= Void
@@ -41,7 +41,7 @@ feature {NONE} -- Initialization
 
 feature -- checks
 
-	is_not_virtual_attribute: BOOLEAN is
+	is_not_virtual_attribute: BOOLEAN
 		local
 			is_virtual: BOOLEAN
 		do

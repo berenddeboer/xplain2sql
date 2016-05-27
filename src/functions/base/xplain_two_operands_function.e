@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Xplain expression that is a function with two operands. This class is a base class for the actual functions like '+' or 'combine'"
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -26,7 +26,7 @@ inherit
 
 feature {NONE} -- Initialization
 
-	make (a_left, a_right: XPLAIN_EXPRESSION) is
+	make (a_left, a_right: XPLAIN_EXPRESSION)
 		require
 			left_not_void: a_left /= Void
 			right_not_void: a_right /= Void
@@ -42,7 +42,7 @@ feature -- Access
 	right: XPLAIN_EXPRESSION
 			-- Left and right operand
 
-	name: STRING is
+	name: STRING
 			-- Xplain function name or operator
 		deferred
 		ensure
@@ -52,19 +52,19 @@ feature -- Access
 
 feature -- Status
 
-	has_wild_card_characters: BOOLEAN is
+	has_wild_card_characters: BOOLEAN
 			-- Does the expression contain the Xplain wildcard characters
 			-- '*' or '?'?
 		do
 			Result := left.has_wild_card_characters or else right.has_wild_card_characters
 		end
 
-	is_literal: BOOLEAN is
+	is_literal: BOOLEAN
 		do
 			Result := left.is_literal and then right.is_literal
 		end
 
-	is_using_other_attributes (an_attribute: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	is_using_other_attributes (an_attribute: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to other attributes as `an_attribute'?
 			-- It is used to output better optimized SQL code.
 		do
@@ -73,13 +73,13 @@ feature -- Status
 				left.is_using_other_attributes (an_attribute)
 		end
 
-	uses_its: BOOLEAN is
+	uses_its: BOOLEAN
 			-- Does expression has an its list somewhere?
 		do
 			Result := left.uses_its or else right.uses_its
 		end
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		do
 			Result :=
@@ -90,7 +90,7 @@ feature -- Status
 
 feature -- SQL code
 
-	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST) is
+	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST)
 			-- Possibility of expression to add something to join part of
 			-- a select statement.
 		do
@@ -98,7 +98,7 @@ feature -- SQL code
 			right.add_to_join (sqlgenerator, join_list)
 		end
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- The representation of left operand. Maybe should be
 			-- improved to infer better? If you add int and double, should
 			-- return double I think.

@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Traverses over Xplain attributes with inits."
 
@@ -29,7 +29,7 @@ create {XPLAIN_TYPE}
 
 feature {NONE} -- Initialization
 
-	make (type: XPLAIN_TYPE; sqlgenerator: SQL_GENERATOR) is
+	make (type: XPLAIN_TYPE; sqlgenerator: SQL_GENERATOR)
 		require
 			type_not_void: type /= Void
 			sqlgenerator_not_void: sqlgenerator /= Void
@@ -40,7 +40,7 @@ feature {NONE} -- Initialization
 
 feature -- checks
 
-	is_initialized_attribute: BOOLEAN is
+	is_initialized_attribute: BOOLEAN
 		do
 			Result := item.init /= Void
 		end

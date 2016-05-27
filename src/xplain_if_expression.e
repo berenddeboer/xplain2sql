@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -33,7 +33,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (a_condition: XPLAIN_LOGICAL_EXPRESSION; a_then_specification, an_else_specification: XPLAIN_EXPRESSION) is
+	make (a_condition: XPLAIN_LOGICAL_EXPRESSION; a_then_specification, an_else_specification: XPLAIN_EXPRESSION)
 			-- Initialization.
 		require
 			condition_not_void: a_condition /= Void
@@ -60,7 +60,7 @@ feature -- Access
 
 feature -- Status
 
-	is_using_other_attributes (an_attribute: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	is_using_other_attributes (an_attribute: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to other attributes as `an_attribute'?
 			-- It is used to output better optimized SQL code.
 		do
@@ -70,7 +70,7 @@ feature -- Status
 				else_specification.is_using_other_attributes (an_attribute)
 		end
 
-	uses_its: BOOLEAN is
+	uses_its: BOOLEAN
 			-- Does expression has an its list somewhere?
 		do
 			Result :=
@@ -79,7 +79,7 @@ feature -- Status
 				else_specification.uses_its
 		end
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		do
 			Result :=
@@ -91,7 +91,7 @@ feature -- Status
 
 feature -- SQL code
 
-	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST) is
+	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST)
 			-- Possibility of expression to add something to join part of
 			-- a select statement.
 		do
@@ -102,7 +102,7 @@ feature -- SQL code
 			join_list.enable_existential_join_optimisation
 		end
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- Guessed representation that matches this expression.
 			-- Used to generate representations for value and extend
 			-- statements. As it must be able to accomodate updates, it
@@ -112,13 +112,13 @@ feature -- SQL code
 			Result := then_specification.representation (sqlgenerator)
 		end
 
-	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING is
+	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING
 			-- Return expression in sql syntax used in init statements.
 		do
 			Result := sqlgenerator.sqlinitvalue_if (Current)
 		end
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Expression in generator syntax
 		do
 			Result := "case when " + condition.sqlvalue (sqlgenerator) + " then " + then_specification.sqlvalue (sqlgenerator) + " else " + else_specification.sqlvalue (sqlgenerator) + " end"

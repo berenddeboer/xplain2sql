@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "SQL join builder."
 
@@ -26,7 +26,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (a_base_aggregate: XPLAIN_TYPE) is
+	make (a_base_aggregate: XPLAIN_TYPE)
 			-- Initialize.
 		require
 			valid_aggregate: a_base_aggregate /= Void
@@ -44,7 +44,7 @@ feature -- Access
 	base_aggregate: XPLAIN_TYPE
 			-- the table name after the from statement.
 
-	first: JOIN_NODE is
+	first: JOIN_NODE
 			--- First JOIN to output to SQL or Void if there are no joins
 		require
 			finalized_called: is_finalized
@@ -55,7 +55,7 @@ feature -- Access
 
 feature -- Status
 
-	existential_join_optimisation: BOOLEAN is
+	existential_join_optimisation: BOOLEAN
 			-- Set when a join to an extend that was derived by creating
 			-- a partial table can be fuly joined instead of left outer
 			-- joined. That greatly improves performance.
@@ -66,7 +66,7 @@ feature -- Status
 			Result := existential_join_optimisation_count = 1
 		end
 
-	is_empty: BOOLEAN is
+	is_empty: BOOLEAN
 			-- Is there nothing to join?
 		require
 			finalized_called: is_finalized
@@ -80,14 +80,14 @@ feature -- Status
 
 feature -- Change
 
-	enable_existential_join_optimisation is
+	enable_existential_join_optimisation
 			-- Allow simple stack-wise enabling/disable of existential
 			-- join optimisation.
 		do
 			existential_join_optimisation_count := existential_join_optimisation_count + 1
 		end
 
-	disable_existential_join_optimisation is
+	disable_existential_join_optimisation
 			-- Allow simple stack-wise enabling/disable of existential
 			-- join optimisation.
 		do
@@ -119,7 +119,7 @@ feature -- Main commands
 		sqlgenerator: SQL_GENERATOR
 		a_per_property: XPLAIN_ATTRIBUTE_NAME_NODE
 		a_selection: XPLAIN_SELECTION_FUNCTION;
-		a_force_left_outer_join: BOOLEAN) is
+		a_force_left_outer_join: BOOLEAN)
 			-- Add a join to a type that has this type as an
 			-- aggregate. This allows certain functions to use (left outer)
 			-- joins which are usually much faster with current
@@ -202,7 +202,7 @@ feature -- Main commands
 
 	extend (
 			sqlgenerator: SQL_GENERATOR
-			attribute_list: XPLAIN_ATTRIBUTE_NAME_NODE) is
+			attribute_list: XPLAIN_ATTRIBUTE_NAME_NODE)
 			-- Add more joins if somewhere in attribute_list a chain is
 			-- not in the joins already present.
 		require
@@ -261,7 +261,7 @@ feature -- Main commands
 			end
 		end
 
-	finalize (sqlgenerator: SQL_GENERATOR) is
+	finalize (sqlgenerator: SQL_GENERATOR)
 			-- Generate the join statements by appending JOIN classes to
 			-- the `first' property.
 		require
@@ -284,14 +284,14 @@ feature -- Main commands
 			finalized: is_finalized
 		end
 
-	optimize_joins (a_predicate: XPLAIN_EXPRESSION) is
+	optimize_joins (a_predicate: XPLAIN_EXPRESSION)
 		do
 		end
 
 
 feature -- Debug
 
-	print_tree is
+	print_tree
 			-- Print the attribute chains, debug purposes only
 		do
 			debug ("xplain2sql_join")
@@ -307,7 +307,7 @@ feature {NONE} -- Implementation
 
 	existential_join_optimisation_count: INTEGER
 
-	copy_role_to_next (anode: XPLAIN_ATTRIBUTE_NAME_NODE) is
+	copy_role_to_next (anode: XPLAIN_ATTRIBUTE_NAME_NODE)
 		do
 			if anode.next /= Void then
 				copy_role_to_next (anode.next)
@@ -315,7 +315,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	revert_alist (anode: XPLAIN_ATTRIBUTE_NAME_NODE): XPLAIN_ATTRIBUTE_NAME_NODE is
+	revert_alist (anode: XPLAIN_ATTRIBUTE_NAME_NODE): XPLAIN_ATTRIBUTE_NAME_NODE
 		local
 			last: XPLAIN_ATTRIBUTE_NAME_NODE
 		do

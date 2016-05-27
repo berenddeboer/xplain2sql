@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Node in a tree, basically XPLAIN_NODE, but can branch."
 
@@ -25,7 +25,7 @@ feature {NONE} -- Initialisation
 		an_item: XPLAIN_ATTRIBUTE_NAME_NODE;
 		an_is_upward_join,
 		an_is_forced_left_outer_join,
-		an_is_forced_inner_join: BOOLEAN) is
+		an_is_forced_inner_join: BOOLEAN)
 			-- Prepare node in tree
 		do
 			item := an_item
@@ -40,7 +40,7 @@ feature -- Tree querying
 	found_immediate_child: JOIN_TREE_NODE
 			-- Last node found by `has_immediate_child'
 
-	get_immediate_child (anode: XPLAIN_ATTRIBUTE_NAME_NODE; an_is_upward_join: BOOLEAN): JOIN_TREE_NODE is
+	get_immediate_child (anode: XPLAIN_ATTRIBUTE_NAME_NODE; an_is_upward_join: BOOLEAN): JOIN_TREE_NODE
 			-- The child where `anode' is an item
 		require
 			has_child: has_immediate_child (anode, an_is_upward_join)
@@ -52,7 +52,7 @@ feature -- Tree querying
 			item_found: Result /= Void
 		end
 
-	has_immediate_child (anode: XPLAIN_ATTRIBUTE_NAME_NODE; an_is_upward_join: BOOLEAN): BOOLEAN is
+	has_immediate_child (anode: XPLAIN_ATTRIBUTE_NAME_NODE; an_is_upward_join: BOOLEAN): BOOLEAN
 			-- Does `anode' exist in our `next' list?
 		require
 			valid_node: anode /= Void
@@ -76,7 +76,7 @@ feature -- Tree querying
 			no_false_positives: not has_children implies not Result
 		end
 
-	has_children: BOOLEAN is
+	has_children: BOOLEAN
 			-- Does the tree have children?
 		do
 			-- For a normal attribute list it would be enough to look at
@@ -93,7 +93,7 @@ feature -- Tree querying
 
 feature -- Tree changing
 
-	append_child (anode: XPLAIN_ATTRIBUTE_NAME_NODE; an_is_upward_join, an_is_forced_left_outer_join, an_is_forced_inner_join: BOOLEAN) is
+	append_child (anode: XPLAIN_ATTRIBUTE_NAME_NODE; an_is_upward_join, an_is_forced_left_outer_join, an_is_forced_inner_join: BOOLEAN)
 			-- Make anode a child.
 		require
 			not_child: not has_immediate_child (anode, an_is_upward_join)
@@ -106,7 +106,7 @@ feature -- Tree changing
 			can_be_found: has_immediate_child (anode, an_is_upward_join)
 		end
 
-	add_additional_item (anode: XPLAIN_ATTRIBUTE_NAME_NODE) is
+	add_additional_item (anode: XPLAIN_ATTRIBUTE_NAME_NODE)
 			-- Add more name nodes to this level, we need to keep track
 			-- of them to be able to set their prefix properly.
 		require
@@ -127,7 +127,7 @@ feature -- JOIN_NODE generation
 	generate_join_nodes (
 			sqlgenerator: SQL_GENERATOR;
 			aggregate: XPLAIN_TYPE;
-			aggregate_alias: STRING): JOIN_NODE is
+			aggregate_alias: STRING): JOIN_NODE
 			-- Return JOIN_NODEs for self and any children.
 			-- Also set prefix for all managed XPLAIN_ATTRIBUTE_NAME_NODE.
 		require
@@ -201,7 +201,7 @@ feature -- JOIN_NODE generation
 
 feature {NONE} -- Implementation
 
-	alias_name (sqlgenerator: SQL_GENERATOR; type: XPLAIN_TYPE): STRING is
+	alias_name (sqlgenerator: SQL_GENERATOR; type: XPLAIN_TYPE): STRING
 			-- Valid and unique sql identifier to use as alias for this
 			-- table;
 			-- preferably the alias should equal the table.
@@ -219,7 +219,7 @@ feature {NONE} -- Implementation
 			name_returned: Result /= Void and then not Result.is_empty
 		end
 
-	increment_usage (a_type: XPLAIN_TYPE) is
+	increment_usage (a_type: XPLAIN_TYPE)
 			-- Make a note that this table has been used once more in the
 			-- join list.
 		require
@@ -233,7 +233,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	set_prefix_table (prefix_table: STRING) is
+	set_prefix_table (prefix_table: STRING)
 			-- Set prefix for all items to to `prefix_table'
 		require
 			have_prefix: prefix_table /= Void and then not prefix_table.is_empty
@@ -255,7 +255,7 @@ feature {NONE} -- Implementation
 			all_items_are_prefixed: have_all_items_a_prefix
 		end
 
-	table_counter: DS_HASH_TABLE [INTEGER, XPLAIN_TYPE] is
+	table_counter: DS_HASH_TABLE [INTEGER, XPLAIN_TYPE]
 			-- Count how often a table has been used.
 		once
 			create Result.make (64)
@@ -263,7 +263,7 @@ feature {NONE} -- Implementation
 
 feature -- Debugging
 
-	have_all_items_a_prefix: BOOLEAN is
+	have_all_items_a_prefix: BOOLEAN
 			-- Do all items have a prefix?
 		do
 			Result := item = Void or else item.prefix_table /= Void
@@ -282,7 +282,7 @@ feature -- Debugging
 			end
 		end
 
-	print_tree (indent: INTEGER) is
+	print_tree (indent: INTEGER)
 			-- Print join tree to stdout, for debug purposes only.
 		local
 			spaces: STRING

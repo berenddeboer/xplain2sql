@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -23,7 +23,7 @@ create
 
 feature
 
-	to_sqlcode (sqlgenerator: SQL_GENERATOR): STRING is
+	to_sqlcode (sqlgenerator: SQL_GENERATOR): STRING
 			-- Return string suitable for sql in enumeration.
 			-- Maybe the use of a single quote looks a bit like knowledge about
 			-- sql here instead of in sqlgenerator. However use of ' is ubiquitous.
@@ -41,7 +41,7 @@ feature
 
 feature {NONE} -- once strings
 
-	the_empty_string: STRING is "''"
+	the_empty_string: STRING = "''"
 			-- Empty string
 
 end

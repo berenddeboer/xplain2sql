@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Xplain assignment"
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -16,7 +16,7 @@ feature {NONE} -- Initialization
 
 	make (
 			a_attribute_name: XPLAIN_ATTRIBUTE_NAME
-			a_expression: XPLAIN_EXPRESSION) is
+			a_expression: XPLAIN_EXPRESSION)
 		require
 			valid_attribute_name: a_attribute_name /= Void
 			attribute_set: a_attribute_name.type_attribute /= Void

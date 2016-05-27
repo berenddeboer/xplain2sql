@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Base for all expression types."
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -13,20 +13,20 @@ deferred class
 
 feature -- Status
 
-	can_be_null: BOOLEAN is
+	can_be_null: BOOLEAN
 			-- Can the result of this expression be a Null value?
 		do
 			Result := False
 		end
 
-	has_wild_card_characters: BOOLEAN is
+	has_wild_card_characters: BOOLEAN
 			-- Does the expression contain the Xplain wildcard characters
 			-- '*' or '?'?
 		do
 			Result := False
 		end
 
-	is_constant: BOOLEAN is
+	is_constant: BOOLEAN
 			-- Is this expression a constant value?
 			-- Expressions like 1 + 1, although technically a constant,
 			-- are not considered constants, unless `sqlvalue'
@@ -36,7 +36,7 @@ feature -- Status
 			Result := False
 		end
 
-	is_literal: BOOLEAN is
+	is_literal: BOOLEAN
 			-- Is this a literal expression?
 			-- A literal expressions only uses numbers or strings and
 			-- could possible be an expression like "1 + 1".
@@ -46,7 +46,7 @@ feature -- Status
 			consistent: is_constant implies Result
 		end
 
-	is_logical_constant: BOOLEAN is
+	is_logical_constant: BOOLEAN
 			-- Is this the True or False constant?
 		do
 			Result := False
@@ -54,13 +54,13 @@ feature -- Status
 			consistent: Result implies is_logical_expression
 		end
 
-	is_logical_expression: BOOLEAN is
+	is_logical_expression: BOOLEAN
 			-- Is this a logical expression?
 		do
 			Result := False
 		end
 
-	is_specialization: BOOLEAN is
+	is_specialization: BOOLEAN
 			-- Is this expression an attribute its list and does it refer
 			-- to an attribute that is a specialization?
 			-- Used for XML generation.
@@ -68,12 +68,12 @@ feature -- Status
 			Result := False
 		end
 
-	is_string_expression: BOOLEAN is
+	is_string_expression: BOOLEAN
 			-- Is this a string?
 		do
 		end
 
-	is_using_other_attributes (an_attribute: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	is_using_other_attributes (an_attribute: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to other attributes as `an_attribute'?
 			-- It is used to output better optimized SQL code.
 		require
@@ -84,7 +84,7 @@ feature -- Status
 			literal_implies_no_other: is_literal implies not Result
 		end
 
-	selects_max_one_row: BOOLEAN is
+	selects_max_one_row: BOOLEAN
 			-- When this expression is used in a where clause, does it
 			-- return max one row?
 			-- Only useful when expression is a predicate of course.
@@ -92,12 +92,12 @@ feature -- Status
 			Result := False
 		end
 
-	uses_its: BOOLEAN is
+	uses_its: BOOLEAN
 			-- Does expression has an its list somewhere?
 		deferred
 		end
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		require
 			parameter_not_void: a_parameter /= Void
@@ -107,7 +107,7 @@ feature -- Status
 
 feature -- SQL generation
 
-	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST) is
+	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST)
 			-- Possibility of expression to add something to join part of
 			-- a select statement.
 		require
@@ -117,7 +117,7 @@ feature -- SQL generation
 			-- do nothing
 		end
 
-	exact_representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	exact_representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- Most exact representation of this expression, should not
 			-- try to accomodate larger values.
 		require
@@ -128,7 +128,7 @@ feature -- SQL generation
 			valid_result: Result /= Void
 		end
 
-	column_name: STRING is
+	column_name: STRING
 			-- The Xplain based column heading name, if any; it is used
 			-- by PostgreSQL output to create the proper function type
 			-- for example. The XML_GENERATOR uses it to give clients
@@ -142,7 +142,7 @@ feature -- SQL generation
 			result_is_void_or_not_empty: Result = Void or else not Result.is_empty
 		end
 
-	path_name: STRING is
+	path_name: STRING
 			-- XML path name, keeping Xplain structure intact; user for
 			-- path procedures
 		do
@@ -151,7 +151,7 @@ feature -- SQL generation
 			result_is_void_or_not_empty: Result = Void or else not Result.is_empty
 		end
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- Guessed representation that matches this expression;
 			-- Used to generate representations for value and extend
 			-- statements. As it must be able to accomodate updates, it
@@ -165,7 +165,7 @@ feature -- SQL generation
 			have_domain_restriction: Result.domain_restriction /= Void
 		end
 
-	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING is
+	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING
 			-- Expression in sql syntax used in init statements. Equal to
 			-- `sqlvalue' in many cases, but usually if you refer to
 			-- an attribute of `a_type' it has to be prefixed by "new." for
@@ -177,7 +177,7 @@ feature -- SQL generation
 			not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sqlmaxvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlmaxvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Return the maximum value of this expression according to its type.
 		require
 			have_sqlgenerator: sqlgenerator /= Void
@@ -187,7 +187,7 @@ feature -- SQL generation
 			min_value_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sqlminvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlminvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Return the minimum value of this expression according to its type.
 		require
 			have_sqlgenerator: sqlgenerator /= Void
@@ -197,7 +197,7 @@ feature -- SQL generation
 			min_value_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sqlname (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlname (sqlgenerator: SQL_GENERATOR): STRING
 			-- Try to come up with the most likely column name for this
 			-- expression, only applicable for attributes. If nothing
 			-- found, return Void.
@@ -210,7 +210,7 @@ feature -- SQL generation
 			result_is_void_or_not_empty: Result = Void or else not Result.is_empty
 		end
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Expression in generator syntax
 		require
 			generator_not_void: sqlgenerator /= Void
@@ -219,7 +219,7 @@ feature -- SQL generation
 			not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sqlvalue_as_wildcard (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue_as_wildcard (sqlgenerator: SQL_GENERATOR): STRING
 			-- As `sqlvalue', but a string literal uses this to return a
 			-- properly formatted SQL like expression
 		require
@@ -230,7 +230,7 @@ feature -- SQL generation
 			not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	outer_sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	outer_sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Return expression in generator syntax.
 			-- Same as `sqlvalue' but it may expect that it is not
 			-- wrapped in another expression. So it may want to add
@@ -244,7 +244,7 @@ feature -- SQL generation
 			valid_result: Result /= Void
 		end
 
-	sql_alias (sqlgenerator: SQL_GENERATOR): STRING is
+	sql_alias (sqlgenerator: SQL_GENERATOR): STRING
 			-- Used in `do_do_create_select_list' if output comes from an
 			-- optimised extension and therefore doesn't have a nice
 			-- colum name. With this the column name can be forced even

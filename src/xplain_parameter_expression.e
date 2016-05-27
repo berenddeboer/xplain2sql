@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Describes a procedure parameter being used in an expression."
 	author:      "Berend de Boer <berend@pobox.com>"
@@ -23,7 +23,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (a_name: XPLAIN_ATTRIBUTE_NAME) is
+	make (a_name: XPLAIN_ATTRIBUTE_NAME)
 		require
 			name_not_void: a_name /= Void
 			name_has_object: a_name.object /= Void
@@ -41,13 +41,13 @@ feature -- Access
 
 feature -- Status
 
-	uses_its: BOOLEAN is
+	uses_its: BOOLEAN
 			-- Does expression has an its list somewhere?
 		do
 			Result := False
 		end
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		do
 			Result := name.is_equal (a_parameter)
@@ -58,13 +58,13 @@ feature -- Status
 
 feature -- SQL output
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- representation is value representation
 		do
 			Result := name.object.representation
 		end
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Return parameter value expression as string.
 		do
 			Result := sqlgenerator.sp_use_param (name.abstracttype.sqlcolumnidentifier (sqlgenerator, name.role))

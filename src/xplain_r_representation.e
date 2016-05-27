@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -32,7 +32,7 @@ create
 
 feature  -- Initialization
 
-	make (abefore, aafter: INTEGER) is
+	make (abefore, aafter: INTEGER)
 		require
 			before_positive: abefore > 0
 			after_not_negative: aafter >= 0
@@ -48,7 +48,7 @@ feature  -- Public state
 	after: INTEGER
 			-- decimal places before and after decimal point
 
-	domain: STRING is
+	domain: STRING
 			-- Give Xplain domain as string.
 		do
 			create Result.make (2 + before + 1 + after + 1)
@@ -60,7 +60,7 @@ feature  -- Public state
 			Result.append_character (')')
 		end
 
-	xml_schema_data_type: STRING is
+	xml_schema_data_type: STRING
 			-- Best matching XML schema data type
 		do
 			Result := "decimal"
@@ -69,18 +69,18 @@ feature  -- Public state
 
 feature
 
-	value_representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	value_representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 		do
 			Result := sqlgenerator.value_representation_float
 		end
 
-	write_with_quotes: BOOLEAN is False
+	write_with_quotes: BOOLEAN = False
 			-- Should values of this type be surrounded by quotes?
 
 
 feature  -- required implementations
 
-	datatype (mygenerator: ABSTRACT_GENERATOR): STRING is
+	datatype (mygenerator: ABSTRACT_GENERATOR): STRING
 			-- Data type according to `mygenerator';
 			-- used for data type in create table definitions, stored procedures,
 			-- or middleware.
@@ -88,7 +88,7 @@ feature  -- required implementations
 			result := mygenerator.datatype_numeric (Current)
 		end
 
-	default_value: STRING is
+	default_value: STRING
 			-- A default value to be used when a complex init is used and
 			-- the column is not null and needs some value because the
 			-- SQL dialect does not have the necessary before-insert
@@ -97,7 +97,7 @@ feature  -- required implementations
 			Result := "0"
 		end
 
-	max_value (sqlgenerator: SQL_GENERATOR): STRING is
+	max_value (sqlgenerator: SQL_GENERATOR): STRING
 			-- maximum value that fits in this representation
 		local
 			s: STRING
@@ -108,7 +108,7 @@ feature  -- required implementations
 			Result.append_string (s)
 		end
 
-	min_value (sqlgenerator: SQL_GENERATOR): STRING is
+	min_value (sqlgenerator: SQL_GENERATOR): STRING
 			-- minimum value that fits in this representation
 		local
 			s: STRING
@@ -123,17 +123,17 @@ feature  -- required implementations
 
 feature -- middleware
 
-	mw_needs_precision: BOOLEAN is
+	mw_needs_precision: BOOLEAN
 		do
 			Result := True
 		end
 
-	mw_numeric_scale: INTEGER is
+	mw_numeric_scale: INTEGER
 		do
 			Result := after
 		end
 
-	mw_precision: INTEGER is
+	mw_precision: INTEGER
 		do
 			Result := before + after
 		end

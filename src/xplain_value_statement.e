@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Describes the Xplain value assignment statement."
 
@@ -29,7 +29,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (a_value: XPLAIN_VALUE) is
+	make (a_value: XPLAIN_VALUE)
 		require
 			have_value: a_value /= Void
 		do
@@ -39,7 +39,7 @@ feature {NONE} -- Initialization
 
 feature -- Generate output
 
-	write (a_generator: ABSTRACT_GENERATOR) is
+	write (a_generator: ABSTRACT_GENERATOR)
 			-- Write output according to this generator.
 		do
 			a_generator.write_value (value)
@@ -48,7 +48,7 @@ feature -- Generate output
 
 feature -- Cleanup
 
-	cleanup is
+	cleanup
 			-- When value is used in procedure, the value is removed from
 			-- the universe the after stored procedure has been generated.
 			-- This of course assumes that the code for a stored
@@ -72,7 +72,7 @@ feature -- Access
 
 feature -- Status
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Is parameter `a_parameter' used by this statement?
 		do
 			Result := value.expression.uses_parameter (a_parameter)

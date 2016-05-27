@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Use for <> expressions with string literal that contains wild card characters."
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -28,7 +28,7 @@ create
 
 feature -- SQL code
 
-	sqloperator: STRING is
+	sqloperator: STRING
 			-- The SQL translation for `operator'
 		once
 			Result := "not like"
@@ -37,7 +37,7 @@ feature -- SQL code
 
 feature {NONE} -- Once strings
 
-	xplain_operator: STRING is
+	xplain_operator: STRING
 			-- The Xplain operator itself.
 		once
 			Result := "<>"

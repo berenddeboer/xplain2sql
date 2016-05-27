@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Set function extension expression."
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -37,7 +37,7 @@ feature {NONE} -- Initialization
 
 	make (
 			a_selection: XPLAIN_SELECTION_FUNCTION;
-			a_per_property: XPLAIN_ATTRIBUTE_NAME_NODE) is
+			a_per_property: XPLAIN_ATTRIBUTE_NAME_NODE)
 		require
 			selection_not_void: a_selection /= Void
 			per_property_not_void: a_per_property /= Void
@@ -55,7 +55,7 @@ feature -- Access
 
 feature -- Status
 
-	is_nil_expression: BOOLEAN is
+	is_nil_expression: BOOLEAN
 			-- Is this expression based on the nil function?
 			-- All other expressions evaluate to true when stored in a
 			-- temporary, except the nil expression, which stores
@@ -65,14 +65,14 @@ feature -- Status
 			Result := selection.function.is_nil
 		end
 
-	is_update_optimization_supported: BOOLEAN is
+	is_update_optimization_supported: BOOLEAN
 			-- Is this an extension that will benefit from optimized
 			-- output in case it is not used in updates?
 		do
 			Result := supports_left_outer_join
 		end
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		do
 			Result := selection.uses_parameter (a_parameter)
@@ -83,7 +83,7 @@ feature -- SQL generation
 
 	set_extension (
 		an_extension: XPLAIN_ABSTRACT_EXTENSION;
-		an_outer_table_name: STRING) is
+		an_outer_table_name: STRING)
 			-- A `per_property' is nothing more than a where statement.
 			-- Build it now we know the expression to which we're tied.
 			-- Make sure to retain the original predicate.
@@ -121,7 +121,7 @@ feature -- SQL generation
 
 feature
 
-	add_to_join (sqlgenerator: SQL_GENERATOR; a_join_list: JOIN_LIST) is
+	add_to_join (sqlgenerator: SQL_GENERATOR; a_join_list: JOIN_LIST)
 		do
 			if supports_left_outer_join then
 				a_join_list.add_join_to_aggregate (sqlgenerator, per_property, selection, not extension.no_update_optimization)
@@ -131,13 +131,13 @@ feature
 			end
 		end
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- Representation for this expression
 		do
 			Result := selection.function.representation (sqlgenerator, selection.type, selection.property)
 		end
 
-	sqlselect (sqlgenerator: SQL_GENERATOR; an_extension: XPLAIN_ABSTRACT_EXTENSION): STRING is
+	sqlselect (sqlgenerator: SQL_GENERATOR; an_extension: XPLAIN_ABSTRACT_EXTENSION): STRING
 			-- SQL for the full select statement that emits the data used
 			-- to create extension.
 		do
@@ -147,7 +147,7 @@ feature
 			Result := sqlgenerator.sql_select_for_extension_function (Current, an_extension)
 		end
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- SQL code to create this extension expression;
 			-- Not suitable when using this extension.
 		require else
@@ -156,7 +156,7 @@ feature
 			Result  := sqlgenerator.sql_extension_function (Current)
 		end
 
-	supports_left_outer_join: BOOLEAN is
+	supports_left_outer_join: BOOLEAN
 			-- Does this expression support being written as a left outer
 			-- join instead of a subselect? Left outer joins are faster
 			-- with most optimizers.

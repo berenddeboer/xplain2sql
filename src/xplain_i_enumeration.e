@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -45,7 +45,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (a_first: XPLAIN_I_NODE) is
+	make (a_first: XPLAIN_I_NODE)
 		do
 			make_xplain_domain_restriction (True)
 			first := a_first
@@ -53,7 +53,7 @@ feature {NONE} -- Initialization
 
 feature
 
-	sqldomainconstraint (sqlgenerator: SQL_GENERATOR; a_column_name: STRING): STRING is
+	sqldomainconstraint (sqlgenerator: SQL_GENERATOR; a_column_name: STRING): STRING
 			-- Return SQL search condition something like
 			-- "check value in (1, 2)"
 		do
@@ -62,7 +62,7 @@ feature
 
 feature -- Check restriction against representation
 
-	check_attachment (sqlgenerator: SQL_GENERATOR; a_representation: XPLAIN_REPRESENTATION) is
+	check_attachment (sqlgenerator: SQL_GENERATOR; a_representation: XPLAIN_REPRESENTATION)
 			-- Print warning if restriction is not ok for representation.
 		local
 			i: XPLAIN_I_REPRESENTATION

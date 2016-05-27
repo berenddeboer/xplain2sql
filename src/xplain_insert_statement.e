@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Describes the Xplain insert statement."
 
@@ -24,7 +24,7 @@ create
 
 feature -- Initialization
 
-	make (a_type: XPLAIN_TYPE; an_id: XPLAIN_EXPRESSION; an_assignment_list: XPLAIN_ASSIGNMENT_NODE) is
+	make (a_type: XPLAIN_TYPE; an_id: XPLAIN_EXPRESSION; an_assignment_list: XPLAIN_ASSIGNMENT_NODE)
 		require
 			type_not_void: a_type /= Void
 			assignment_list_not_void: an_assignment_list /= Void
@@ -37,7 +37,7 @@ feature -- Initialization
 
 feature -- Generate output
 
-	write (a_generator: ABSTRACT_GENERATOR) is
+	write (a_generator: ABSTRACT_GENERATOR)
 			-- Write output according to this generator.
 		do
 			a_generator.write_insert (type, id, assignment_list)
@@ -46,7 +46,7 @@ feature -- Generate output
 
 feature --  Warnings
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Is parameter `a_parameter' used by this statement?
 		local
 			node: like assignment_list

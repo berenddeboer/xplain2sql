@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Xplain integer foreign key constraint restriction"
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -26,14 +26,14 @@ create
 
 feature -- initialization
 
-	make is
+	make
 		do
 			make_xplain_domain_restriction (True)
 		end
 
 feature
 
-	sqldomainconstraint (sqlgenerator: SQL_GENERATOR; column_name: STRING): STRING is
+	sqldomainconstraint (sqlgenerator: SQL_GENERATOR; column_name: STRING): STRING
 			-- Table never used in create domain statements
 		do
 				check
@@ -42,7 +42,7 @@ feature
 			Result := Void
 		end
 
-	sqlcolumnconstraint (sqlgenerator: SQL_GENERATOR; column_name: STRING): STRING is
+	sqlcolumnconstraint (sqlgenerator: SQL_GENERATOR; column_name: STRING): STRING
 			-- Constraint used when creating columns
 		do
 				check

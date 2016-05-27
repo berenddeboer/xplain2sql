@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Use for True/False values"
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -28,7 +28,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (a_value: BOOLEAN) is
+	make (a_value: BOOLEAN)
 		do
 			value := a_value
 		ensure
@@ -43,22 +43,22 @@ feature -- Access
 
 feature -- Status
 
-	is_constant: BOOLEAN is True
+	is_constant: BOOLEAN = True
 			-- Is this expression a constant value?
 
-	is_logical_constant: BOOLEAN is True
+	is_logical_constant: BOOLEAN = True
 			-- Is this the True or False constant?
 
-	is_logical_expression: BOOLEAN is True
+	is_logical_expression: BOOLEAN = True
 			-- Is this a logical expression?
 
-	uses_its: BOOLEAN is
+	uses_its: BOOLEAN
 			-- Does expression has an its list somewhere?
 		do
 			Result := False
 		end
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		do
 			Result := False
@@ -67,12 +67,12 @@ feature -- Status
 
 feature -- SQL generation
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 		do
 			Result := sqlgenerator.value_representation_boolean
 		end
 
-	sqlvalue (mygenerator: SQL_GENERATOR): STRING is
+	sqlvalue (mygenerator: SQL_GENERATOR): STRING
 			-- Return string.
 		do
 			if value then

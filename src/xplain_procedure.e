@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Xplain procedure (xplain2sql extension)"
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -34,7 +34,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (a_name: STRING; a_parameters: XPLAIN_ATTRIBUTE_NAME_NODE; a_procedure_kind: INTEGER; a_statements: XPLAIN_STATEMENT_NODE) is
+	make (a_name: STRING; a_parameters: XPLAIN_ATTRIBUTE_NAME_NODE; a_procedure_kind: INTEGER; a_statements: XPLAIN_STATEMENT_NODE)
 			-- Initialize stored procedure.
 		require
 			valid_name: a_name /= Void and then not a_name.is_empty
@@ -83,7 +83,7 @@ feature {NONE} -- Initialization
 
 feature -- Commands
 
-	cleanup_after_write is
+	cleanup_after_write
 			-- When procedure is written, it adds extends as columns to
 			-- types. These extends must be removed. Also values are
 			-- added to the universe, and should be removed as well.
@@ -101,7 +101,7 @@ feature -- Commands
 			end
 		end
 
-	optimize_statements is
+	optimize_statements
 			-- Check what optimiziations can be applied.
 		local
 			cursor: DS_BILINEAR_CURSOR [XPLAIN_STATEMENT]
@@ -117,7 +117,7 @@ feature -- Commands
 			end
 		end
 
-	warn_about_unused_parameters is
+	warn_about_unused_parameters
 			-- Write warning to stderr if any of the parameters are
 			-- declared, but not used.
 		local
@@ -152,7 +152,7 @@ feature -- Commands
 
 feature -- Access
 
-	last_get_statement: XPLAIN_GET_STATEMENT is
+	last_get_statement: XPLAIN_GET_STATEMENT
 			-- Last get statement, if any.
 		local
 			cursor: DS_BILINEAR_CURSOR [XPLAIN_STATEMENT]
@@ -169,7 +169,7 @@ feature -- Access
 			end
 		end
 
-	last_value_selection_statement: XPLAIN_VALUE_SELECTION_STATEMENT is
+	last_value_selection_statement: XPLAIN_VALUE_SELECTION_STATEMENT
 			-- Last value selection statement, if any.
 		local
 			cursor: DS_BILINEAR_CURSOR [XPLAIN_STATEMENT]
@@ -201,7 +201,7 @@ feature -- Access
 			-- Highly recommended when using extend statements in a
 			-- stored procedure.
 
-	returns_rows: BOOLEAN is
+	returns_rows: BOOLEAN
 			-- True if this is a procedure that returns a result set, 0
 			-- or more rows.
 		do
@@ -214,7 +214,7 @@ feature -- Access
 
 feature -- Expression builder support
 
-	create_expression (node: XPLAIN_ATTRIBUTE_NAME_NODE): XPLAIN_EXPRESSION is
+	create_expression (node: XPLAIN_ATTRIBUTE_NAME_NODE): XPLAIN_EXPRESSION
 			-- Return suitable expression for attribute/variable/value/extension.
 		do
 			-- not applicable.
@@ -223,7 +223,7 @@ feature -- Expression builder support
 
 feature -- Names
 
-	sqlname (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlname (sqlgenerator: SQL_GENERATOR): STRING
 			-- Name as known in sql code.
 			-- To be overriden, callback into sqlgenerator.
 		do
@@ -233,7 +233,7 @@ feature -- Names
 
 feature -- SQL output
 
-	sp_function_type (sqlgenerator: SQL_GENERATOR; an_emit_path: BOOLEAN): STRING is
+	sp_function_type (sqlgenerator: SQL_GENERATOR; an_emit_path: BOOLEAN): STRING
 			-- Function type as required by PostgreSQL.
 		require
 			sqlgenerator_not_void: sqlgenerator /= Void
@@ -250,7 +250,7 @@ feature -- SQL output
 			function_type_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	write_drop (sqlgenerator: SQL_GENERATOR) is
+	write_drop (sqlgenerator: SQL_GENERATOR)
 			-- Switch into correct sql drop statement.
 		do
 			sqlgenerator.drop_procedure (Current)

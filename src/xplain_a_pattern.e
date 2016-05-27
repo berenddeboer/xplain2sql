@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -28,7 +28,7 @@ feature
 
 feature  -- Initialization
 	 
-	 make (apattern: STRING) is
+	 make (apattern: STRING)
 			do
          make_xplain_domain_restriction(True)
 				 pattern := apattern
@@ -36,7 +36,7 @@ feature  -- Initialization
 
 feature
 
-   sqldomainconstraint(sqlgenerator: SQL_GENERATOR; column_name: STRING): STRING is
+   sqldomainconstraint(sqlgenerator: SQL_GENERATOR; column_name: STRING): STRING
          -- return SQL search condition something like
          -- "check value like 'abc%'"
       do

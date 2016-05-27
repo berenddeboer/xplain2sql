@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Conversion of expression to a real."
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -27,12 +27,12 @@ create
 
 feature -- Access
 
-	name: STRING is "real"
+	name: STRING = "real"
 
 
 feature -- SQL code
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- The representation of left operand. Maybe should be
 			-- improved to infer better? If you add int and double, should
 			-- return double I think.
@@ -45,13 +45,13 @@ feature -- SQL code
 			Result := sqlgenerator.value_representation_float
 		end
 
-	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING is
+	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING
 			-- Expression which casts `operand' to a string
 		do
 			Result := sqlgenerator.sql_init_cast_to_real (operand)
 		end
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Expression which casts `operand' to a real
 		do
 			Result := sqlgenerator.sql_cast_to_real (operand)

@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Xplain some function"
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -22,22 +22,22 @@ inherit
 
 feature -- Status
 
-	is_some: BOOLEAN is True
+	is_some: BOOLEAN = True
 
-	property_required: INTEGER is 2
+	property_required: INTEGER = 2
 			-- Does function need the presence of a property?
 			-- 0: forbidden; 1: must be presented; 2: don't care either way
 
 
 feature -- Access
 
-	name: STRING is "some"
+	name: STRING = "some"
 			-- Xplain name of function
 
-	needs_coalesce: BOOLEAN is False
+	needs_coalesce: BOOLEAN = False
 			-- it's ok for some to return a Null.
 
-	needs_limit (sqlgenerator: SQL_GENERATOR): BOOLEAN is
+	needs_limit (sqlgenerator: SQL_GENERATOR): BOOLEAN
 			-- Can the function return more than one value, so we need to
 			-- top it off?
 		do
@@ -47,7 +47,7 @@ feature -- Access
 	representation (
 			 sqlgenerator: SQL_GENERATOR;
 			 type: XPLAIN_TYPE;
-			 expression: XPLAIN_EXPRESSION): XPLAIN_REPRESENTATION is
+			 expression: XPLAIN_EXPRESSION): XPLAIN_REPRESENTATION
 			-- The xplain representation for this function
 		do
 			if expression = Void then
@@ -57,7 +57,7 @@ feature -- Access
 			end
 		end
 
-	sqlfunction (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlfunction (sqlgenerator: SQL_GENERATOR): STRING
 			-- The SQL equivalent for for this function
 		do
 			Result := sqlgenerator.sqlfunction_some

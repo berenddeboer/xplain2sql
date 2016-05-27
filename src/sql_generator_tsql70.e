@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -45,7 +45,7 @@ create
 
 feature -- About this generator
 
-	target_name: STRING is
+	target_name: STRING
 			-- Name and version of dialect
 		once
 			Result := "MS SQL Server Transact SQL 7.0"
@@ -54,17 +54,17 @@ feature -- About this generator
 
 feature -- Identifiers
 
-	MaxIdentifierLength: INTEGER is
+	MaxIdentifierLength: INTEGER
 		once
 			Result := 128
 		end
 
-	MaxTemporaryTableNameLength: INTEGER is
+	MaxTemporaryTableNameLength: INTEGER
 		once
 			Result := 116
 		end
 
-	quote_identifier (identifier: STRING): STRING is
+	quote_identifier (identifier: STRING): STRING
 			-- return identifier, surrounded by brackets
 		local
 			s: STRING
@@ -76,9 +76,9 @@ feature -- Identifiers
 
 feature -- Assertions
 
-	CalculatedColumnsSupported: Boolean is True
+	CalculatedColumnsSupported: Boolean = True
 
-	asserted_format_string: STRING is
+	asserted_format_string: STRING
 		once
 			Result := "as $s"
 		end
@@ -86,12 +86,12 @@ feature -- Assertions
 
 feature -- Booleans
 
-	SQLTrue: STRING is
+	SQLTrue: STRING
 		once
 			Result := "cast(1 as bit)"
 		end
 
-	SQLFalse: STRING is
+	SQLFalse: STRING
 		once
 			Result := "cast(0 as bit)"
 		end
@@ -99,7 +99,7 @@ feature -- Booleans
 
 feature -- TransactSQL specific SQL creation statements
 
-	do_create_value_assign (a_value: XPLAIN_VALUE) is
+	do_create_value_assign (a_value: XPLAIN_VALUE)
 			-- Assign a value to `a_value'.
 		do
 			std.output.put_string ("set ")
@@ -113,7 +113,7 @@ feature -- TransactSQL specific SQL creation statements
 
 feature -- drop statements
 
-	drop_table_if_exist (type: XPLAIN_TYPE) is
+	drop_table_if_exist (type: XPLAIN_TYPE)
 			-- TSQL 7 specific drop statement
 		do
 			std.output.put_string ("if exists (select * from sysobjects where id = object_id('dbo.")
@@ -128,12 +128,12 @@ feature -- drop statements
 
 feature -- functions
 
-	sqlfunction_some: STRING is once Result := "top 1" end
+	sqlfunction_some: STRING once Result := "top 1" end
 
 
 feature -- Extension
 
-	sql_expression_as_boolean_value (expression: XPLAIN_EXPRESSION): STRING is
+	sql_expression_as_boolean_value (expression: XPLAIN_EXPRESSION): STRING
 			-- Return SQL code for extension that is a logical
 			-- expression. For SQL dialects that don't support Booleans,
 			-- it might need to map the Boolean result to a 'T' or 'F'
@@ -150,7 +150,7 @@ feature -- Extension
 
 feature -- Return sql code
 
-	sql_select_function_limit_before (selection_list: XPLAIN_SELECTION_FUNCTION): STRING is
+	sql_select_function_limit_before (selection_list: XPLAIN_SELECTION_FUNCTION): STRING
 			-- Code that limits a select to return a single value.
 			-- Returns empty for no output.
 		do
@@ -163,7 +163,7 @@ feature -- Return sql code
 
 feature -- Stored procedure support
 
-	conditional_drop_procedure (name: STRING) is
+	conditional_drop_procedure (name: STRING)
 			-- Drop procedure, but only if it exists, should never
 			-- generate an error or warning.
 		do
@@ -174,7 +174,7 @@ feature -- Stored procedure support
 			end_with_go
 		end
 
-	sp_body_start is
+	sp_body_start
 			-- Begin a procedure body.
 			-- Should leave cursor on a new line.
 			-- For Transact SQL 7 we abort a stored procedure on any
@@ -185,7 +185,7 @@ feature -- Stored procedure support
 			std.output.put_string ("set xact_abort on%N")
 		end
 
-	sp_user_result (procedure: XPLAIN_PROCEDURE) is
+	sp_user_result (procedure: XPLAIN_PROCEDURE)
 			-- Output any stuff before header ends. Result parameter, if
 			-- any has been written.
 		do

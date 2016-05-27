@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 		"Produces PostgreSQL 7.2 output."
@@ -32,7 +32,7 @@ create
 
 feature -- About this generator
 
-	target_name: STRING is
+	target_name: STRING
 			-- Name and version of dialect
 		once
 			Result := "PostgreSQL 7.2"
@@ -41,7 +41,7 @@ feature -- About this generator
 
 feature -- Stored procedure support
 
-	sp_before_end_delete is
+	sp_before_end_delete
 		do
 			std.output.put_string (Tab)
 			std.output.put_string ("return 0")
@@ -49,7 +49,7 @@ feature -- Stored procedure support
 			std.output.put_character ('%N')
 		end
 
-	sp_before_end_update is
+	sp_before_end_update
 			-- Chance to emit something just before `sp_end' is called in
 			-- `create_sp_update'.
 		do
@@ -59,7 +59,7 @@ feature -- Stored procedure support
 			std.output.put_character ('%N')
 		end
 
-	sp_result_parameter (a_procedure: XPLAIN_PROCEDURE) is
+	sp_result_parameter (a_procedure: XPLAIN_PROCEDURE)
 			-- Emit the result parameter of the stored procedure, if
 			-- applicable.
 			-- For example DB/2/Oracle needs to know if rows are returned.
@@ -72,7 +72,7 @@ feature -- Stored procedure support
 			end
 		end
 
-	sp_return_cursor is
+	sp_return_cursor
 			-- Code that returns all rows in a cursor to a client.
 			-- Only one select statement is allowed per procedure.
 		do
@@ -82,7 +82,7 @@ feature -- Stored procedure support
 			std.output.put_string ("return result_cursor")
 		end
 
-	sp_start (a_procedure: XPLAIN_PROCEDURE) is
+	sp_start (a_procedure: XPLAIN_PROCEDURE)
 			-- Write statements to start a procedure, including the
 			-- "create procedure " statement itself (including space).
 		do
@@ -90,7 +90,7 @@ feature -- Stored procedure support
 			std.output.put_string ("create function ")
 		end
 
-	sp_start_cursor is
+	sp_start_cursor
 			-- Code that starts a cursor for a select statement.
 			-- Only one select statement is allowed per procedure.
 		do
@@ -98,13 +98,13 @@ feature -- Stored procedure support
 			CommandSeparator.wipe_out
 		end
 
-	sp_type_name (a_procedure: XPLAIN_PROCEDURE): STRING is
+	sp_type_name (a_procedure: XPLAIN_PROCEDURE): STRING
 			-- Name of type that is result of a function that returns sets.
 		once
 			Result := "refcursor"
 		end
 
-	sp_user_declaration (procedure: XPLAIN_PROCEDURE) is
+	sp_user_declaration (procedure: XPLAIN_PROCEDURE)
 			-- Emit value declarations.
 		do
 			precursor (procedure)
@@ -120,10 +120,10 @@ feature -- Stored procedure support
 
 feature -- Identifiers
 
-	renamed_name: STRING is "name_"
-	renamed_time: STRING is "time_"
+	renamed_name: STRING = "name_"
+	renamed_time: STRING = "time_"
 
-	make_valid_identifier (name: STRING): STRING is
+	make_valid_identifier (name: STRING): STRING
 			-- Rename the PostgreSQL keywords time and name.
 		do
 			Result := precursor (name)

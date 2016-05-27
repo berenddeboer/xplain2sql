@@ -36,12 +36,12 @@ create
 
 feature -- identification
 
-	Version: STRING is "beta-4.1.3"
+	Version: STRING = "beta-4.1.3"
 
 
 feature -- creation
 
-	make is
+	make
 			-- Parse xplain files `arguments (1..argument_count)'.
 		local
 			j, n: INTEGER
@@ -242,8 +242,8 @@ feature -- creation
 				end
 			end
 
-			if sqlgenerator = Void then
-				!SQL_GENERATOR_ANSI!sqlgenerator.make
+			if sqlgenerator = Void then 
+				create {SQL_GENERATOR_ANSI} sqlgenerator.make
 			end
 			sqlgenerator.set_options(
 				AssertEnabled,
@@ -297,7 +297,7 @@ feature -- creation
 
 feature -- help
 
-	show_usage is
+	show_usage
 		do
 			std.error.put_string ("This is xplain2sql, version ")
 			std.error.put_string (Version)

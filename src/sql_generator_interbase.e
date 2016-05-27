@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Base class for InterBase output."
 
@@ -50,11 +50,11 @@ inherit
 
 feature -- SQL Comments
 
-	OneLineCommentPrefix: STRING is once result := Void end
+	OneLineCommentPrefix: STRING once result := Void end
 
 feature -- command separation
 
-	begin_new_separator is
+	begin_new_separator
 		require
 			no_separator_conflict: not equal("^", CommandSeparator)
 		do
@@ -64,7 +64,7 @@ feature -- command separation
 			std.output.put_character ('%N')
 		end
 
-	end_new_separator is
+	end_new_separator
 		do
 			std.output.put_character ('%N')
 			std.output.put_string ("set term ")
@@ -76,7 +76,7 @@ feature -- command separation
 
 feature -- Identifiers
 
-	MaxIdentifierLength: INTEGER is
+	MaxIdentifierLength: INTEGER
 		once
 			Result := 31
 		end
@@ -84,34 +84,34 @@ feature -- Identifiers
 
 feature -- domain options
 
-	DomainNullAllowed: BOOLEAN is once Result := False end
+	DomainNullAllowed: BOOLEAN once Result := False end
 
 
 feature -- table options
 
-	AutoPrimaryKeySupported: BOOLEAN is
+	AutoPrimaryKeySupported: BOOLEAN
 		once
 			Result := True
 		end
 
-	ColumnNullAllowed: BOOLEAN is
+	ColumnNullAllowed: BOOLEAN
 		once
 			Result := False
 		end
 
-	ExpressionsInDefaultClauseSupported: BOOLEAN is False
+	ExpressionsInDefaultClauseSupported: BOOLEAN = False
 			-- Does the SQL dialect support expressions (1 + 1 for
 			-- example) in the default clause?
 
 
 feature -- Strings
 
-	sql_string_combine_separator: STRING is " || "
+	sql_string_combine_separator: STRING = " || "
 
 
 feature -- insert options
 
-	SupportsDefaultValues: BOOLEAN is
+	SupportsDefaultValues: BOOLEAN
 			-- Does the dialect supports the default values clause in an
 			-- insert statement?
 		once
@@ -121,19 +121,19 @@ feature -- insert options
 
 feature -- Stored procedure options
 
-	StoredProcedureParamListStartRequired: BOOLEAN is False
+	StoredProcedureParamListStartRequired: BOOLEAN = False
 			-- True if start of a parameter list like '(' is required. It
 			-- is for DB/2, it isn't for Oracle for example.
 
-	StoredProcedureReturnParamListStart: STRING is "%Nreturns (%N"
+	StoredProcedureReturnParamListStart: STRING = "%Nreturns (%N"
 
 
 feature -- Booleans
 
-	SQLTrue: STRING is "'T'"
-	SQLFalse: STRING is "'F'"
+	SQLTrue: STRING = "'T'"
+	SQLFalse: STRING = "'F'"
 
-	SupportsTrueBoolean: BOOLEAN is
+	SupportsTrueBoolean: BOOLEAN
 		do
 			Result := False
 		end
@@ -141,7 +141,7 @@ feature -- Booleans
 
 feature -- functions
 
-	SQLCoalesce: STRING is
+	SQLCoalesce: STRING
 		once
 			Result := Void
 		end
@@ -149,9 +149,9 @@ feature -- functions
 
 feature -- assertions
 
-	CalculatedColumnsSupported: Boolean is True
+	CalculatedColumnsSupported: Boolean = True
 
-	asserted_format_string: STRING is
+	asserted_format_string: STRING
 		once
 			Result := "computed by ($s)"
 		end
@@ -159,7 +159,7 @@ feature -- assertions
 
 feature -- sql creation
 
-	create_init (type: XPLAIN_TYPE) is
+	create_init (type: XPLAIN_TYPE)
 		local
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE]
 			if_expression: XPLAIN_IF_EXPRESSION
@@ -225,7 +225,7 @@ feature -- sql creation
 			end_new_separator
 		end
 
-	create_primary_key_generator (type: XPLAIN_TYPE) is
+	create_primary_key_generator (type: XPLAIN_TYPE)
 		do
 			std.output.put_character ('%N')
 			std.output.put_string (sql_create_generator)
@@ -279,7 +279,7 @@ feature -- sql creation
 			end_new_separator
 		end
 
-	create_use_database (database: STRING) is
+	create_use_database (database: STRING)
 			-- start using a certain database
 		do
 			std.output.put_string ("connect ")
@@ -291,7 +291,7 @@ feature -- sql creation
 
 feature -- drop statements
 
-	drop_column (tablename, columnname: STRING) is
+	drop_column (tablename, columnname: STRING)
 			-- generate code to drop some column from some table
 			-- used to purge attributes/variable/values
 		do
@@ -303,7 +303,7 @@ feature -- drop statements
 			std.output.put_character ('%N')
 		end
 
-	drop_primary_key_generator (type: XPLAIN_TYPE) is
+	drop_primary_key_generator (type: XPLAIN_TYPE)
 		do
 			std.output.put_string ("delete from rdb$generators%N")
 			std.output.put_string (Tab)
@@ -321,18 +321,18 @@ feature -- drop statements
 
 feature -- type specification for xplain types
 
-	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING is
+	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING
 		do
 			Result := "char(1)"
 		end
 
-	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING is
+	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING
 			-- platform dependent approximate numeric data type
 		do
 			Result := "double precision";
 		end
 
-	datatype_numeric (representation: XPLAIN_R_REPRESENTATION): STRING is
+	datatype_numeric (representation: XPLAIN_R_REPRESENTATION): STRING
 			-- numeric seems to be better, however Delphi doesn't support this
 			-- properly, it seems to convert it to an integer instead of
 			-- float or BCD
@@ -344,24 +344,24 @@ feature -- type specification for xplain types
 			end
 		end
 
-	datatype_money (representation: XPLAIN_M_REPRESENTATION): STRING is
+	datatype_money (representation: XPLAIN_M_REPRESENTATION): STRING
 		do
 			Result := "float"
 		end
 
-	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING is
+	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING
 		do
 			Result := "blob"
 		end
 
-	datatype_text (representation: XPLAIN_T_REPRESENTATION): STRING is
+	datatype_text (representation: XPLAIN_T_REPRESENTATION): STRING
 		do
 			Result := "blob sub_type text"
 		end
 
 feature -- generate constraints definitions
 
-	sqlcheck_boolean (restriction: XPLAIN_B_RESTRICTION; column_name: STRING): STRING is
+	sqlcheck_boolean (restriction: XPLAIN_B_RESTRICTION; column_name: STRING): STRING
 			-- InterBase SQL check condition with Booleans
 		do
 			if restriction.required then
@@ -374,7 +374,7 @@ feature -- generate constraints definitions
 
 feature -- other names generators
 
-	generator_name (type: XPLAIN_TYPE): STRING is
+	generator_name (type: XPLAIN_TYPE): STRING
 		do
 			Result := "gen_" + type.sqlname(Current)
 			if Result.count > MaxIdentifierLength then
@@ -384,7 +384,7 @@ feature -- other names generators
 
 feature -- generate columns either base or type columns
 
-	init_forced_default (an_attribute: XPLAIN_ATTRIBUTE): BOOLEAN is
+	init_forced_default (an_attribute: XPLAIN_ATTRIBUTE): BOOLEAN
 			-- not applicable for InterBase. Has before-insert triggers.
 		do
 			Result := False
@@ -392,12 +392,12 @@ feature -- generate columns either base or type columns
 
 feature -- ansi niladic functions
 
-	sqlsysfunction_current_timestamp: STRING is
+	sqlsysfunction_current_timestamp: STRING
 		once
 			Result := "'now'"
 		end
 
-	sqlsysfunction_system_user: STRING is
+	sqlsysfunction_system_user: STRING
 		once
 			Result := "USER"
 		end
@@ -405,12 +405,12 @@ feature -- ansi niladic functions
 
 feature -- Return sql code
 
-	sql_create_generator: STRING is
+	sql_create_generator: STRING
 		do
 			Result := "create generator"
 		end
 
-	sql_last_auto_generated_primary_key	(type: XPLAIN_TYPE): STRING is
+	sql_last_auto_generated_primary_key	(type: XPLAIN_TYPE): STRING
 			-- Return code to get the last auto-generated primary key for
 			-- `type'. Certain SQL dialects can only return the last
 			-- generated key, so this code is not guaranteed to be `type'
@@ -422,7 +422,7 @@ feature -- Return sql code
 
 feature -- generation of init [default] expressions
 
-	sqlinitvalue_attribute (expression: XPLAIN_ATTRIBUTE_EXPRESSION): STRING is
+	sqlinitvalue_attribute (expression: XPLAIN_ATTRIBUTE_EXPRESSION): STRING
 		do
 			-- try to minimize the need to create singleton selects
 			if expression.first.next = Void then
@@ -437,7 +437,7 @@ feature -- generation of init [default] expressions
 
 feature -- Extension specific methods
 
-	extension_index_name (an_extension: XPLAIN_EXTENSION): STRING is
+	extension_index_name (an_extension: XPLAIN_EXTENSION): STRING
 			-- Name of index on temporary table to speed up join to that table
 		do
 			Result := quote_valid_identifier (once "idx_" + an_extension.type.name + once "_" + an_extension.name)
@@ -446,7 +446,7 @@ feature -- Extension specific methods
 
 feature -- Get a variable/value
 
-	sqlgetvalue_inside_sp (a_value: XPLAIN_VALUE): STRING is
+	sqlgetvalue_inside_sp (a_value: XPLAIN_VALUE): STRING
 			-- SQL expression that returns the value of a value inside a
 			-- stored procedure
 		do
@@ -456,7 +456,7 @@ feature -- Get a variable/value
 
 feature -- Stored procedure names and parameter conventions
 
-	sp_define_param_name (name: STRING): STRING is
+	sp_define_param_name (name: STRING): STRING
 			-- Return `name' formatted as the name of the parameter as it
 			-- appears in the header, and hopefully as it is known to
 			-- clients.
@@ -464,14 +464,14 @@ feature -- Stored procedure names and parameter conventions
 			Result := quote_identifier (name)
 		end
 
-	sp_end is
+	sp_end
 		do
 			is_stored_procedure := False
 			std.output.put_string ("end ^")
 			end_new_separator
 		end
 
-	sp_get_auto_generated_primary_key (type: XPLAIN_TYPE): STRING is
+	sp_get_auto_generated_primary_key (type: XPLAIN_TYPE): STRING
 		do
 			create Result.make (64)
 			Result.wipe_out
@@ -481,13 +481,13 @@ feature -- Stored procedure names and parameter conventions
 			Result.append_string (CommandSeparator)
 		end
 
-	sp_start (a_procedure: XPLAIN_PROCEDURE) is
+	sp_start (a_procedure: XPLAIN_PROCEDURE)
 		do
 			begin_new_separator
 			precursor (a_procedure)
 		end
 
-	sp_use_param (name: STRING): STRING is
+	sp_use_param (name: STRING): STRING
 			-- return stored procedure parameter `name' formatted
 			-- according to the dialects convention when using
 			-- parameters in sql code. It is usually prefixed by '@' or ':'

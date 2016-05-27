@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -32,7 +32,7 @@ feature {NONE} -- Initialization
 		a_selection: XPLAIN_SELECTION_LIST;
 		an_insert_type: XPLAIN_TYPE;
 		an_auto_primary_key: BOOLEAN
-		an_assignment_list: XPLAIN_ATTRIBUTE_NAME_NODE) is
+		an_assignment_list: XPLAIN_ATTRIBUTE_NAME_NODE)
 		require
 			selection_not_void: a_selection /= Void
 			type_not_void: an_insert_type /= Void
@@ -46,7 +46,7 @@ feature {NONE} -- Initialization
 
 feature -- Generate output
 
-	write (a_generator: ABSTRACT_GENERATOR) is
+	write (a_generator: ABSTRACT_GENERATOR)
 			-- Write output according to this generator.
 		do
 			a_generator.write_get_insert (selection, insert_type, auto_primary_key, assignment_list)
@@ -55,7 +55,7 @@ feature -- Generate output
 
 feature --  Warnings
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Is parameter `a_parameter' used by this statement?
 		do
 			Result := selection.uses_parameter (a_parameter)

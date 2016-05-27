@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Xplain abstract object, parent for base, type, value and such"
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -17,7 +17,7 @@ inherit
 
 feature {NONE} -- Initialization
 
-	make (a_name: STRING; a_representation: XPLAIN_REPRESENTATION) is
+	make (a_name: STRING; a_representation: XPLAIN_REPRESENTATION)
 		require
 			valid_name: a_name /= Void and then not a_name.is_empty
 			valid_representation: a_representation /= Void
@@ -29,7 +29,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	hash_code: INTEGER is
+	hash_code: INTEGER
 		do
 			Result := name.hash_code
 		end
@@ -43,7 +43,7 @@ feature -- Access
 
 feature -- Status
 
-	may_be_redefined: BOOLEAN is
+	may_be_redefined: BOOLEAN
 			-- Can an object of this type be redefined?
 			-- Most objects can be defined just once, such as types, but
 			-- values can be given a new definition.
@@ -54,7 +54,7 @@ feature -- Status
 
 feature -- Expression builder support
 
-	create_expression (node: XPLAIN_ATTRIBUTE_NAME_NODE): XPLAIN_EXPRESSION is
+	create_expression (node: XPLAIN_ATTRIBUTE_NAME_NODE): XPLAIN_EXPRESSION
 			-- Suitable expression for attribute/variable/value/extension
 		deferred
 		end
@@ -62,7 +62,7 @@ feature -- Expression builder support
 
 feature -- Names
 
-	sqlname (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlname (sqlgenerator: SQL_GENERATOR): STRING
 			-- Name as known in sql code;
 			-- to be overriden, callback into sqlgenerator.
 		require
@@ -72,7 +72,7 @@ feature -- Names
 			result_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	quoted_name (sqlgenerator: SQL_GENERATOR): STRING is
+	quoted_name (sqlgenerator: SQL_GENERATOR): STRING
 			-- As `sqlname', but quoted (i.e. with double quotes for
 			-- example)
 		require
@@ -86,7 +86,7 @@ feature -- Names
 
 feature -- Drop statement
 
-	write_drop (sqlgenerator: SQL_GENERATOR) is
+	write_drop (sqlgenerator: SQL_GENERATOR)
 			-- switch into correct sql drop statement
 		require
 			sqlgenerator_not_void: sqlgenerator /= Void

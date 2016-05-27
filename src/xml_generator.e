@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Produce an XML description of the executable code."
 
@@ -33,7 +33,7 @@ inherit
 
 feature -- Identifier capabilities
 
-	MaxIdentifierLength: INTEGER is
+	MaxIdentifierLength: INTEGER
 			-- Maximum length of identifiers;
 			-- Not used for XML I believe.
 		do
@@ -43,7 +43,7 @@ feature -- Identifier capabilities
 
 feature -- Main features
 
-	dump_statements (statements: XPLAIN_STATEMENTS; a_sqlgenerator: SQL_GENERATOR) is
+	dump_statements (statements: XPLAIN_STATEMENTS; a_sqlgenerator: SQL_GENERATOR)
 			-- Dump statements in order of occurrence.
 		local
 			file: KL_TEXT_OUTPUT_FILE
@@ -75,7 +75,7 @@ feature -- Main features
 			file.close
 		end
 
-	dump_type (type: XPLAIN_TYPE; a_sqlgenerator: SQL_GENERATOR) is
+	dump_type (type: XPLAIN_TYPE; a_sqlgenerator: SQL_GENERATOR)
 		do
 			-- Not applicable, routine should become obsolete.
 		end
@@ -83,7 +83,7 @@ feature -- Main features
 
 feature -- Write callbacks
 
-	write_constant (constant: XPLAIN_VARIABLE) is
+	write_constant (constant: XPLAIN_VARIABLE)
 			-- Dump every constant that has a value.
 		local
 			value: STRING
@@ -110,13 +110,13 @@ feature -- Write callbacks
 			end
 		end
 
-	write_constant_assignment (constant: XPLAIN_VARIABLE; expression: XPLAIN_EXPRESSION) is
+	write_constant_assignment (constant: XPLAIN_VARIABLE; expression: XPLAIN_EXPRESSION)
 			-- Code for constant assignment.
 		do
 			-- no output
 		end
 
-	write_delete (subject: XPLAIN_SUBJECT; predicate: XPLAIN_EXPRESSION) is
+	write_delete (subject: XPLAIN_SUBJECT; predicate: XPLAIN_EXPRESSION)
 			-- Code for delete statement.
 		do
 			-- no output.
@@ -126,24 +126,24 @@ feature -- Write callbacks
 		a_selection: XPLAIN_SELECTION_LIST
 		an_insert_type: XPLAIN_TYPE
 		an_auto_primary_key: BOOLEAN
-		an_assignment_list: XPLAIN_ATTRIBUTE_NAME_NODE) is
+		an_assignment_list: XPLAIN_ATTRIBUTE_NAME_NODE)
 			-- Get into a table.
 		do
 			-- no output
 		end
 
-	write_extend (extension: XPLAIN_EXTENSION) is
+	write_extend (extension: XPLAIN_EXTENSION)
 			-- Code for extend statement.
 		do
 			-- no output
 		end
 
-	write_insert (type: XPLAIN_TYPE; id: XPLAIN_EXPRESSION; assignment_list: XPLAIN_ASSIGNMENT_NODE) is
+	write_insert (type: XPLAIN_TYPE; id: XPLAIN_EXPRESSION; assignment_list: XPLAIN_ASSIGNMENT_NODE)
 		do
 			-- no output
 		end
 
-	write_procedure (procedure: XPLAIN_PROCEDURE) is
+	write_procedure (procedure: XPLAIN_PROCEDURE)
 			-- Dump stored procedure info.
 		local
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE_NAME]
@@ -203,13 +203,13 @@ feature -- Write callbacks
 			end
 		end
 
-	write_select (selection: XPLAIN_SELECTION) is
+	write_select (selection: XPLAIN_SELECTION)
 			-- Write various select statements.
 		do
 			-- not supported.
 		end
 
-	write_select_function (selection_list: XPLAIN_SELECTION_FUNCTION) is
+	write_select_function (selection_list: XPLAIN_SELECTION_FUNCTION)
 			-- Write get with function.
 		local
 			representation: XPLAIN_REPRESENTATION
@@ -247,7 +247,7 @@ feature -- Write callbacks
 			xml.stop_tag
 		end
 
-	write_select_list (selection_list: XPLAIN_SELECTION_LIST) is
+	write_select_list (selection_list: XPLAIN_SELECTION_LIST)
 			-- Write get with zero or more attributes.
 		local
 			node: XPLAIN_EXPRESSION_NODE
@@ -307,7 +307,7 @@ feature -- Write callbacks
 			xml.stop_tag
 		end
 
-	write_select_value (value: XPLAIN_VALUE) is
+	write_select_value (value: XPLAIN_VALUE)
 			-- Value selection: value v.
 		do
 			xml.start_tag ("select")
@@ -323,13 +323,13 @@ feature -- Write callbacks
 			xml.stop_tag
 		end
 
-	write_sql (sql: STRING) is
+	write_sql (sql: STRING)
 			-- Literal SQL.
 		do
 			-- no output
 		end
 
-	write_type (type: XPLAIN_TYPE) is
+	write_type (type: XPLAIN_TYPE)
 			-- Dump type info.
 		do
 			xml.start_tag ("table")
@@ -352,13 +352,13 @@ feature -- Write callbacks
 	write_update (
 			subject: XPLAIN_SUBJECT;
 			assignment_list: XPLAIN_ASSIGNMENT_NODE;
-			predicate: XPLAIN_EXPRESSION) is
+			predicate: XPLAIN_EXPRESSION)
 			-- Code for update statement.
 		do
 			-- no output.
 		end
 
-	write_value (value: XPLAIN_VALUE) is
+	write_value (value: XPLAIN_VALUE)
 			-- Value definition (includes assignment): value v = 10.
 		do
 			-- no output.
@@ -367,7 +367,7 @@ feature -- Write callbacks
 
 feature {NONE} -- Write helpers
 
-	dump_columns (type: XPLAIN_TYPE) is
+	dump_columns (type: XPLAIN_TYPE)
 			-- Write all columns, attributes and auto-added ones, as a
 			-- series of <column>s
 		local
@@ -439,7 +439,7 @@ feature {NONE} -- Write helpers
 			-- time stamp
 		end
 
-	set_names (xplain_name, xplain_domain, sql_name, sql_type, an_ncname, an_xs_data_type: STRING) is
+	set_names (xplain_name, xplain_domain, sql_name, sql_type, an_ncname, an_xs_data_type: STRING)
 			-- Write the bunch of name attributes.
 			-- `sql_name' should be unquoted.
 		require
@@ -473,7 +473,7 @@ feature {NONE} -- Write helpers
 			end
 		end
 
-	set_sp_name (an_attribute, sp_name: STRING) is
+	set_sp_name (an_attribute, sp_name: STRING)
 			-- Write modification stored procedure attributes. `sp_name'
 			-- is an unquoted name.
 		local
@@ -485,7 +485,7 @@ feature {NONE} -- Write helpers
 			xml.set_attribute (an_attribute + "AsCString", as_c_string (quoted_sp_name))
 		end
 
-	as_c_string (s: STRING): STRING is
+	as_c_string (s: STRING): STRING
 			-- Quote occurrences of " in `s'.
 		require
 			s_not_empty: s /= Void and then not s.is_empty
@@ -493,7 +493,7 @@ feature {NONE} -- Write helpers
 			Result := as_some_string (s, '\')
 		end
 
-	as_eiffel_string (s: STRING): STRING is
+	as_eiffel_string (s: STRING): STRING
 			-- Quote occurrences of " in `s'.
 		require
 			s_not_empty: s /= Void and then not s.is_empty
@@ -501,7 +501,7 @@ feature {NONE} -- Write helpers
 			Result := as_some_string (s, '%%')
 		end
 
-	as_ncname (s: STRING): UC_STRING is
+	as_ncname (s: STRING): UC_STRING
 			-- As `s', but spaces replaced with '-'
 		local
 			p: INTEGER
@@ -526,7 +526,7 @@ feature {NONE} -- Write helpers
 			not_empty: is_ncname (Result)
 		end
 
-	as_some_string (s: STRING; quote: CHARACTER): STRING is
+	as_some_string (s: STRING; quote: CHARACTER): STRING
 			-- Return as a valid string in some language. Reserved
 			-- characters are quoted using `quote'.
 		require
@@ -560,12 +560,12 @@ feature {NONE} -- Write helpers
 
 feature -- Public state
 
-	file_name: STRING is "xplain2sql.xml"
+	file_name: STRING = "xplain2sql.xml"
 
 
 feature {NONE} -- Implementation
 
-	code_common_identifier (name: STRING): STRING is
+	code_common_identifier (name: STRING): STRING
 			-- Identifier that works for most programming languages such
 			-- as Eiffel, Delphi or C.
 		require
@@ -608,82 +608,82 @@ feature {NONE} -- Implementation
 
 feature -- The following is only here to silence the compiler, all this stuff will go
 
-	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING is
+	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING
 		once
 			Result := "BOOLEAN"
 		end
 
-	datatype_char (representation: XPLAIN_C_REPRESENTATION): STRING is
+	datatype_char (representation: XPLAIN_C_REPRESENTATION): STRING
 		once
 			Result := "STRING"
 		end
 
-	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING is
+	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING
 		once
 			Result := "STRING"
 		end
 
-	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING is
+	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING
 			-- platform dependent approximate numeric data type using
 			-- largest size available on that platform
 		once
 			Result := "DOUBLE"
 		end
 
-	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING is
+	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING
 		once
 			Result := "INTEGER"
 		end
 
-	datatype_money (representation: XPLAIN_M_REPRESENTATION): STRING is
+	datatype_money (representation: XPLAIN_M_REPRESENTATION): STRING
 		once
 			Result := "DOUBLE"
 		end
 
-	datatype_numeric (representation: XPLAIN_R_REPRESENTATION): STRING is
+	datatype_numeric (representation: XPLAIN_R_REPRESENTATION): STRING
 			-- exact numeric data type
 		once
 			Result := "DOUBLE"
 		end
 
-	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING is
+	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING
 		once
 			Result := "STRING"
 		end
 
-	datatype_pk_char (representation: XPLAIN_PK_A_REPRESENTATION): STRING is
+	datatype_pk_char (representation: XPLAIN_PK_A_REPRESENTATION): STRING
 		once
 			Result := "STRING"
 		end
 
-	datatype_pk_int (representation: XPLAIN_PK_I_REPRESENTATION): STRING is
+	datatype_pk_int (representation: XPLAIN_PK_I_REPRESENTATION): STRING
 		once
 			Result := "INTEGER"
 		end
 
-	datatype_text (representation: XPLAIN_T_REPRESENTATION): STRING is
+	datatype_text (representation: XPLAIN_T_REPRESENTATION): STRING
 		once
 			Result := "STRING"
 		end
 
-	datatype_varchar (representation: XPLAIN_A_REPRESENTATION): STRING is
+	datatype_varchar (representation: XPLAIN_A_REPRESENTATION): STRING
 		once
 			Result := "STRING"
 		end
 
-	SQLTrue: STRING is
+	SQLTrue: STRING
 			-- Return the value for True.
 		once
 			Result := "True"
 		end
 
-	SQLFalse: STRING is
+	SQLFalse: STRING
 			-- Return the value for False.
 		once
 			Result := "False"
 		end
 
-	as_string (s: STRING): STRING is
+	as_string (s: STRING): STRING
 			-- Return `s' as string by surrounding it with
 			-- quotes. Special characters in string should be properly
 			-- quoted.
@@ -691,19 +691,19 @@ feature -- The following is only here to silence the compiler, all this stuff wi
 			Result := s
 		end
 
-	sqlgetconstant (variable: XPLAIN_VARIABLE): STRING is
+	sqlgetconstant (variable: XPLAIN_VARIABLE): STRING
 			-- Return contents of a variable.
 		do
 			Result := no_space_identifier (variable.name)
 		end
 
-	get_column_value (column_name: STRING): STRING is
+	get_column_value (column_name: STRING): STRING
 			-- get value for a certain column
 		do
 			Result := "rs.Fields['" + column_name + "'].Value"
 		end
 
-	get_column_value_string (column_name: STRING): STRING is
+	get_column_value_string (column_name: STRING): STRING
 			-- get value for a certain column if it is a string
 		do
 			Result := "VarToStr(rs.Fields['" + column_name + "'].Value)"

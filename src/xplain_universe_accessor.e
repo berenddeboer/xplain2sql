@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Singleton accessor class that returns the Xplain universe."
 	thanks: "Thanks to Design Patterns and Contracts."
@@ -14,7 +14,7 @@ class
 
 feature {NONE} -- Implementation
 
-	universe: XPLAIN_UNIVERSE is
+	universe: XPLAIN_UNIVERSE
 			-- Access to the unique instance.
 		once
 			create Result.make
@@ -22,7 +22,7 @@ feature {NONE} -- Implementation
 			result_not_void: Result /= Void
 		end
 
-	is_universe_real_singleton: BOOLEAN is
+	is_universe_real_singleton: BOOLEAN
 			-- Do multiple calls to `universe' return the same result?
 		do
 			Result := universe = universe

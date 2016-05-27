@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -25,7 +25,7 @@ create {XPLAIN_SCANNER}
 
 feature {NONE} -- Initialization
 
-	make_file, make_include (a_input_buffer: YY_BUFFER; a_filename: STRING) is
+	make_file, make_include (a_input_buffer: YY_BUFFER; a_filename: STRING)
 			-- state based on file reading
 		require
 			valid_buffer: a_input_buffer /= Void
@@ -35,7 +35,7 @@ feature {NONE} -- Initialization
 			set_directory
 		end
 
-	make_stdin (a_input_buffer: YY_BUFFER) is
+	make_stdin (a_input_buffer: YY_BUFFER)
 			-- state based on stdin reading
 		require
 			valid_buffer: a_input_buffer /= Void
@@ -43,7 +43,7 @@ feature {NONE} -- Initialization
 			do_make (a_input_buffer)
 		end
 
-	make_use (a_input_buffer: YY_BUFFER; a_filename: STRING) is
+	make_use (a_input_buffer: YY_BUFFER; a_filename: STRING)
 			-- state based on .use file reading
 		require
 			valid_buffer: a_input_buffer /= Void
@@ -61,7 +61,7 @@ feature {NONE} -- Initialization
 
 feature {NONE} -- initialization
 
-	do_make (a_input_buffer: YY_BUFFER) is
+	do_make (a_input_buffer: YY_BUFFER)
 		require
 			valid_buffer: a_input_buffer /= Void
 		do
@@ -82,7 +82,7 @@ feature -- state
 
 feature {NONE} -- directory
 
-	set_directory is
+	set_directory
 			-- extract the directory part from `filename' and set `directory'
 		require
 			need_filename: filename /= Void and then not filename.is_empty

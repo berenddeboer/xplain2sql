@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Use for = with a string literal that has wild card characters. Perhaps I will introduce a real like operator as well."
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -32,7 +32,7 @@ feature {NONE} -- Initialization
 
 	make (
 			a_left: XPLAIN_EXPRESSION;
-			a_right: XPLAIN_EXPRESSION) is
+			a_right: XPLAIN_EXPRESSION)
 		require
 			valid_left: a_left /= Void
 			valid_right: a_right /= Void
@@ -44,13 +44,13 @@ feature {NONE} -- Initialization
 
 feature -- SQL code
 
-	sqloperator: STRING is
+	sqloperator: STRING
 			-- The SQL translation for `operator'
 		once
 			Result := "like"
 		end
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Value as SQL expression
 		local
 			left_value,
@@ -71,7 +71,7 @@ feature -- SQL code
 
 feature {NONE} -- Once strings
 
-	xplain_operator: STRING is
+	xplain_operator: STRING
 			-- The Xplain operator itself.
 		once
 			Result := "="

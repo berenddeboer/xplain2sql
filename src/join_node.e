@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Xplain linked list of joins"
 

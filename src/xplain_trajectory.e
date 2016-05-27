@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -37,7 +37,7 @@ create
 
 feature {NONE} -- Initialisation
 
-	make (a_min, a_max: STRING) is
+	make (a_min, a_max: STRING)
 		require
 			min_not_empty: a_min /= Void and then not a_min.is_empty
 			max_not_empty: a_max /= Void and then not a_max.is_empty
@@ -56,14 +56,14 @@ feature
 
 feature -- SQL code
 
-	sqldomainconstraint (sqlgenerator: SQL_GENERATOR; column_name: STRING): STRING is
+	sqldomainconstraint (sqlgenerator: SQL_GENERATOR; column_name: STRING): STRING
 		do
 			result := sqlgenerator.sqlcheck_between(Current, column_name)
 		end
 
 feature -- Check restriction against representation
 
-	check_attachment (sqlgenerator: SQL_GENERATOR; representation: XPLAIN_REPRESENTATION) is
+	check_attachment (sqlgenerator: SQL_GENERATOR; representation: XPLAIN_REPRESENTATION)
 			-- Print warning if a value in enumeration does not fit in
 			-- max base type length.
 		local

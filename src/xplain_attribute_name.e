@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -41,7 +41,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (a_role, a_name: STRING) is
+	make (a_role, a_name: STRING)
 			-- Make with name, attribute not yet known. Don't forget to
 			-- call `set_attribute' later.
 		require
@@ -52,7 +52,7 @@ feature {NONE} -- Initialization
 			name := a_name
 		end
 
-	make_from_attribute (an_attribute: XPLAIN_ATTRIBUTE) is
+	make_from_attribute (an_attribute: XPLAIN_ATTRIBUTE)
 			-- Make with given `an_attribute'.
 		require
 			attribute_not_void: an_attribute /= Void
@@ -72,7 +72,7 @@ feature -- Access
 
 	name: STRING
 
-	full_name: STRING is
+	full_name: STRING
 			-- `role'_`name'
 		do
 			if role = Void then
@@ -87,7 +87,7 @@ feature -- Access
 
 feature -- Change
 
-	set_role (a_role: STRING) is
+	set_role (a_role: STRING)
 		do
 			role := a_role
 		ensure
@@ -97,7 +97,7 @@ feature -- Change
 
 feature -- Equality
 
-	is_equal (other: like Current): BOOLEAN is
+	is_equal (other: like Current): BOOLEAN
 		do
 			Result :=
 				STRING_.same_string (other.name, name) and then
@@ -116,7 +116,7 @@ feature -- Type info
 			-- statement. In that case the attribute is not yet known,
 			-- because the type has not been created.
 
-	set_attribute (an_attribute: XPLAIN_ATTRIBUTE) is
+	set_attribute (an_attribute: XPLAIN_ATTRIBUTE)
 			-- Set `attribute' and `object' for cases where the actual
 			-- attribute of the type is known.
 		require
@@ -130,7 +130,7 @@ feature -- Type info
 			object_set: object = an_attribute.abstracttype
 		end
 
-	set_object (a_object: XPLAIN_ABSTRACT_OBJECT) is
+	set_object (a_object: XPLAIN_ABSTRACT_OBJECT)
 			-- Augment tree with type info.
 		require
 			valid_object: a_object /= Void
@@ -143,24 +143,24 @@ feature -- Type info
 
 feature -- Be more specific about type of attribute
 
-	abstracttype: XPLAIN_ABSTRACT_TYPE is
+	abstracttype: XPLAIN_ABSTRACT_TYPE
 		do
 			Result ?= object
 		ensure
 			valid_base_or_type_or_extension: Result /= Void
 		end
 
-	abstractextension_if_known: XPLAIN_ABSTRACT_EXTENSION is
+	abstractextension_if_known: XPLAIN_ABSTRACT_EXTENSION
 		do
 			Result ?= object
 		end
 
-	abstracttype_if_known: XPLAIN_ABSTRACT_TYPE is
+	abstracttype_if_known: XPLAIN_ABSTRACT_TYPE
 		do
 			Result ?= object
 		end
 
-	type: XPLAIN_TYPE is
+	type: XPLAIN_TYPE
 			-- `object' cast as Xplain type;
 			-- `object' must denote a type.
 		do
@@ -169,14 +169,14 @@ feature -- Be more specific about type of attribute
 			valid_type: Result /= Void
 		end
 
-	value: XPLAIN_VALUE is
+	value: XPLAIN_VALUE
 		do
 			Result ?= object
 		ensure
 			valid_value: Result /= Void
 		end
 
-	variable: XPLAIN_VARIABLE is
+	variable: XPLAIN_VARIABLE
 		do
 			Result ?= object
 		ensure
@@ -186,7 +186,7 @@ feature -- Be more specific about type of attribute
 
 feature -- for sql conversion
 
-	sqlcolumnidentifier (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlcolumnidentifier (sqlgenerator: SQL_GENERATOR): STRING
 			-- Name of column, type info must be available.
 		require
 			type_info_available: object /= Void
@@ -194,7 +194,7 @@ feature -- for sql conversion
 			Result := abstracttype.sqlcolumnidentifier (sqlgenerator, role)
 		end
 
-	quoted_name	(sqlgenerator: SQL_GENERATOR): STRING is
+	quoted_name	(sqlgenerator: SQL_GENERATOR): STRING
 			-- Return sqlcolumnidentifier, but quoted.
 		require
 			type_info_available: object /= Void
@@ -202,7 +202,7 @@ feature -- for sql conversion
 			Result := sqlgenerator.quote_identifier (sqlcolumnidentifier (sqlgenerator))
 		end
 
-	q_sql_select_name (sqlgenerator: SQL_GENERATOR): STRING is
+	q_sql_select_name (sqlgenerator: SQL_GENERATOR): STRING
 			-- Name to be used in select or order by statement. Should
 			-- replace usage of `sqlcolumnidentifier'.
 		require

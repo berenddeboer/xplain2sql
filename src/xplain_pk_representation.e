@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -24,7 +24,7 @@ inherit
 
 feature -- Status
 
-	is_integer: BOOLEAN is
+	is_integer: BOOLEAN
 			-- Is this primary key based on integers?
 		deferred
 		end
@@ -32,14 +32,14 @@ feature -- Status
 
 feature -- Access
 
-	length: INTEGER is
+	length: INTEGER
 			-- Max length of representation
 		deferred
 		ensure
 			length_positive: length > 0
 		end
 
-	pkdatatype (mygenerator: ABSTRACT_GENERATOR): STRING is
+	pkdatatype (mygenerator: ABSTRACT_GENERATOR): STRING
 			-- if SQL generator, return complete sql definition for primary key
 			-- should include data type, not null and primary key
 			-- constraints

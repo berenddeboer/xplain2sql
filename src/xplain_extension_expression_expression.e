@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Extension definition that is an expression, not a function"
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -36,7 +36,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (an_expression: XPLAIN_EXPRESSION) is
+	make (an_expression: XPLAIN_EXPRESSION)
 		require
 			valid_expression: an_expression /= Void
 		do
@@ -50,28 +50,28 @@ feature -- Access
 
 feature -- Status
 
-	is_literal: BOOLEAN is
+	is_literal: BOOLEAN
 		do
 			Result := expression.is_literal
 		end
 
-	is_logical_expression: BOOLEAN is
+	is_logical_expression: BOOLEAN
 			-- Is this a logical expression?
 		do
 			Result := expression.is_logical_expression
 		end
 
-	is_update_optimization_supported: BOOLEAN is True
+	is_update_optimization_supported: BOOLEAN = True
 			-- Is this an extension that will benefit from optimized
 			-- output in case it is not used in updates?
 
-	uses_its: BOOLEAN is
+	uses_its: BOOLEAN
 			-- Does expression has an its list somewhere?
 		do
 			Result := expression.uses_its
 		end
 
-	uses_non_data_attributes: BOOLEAN is
+	uses_non_data_attributes: BOOLEAN
 			-- Does this extension expression use attributes of its owner
 			-- that are other assertions or does it use an its list?
 		do
@@ -80,7 +80,7 @@ feature -- Status
 			Result := False
 		end
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		do
 			Result := expression.uses_parameter (a_parameter)
@@ -90,33 +90,33 @@ feature -- Status
 
 feature -- SQL generation
 
-	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST) is
+	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST)
 			-- Possibility of expression to add something to join part of
 			-- a select statement.
 		do
 			expression.add_to_join (sqlgenerator, join_list)
 		end
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- Return correct representation for this expression.
 		do
 			Result := expression.representation (sqlgenerator)
 		end
 
-	sqlselect (sqlgenerator: SQL_GENERATOR; an_extension: XPLAIN_ABSTRACT_EXTENSION): STRING is
+	sqlselect (sqlgenerator: SQL_GENERATOR; an_extension: XPLAIN_ABSTRACT_EXTENSION): STRING
 			-- SQL for the full select statement that emits the data used
 			-- to create extension.
 		do
 			Result := sqlgenerator.sql_select_for_extension_expression (Current)
 		end
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- The extension expression converted to SQL
 		do
 			Result := expression.sqlvalue (sqlgenerator)
 		end
 
-	outer_sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	outer_sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Return expression in generator syntax.
 			-- Same as `sqlvalue' but it may expect that it is not
 			-- wrapped in another expression. So it may want to add

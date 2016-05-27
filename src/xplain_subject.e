@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "typename [ identification ]"
 
@@ -21,7 +21,7 @@ feature {NONE} -- Initialization
 
 	make (
 			a_type: XPLAIN_TYPE;
-			an_identification: XPLAIN_EXPRESSION) is
+			an_identification: XPLAIN_EXPRESSION)
 			-- Initialize subject.
 		require
 			type_not_void: a_type /= Void

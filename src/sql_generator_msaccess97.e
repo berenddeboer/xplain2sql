@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Produces Microsoft Access '97 SQL output"
 
@@ -26,7 +26,7 @@ create
 
 feature -- About this generator
 
-	target_name: STRING is
+	target_name: STRING
 			-- Name and version of dialect
 		once
 			Result := "Microsoft Access '97"
@@ -34,17 +34,17 @@ feature -- About this generator
 
 feature -- Table options
 
-	AutoPrimaryKeyConstraint: STRING is
+	AutoPrimaryKeyConstraint: STRING
 		once
 			Result := "counter not null"
 		end
 
-	UniqueConstraintSupported: BOOLEAN is
+	UniqueConstraintSupported: BOOLEAN
 		once
 			Result := False
 		end
 
-	InlineUniqueConstraintSupported: BOOLEAN is
+	InlineUniqueConstraintSupported: BOOLEAN
 		once
 			Result := False
 		end

@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 		"Produces mySQL 3.22 output. Maybe lower versions are supported also"
@@ -32,7 +32,7 @@ create
 
 feature -- About this generator
 
-	target_name: STRING is
+	target_name: STRING
 			-- Name and version of dialect
 		once
 			Result := "mySQL 3.22"
@@ -41,7 +41,7 @@ feature -- About this generator
 
 feature -- table options
 
-	AutoPrimaryKeyConstraint: STRING is
+	AutoPrimaryKeyConstraint: STRING
 		once
 			Result := "auto_increment " + PrimaryKeyConstraint
 		end

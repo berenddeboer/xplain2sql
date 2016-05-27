@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -27,7 +27,7 @@ inherit
 
 feature -- init [default] options
 
-	ChecksNullAfterTrigger: BOOLEAN is
+	ChecksNullAfterTrigger: BOOLEAN
 			-- Does this dialect check for nulls in columns after a
 			-- trigger has been fired?
 		once
@@ -39,7 +39,7 @@ feature -- init [default] options
 
 feature -- write
 
-	write_init (type: XPLAIN_TYPE) is
+	write_init (type: XPLAIN_TYPE)
 		do
 			if init_necessary (type) then
 				create_init (type)
@@ -49,7 +49,7 @@ feature -- write
 
 feature -- create
 
-	create_init (type: XPLAIN_TYPE) is
+	create_init (type: XPLAIN_TYPE)
 			-- Generate sql code to give attributes of type a default value.
 		require
 			valid_type: type /= Void
@@ -60,7 +60,7 @@ feature -- create
 
 feature -- generation of init [default] expressions
 
-	init_forced_default (an_attribute: XPLAIN_ATTRIBUTE): BOOLEAN is
+	init_forced_default (an_attribute: XPLAIN_ATTRIBUTE): BOOLEAN
 			-- Does this attribute have an init that has to be converted
 			-- to a after-insert style trigger?
 			-- In that case the column should either be optional or there
@@ -75,7 +75,7 @@ feature -- generation of init [default] expressions
 				(not ExpressionsInDefaultClauseSupported or else not an_attribute.init.is_literal)
 		end
 
-	init_forced_null (an_attribute: XPLAIN_ATTRIBUTE): BOOLEAN is
+	init_forced_null (an_attribute: XPLAIN_ATTRIBUTE): BOOLEAN
 			-- Does this attribute have a init default that has to be
 			-- converted to a after-insert style trigger?
 			-- To be able to distinguish if a user has supplied a value,
@@ -93,7 +93,7 @@ feature -- generation of init [default] expressions
 				(not ExpressionsInDefaultClauseSupported or else not an_attribute.init.is_literal)
 		end
 
-	sql_init_expression (an_attribute: XPLAIN_ATTRIBUTE): STRING is
+	sql_init_expression (an_attribute: XPLAIN_ATTRIBUTE): STRING
 			-- SQL code that initialises a single column and takes care
 			-- if the init is a default or not
 		require
@@ -117,7 +117,7 @@ feature -- generation of init [default] expressions
 			result_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sql_init_infix_expression (a_left: XPLAIN_EXPRESSION; an_operator: STRING; a_right: XPLAIN_EXPRESSION): STRING is
+	sql_init_infix_expression (a_left: XPLAIN_EXPRESSION; an_operator: STRING; a_right: XPLAIN_EXPRESSION): STRING
 			-- SQL expression for multiplication/division, etc when used
 			-- in an init expression. Most SQL dialects want to see
 			-- special code when referencing attributes for example,
@@ -146,7 +146,7 @@ sql_operator: STRING
 			sql_infix_expression_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sqlinitvalue_attribute (expression: XPLAIN_ATTRIBUTE_EXPRESSION): STRING is
+	sqlinitvalue_attribute (expression: XPLAIN_ATTRIBUTE_EXPRESSION): STRING
 			-- SQL to select the new value of attribute (singleton
 			-- select); Most dialects treat selecting columns of a just
 			-- inserted row specially, they want to see it prefixed by
@@ -204,7 +204,7 @@ sql_operator: STRING
 			result_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sqlinitvalue_if (expression: XPLAIN_IF_EXPRESSION): STRING is
+	sqlinitvalue_if (expression: XPLAIN_IF_EXPRESSION): STRING
 			-- SQL code to emit if expression is an if-then-else statement.
 		do
 			Result := "case when " + expression.condition.sqlinitvalue (Current) + " then " + expression.then_specification.sqlinitvalue (Current) + " else " + expression.else_specification.sqlinitvalue (Current) + " end"
@@ -212,7 +212,7 @@ sql_operator: STRING
 			not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sql_init_combine_expression (a_list: XPLAIN_EXPRESSION_NODE): STRING is
+	sql_init_combine_expression (a_list: XPLAIN_EXPRESSION_NODE): STRING
 			-- SQL expression to combine strings in an init expression
 		require
 			list_not_empty: a_list /= Void
@@ -237,7 +237,7 @@ sql_operator: STRING
 			sql_combine_expression_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	new_row_prefix: STRING is
+	new_row_prefix: STRING
 			-- Prefix to access new rows in a trigger
 		once
 			Result := "new."
@@ -246,7 +246,7 @@ sql_operator: STRING
 
 feature -- Cast expressions
 
-	sql_init_cast_to_date (an_expression: XPLAIN_EXPRESSION): STRING is
+	sql_init_cast_to_date (an_expression: XPLAIN_EXPRESSION): STRING
 			-- SQL expression to cast `an_expression' to a date
 		do
 			Result := do_sql_cast_to_date (an_expression.sqlinitvalue (Current))
@@ -254,7 +254,7 @@ feature -- Cast expressions
 			cast_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sql_init_cast_to_integer (an_expression: XPLAIN_EXPRESSION): STRING is
+	sql_init_cast_to_integer (an_expression: XPLAIN_EXPRESSION): STRING
 			-- SQL expression to cast `an_expression' to an integer
 		do
 			Result := do_sql_cast_to_integer (an_expression.sqlinitvalue (Current))
@@ -262,7 +262,7 @@ feature -- Cast expressions
 			cast_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sql_init_cast_to_real (an_expression: XPLAIN_EXPRESSION): STRING is
+	sql_init_cast_to_real (an_expression: XPLAIN_EXPRESSION): STRING
 			-- SQL expression to cast `an_expression' to a real
 		do
 			Result := do_sql_cast_to_real (an_expression.sqlinitvalue (Current))
@@ -270,7 +270,7 @@ feature -- Cast expressions
 			cast_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sql_init_cast_to_string (an_expression: XPLAIN_EXPRESSION): STRING is
+	sql_init_cast_to_string (an_expression: XPLAIN_EXPRESSION): STRING
 			-- SQL expression to cast `an_expression' to a string
 		do
 			Result := do_sql_cast_to_string (an_expression.sqlinitvalue (Current))
@@ -281,7 +281,7 @@ feature -- Cast expressions
 
 feature -- generate columns either base or type columns
 
-	sqlcolumnrequired_base (an_attribute: XPLAIN_ATTRIBUTE): STRING is
+	sqlcolumnrequired_base (an_attribute: XPLAIN_ATTRIBUTE): STRING
 			-- Produce null or not null status of a column that is a base
 		do
 			if init_forced_null (an_attribute) then
@@ -291,7 +291,7 @@ feature -- generate columns either base or type columns
 			end
 		end
 
-	sqlcolumnrequired_type (an_attribute: XPLAIN_ATTRIBUTE): STRING is
+	sqlcolumnrequired_type (an_attribute: XPLAIN_ATTRIBUTE): STRING
 			-- Produce null or not null status of a column that refers to a type
 		do
 			if init_forced_null (an_attribute) then

@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Xplain base type"
 
@@ -21,7 +21,7 @@ create
 
 feature -- to be overriden, callback into sqlgenerator
 
-	sqlname (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlname (sqlgenerator: SQL_GENERATOR): STRING
 			-- name as known in sql code
 		do
 			Result := sqlgenerator.domain_identifier (Current)
@@ -30,7 +30,7 @@ feature -- to be overriden, callback into sqlgenerator
 
 feature
 
-	write_drop (sqlgenerator: SQL_GENERATOR) is
+	write_drop (sqlgenerator: SQL_GENERATOR)
 		do
 			sqlgenerator.drop_domain (Current)
 		end
@@ -38,7 +38,7 @@ feature
 
 feature
 
-	columndatatype (mygenerator: ABSTRACT_GENERATOR): STRING is
+	columndatatype (mygenerator: ABSTRACT_GENERATOR): STRING
 		do
 			Result := mygenerator.columndatatype_base (Current)
 		end
@@ -46,19 +46,19 @@ feature
 
 feature -- implementation of deferred routines
 
-	sqlcolumnidentifier (sqlgenerator: SQL_GENERATOR; role: STRING): STRING is
+	sqlcolumnidentifier (sqlgenerator: SQL_GENERATOR; role: STRING): STRING
 			-- name of base/type when used as a column in a create table
 			-- or select statement
 		do
 			Result := sqlgenerator.sqlcolumnidentifier_base (Current, role)
 		end
 
-	sqlcolumndefault (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING is
+	sqlcolumndefault (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING
 		do
 			Result := sqlgenerator.sqlcolumndefault_base (an_attribute)
 		end
 
-	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING is
+	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING
 		do
 			Result := sqlgenerator.sqlcolumnrequired_base (an_attribute)
 		end

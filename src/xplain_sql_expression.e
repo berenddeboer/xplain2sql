@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -28,7 +28,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (an_sql: STRING) is
+	make (an_sql: STRING)
 		require
 			sql_not_void: an_sql /= Void
 		do
@@ -44,14 +44,14 @@ feature -- Access
 
 feature -- Status
 
-	uses_its: BOOLEAN is
+	uses_its: BOOLEAN
 			-- Does expression has an its list somewhere?
 		do
 			-- Might, we have no clue
 			Result := True
 		end
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		do
 			-- Might, we have no clue
@@ -61,7 +61,7 @@ feature -- Status
 
 feature -- SQL code
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 		do
 			if value.count = 0 then
 				Result := sqlgenerator.value_representation_char (1)
@@ -70,7 +70,7 @@ feature -- SQL code
 			end
 		end
 
-	sqlvalue (mygenerator: SQL_GENERATOR): STRING is
+	sqlvalue (mygenerator: SQL_GENERATOR): STRING
 			-- Just `value'.
 		do
 			Result := value

@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Value of a value being used in an expression"
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -27,7 +27,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (a_value: XPLAIN_VALUE) is
+	make (a_value: XPLAIN_VALUE)
 		require
 			valid_value: a_value /= Void
 		do
@@ -43,18 +43,18 @@ feature -- Access
 
 feature -- Status
 
-	is_literal: BOOLEAN is
+	is_literal: BOOLEAN
 		do
 			Result := value.expression.is_literal
 		end
 
-	uses_its: BOOLEAN is
+	uses_its: BOOLEAN
 			-- Does expression has an its list somewhere?
 		do
 			Result := value.expression.uses_its
 		end
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		do
 			Result := value.expression.uses_parameter (a_parameter)
@@ -63,7 +63,7 @@ feature -- Status
 
 feature -- SQL specifics
 
-	column_name: STRING is
+	column_name: STRING
 			-- The Xplain based column heading name, if any. It is used
 			-- by PostgreSQL output to create the proper function type
 			-- for example. The XML_GENERATOR uses it to give clients
@@ -72,14 +72,14 @@ feature -- SQL specifics
 			Result := value.name
 		end
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- Return correct representation for this expression.
 			-- Used to generate representations for value and extend statements.
 		do
 			Result := value.representation
 		end
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- SQL to return the contents of a value
 		do
 			Result := sqlgenerator.sqlgetvalue (value)

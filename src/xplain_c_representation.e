@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -32,7 +32,7 @@ create
 
 feature  -- Initialization
 
-	make (alength: INTEGER) is
+	make (alength: INTEGER)
 		require
 			length_positive: alength > 0
 		do
@@ -42,7 +42,7 @@ feature  -- Initialization
 
 feature  -- public
 
-	domain: STRING is
+	domain: STRING
 			-- Give Xplain domain as string.
 		local
 			len: STRING
@@ -58,7 +58,7 @@ feature  -- public
 	length: INTEGER
 			-- Maximum length of characters.
 
-	xml_schema_data_type: STRING is
+	xml_schema_data_type: STRING
 			-- Best matching XML schema data type
 		do
 			Result := "string"
@@ -67,7 +67,7 @@ feature  -- public
 
 feature
 
-	value_representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	value_representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 		do
 			Result := sqlgenerator.value_representation_char (length)
 		end
@@ -75,13 +75,13 @@ feature
 
 feature  -- required implementations
 
-	datatype (mygenerator: ABSTRACT_GENERATOR): STRING is
+	datatype (mygenerator: ABSTRACT_GENERATOR): STRING
 			-- SQL data type
 		do
 			result := mygenerator.datatype_char (Current)
 		end
 
-	default_value: STRING is
+	default_value: STRING
 			-- A default value to be used when a complex init is used and
 			-- the column is not null and needs some value because the
 			-- SQL dialect does not have the necessary before-insert
@@ -90,14 +90,14 @@ feature  -- required implementations
 			Result := "''"
 		end
 
-	max_value (sqlgenerator: SQL_GENERATOR): STRING is
+	max_value (sqlgenerator: SQL_GENERATOR): STRING
 			-- Maximum value that fits in this representation
 		do
 			std.error.put_string ("A (C) base doesn't have a maximum value.%N")
 			Result := "not applicable"
 		end
 
-	min_value (sqlgenerator: SQL_GENERATOR): STRING is
+	min_value (sqlgenerator: SQL_GENERATOR): STRING
 			-- Minimum value that fits in this representation
 		do
 			std.error.put_string ("A (C) base doesn't have a minimum value.%N")
@@ -107,7 +107,7 @@ feature  -- required implementations
 
 feature -- middleware specific routines
 
-	mw_column_value (mygenerator: MIDDLEWARE_GENERATOR; column_name: STRING): STRING is
+	mw_column_value (mygenerator: MIDDLEWARE_GENERATOR; column_name: STRING): STRING
 			-- return piece of code to get contents
 			-- getting values is usually type specific,
 			-- not column_name specific

@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -27,7 +27,7 @@ create
 
 feature -- Initialization
 
-	make is
+	make
 		do
 			create objects.make (1024)
 		end
@@ -41,7 +41,7 @@ feature -- Access
 
 feature -- Commands
 
-	add (object: XPLAIN_ABSTRACT_OBJECT) is
+	add (object: XPLAIN_ABSTRACT_OBJECT)
 			-- Add new object to the universe.
 		require
 			object_not_void: object /= Void
@@ -57,7 +57,7 @@ feature -- Commands
 			object_added: has (object.name)
 		end
 
-	delete (object: XPLAIN_ABSTRACT_OBJECT) is
+	delete (object: XPLAIN_ABSTRACT_OBJECT)
 			-- Remove `object' from the universe.
 		require
 			object_not_void: object /= Void
@@ -76,7 +76,7 @@ feature -- Commands
 
 feature -- Access
 
-	has (object_name: STRING): BOOLEAN is
+	has (object_name: STRING): BOOLEAN
 			-- Does an object with name `object_name' exists in the universe?
 		require
 			object_name_not_empty: object_name /= Void and then not object_name.is_empty
@@ -87,7 +87,7 @@ feature -- Access
 
 feature -- find objects or types
 
-	find_object (name: STRING): XPLAIN_ABSTRACT_OBJECT is
+	find_object (name: STRING): XPLAIN_ABSTRACT_OBJECT
 			-- Return object if found. Uses `objects'.`search'.
 		do
 			objects.search (name)
@@ -98,27 +98,27 @@ feature -- find objects or types
 			found_item_set: Result /= Void implies objects.found
 		end
 
-	find_base_or_type (name: STRING): XPLAIN_ABSTRACT_TYPE is
+	find_base_or_type (name: STRING): XPLAIN_ABSTRACT_TYPE
 		do
 			result ?= find_object (name)
 		end
 
-	find_base (name: STRING): XPLAIN_BASE is
+	find_base (name: STRING): XPLAIN_BASE
 		do
 			result ?= find_object (name)
 		end
 
-	find_type (name: STRING): XPLAIN_TYPE is
+	find_type (name: STRING): XPLAIN_TYPE
 		do
 			result ?= find_object (name)
 		end
 
-	find_value (name: STRING): XPLAIN_VALUE is
+	find_value (name: STRING): XPLAIN_VALUE
 		do
 			result ?= find_object (name)
 		end
 
-	find_variable (name: STRING): XPLAIN_VARIABLE is
+	find_variable (name: STRING): XPLAIN_VARIABLE
 		do
 			result ?= find_object (name)
 		end
@@ -126,7 +126,7 @@ feature -- find objects or types
 
 feature {NONE} -- Singleton part
 
-	frozen singleton_memory: XPLAIN_UNIVERSE is
+	frozen singleton_memory: XPLAIN_UNIVERSE
 		once
 			Result := Current
 		end

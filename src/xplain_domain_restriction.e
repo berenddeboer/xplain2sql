@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Xplain domain restriction abstraction"
 
@@ -13,7 +13,7 @@ deferred class
 
 feature {NONE} -- Initialization
 
-	make (a_required: BOOLEAN) is
+	make (a_required: BOOLEAN)
 		do
 			required := a_required
 		ensure
@@ -28,7 +28,7 @@ feature -- Access
 
 feature -- SQL code
 
-	sqldomainconstraint (sqlgenerator: SQL_GENERATOR; a_column_name: STRING): STRING is
+	sqldomainconstraint (sqlgenerator: SQL_GENERATOR; a_column_name: STRING): STRING
 			-- Constraint used when creating domains
 			-- Void means no domain constraints.
 			-- If you want `a_column_name' to be quoted, you need to pass a
@@ -36,7 +36,7 @@ feature -- SQL code
 		deferred
 		end
 
-	sqlcolumnconstraint (sqlgenerator: SQL_GENERATOR; a_column_name: STRING): STRING is
+	sqlcolumnconstraint (sqlgenerator: SQL_GENERATOR; a_column_name: STRING): STRING
 			-- Constraint to use when creating columns;
 			-- Void means no column constraints
 		do
@@ -45,7 +45,7 @@ feature -- SQL code
 
 feature -- Check restriction against representation
 
-	check_attachment (sqlgenerator: SQL_GENERATOR; a_representation: XPLAIN_REPRESENTATION) is
+	check_attachment (sqlgenerator: SQL_GENERATOR; a_representation: XPLAIN_REPRESENTATION)
 			-- Print warning if restriction is not ok for representation.
 		do
 			-- do nothing

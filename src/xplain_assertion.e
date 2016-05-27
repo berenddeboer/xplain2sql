@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Describes an Xplain assertion."
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -53,7 +53,7 @@ feature {NONE} -- creation
 
 	make (sqlgenerator: SQL_GENERATOR; atype: XPLAIN_TYPE
 			aname: STRING; arange: XPLAIN_DOMAIN_RESTRICTION
-			aexpression: XPLAIN_EXTENSION_EXPRESSION) is
+			aexpression: XPLAIN_EXTENSION_EXPRESSION)
 		require
 			valid_args: aname /= Void and
 							atype /= Void and
@@ -88,13 +88,13 @@ feature -- Access
 
 feature -- Status
 
-	is_literal: BOOLEAN is
+	is_literal: BOOLEAN
 			-- Is assertion basically a constant value?
 		do
 			Result := expression.is_literal
 		end
 
-	is_simple: BOOLEAN is
+	is_simple: BOOLEAN
 			-- Does this assertion only refer to immediate attributes and
 			-- are these attributes data attributes, not assertions
 			-- themselves?
@@ -102,14 +102,14 @@ feature -- Status
 			Result := not is_literal and not expression.uses_non_data_attributes
 		end
 
-	is_complex: BOOLEAN is
+	is_complex: BOOLEAN
 			-- Does this assertion uses its when refering to attributes
 			-- or does it refer to other assertions of this type?
 		do
 			Result := expression.uses_non_data_attributes
 		end
 
-	is_function: BOOLEAN is
+	is_function: BOOLEAN
 			-- Is this assertion a function?
 		local
 			f: XPLAIN_EXTENSION_FUNCTION_EXPRESSION
@@ -121,7 +121,7 @@ feature -- Status
 
 feature
 
-	write_drop (sqlgenerator: SQL_GENERATOR) is
+	write_drop (sqlgenerator: SQL_GENERATOR)
 		do
 			-- called via XPLAIN_VIRTUAL_ATTRIBUTE.`write_drop'.
 			sqlgenerator.write_drop_assertion (Current)
@@ -130,7 +130,7 @@ feature
 
 feature -- Expression builder support
 
-	create_expression (node: XPLAIN_ATTRIBUTE_NAME_NODE): XPLAIN_EXPRESSION is
+	create_expression (node: XPLAIN_ATTRIBUTE_NAME_NODE): XPLAIN_EXPRESSION
 			-- Return a new suitable expression for extension.
 			-- Note that the property expression is only valid to build this
 			-- extension. When the extension itself is used in an expression,
@@ -142,7 +142,7 @@ feature -- Expression builder support
 
 feature -- Access
 
-	columndatatype (mygenerator: ABSTRACT_GENERATOR): STRING is
+	columndatatype (mygenerator: ABSTRACT_GENERATOR): STRING
 		do
 			-- make sure XPLAIN_ATTRIBUTE_EXPRESSION has some prefix
 			-- table, or remove that requirement, because there is no join?? Or
@@ -150,7 +150,7 @@ feature -- Access
 			Result := mygenerator.columndatatype_assertion (Current)
 		end
 
-	sqlcolumnidentifier (sqlgenerator: SQL_GENERATOR; role: STRING): STRING is
+	sqlcolumnidentifier (sqlgenerator: SQL_GENERATOR; role: STRING): STRING
 		do
 			if sqlgenerator.assert_implemented_as_view (Current) then
 				Result := sqlpkname (sqlgenerator)
@@ -159,17 +159,17 @@ feature -- Access
 			end
 		end
 
-	sqlcolumndefault (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING is
+	sqlcolumndefault (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING
 		do
 			Result := Void
 		end
 
-	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING is
+	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING
 		do
 			Result := Void
 		end
 
-	sql_qualified_name (sqlgenerator: SQL_GENERATOR; prefix_override: STRING): STRING is
+	sql_qualified_name (sqlgenerator: SQL_GENERATOR; prefix_override: STRING): STRING
 			-- Name used in select statements
 		do
 			-- If there is no `prefix_override', no join was used to get
@@ -187,7 +187,7 @@ feature -- Access
 
 feature -- SQL code
 
-	sql_select_name (sqlgenerator: SQL_GENERATOR; role: STRING): STRING is
+	sql_select_name (sqlgenerator: SQL_GENERATOR; role: STRING): STRING
 			-- Name of base/type/extension when used in a select or order
 			-- by statement.
 			-- Note that it probably needs to be prefixed by its
@@ -196,7 +196,7 @@ feature -- SQL code
 			Result := sqlgenerator.make_valid_identifier (name)
 		end
 
-	sqlname (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlname (sqlgenerator: SQL_GENERATOR): STRING
 			-- name as known in sql code
 			-- to be overriden, callback into sqlgenerator
 		do
@@ -204,7 +204,7 @@ feature -- SQL code
 			Result := sqlgenerator.assertion_name (Current)
 		end
 
-	sqlpkname (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlpkname (sqlgenerator: SQL_GENERATOR): STRING
 			-- Primary key column name of this type
 		do
 			Result := type.sqlpkname (sqlgenerator)
@@ -213,7 +213,7 @@ feature -- SQL code
 
 feature -- Optimizations
 
-	set_no_update_optimization (a_value: BOOLEAN) is
+	set_no_update_optimization (a_value: BOOLEAN)
 		do
 			-- Not supported for assertions
 			-- Obviously this means that we need to be written with left

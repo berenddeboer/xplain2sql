@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -30,7 +30,7 @@ create
 
 feature -- public
 
-	domain: STRING is
+	domain: STRING
 			-- Give Xplain domain as string.
 		do
 			create Result.make (2 + length + 1)
@@ -42,7 +42,7 @@ feature -- public
 
 feature -- Required implementations
 
-	datatype (mygenerator: ABSTRACT_GENERATOR): STRING is
+	datatype (mygenerator: ABSTRACT_GENERATOR): STRING
 			-- return sql data type, call sql_generator to return this
 		do
 			result := mygenerator.datatype_varchar (Current)

@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Produces DB/2 version 6 SQL output"
 
@@ -46,7 +46,7 @@ create
 
 feature -- About this generator
 
-	target_name: STRING is
+	target_name: STRING
 			-- Name and version of dialect
 		once
 			Result := "DB/2 version 6"
@@ -55,7 +55,7 @@ feature -- About this generator
 
 feature -- domain options
 
-	DomainsSupported: BOOLEAN is
+	DomainsSupported: BOOLEAN
 		once
 			Result := False
 		end
@@ -63,45 +63,45 @@ feature -- domain options
 
 feature -- Identifiers
 
-	IdentifierWithSpacesSupported: BOOLEAN is
+	IdentifierWithSpacesSupported: BOOLEAN
 		once
 			Result := True
 		end
 
-	MaxIdentifierLength: INTEGER is
+	MaxIdentifierLength: INTEGER
 			-- table names may be 128
 		once
 			Result := 30
 		end
 
-	MaxConstraintIdentifierLength: INTEGER is
+	MaxConstraintIdentifierLength: INTEGER
 		once
 			Result := 18
 		end
 
-	MaxIndexNameLength: INTEGER is 18
+	MaxIndexNameLength: INTEGER = 18
 
 
 feature -- table options
 
-	AutoPrimaryKeySupported: BOOLEAN is
+	AutoPrimaryKeySupported: BOOLEAN
 		once
 			Result := False
 		end
 
-	ColumnNullAllowed: BOOLEAN is
+	ColumnNullAllowed: BOOLEAN
 		once
 			Result := False
 		end
 
-	ExpressionsInDefaultClauseSupported: BOOLEAN is False
+	ExpressionsInDefaultClauseSupported: BOOLEAN = False
 			-- Does the SQL dialect support expressions (1 + 1 for
 			-- example) in the default clause?
 
 
 feature -- purge options
 
-	DropColumnSupported: BOOLEAN is
+	DropColumnSupported: BOOLEAN
 			-- can columns be removed?
 		once
 			Result := False
@@ -109,10 +109,10 @@ feature -- purge options
 
 feature -- Booleans
 
-	SQLTrue: STRING is once Result := "1" end
-	SQLFalse: STRING is once Result := "0" end
+	SQLTrue: STRING once Result := "1" end
+	SQLFalse: STRING once Result := "0" end
 
-	SupportsTrueBoolean: BOOLEAN is
+	SupportsTrueBoolean: BOOLEAN
 		do
 			Result := False
 		end
@@ -120,12 +120,12 @@ feature -- Booleans
 
 feature -- Strings
 
-	sql_string_combine_separator: STRING is " || "
+	sql_string_combine_separator: STRING = " || "
 
 
 feature -- actual creation of sql statements, you may redefine these
 
-	create_end (database: STRING) is
+	create_end (database: STRING)
 		do
 			std.output.put_string ("disconnect ")
 			std.output.put_string (database)
@@ -133,7 +133,7 @@ feature -- actual creation of sql statements, you may redefine these
 			std.output.put_string ("%N")
 		end
 
-	create_use_database (database: STRING) is
+	create_use_database (database: STRING)
 			-- start using a certain database
 		do
 			std.output.put_string ("connect to ")
@@ -145,23 +145,23 @@ feature -- actual creation of sql statements, you may redefine these
 
 feature -- Type specification for xplain types
 
-	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING is
+	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING
 		once
 			Result := "smallint"
 		end
 
-	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING is
+	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING
 		once
 			Result := "timestamp"
 		end
 
-	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING is
+	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING
 			-- platform dependent approximate numeric data type
 		once
 			Result := "double precision"
 		end
 
-	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING is
+	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING
 		do
 			inspect representation.length
 			when 1 .. 4 then
@@ -175,18 +175,18 @@ feature -- Type specification for xplain types
 			end
 		end
 
-	datatype_money (representation: XPLAIN_M_REPRESENTATION): STRING is
+	datatype_money (representation: XPLAIN_M_REPRESENTATION): STRING
 		once
 			Result := "numeric(12,4)"
 		end
 
-	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING is
+	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING
 			-- Store pictures of up to 1MB.
 		once
 			Result := "blob(1M)"
 		end
 
-	datatype_text (representation: XPLAIN_T_REPRESENTATION): STRING is
+	datatype_text (representation: XPLAIN_T_REPRESENTATION): STRING
 			-- Maximum length is 1M characters.
 		once
 			Result := "clob(1M)"
@@ -194,12 +194,12 @@ feature -- Type specification for xplain types
 
 feature -- ansi niladic functions
 
-	sqlsysfunction_current_timestamp: STRING is
+	sqlsysfunction_current_timestamp: STRING
 		once
 			Result := "CURRENT TIMESTAMP"
 		end
 
-	sqlsysfunction_system_user: STRING is
+	sqlsysfunction_system_user: STRING
 		once
 			Result := "USER"
 		end
@@ -207,7 +207,7 @@ feature -- ansi niladic functions
 
 feature -- Identifiers
 
-	quote_identifier (identifier: STRING): STRING is
+	quote_identifier (identifier: STRING): STRING
 			-- Return identifier, surrounded by quotes.
 		local
 			s: STRING
@@ -218,7 +218,7 @@ feature -- Identifiers
 
 feature -- Index name
 
-	index_name (index: XPLAIN_INDEX): STRING is
+	index_name (index: XPLAIN_INDEX): STRING
 		do
 			Result := "idx_" + index.type.sqlname (Current) + "_" + index.name
 			Result.keep_head (MaxIndexNameLength)

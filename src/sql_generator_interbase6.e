@@ -1,4 +1,4 @@
-indexing
+note
 
   description: "Produces output for Interbase 6."
 
@@ -51,7 +51,7 @@ create
 
 feature -- About this generator
 
-	target_name: STRING is
+	target_name: STRING
 			-- Name and version of dialect
 		once
 			Result := "InterBase 6.0/FireBird 1.x"
@@ -60,12 +60,12 @@ feature -- About this generator
 
 feature -- Identifiers
 
-	IdentifierWithSpacesSupported: BOOLEAN is
+	IdentifierWithSpacesSupported: BOOLEAN
 		once
 			Result := True
 		end
 
-	quote_identifier (identifier: STRING): STRING is
+	quote_identifier (identifier: STRING): STRING
 			-- return identifier, surrounded by quotes
 		local
 			s: STRING
@@ -77,7 +77,7 @@ feature -- Identifiers
 
 feature -- Stored procedure options
 
-	SupportsDomainsInStoredProcedures: BOOLEAN is
+	SupportsDomainsInStoredProcedures: BOOLEAN
 		do
 			Result := False
 		end
@@ -85,7 +85,7 @@ feature -- Stored procedure options
 
 feature -- Numeric precision
 
-	max_numeric_precision: INTEGER is
+	max_numeric_precision: INTEGER
 		once
 			Result := 18
 		end
@@ -93,14 +93,14 @@ feature -- Numeric precision
 
 feature -- select options
 
-	ExistentialFromTable: STRING is "RDB$DATABASE"
+	ExistentialFromTable: STRING = "RDB$DATABASE"
 			-- Name of the dual table to be used in a select statement
 			-- where a from is required
 
 
 feature -- SQL creation
 
-	create_select_function (selection_list: XPLAIN_SELECTION_FUNCTION) is
+	create_select_function (selection_list: XPLAIN_SELECTION_FUNCTION)
 		do
 			if is_stored_procedure then
 				std.output.put_string ("for ")
@@ -117,7 +117,7 @@ feature -- SQL creation
 			end
 		end
 
-	create_select_list (selection_list: XPLAIN_SELECTION_LIST) is
+	create_select_list (selection_list: XPLAIN_SELECTION_LIST)
 			-- For Interbase selects in a stored procedure have to be
 			-- treated differently.
 		local
@@ -175,7 +175,7 @@ feature -- SQL creation
 			end
 		end
 
-	create_select_value_inside_sp (a_value: XPLAIN_VALUE) is
+	create_select_value_inside_sp (a_value: XPLAIN_VALUE)
 			-- Emit SQL that returns the value when asked for that value
 			-- inside a stored procedure.
 		do
@@ -187,7 +187,7 @@ feature -- SQL creation
 			std.output.put_string (a_value.quoted_name (Current))
 		end
 
-	create_use_database (database: STRING) is
+	create_use_database (database: STRING)
 			-- start using a certain database
 		do
 			precursor (database)
@@ -196,7 +196,7 @@ feature -- SQL creation
 			std.output.put_character ('%N')
 		end
 
-	create_value_assign_inside_sp (a_value: XPLAIN_VALUE) is
+	create_value_assign_inside_sp (a_value: XPLAIN_VALUE)
 			-- Emit code to assign `a_value'.`expression' to `a_value'
 			-- inside a stored procedure.
 		local
@@ -224,7 +224,7 @@ feature -- SQL creation
 			std.output.put_character ('%N')
 		end
 
-	create_value_declare_inside_sp (a_value: XPLAIN_VALUE) is
+	create_value_declare_inside_sp (a_value: XPLAIN_VALUE)
 			-- Emit code to declare `a_value' inside a stored procedure.
 		do
 			std.output.put_string ("declare variable ")
@@ -238,12 +238,12 @@ feature -- SQL creation
 
 feature -- type specification for xplain types
 
-	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING is
+	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING
 		do
 			Result := "timestamp"
 		end
 
-	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING is
+	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING
 		local
 			len: INTEGER
 		do
@@ -270,7 +270,7 @@ feature -- type specification for xplain types
 
 feature -- Value specific features
 
-	value_identifier (a_value: XPLAIN_VALUE): STRING is
+	value_identifier (a_value: XPLAIN_VALUE): STRING
 			-- Return identifier, not quoted.
 		do
 			if is_stored_procedure then
@@ -283,7 +283,7 @@ feature -- Value specific features
 
 feature -- Stored procedures
 
-	sp_user_declaration (procedure: XPLAIN_PROCEDURE) is
+	sp_user_declaration (procedure: XPLAIN_PROCEDURE)
 			-- Emit value declarations.
 		local
 			value_statement: XPLAIN_VALUE_STATEMENT
@@ -301,7 +301,7 @@ feature -- Stored procedures
 			end
 		end
 
-	sp_user_result (procedure: XPLAIN_PROCEDURE) is
+	sp_user_result (procedure: XPLAIN_PROCEDURE)
 			-- Output the proper clause when rows are returned or not.
 		local
 			get_statement: XPLAIN_GET_STATEMENT

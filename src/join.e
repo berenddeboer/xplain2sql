@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Describes a single SQL join statement."
 
@@ -26,7 +26,7 @@ feature {NONE} -- Initialization
 		aaggregate_fk: STRING;
 		an_is_upward_join,
 		an_is_forced_left_outer_join,
-		an_is_forced_inner_join: BOOLEAN) is
+		an_is_forced_inner_join: BOOLEAN)
 				-- Initialize.
 		require
 			an_actual_attribute_not_void: an_actual_attribute /= Void
@@ -50,7 +50,7 @@ feature {NONE} -- Initialization
 
 feature -- SQL code
 
-	attribute_table_name (sqlgenerator: SQL_GENERATOR): STRING is
+	attribute_table_name (sqlgenerator: SQL_GENERATOR): STRING
 			-- SQL table name of attribute type
 		do
 			Result := aggregate_attribute.sqltablename (sqlgenerator)
@@ -58,7 +58,7 @@ feature -- SQL code
 			have_table_name: Result /= Void and then not Result.is_empty
 		end
 
-	attribute_pk (sqlgenerator: SQL_GENERATOR): STRING is
+	attribute_pk (sqlgenerator: SQL_GENERATOR): STRING
 			-- Primary key of attribute type
 		do
 			Result := aggregate_attribute.sqlpkname (sqlgenerator)
@@ -85,7 +85,7 @@ feature -- Access
 
 feature -- Status
 
-	is_inner_join: BOOLEAN is
+	is_inner_join: BOOLEAN
 			-- Generate an inner join?
 		do
 			Result :=

@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Xplain general node, used a lot when parsing."
 
@@ -23,7 +23,7 @@ feature -- Access
 
 feature {NONE} -- Initialization
 
-	make (an_item: G; a_next: like Current) is
+	make (an_item: G; a_next: like Current)
 		require
 			item_not_void: an_item /= Void
 		do
@@ -34,7 +34,7 @@ feature {NONE} -- Initialization
 
 feature -- Status
 
-	has (v: G): BOOLEAN is
+	has (v: G): BOOLEAN
 			-- Does container include `v'?
 		local
 			node: like Current
@@ -53,7 +53,7 @@ feature -- Status
 
 feature -- List building
 
-	last: like Current is
+	last: like Current
 			-- Return last item in list.
 		local
 			node: like Current
@@ -70,7 +70,7 @@ feature -- List building
 			valid_result: Result /= Void
 		end
 
-	set_next (anext: like Current) is
+	set_next (anext: like Current)
 			-- Set the next item.
 		require
 			is_last_node: next = Void

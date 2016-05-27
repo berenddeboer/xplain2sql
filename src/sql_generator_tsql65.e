@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -35,7 +35,7 @@ create
 
 feature -- About this generator
 
-	target_name: STRING is
+	target_name: STRING
 			-- Name and version of dialect
 		once
 			Result := "MS SQL Server Transact SQL 6.5"
@@ -44,7 +44,7 @@ feature -- About this generator
 
 feature -- functions
 
-	SQLCoalesce: STRING is
+	SQLCoalesce: STRING
 			-- MS SQL Server 6.5 dumps core with coalesce function
 		once
 			Result := "IsNull"
@@ -53,17 +53,17 @@ feature -- functions
 
 feature -- identifiers
 
-	MaxIdentifierLength: INTEGER is
+	MaxIdentifierLength: INTEGER
 		once
 			Result := 30
 		end
 
-	MaxTemporaryTableNameLength: INTEGER is
+	MaxTemporaryTableNameLength: INTEGER
 		once
 			Result := 20
 		end
 
-	quote_identifier (identifier: STRING): STRING is
+	quote_identifier (identifier: STRING): STRING
 			-- return identifier, surrounded by quotes
 		local
 			s: STRING
@@ -75,7 +75,7 @@ feature -- identifiers
 
 feature -- drop statements
 
-		drop_table_if_exist (type: XPLAIN_TYPE) is
+		drop_table_if_exist (type: XPLAIN_TYPE)
 			-- TSQL 6.5 specific drop statement
 		do
 			print ("if exists (select * from sysobjects where id = object_id('dbo.")

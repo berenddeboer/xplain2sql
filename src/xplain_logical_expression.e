@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Turns a logical expression into correct output for SQL dialects that don't support Booleans."
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -29,12 +29,12 @@ create
 
 feature -- Status
 
-	is_logical_expression: BOOLEAN is True
+	is_logical_expression: BOOLEAN = True
 
 
 feature -- SQL generation
 
-	outer_sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	outer_sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Return expression in generator syntax.
 			-- Same as `sqlvalue' but it may expect that it is not
 			-- wrapped in another expression.
@@ -46,7 +46,7 @@ feature -- SQL generation
 			end
 		end
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- Return correct representation for this expression.
 			-- Used to generate representations for value and extend statements.
 		do
@@ -60,7 +60,7 @@ feature -- SQL generation
 			Result := expression.representation (sqlgenerator)
 		end
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 		do
 			Result := expression.sqlvalue (sqlgenerator)
 		end

@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Describes the Xplain update statement."
 
@@ -30,7 +30,7 @@ feature -- Initialization
 	make (
 			a_subject: XPLAIN_SUBJECT;
 			a_assignment_list: XPLAIN_ASSIGNMENT_NODE;
-			a_predicate: XPLAIN_EXPRESSION) is
+			a_predicate: XPLAIN_EXPRESSION)
 		require
 			subject_not_void: a_subject /= Void
 			assignment_list_not_void: a_assignment_list /= Void
@@ -43,7 +43,7 @@ feature -- Initialization
 
 feature -- Generate output
 
-	write (a_generator: ABSTRACT_GENERATOR) is
+	write (a_generator: ABSTRACT_GENERATOR)
 			-- Write output according to this generator.
 		do
 			a_generator.write_update (subject, assignment_list, predicate)
@@ -52,7 +52,7 @@ feature -- Generate output
 
 feature --  Warnings
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Is parameter `a_parameter' used by this statement?
 		local
 			node: like assignment_list
@@ -86,7 +86,7 @@ feature -- Access
 
 feature -- Status
 
-	updates_attribute (a_type: XPLAIN_TYPE; an_attribute_name: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	updates_attribute (a_type: XPLAIN_TYPE; an_attribute_name: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this statement update the attribute `an_attribute_name'
 			-- of type ``a_type_name'?
 		local

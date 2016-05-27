@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Xplain integer representation"
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -26,7 +26,7 @@ create
 
 feature {NONE}  -- Initialization
 
-	make (alength: INTEGER) is
+	make (alength: INTEGER)
 		require
 			valid_length: alength > 0
 		do
@@ -36,7 +36,7 @@ feature {NONE}  -- Initialization
 
 feature -- Access
 
-	domain: STRING is
+	domain: STRING
 			-- Give Xplain domain as string.
 		do
 			create Result.make (2 + length + 1)
@@ -49,12 +49,12 @@ feature -- Access
 	length: INTEGER
 			-- Maximum number of digits in this integer
 
-	value_representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	value_representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 		do
 			Result := sqlgenerator.value_representation_integer (length)
 		end
 
-	xml_schema_data_type: STRING is
+	xml_schema_data_type: STRING
 			-- Best matching XML schema data type
 		local
 			trajectory: XPLAIN_TRAJECTORY
@@ -106,7 +106,7 @@ feature -- Access
 
 feature -- Status
 
-	write_with_quotes: BOOLEAN is
+	write_with_quotes: BOOLEAN
 			-- Should values of this type be surrounded by quotes?
 		do
 			Result := False
@@ -115,13 +115,13 @@ feature -- Status
 
 feature  -- required implementations
 
-	datatype (mygenerator: ABSTRACT_GENERATOR): STRING is
+	datatype (mygenerator: ABSTRACT_GENERATOR): STRING
 			-- return sql data type, call sql_generator to return this
 		do
 			Result := mygenerator.datatype_int (Current)
 		end
 
-	default_value: STRING is
+	default_value: STRING
 			-- A default value to be used when a complex init is used and
 			-- the column is not null and needs some value because the
 			-- SQL dialect does not have the necessary before-insert
@@ -130,13 +130,13 @@ feature  -- required implementations
 			Result := "0"
 		end
 
-	max_value (sqlgenerator: SQL_GENERATOR): STRING is
+	max_value (sqlgenerator: SQL_GENERATOR): STRING
 			-- maximum value that fits in this representation
 		do
 			create Result.make_filled ('9', length)
 		end
 
-	min_value (sqlgenerator: SQL_GENERATOR): STRING is
+	min_value (sqlgenerator: SQL_GENERATOR): STRING
 			-- minimum value that fits in this representation
 		do
 			create Result.make_filled ('9', length)

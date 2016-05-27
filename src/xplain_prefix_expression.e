@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "use for prefix expressions like not or -"
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -29,7 +29,7 @@ create
 feature -- Initialization
 
 	make (an_operator: STRING;
-			an_operand: XPLAIN_EXPRESSION) is
+			an_operand: XPLAIN_EXPRESSION)
 		require
 			valid_operator: an_operator /= Void and then not an_operator.is_empty
 			valid_operand: an_operand /= Void
@@ -46,7 +46,7 @@ feature -- Access
 
 feature -- SQL generation
 
-	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING is
+	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING
 			-- Expression which casts `operand' to a string
 		do
 			Result :=
@@ -56,7 +56,7 @@ feature -- SQL generation
 				" )"
 		end
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Return expression in generator syntax.
 		do
 			Result :=

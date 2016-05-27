@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Xplain total function"
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -20,20 +20,20 @@ inherit
 
 feature -- Status
 
-	property_required: INTEGER is 1
+	property_required: INTEGER = 1
 			-- Does function need the presence of a property?
 			-- 0: forbidden; 1: must be presented; 2: don't care either way
 
 
 feature -- Access
 
-	name: STRING is "total"
+	name: STRING = "total"
 			-- Xplain name of function
 
 	representation (
 			sqlgenerator: SQL_GENERATOR;
 			type: XPLAIN_TYPE;
-			expression: XPLAIN_EXPRESSION): XPLAIN_REPRESENTATION is
+			expression: XPLAIN_EXPRESSION): XPLAIN_REPRESENTATION
 			-- What's the xplain representation for this function?
 		do
 				check
@@ -42,13 +42,13 @@ feature -- Access
 			Result := expression.representation (sqlgenerator)
 		end
 
-	sqlextenddefault (sqlgenerator: SQL_GENERATOR; expression: XPLAIN_EXPRESSION): STRING is
+	sqlextenddefault (sqlgenerator: SQL_GENERATOR; expression: XPLAIN_EXPRESSION): STRING
 			-- default to use for extension when function returns a Null value
 		do
 			Result := "0"
 		end
 
-	sqlfunction (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlfunction (sqlgenerator: SQL_GENERATOR): STRING
 			-- switch into correct sql function statement
 		do
 			Result := sqlgenerator.sqlfunction_total

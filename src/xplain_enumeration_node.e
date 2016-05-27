@@ -1,4 +1,4 @@
-indexing
+note
 
   description: "Xplain node used for enumerations"
   author:     "Berend de Boer <berend@pobox.com>"
@@ -14,7 +14,7 @@ inherit
 
 feature
 
-   to_sqlcode (sqlgenerator: SQL_GENERATOR): STRING is
+   to_sqlcode (sqlgenerator: SQL_GENERATOR): STRING
          -- return something suitable for sql in enumeration
       deferred
       ensure

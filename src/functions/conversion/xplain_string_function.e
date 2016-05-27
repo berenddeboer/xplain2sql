@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Conversion of expression to a string."
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -28,18 +28,18 @@ create
 
 feature -- Access
 
-	name: STRING is "string"
+	name: STRING = "string"
 
 
 feature -- Status
 
-	is_string_expression: BOOLEAN is True
+	is_string_expression: BOOLEAN = True
 			-- Is this a string?
 
 
 feature -- SQL code
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- The representation of left operand. Maybe should be
 			-- improved to infer better? If you add int and double, should
 			-- return double I think.
@@ -52,13 +52,13 @@ feature -- SQL code
 			Result := sqlgenerator.value_representation_char (250)
 		end
 
-	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING is
+	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING
 			-- Expression which casts `operand' to a string
 		do
 			Result := sqlgenerator.sql_init_cast_to_string (operand)
 		end
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Expression which casts `operand' to a string
 		do
 			Result := sqlgenerator.sql_cast_to_string (operand)

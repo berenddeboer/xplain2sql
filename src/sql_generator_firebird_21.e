@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -38,7 +38,7 @@ create
 
 feature -- About this generator
 
-	target_name: STRING is
+	target_name: STRING
 			-- Name and version of dialect
 		once
 			Result := "FireBird 2.1"
@@ -47,7 +47,7 @@ feature -- About this generator
 
 feature -- Coalesce
 
-	SQLCoalesce: STRING is
+	SQLCoalesce: STRING
 		once
 			Result := "coalesce"
 		end
@@ -55,10 +55,10 @@ feature -- Coalesce
 
 feature -- Temporary tables
 
-	TemporaryTablesSupported: BOOLEAN is True
+	TemporaryTablesSupported: BOOLEAN = True
 			-- Does this dialect support the 'create temporary table'?
 
-	CreateTemporaryTableStatement: STRING is
+	CreateTemporaryTableStatement: STRING
 			-- The create statement to start creating a temporary table.
 		once
 			if TemporaryTablesSupported then
@@ -68,23 +68,23 @@ feature -- Temporary tables
 			end
 		end
 
-	FinishTemporaryTableStatement: STRING is "on commit preserve rows"
+	FinishTemporaryTableStatement: STRING = "on commit preserve rows"
 
 
 feature -- Sequences
 
-	sql_create_generator: STRING is "create sequence"
+	sql_create_generator: STRING = "create sequence"
 
 
 feature -- Extends
 
-	create_table (type: XPLAIN_TYPE) is
+	create_table (type: XPLAIN_TYPE)
 		do
 			precursor (type)
 			commit
 		end
 
-	create_extend_create_index (an_extension: XPLAIN_EXTENSION) is
+	create_extend_create_index (an_extension: XPLAIN_EXTENSION)
 		do
 			commit
 			precursor (an_extension)
@@ -93,7 +93,7 @@ feature -- Extends
 
 feature {NONE} -- SQL
 
-	commit is
+	commit
 		do
 			std.output.put_string (once "commit")
 			std.output.put_string (CommandSeparator)

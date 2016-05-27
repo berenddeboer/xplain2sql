@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Produces FoxPro SQL output"
 
@@ -33,7 +33,7 @@ create
 
 feature -- About this generator
 
-	target_name: STRING is
+	target_name: STRING
 			-- Name and version of dialect
 		once
 			Result := "FoxPro SQL"
@@ -42,7 +42,7 @@ feature -- About this generator
 
 feature -- identifiers
 
-	MaxIdentifierLength: INTEGER is
+	MaxIdentifierLength: INTEGER
 		once
 			Result := 64
 		end
@@ -50,44 +50,44 @@ feature -- identifiers
 
 feature -- table options
 
-	ViewsSupported: BOOLEAN is
+	ViewsSupported: BOOLEAN
 		once Result := False end
 
 
 feature -- type specification for xplain types
 
-	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING is
+	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING
 		do
 			Result := "L"
 		end
 
-	datatype_char (representation: XPLAIN_C_REPRESENTATION): STRING is
+	datatype_char (representation: XPLAIN_C_REPRESENTATION): STRING
 		do
 			Result := "C(" + representation.length.out + ")"
 		end
 
-	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING is
+	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING
 		do
 			Result := "T"
 		end
 
-	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING is
+	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING
 			-- platform dependent approximate numeric data type
 		do
 			Result := "D"
 		end
 
-	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING is
+	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING
 		do
 			Result := "I"
 		end
 
-	datatype_money (representation: XPLAIN_M_REPRESENTATION): STRING is
+	datatype_money (representation: XPLAIN_M_REPRESENTATION): STRING
 		do
 			Result := "M"
 		end
 
-	datatype_numeric (representation: XPLAIN_R_REPRESENTATION): STRING is
+	datatype_numeric (representation: XPLAIN_R_REPRESENTATION): STRING
 			-- exact numeric data type
 		local
 			precision, scale: INTEGER
@@ -97,17 +97,17 @@ feature -- type specification for xplain types
 			Result := "N(" + precision.out + "," + scale.out + ")"
 		end
 
-	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING is
+	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING
 		do
 			Result := "M"
 		end
 
-	datatype_text (representation: XPLAIN_T_REPRESENTATION): STRING is
+	datatype_text (representation: XPLAIN_T_REPRESENTATION): STRING
 		do
 			Result := "M"
 		end
 
-	datatype_varchar (representation: XPLAIN_A_REPRESENTATION): STRING is
+	datatype_varchar (representation: XPLAIN_A_REPRESENTATION): STRING
 		do
 			Result := "C(" + representation.length.out + ")"
 		end

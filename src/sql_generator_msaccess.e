@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Base class for Microsoft Access SQL output"
 
@@ -33,7 +33,7 @@ inherit
 
 feature -- identifiers
 
-	MaxIdentifierLength: INTEGER is
+	MaxIdentifierLength: INTEGER
 		once
 			Result := 64
 		end
@@ -41,17 +41,17 @@ feature -- identifiers
 
 feature -- table options
 
-	AutoPrimaryKeySupported: BOOLEAN is
+	AutoPrimaryKeySupported: BOOLEAN
 		once
 			Result := True
 		end
 
-	CheckConstraintSupported: BOOLEAN is
+	CheckConstraintSupported: BOOLEAN
 		once
 			Result := False
 		end
 
-	TemporaryTablesSupported: BOOLEAN is
+	TemporaryTablesSupported: BOOLEAN
 			-- support 'create temporary table' statement
 		once
 			Result := True
@@ -60,28 +60,28 @@ feature -- table options
 
 feature -- type specification for xplain types
 
-	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING is
+	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING
 		do
 			Result := "logical"
 		end
 
-	datatype_char (representation: XPLAIN_C_REPRESENTATION): STRING is
+	datatype_char (representation: XPLAIN_C_REPRESENTATION): STRING
 		do
 			Result := "char(" + representation.length.out + ")"
 		end
 
-	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING is
+	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING
 		do
 			Result := "datetime"
 		end
 
-	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING is
+	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING
 			-- platform dependent approximate numeric data type
 		do
 			Result := "float"
 		end
 
-	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING is
+	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING
 		do
 			inspect representation.length
 			when 1 .. 4 then
@@ -91,23 +91,23 @@ feature -- type specification for xplain types
 			end
 		end
 
-	datatype_money (representation: XPLAIN_M_REPRESENTATION): STRING is
+	datatype_money (representation: XPLAIN_M_REPRESENTATION): STRING
 		do
 			Result := "money"
 		end
 
-	datatype_numeric (representation: XPLAIN_R_REPRESENTATION): STRING is
+	datatype_numeric (representation: XPLAIN_R_REPRESENTATION): STRING
 			-- exact numeric data type
 		do
 			Result := "float"
 		end
 
-	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING is
+	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING
 		do
 			Result := "image"
 		end
 
-	datatype_pk_int (representation: XPLAIN_PK_I_REPRESENTATION): STRING is
+	datatype_pk_int (representation: XPLAIN_PK_I_REPRESENTATION): STRING
 		do
 			if CreateAutoPrimaryKey then
 				Result := AutoPrimaryKeyConstraint
@@ -116,7 +116,7 @@ feature -- type specification for xplain types
 			end
 		end
 
-	datatype_ref_int (representation: XPLAIN_PK_I_REPRESENTATION): STRING is
+	datatype_ref_int (representation: XPLAIN_PK_I_REPRESENTATION): STRING
 			-- foreign key data type for integer primary keys
 		do
 			if CreateAutoPrimaryKey then
@@ -126,12 +126,12 @@ feature -- type specification for xplain types
 			end
 		end
 
-	datatype_text (representation: XPLAIN_T_REPRESENTATION): STRING is
+	datatype_text (representation: XPLAIN_T_REPRESENTATION): STRING
 		do
 			Result := "text"
 		end
 
-	datatype_varchar (representation: XPLAIN_A_REPRESENTATION): STRING is
+	datatype_varchar (representation: XPLAIN_A_REPRESENTATION): STRING
 		do
 			Result := "char(" + representation.length.out + ")"
 		end

@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Traverses over universe to return a subset of types."
 
@@ -27,7 +27,7 @@ inherit
 
 feature -- Access
 
-	name_in_query (sqlgenerator: SQL_GENERATOR): STRING is
+	name_in_query (sqlgenerator: SQL_GENERATOR): STRING
 			-- Name as it occurs in select statements and such, not the
 			-- type name. Unfortunately, some names need a role, how to
 			-- handle that?
@@ -47,7 +47,7 @@ feature -- Status report
 
 feature -- Cursor movement
 
-	start is
+	start
 		do
 			precursor
 			if not after then
@@ -58,7 +58,7 @@ feature -- Cursor movement
 			is_first := not after
 		end
 
-	forth is
+	forth
 		do
 			is_first := False
 			precursor
@@ -72,7 +72,7 @@ feature -- Cursor movement
 
 feature {NONE} -- Check
 
-	skip_this_item: BOOLEAN is
+	skip_this_item: BOOLEAN
 			-- True if this item must be skipped.
 		deferred
 		end

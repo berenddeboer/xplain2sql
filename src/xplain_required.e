@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Default optional or required (null/not null) restriction"
 
@@ -21,7 +21,7 @@ create
 
 feature
 
-	sqldomainconstraint (sqlgenerator: SQL_GENERATOR; column_name: STRING): STRING is
+	sqldomainconstraint (sqlgenerator: SQL_GENERATOR; column_name: STRING): STRING
 			-- Constraint used when creating domains;
 			-- Void means no domain constraints.
 			-- default is no SQL check condition,

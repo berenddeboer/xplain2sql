@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Concatenation of two strings."
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -29,18 +29,18 @@ create
 
 feature -- Access
 
-	operator: STRING is "+"
+	operator: STRING = "+"
 
 
 feature -- Status
 
-	is_string_expression: BOOLEAN is True
+	is_string_expression: BOOLEAN = True
 			-- Is this a string?
 
 
 feature -- SQL code
 
-	sqloperator: STRING is
+	sqloperator: STRING
 			-- The SQL translation for `operator'
 		do
 			Result := operator
@@ -48,7 +48,7 @@ feature -- SQL code
 			sql_operator_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING is
+	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING
 			-- Expression in sql syntax used in init statements. Equal to
 			-- `sqlvalue' in many cases, but usually if you refer to
 			-- an attribute of `a_type' it has to be prefixed by "new." for
@@ -57,7 +57,7 @@ feature -- SQL code
 			Result := sqlgenerator.sql_init_combine_expression (operands)
 		end
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Expression in generator syntax
 		local
 			s: STRING
@@ -69,7 +69,7 @@ feature -- SQL code
 			Result.append_character (')')
 		end
 
-	sqlvalue_as_wildcard (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue_as_wildcard (sqlgenerator: SQL_GENERATOR): STRING
 			-- As `sqlvalue', but a string literal uses this to return a
 			-- properly formatted SQL like expression
 		local

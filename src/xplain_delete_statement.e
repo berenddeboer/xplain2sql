@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Describes the Xplain delete statement."
 
@@ -24,7 +24,7 @@ create
 
 feature -- Initialization
 
-	make (a_subject: XPLAIN_SUBJECT; a_predicate: XPLAIN_EXPRESSION) is
+	make (a_subject: XPLAIN_SUBJECT; a_predicate: XPLAIN_EXPRESSION)
 		require
 			subject_not_void: a_subject /= Void
 		do
@@ -35,7 +35,7 @@ feature -- Initialization
 
 feature -- Generate output
 
-	write (a_generator: ABSTRACT_GENERATOR) is
+	write (a_generator: ABSTRACT_GENERATOR)
 			-- Write output according to this generator.
 		do
 			a_generator.write_delete (subject, predicate)
@@ -44,7 +44,7 @@ feature -- Generate output
 
 feature --  Warnings
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Is parameter `a_parameter' used by this statement?
 		do
 			Result :=

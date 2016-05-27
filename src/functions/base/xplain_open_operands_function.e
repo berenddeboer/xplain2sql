@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Xplain expression that is a function with one or more operands."
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -25,7 +25,7 @@ inherit
 
 feature {NONE} -- Initialization
 
-	make (an_operands: XPLAIN_EXPRESSION_NODE) is
+	make (an_operands: XPLAIN_EXPRESSION_NODE)
 		require
 			operands_not_void: an_operands /= Void
 		do
@@ -38,7 +38,7 @@ feature -- Access
 	operands: XPLAIN_EXPRESSION_NODE
 			-- Operands
 
-	name: STRING is
+	name: STRING
 			-- Xplain function name or operator
 		deferred
 		ensure
@@ -48,7 +48,7 @@ feature -- Access
 
 feature -- Status
 
-	has_wild_card_characters: BOOLEAN is
+	has_wild_card_characters: BOOLEAN
 			-- Does the expression contain the Xplain wildcard characters
 			-- '*' or '?'?
 		local
@@ -64,7 +64,7 @@ feature -- Status
 			end
 		end
 
-	is_literal: BOOLEAN is
+	is_literal: BOOLEAN
 		local
 			n: XPLAIN_EXPRESSION_NODE
 		do
@@ -78,7 +78,7 @@ feature -- Status
 			end
 		end
 
-	is_using_other_attributes (an_attribute: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	is_using_other_attributes (an_attribute: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to other attributes as `an_attribute'?
 			-- It is used to output better optimized SQL code.
 		local
@@ -94,7 +94,7 @@ feature -- Status
 			end
 		end
 
-	uses_its: BOOLEAN is
+	uses_its: BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		local
 			n: XPLAIN_EXPRESSION_NODE
@@ -109,7 +109,7 @@ feature -- Status
 			end
 		end
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		local
 			n: XPLAIN_EXPRESSION_NODE
@@ -127,7 +127,7 @@ feature -- Status
 
 feature -- SQL code
 
-	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST) is
+	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST)
 			-- Possibility of expression to add something to join part of
 			-- a select statement.
 		local
@@ -143,7 +143,7 @@ feature -- SQL code
 			end
 		end
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- The representation of left operand. Maybe should be
 			-- improved to infer better? If you add int and double, should
 			-- return double I think.

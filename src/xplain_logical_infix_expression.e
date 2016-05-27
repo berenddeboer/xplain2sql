@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -36,12 +36,12 @@ create
 
 feature -- Status
 
-	is_logical_expression: BOOLEAN is True
+	is_logical_expression: BOOLEAN = True
 
 
 feature -- SQL generation
 
-	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST) is
+	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST)
 			-- Possibility of expression to add something to join part of
 			-- a select statement.
 		local
@@ -57,7 +57,7 @@ feature -- SQL generation
 			end
 		end
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- Return correct representation for this expression.
 			-- Used to generate representations for value and extend statements.
 		do

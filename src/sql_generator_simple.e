@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Class that can serve as parent to generate output for very basic SQL output, i.e. no stored procedures, domains, and such."
 
@@ -28,7 +28,7 @@ inherit
 
 feature -- Domain options
 
-	DomainsSupported: BOOLEAN is
+	DomainsSupported: BOOLEAN
 			-- Does this dialect support creation of user defined data types?
 		once
 			Result := False
@@ -37,12 +37,12 @@ feature -- Domain options
 
 feature -- ANSI specific SQL creation statements
 
-	create_primary_key_generator (type: XPLAIN_TYPE) is
+	create_primary_key_generator (type: XPLAIN_TYPE)
 		do
 			-- nothing
 		end
 
-	create_use_database (database: STRING) is
+	create_use_database (database: STRING)
 			-- start using a certain database
 		do
 			-- nothing
@@ -51,7 +51,7 @@ feature -- ANSI specific SQL creation statements
 
 feature -- drop statements
 
-	drop_primary_key_generator (type: XPLAIN_TYPE) is
+	drop_primary_key_generator (type: XPLAIN_TYPE)
 		do
 			-- nothing
 		end
@@ -59,7 +59,7 @@ feature -- drop statements
 
 feature -- generation of init [default] expressions
 
-	sqlinitvalue_attribute (expression: XPLAIN_ATTRIBUTE_EXPRESSION): STRING is
+	sqlinitvalue_attribute (expression: XPLAIN_ATTRIBUTE_EXPRESSION): STRING
 			-- inits are not supported, we should not be called
 		do
 			-- n/a
@@ -68,7 +68,7 @@ feature -- generation of init [default] expressions
 
 feature -- Stored procedures
 
-	sp_get_auto_generated_primary_key (type: XPLAIN_TYPE): STRING is
+	sp_get_auto_generated_primary_key (type: XPLAIN_TYPE): STRING
 			-- Statement that returns the generated primary key into the
 			-- output parameters. Statement should end with CommandSeperator.
 		do

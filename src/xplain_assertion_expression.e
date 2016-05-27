@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -34,7 +34,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (an_assertion: XPLAIN_ASSERTION; an_anode: XPLAIN_ATTRIBUTE_NAME_NODE) is
+	make (an_assertion: XPLAIN_ASSERTION; an_anode: XPLAIN_ATTRIBUTE_NAME_NODE)
 			-- Initialise.
 		require
 			assertion_not_void: an_assertion /= Void
@@ -48,7 +48,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	column_name: STRING is
+	column_name: STRING
 			-- The Xplain based column heading name, if any. It is used
 			-- by XML_GENERATOR to give clients some idea what the column
 			-- name of a select is going to be.
@@ -66,7 +66,7 @@ feature -- Access
 
 feature -- Status
 
-	is_using_other_attributes (an_attribute: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	is_using_other_attributes (an_attribute: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to other attributes as `an_attribute'?
 			-- It is used to output better optimized SQL code.
 		do
@@ -76,20 +76,20 @@ feature -- Status
 				not anode.item.is_equal (an_attribute)
 		end
 
-	uses_non_data_attributes: BOOLEAN is
+	uses_non_data_attributes: BOOLEAN
 			-- Does this assertion expression use attributes of its owner
 			-- that are other assertions or does it use an its list?
 		do
 			Result := True
 		end
 
-	uses_its: BOOLEAN is
+	uses_its: BOOLEAN
 			-- Does expression has an its list somewhere?
 		do
 			-- not applicable here, overriden by descendants
 		end
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		do
 			-- not applicable here, overriden by descendants
@@ -98,7 +98,7 @@ feature -- Status
 
 feature -- SQL specifics
 
-	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST) is
+	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST)
 			-- Make sure the its list leading to this assertion is
 			-- present as join.
 		do
@@ -111,7 +111,7 @@ feature -- SQL specifics
 			end
 		end
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- The correct representation for this expression.
 			-- Note that this feature is only called when this class is
 			-- instantiated because an assertion has been used in an expression.
@@ -119,7 +119,7 @@ feature -- SQL specifics
 			Result := assertion.expression.representation (sqlgenerator)
 		end
 
-	sqlfromaliasname: STRING is
+	sqlfromaliasname: STRING
 			-- Joining with assertion table/view requires an outer join
 			-- name, but when building a function assertion only.
 		do
@@ -127,14 +127,14 @@ feature -- SQL specifics
 			-- Result := ""
 		end
 
-	sqlname (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlname (sqlgenerator: SQL_GENERATOR): STRING
 			-- Try to come up with the most likely column name for this
 			-- assertion.
 		do
 			Result := assertion.sql_select_name (sqlgenerator, Void)
 		end
 
-	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING is
+	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING
 			-- Expression in sql syntax used in init statements. Equal to
 			-- `sqlvalue' in many cases, but usually if you refer to
 			-- attributes of the type it has to be prefixed by "new." for
@@ -144,7 +144,7 @@ feature -- SQL specifics
 			Result := sqlvalue (sqlgenerator)
 		end
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Assertion when used in get/value statement. Name includes
 			-- prefix of table if we have such a prefix.
 		local

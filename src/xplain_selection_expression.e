@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 		"expression that selects a single value from the database ('count employee' for example), used within value definition."
@@ -28,7 +28,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (a_select_value: XPLAIN_SELECTION_VALUE) is
+	make (a_select_value: XPLAIN_SELECTION_VALUE)
 			-- Initialize.
 		require
 			valid_value: a_select_value /= Void
@@ -44,7 +44,7 @@ feature -- Access
 
 feature -- Status
 
-	uses_its: BOOLEAN is
+	uses_its: BOOLEAN
 			-- Does expression has an its list somewhere?
 		do
 			if select_value.property /= Void then
@@ -52,7 +52,7 @@ feature -- Status
 			end
 		end
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		do
 			Result := select_value.uses_parameter (a_parameter)
@@ -61,7 +61,7 @@ feature -- Status
 
 feature -- SQL output
 
-	column_name: STRING is
+	column_name: STRING
 			-- The Xplain based column heading name, if any. It is used
 			-- by PostgreSQL output to create the proper function type
 			-- for example. The XML_GENERATOR uses it to give clients
@@ -70,12 +70,12 @@ feature -- SQL output
 			Result := select_value.property.column_name
 		end
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 		do
 			Result := select_value.representation (sqlgenerator)
 		end
 
-	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING is
+	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING
 			-- Expression in sql syntax used in init statements. Equal to
 			-- `sqlvalue' in many cases, but usually if you refer to
 			-- attributes of the type it has to be prefixed by "new." for
@@ -85,7 +85,7 @@ feature -- SQL output
 			Result := sqlvalue (sqlgenerator)
 		end
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- return string
 		do
 			Result := select_value.sqlvalue (sqlgenerator)

@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Xplain base class for comparison to NULL expression."
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -22,7 +22,7 @@ inherit
 
 feature {NONE} -- Initialization
 
-	make (a_expression: XPLAIN_EXPRESSION) is
+	make (a_expression: XPLAIN_EXPRESSION)
 			-- Initialize.
 		require
 			a_expression_not_void: a_expression /= Void
@@ -41,13 +41,13 @@ feature -- Access
 
 feature -- Status
 
-	uses_its: BOOLEAN is
+	uses_its: BOOLEAN
 			-- Does expression has an its list somewhere?
 		do
 			Result := expression.uses_its
 		end
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		do
 			Result := expression.uses_parameter (a_parameter)
@@ -56,14 +56,14 @@ feature -- Status
 
 feature -- SQL specifics
 
-	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST) is
+	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST)
 			-- Possibility of expression to add something to join part of
 			-- a select statement.
 		do
 			expression.add_to_join (sqlgenerator, join_list)
 		end
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- Return correct representation for this expression.
 			-- Used to generate representations for value and extend statements.
 		local
@@ -75,7 +75,7 @@ feature -- SQL specifics
 			Result.set_domain_restriction (sqlgenerator, restriction)
 		end
 
-	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING is
+	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING
 			-- Expression in sql syntax used in init statements. Equal to
 			-- `sqlvalue' in many cases, but usually if you refer to
 			-- attributes of the type it has to be prefixed by "new." for
@@ -85,7 +85,7 @@ feature -- SQL specifics
 				expression.sqlinitvalue (sqlgenerator) + compare_with_null
 		end
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Return expression in generator syntax.
 		do
 			Result :=
@@ -95,7 +95,7 @@ feature -- SQL specifics
 
 feature {NONE} -- Implementation
 
-	compare_with_null: STRING is
+	compare_with_null: STRING
 			-- The string which compares a property with NULL.
 		deferred
 		ensure

@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Describes the Xplain cascade statement."
 
@@ -24,7 +24,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (sqlgenerator: SQL_GENERATOR; a_subtype: XPLAIN_TYPE; a_cascade_attribute: like cascade_attribute; a_definition: like definition) is
+	make (sqlgenerator: SQL_GENERATOR; a_subtype: XPLAIN_TYPE; a_cascade_attribute: like cascade_attribute; a_definition: like definition)
 		require
 			subtype: a_subtype /= Void
 			cascade_attribute_not_void: a_cascade_attribute /= Void
@@ -171,7 +171,7 @@ feature {NONE} -- Initialization
 
 feature -- Generate output
 
-	write (a_generator: ABSTRACT_GENERATOR) is
+	write (a_generator: ABSTRACT_GENERATOR)
 			-- Write output according to this generator.
 		do
 			--a_generator.write_cascade (subtype, cascade_attribute, definition)
@@ -217,7 +217,7 @@ feature -- Generate output
 
 feature --  Warnings
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Is parameter `a_parameter' used by this statement?
 		do
 			-- TODO: probably not complete
@@ -266,15 +266,15 @@ feature {NONE} -- Xplain statements
 
 feature {NONE} -- Once strings used in building the Xplain statements
 
-	counter_increment_value: STRING is "1"
+	counter_increment_value: STRING = "1"
 
-	counter_initial_value: STRING is "0"
+	counter_initial_value: STRING = "0"
 
-	counter_name: STRING is "counter"
+	counter_name: STRING = "counter"
 
-	round_visited_name: STRING is "round visited"
+	round_visited_name: STRING = "round visited"
 
-	this_round_name: STRING is "this round"
+	this_round_name: STRING = "this round"
 
 
 invariant

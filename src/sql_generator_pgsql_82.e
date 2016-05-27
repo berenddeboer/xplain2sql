@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -32,7 +32,7 @@ create
 
 feature -- About this generator
 
-	target_name: STRING is
+	target_name: STRING
 			-- Name and version of dialect
 		once
 			Result := "PostgreSQL 8.2"
@@ -41,7 +41,7 @@ feature -- About this generator
 
 feature -- Stored procedure support
 
-	drop_sp_type (a_procedure: XPLAIN_PROCEDURE) is
+	drop_sp_type (a_procedure: XPLAIN_PROCEDURE)
 			-- Drop the type of records the procedure
 			-- returns. Unfortunately we cannot test if the type exists
 			-- so you have to ignore the error message if the type does

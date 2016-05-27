@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Xplain expression that is a function with a single operand."
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -25,7 +25,7 @@ inherit
 
 feature {NONE} -- Initialization
 
-	make (an_operand: XPLAIN_EXPRESSION) is
+	make (an_operand: XPLAIN_EXPRESSION)
 			-- Initialize.
 		require
 			operand_not_void: an_operand /= Void
@@ -36,7 +36,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	column_name: STRING is
+	column_name: STRING
 			-- Try to come up with the most likely column name for this
 			-- expression, only applicable for attributes. If nothing
 			-- found, return Void.
@@ -46,7 +46,7 @@ feature -- Access
 
 	operand: XPLAIN_EXPRESSION
 
-	name: STRING is
+	name: STRING
 			-- Xplain function name or operator
 		deferred
 		ensure
@@ -56,20 +56,20 @@ feature -- Access
 
 feature -- Status
 
-	is_using_other_attributes (an_attribute: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	is_using_other_attributes (an_attribute: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to other attributes as `an_attribute'?
 			-- It is used to output better optimized SQL code.
 		do
 			Result := operand.is_using_other_attributes (an_attribute)
 		end
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		do
 			Result := operand.uses_parameter (a_parameter)
 		end
 
-	uses_its: BOOLEAN is
+	uses_its: BOOLEAN
 			-- Does expression has an its list somewhere?
 		do
 			Result := operand.uses_its
@@ -78,14 +78,14 @@ feature -- Status
 
 feature -- SQL code
 
-	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST) is
+	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST)
 			-- Possibility of expression to add something to join part of
 			-- a select statement.
 		do
 			operand.add_to_join (sqlgenerator, join_list)
 		end
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- The representation of left operand. Maybe should be
 			-- improved to infer better? If you add int and double, should
 			-- return double I think.

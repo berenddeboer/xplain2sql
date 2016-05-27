@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -39,7 +39,7 @@ inherit
 
 feature -- create SQL for Xplain constructs
 
-	create_init (type: XPLAIN_TYPE) is
+	create_init (type: XPLAIN_TYPE)
 			-- Generate sql code to give attributes of type a default value.
 		deferred
 		ensure then

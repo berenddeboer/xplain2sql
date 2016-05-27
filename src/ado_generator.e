@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "ADO specific type definitions"
 
@@ -18,72 +18,72 @@ inherit
 
 feature -- type specification for xplain types
 
-	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING is
+	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING
 		do
 			Result := "adBoolean"
 		end
 
-	datatype_char (representation: XPLAIN_A_REPRESENTATION): STRING is
+	datatype_char (representation: XPLAIN_A_REPRESENTATION): STRING
 		do
 			Result := "adVarChar"
 		end
 
-	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING is
+	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING
 		do
 			Result := "adDBTimestamp"
 		end
 
-	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING is
+	datatype_float (representation: XPLAIN_F_REPRESENTATION): STRING
 			-- platform dependent approximate numeric data type using
 			-- largest size available on that platform
 		do
 			Result := "adDouble"
 		end
 
-	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING is
+	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING
 		do
 			Result := "adInteger"
 		end
 
-	datatype_numeric (representation: XPLAIN_R_REPRESENTATION): STRING is
+	datatype_numeric (representation: XPLAIN_R_REPRESENTATION): STRING
 			-- exact numeric data type
 		do
 			Result := "adNumeric"
 		end
 
-	datatype_money (representation: XPLAIN_M_REPRESENTATION): STRING is
+	datatype_money (representation: XPLAIN_M_REPRESENTATION): STRING
 		do
 			Result := "adCurrency"
 		end
 
-	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING is
+	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING
 		do
 			Result := "adLongVarBinary"
 		end
 
-	datatype_pk_char (representation: XPLAIN_PK_A_REPRESENTATION): STRING is
+	datatype_pk_char (representation: XPLAIN_PK_A_REPRESENTATION): STRING
 		do
 			Result := "adChar"
 		end
 
-	datatype_pk_int (representation: XPLAIN_PK_I_REPRESENTATION): STRING is
+	datatype_pk_int (representation: XPLAIN_PK_I_REPRESENTATION): STRING
 		do
 			Result := "adUnsignedInt"
 		end
 
-	datatype_text (representation: XPLAIN_T_REPRESENTATION): STRING is
+	datatype_text (representation: XPLAIN_T_REPRESENTATION): STRING
 		do
 			Result := "adLongVarChar"
 		end
 
-	datatype_varchar (representation: XPLAIN_V_REPRESENTATION): STRING is
+	datatype_varchar (representation: XPLAIN_V_REPRESENTATION): STRING
 		do
 			Result := "adVarChar"
 		end
 
 feature -- length specification
 
-	datalen (representation: XPLAIN_REPRESENTATION): INTEGER is
+	datalen (representation: XPLAIN_REPRESENTATION): INTEGER
 			-- this routine is a hack, best is probably to switch through the
 			-- representation to the generator, but I needed the length
 			-- only for ADO and the length is only necessary for
@@ -108,13 +108,13 @@ feature -- length specification
 
 feature -- code writing
 
-	get_column_value (column_name: STRING): STRING is
+	get_column_value (column_name: STRING): STRING
 			-- get value for a certain column
 		do
 			Result := "rs.Fields['" + column_name + "'].Value"
 		end
 
-	get_column_value_string (column_name: STRING): STRING is
+	get_column_value_string (column_name: STRING): STRING
 			-- get value for a certain column if it is a string
 		do
 			Result := "VarToStr(rs.Fields['" + column_name + "'].Value)"

@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Selection of a single value."
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -28,7 +28,7 @@ feature -- Access
 
 feature -- Status
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Is parameter `a_parameter' used by this statement?
 		do
 			Result :=
@@ -39,7 +39,7 @@ feature -- Status
 
 feature --  Joins
 
-	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST) is
+	add_to_join (sqlgenerator: SQL_GENERATOR; join_list: JOIN_LIST)
 			-- Retrieval statement can make sure the join_list is up to
 			-- date.
 		do
@@ -52,12 +52,12 @@ feature --  Joins
 
 feature -- SQL generating functions
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- Suitable representation
 		deferred
 		end
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- SQL expression that returns a single value
 		deferred
 		ensure

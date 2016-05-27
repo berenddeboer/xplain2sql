@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Selection of values, i.e. a single instance."
 
@@ -15,7 +15,7 @@ deferred class
 
 feature -- Access
 
-	type: XPLAIN_TYPE is
+	type: XPLAIN_TYPE
 			-- Type we operate on
 		do
 			Result := subject.type
@@ -33,7 +33,7 @@ feature -- Access
 
 feature -- Status
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Is parameter `a_parameter' used by this statement?
 		do
 			Result :=
@@ -46,7 +46,7 @@ feature -- Status
 
 feature -- Change
 
-	set_predicate (a_predicate: XPLAIN_EXPRESSION) is
+	set_predicate (a_predicate: XPLAIN_EXPRESSION)
 		do
 			predicate := a_predicate
 		end
@@ -54,7 +54,7 @@ feature -- Change
 
 feature -- SQL generation
 
-	add_to_join (sqlgenerator: SQL_GENERATOR; a_join_list: JOIN_LIST) is
+	add_to_join (sqlgenerator: SQL_GENERATOR; a_join_list: JOIN_LIST)
 			-- retrieval statement can make sure the join_list is up to
 			-- date
 		require
@@ -70,7 +70,7 @@ feature -- SQL generation
 			end
 		end
 
-	sp_function_type (sqlgenerator: SQL_GENERATOR; an_emit_path: BOOLEAN): STRING is
+	sp_function_type (sqlgenerator: SQL_GENERATOR; an_emit_path: BOOLEAN): STRING
 			-- Callback in generator to generate function type for
 			-- PostgreSQL functions.
 		require
@@ -80,7 +80,7 @@ feature -- SQL generation
 			function_type_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	write_select (a_generator: ABSTRACT_GENERATOR) is
+	write_select (a_generator: ABSTRACT_GENERATOR)
 			-- Callback to proper write method.
 		require
 			a_generator_not_void: a_generator /= Void

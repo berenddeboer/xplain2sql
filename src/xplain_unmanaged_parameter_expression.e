@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Describes a stored procedure parameter being used in an expression. This stored procedure has been written using SQL code, not with the Xplain procedure statement."
 	author:      "Berend de Boer <berend@pobox.com>"
@@ -22,7 +22,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (aname: STRING) is
+	make (aname: STRING)
 		require
 			valid_name: aname /= Void and then not aname.is_empty
 		do
@@ -37,13 +37,13 @@ feature -- Access
 
 feature -- Status
 
-	uses_its: BOOLEAN is
+	uses_its: BOOLEAN
 			-- Does expression has an its list somewhere?
 		do
 			Result := False
 		end
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		do
 			Result := False
@@ -52,13 +52,13 @@ feature -- Status
 
 feature -- SQL output
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- representation is value representation
 		do
 			Result := sqlgenerator.value_representation_char (250)
 		end
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- return string
 		do
 			Result := sqlgenerator.sp_use_param (name)

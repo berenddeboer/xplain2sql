@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Linked list of Xplain statements"
 

@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Xplain count function"
 	author:     "Berend de Boer <berend@pobox.com>"
@@ -22,38 +22,38 @@ inherit
 
 feature -- Status
 
-	property_required: INTEGER is 2
+	property_required: INTEGER = 2
 			-- Does function need the presence of a property?
 			-- 0: forbidden; 1: must be presented; 2: don't care either way
 
 
 feature -- Access
 
-	name: STRING is "count"
+	name: STRING = "count"
 			-- Xplain name of function
 
-	needs_coalesce: BOOLEAN is False
+	needs_coalesce: BOOLEAN = False
 			-- count never returns Nulls
 
-	needs_distinct: BOOLEAN is True
+	needs_distinct: BOOLEAN = True
 			-- Does function need a distinct clause (count function)?
 
 	representation (
 			 sqlgenerator: SQL_GENERATOR;
 			 type: XPLAIN_TYPE;
-			 expression: XPLAIN_EXPRESSION): XPLAIN_REPRESENTATION is
+			 expression: XPLAIN_EXPRESSION): XPLAIN_REPRESENTATION
 			-- What's the xplain representation for this function?
 		do
 			Result := sqlgenerator.value_representation_integer (9)
 		end
 
-	sqlextenddefault (sqlgenerator: SQL_GENERATOR; expression: XPLAIN_EXPRESSION): STRING is
+	sqlextenddefault (sqlgenerator: SQL_GENERATOR; expression: XPLAIN_EXPRESSION): STRING
 			-- default to use for extension when function returns a Null value
 		once
 			Result := "0"
 		end
 
-	sqlfunction (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlfunction (sqlgenerator: SQL_GENERATOR): STRING
 			-- switch into correct sql function statement
 		do
 			Result := sqlgenerator.sqlfunction_count

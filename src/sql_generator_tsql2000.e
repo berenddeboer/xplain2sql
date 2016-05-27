@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -33,7 +33,7 @@ create
 
 feature -- About this generator
 
-	target_name: STRING is
+	target_name: STRING
 			-- Name and version of dialect
 		once
 			Result := "MS SQL Server 2000"
@@ -42,7 +42,7 @@ feature -- About this generator
 
 feature -- Numeric precision
 
-	max_numeric_precision: INTEGER is
+	max_numeric_precision: INTEGER
 			-- Maximum precision of the numeric data type
 		once
 			Result := 38
@@ -51,7 +51,7 @@ feature -- Numeric precision
 
 feature -- type specification for xplain types
 
-	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING is
+	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING
 		do
 			inspect representation.length
 			when 1 .. 4 then

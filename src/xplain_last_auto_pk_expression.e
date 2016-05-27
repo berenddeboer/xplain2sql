@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Attempt to return the last auto-generated-primary-key."
 	author:      "Berend de Boer <berend@pobox.com>"
@@ -21,7 +21,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (a_type: XPLAIN_TYPE) is
+	make (a_type: XPLAIN_TYPE)
 			-- Initialize.
 		require
 			type_not_void: a_type /= Void
@@ -34,7 +34,7 @@ feature -- Access
 
 	type: XPLAIN_TYPE
 
-	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION is
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- Representation is value representation.
 		do
 			-- Should depend on `type', but as we talk about
@@ -45,13 +45,13 @@ feature -- Access
 
 feature -- Status
 
-	uses_its: BOOLEAN is
+	uses_its: BOOLEAN
 			-- Does expression has an its list somewhere?
 		do
 			Result := False
 		end
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		do
 			Result := False
@@ -60,7 +60,7 @@ feature -- Status
 
 feature -- SQL code
 
-	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING is
+	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Return parameter value expression as string.
 		do
 			Result := sqlgenerator.sql_last_auto_generated_primary_key (type)

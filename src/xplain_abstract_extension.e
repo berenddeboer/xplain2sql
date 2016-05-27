@@ -1,4 +1,4 @@
-indexing
+note
 
 	description: "Xplain base for virtual or extended attributes.%
 	%Specializes into a virtual attribute or extension."
@@ -24,7 +24,7 @@ inherit
 
 feature -- SQL
 
-	sql_qualified_name (sqlgenerator: SQL_GENERATOR; prefix_override: STRING): STRING is
+	sql_qualified_name (sqlgenerator: SQL_GENERATOR; prefix_override: STRING): STRING
 			-- Name used in select statements. prefix overrides the
 			-- default prefix, used when joining the extend table more
 			-- than one time.
@@ -35,7 +35,7 @@ feature -- SQL
 			have_name: Result /= Void and then not Result.is_empty
 		end
 
-	sql_alias (sqlgenerator: SQL_GENERATOR): STRING is
+	sql_alias (sqlgenerator: SQL_GENERATOR): STRING
 			-- Used in `do_do_create_select_list' if output comes from an
 			-- optimised extension and therefore doesn't have a nice
 			-- colum name. With this the column name can be forced even
@@ -58,7 +58,7 @@ feature -- Access
 
 feature
 
-	hack_anode (anode: XPLAIN_ATTRIBUTE_NAME_NODE) is
+	hack_anode (anode: XPLAIN_ATTRIBUTE_NAME_NODE)
 			-- Add one more item to the `anode' chain.
 		local
 			next_node: XPLAIN_ATTRIBUTE_NAME_NODE
@@ -82,7 +82,7 @@ feature -- Optimizations
 	no_update_optimization: BOOLEAN
 			-- Extension is not updated, so enable optimization
 
-	set_no_update_optimization (a_value: BOOLEAN) is
+	set_no_update_optimization (a_value: BOOLEAN)
 		require
 			supported: expression.is_update_optimization_supported
 		local

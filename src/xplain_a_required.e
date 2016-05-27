@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 
@@ -24,14 +24,14 @@ create
 
 feature -- initialization
 
-   make is
+   make
       do
          make_xplain_domain_restriction (True)
       end
 
 feature
 
-   sqldomainconstraint(sqlgenerator: SQL_GENERATOR; column_name: STRING): STRING is
+   sqldomainconstraint(sqlgenerator: SQL_GENERATOR; column_name: STRING): STRING
          -- return SQL search condition something like
          -- "check value <> ''"
       do
