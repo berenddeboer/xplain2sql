@@ -5,16 +5,17 @@ note
 	notes: "Shamelessly copied from eposix."
 
 	author: "Berend de Boer"
-	date: "$Date: 2008/12/15 $"
-	revision: "$Revision: #5 $"
+
 
 class
 
 	XML_WRITER
 
+
 inherit
 
 	KL_IMPORTED_STRING_ROUTINES
+
 
 create
 
@@ -512,7 +513,7 @@ feature {NONE} -- tag attributes
 			until
 				Result or else current_attribute = attribute_count
 			loop
-				Result := attributes.item (current_attribute).is_equal (an_attribute)
+				Result := STRING_.same_string (attributes.item (current_attribute), an_attribute)
 				if not Result then
 					current_attribute := current_attribute + 1
 				end
