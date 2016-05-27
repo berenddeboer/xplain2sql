@@ -3,7 +3,7 @@ note
 	description: "Xplain2SQL root class."
 
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 1999-2014 Berend de Boer, see LICENSE"
+	copyright:  "Copyright (c) 1999-2016 Berend de Boer, see LICENSE"
 
 class
 
@@ -242,7 +242,7 @@ feature -- creation
 				end
 			end
 
-			if sqlgenerator = Void then 
+			if sqlgenerator = Void then
 				create {SQL_GENERATOR_ANSI} sqlgenerator.make
 			end
 			sqlgenerator.set_options(
