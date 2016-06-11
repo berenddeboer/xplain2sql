@@ -1,5 +1,5 @@
 %{
-indexing
+note
 
   description:
 
@@ -12,11 +12,8 @@ indexing
   %   such style comments."
 
   author:     "Berend de Boer <berend@pobox.com>"
-  copyright:  "Copyright (c) 1999-2001, Berend de Boer, see forum.txt"
-  date:       "$Date: 2010/02/11 $"
-  revision:   "$Revision: #13 $"
 
-class XPLAIN_SCANNER
+deferred class XPLAIN_SCANNER
 
 inherit
 
@@ -52,12 +49,6 @@ inherit
 			{NONE} all
 		end
 
-
-create
-
-	make_with_stdin,
-	make_with_file,
-	execute
 
 %}
 
@@ -327,7 +318,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make_with_file (a_file: KI_CHARACTER_INPUT_STREAM) is
+	make_with_file (a_file: KI_CHARACTER_INPUT_STREAM)
 		local
 			state: XPLAIN_SCANNER_STATE
 		do
@@ -339,7 +330,7 @@ feature {NONE} -- Initialization
 			has_state: not saved_state.is_empty
 		end
 
-	make_with_stdin is
+	make_with_stdin
 		local
 			state: XPLAIN_SCANNER_STATE
 		do
@@ -353,14 +344,16 @@ feature {NONE} -- Initialization
 
 feature {NONE} -- Initialization
 
-	do_make is
+	do_make
 			-- Create a new Xplain scanner.
 		do
 			make_compressed_scanner_skeleton
 			create saved_state.make
+			my_sql := ""
+			last_string_value := ""
 		end
 
-	execute is
+	execute
 			-- Analyze files `arguments (1..argument_count)'.
 		local
 			j, n: INTEGER
@@ -397,7 +390,7 @@ feature -- Scanning specials
 	expect_domain: BOOLEAN
 			-- internal state to see a (A or (V only as domain when needed.
 
-	conditional_parse_domain (token: INTEGER) is
+	conditional_parse_domain (token: INTEGER)
 			-- call when scanner thinks domain is being parsed
 		do
 			if expect_domain then
@@ -421,7 +414,7 @@ feature -- Scanning specials
 
 feature -- Error handling
 
-	report_error (a_message: STRING) is
+	report_error (a_message: STRING)
 			-- Print error message.
 		local
 		  state: XPLAIN_SCANNER_STATE
@@ -430,8 +423,8 @@ feature -- Error handling
 				std.error.put_string (a_message)
 			else
 				state := saved_state.last
-				if state.filename /= Void then
-					std.error.put_string (state.filename)
+				if attached state.filename as fn then
+					std.error.put_string (fn)
 					std.error.put_string (", line ")
 				else
 					std.error.put_string ("line ")
@@ -445,7 +438,7 @@ feature -- Error handling
 			std.error.put_character ('%N')
 		end
 
-	report_warning (a_message: STRING) is
+	report_warning (a_message: STRING)
 			-- Print error message.
 		local
 		  state: XPLAIN_SCANNER_STATE
@@ -455,8 +448,8 @@ feature -- Error handling
 				std.error.put_string (a_message)
 			else
 				state := saved_state.last
-				if state.filename /= Void then
-					std.error.put_string (state.filename)
+				if attached state.filename as fn then
+					std.error.put_string (fn)
 					std.error.put_string (", line ")
 				else
 					std.error.put_string ("line ")
@@ -473,10 +466,10 @@ feature -- Error handling
 
 feature -- dirty, should be implemented by parser
 
-	pending_init: XPLAIN_TYPE
+	pending_init: detachable XPLAIN_TYPE
 			-- set if for a type inits need to be processed
 
-	write_pending_statement is
+	write_pending_statement
 		do
 			-- ignore
 		end
@@ -486,7 +479,7 @@ feature -- Outside
 
 	sqlgenerator: SQL_GENERATOR
 
-	set_sqlgenerator (sqlg: SQL_GENERATOR) is
+	set_sqlgenerator (sqlg: SQL_GENERATOR)
 		do
 			sqlgenerator := sqlg
 		end
@@ -496,27 +489,24 @@ feature {NONE} -- .include/.use support
 
 	saved_state: DS_LINKED_LIST [XPLAIN_SCANNER_STATE]
 
-	make_relative_path (name: STRING): STRING is
+	make_relative_path (name: STRING): STRING
 			-- `name' if an absolute path, else `name' relative from
 			-- currently parsed filename
 		require
 			name_not_empty: name /= Void and then not name.is_empty
-		local
-			current_dir: STRING
 		do
-			current_dir := saved_state.last.directory
-			if current_dir = Void then
-				Result := name
-			else
+			if attached saved_state.last.directory as current_dir then
 				if name.item (1) = '/' then
 					Result := name
 				else
 					Result := current_dir + name
 				end
+			else
+				Result := name
 			end
 		end
 
-	use_mode: BOOLEAN is
+	use_mode: BOOLEAN
 			-- We're in use mode if there is a single .use mode on the
 			-- stack.
 		local
@@ -534,7 +524,7 @@ feature {NONE} -- .include/.use support
 			end
 		end
 
-	wrap: BOOLEAN is
+	wrap: BOOLEAN
 			-- Should we continue at EOF?
 			-- We do, unless no more state.
 		do
@@ -552,7 +542,7 @@ feature {NONE} -- .include/.use support
 	procedure_mode: BOOLEAN
 			-- Set when creating a stored procedure to delay output of code.
 
-	immediate_output_mode: BOOLEAN is
+	immediate_output_mode: BOOLEAN
 			-- True if output should be generated immediately. Until full
 			-- AST building is in place, we need this trick.
 		do
@@ -564,7 +554,7 @@ feature {NONE} -- Implementation
 
 	my_sql: STRING
 
-	unquote_string (s: STRING): STRING is
+	unquote_string (s: STRING): STRING
 			-- Make sure a quoted double quote in `s' is unquoted.
 		require
 			s_not_void: s /= Void
@@ -577,8 +567,6 @@ feature {NONE} -- Implementation
 					i := 1
 				invariant
 					Result.count >= 1
-				variant
-					Result.count - (i - 1)
 				until
 					i >= Result.count
 				loop
@@ -589,6 +577,8 @@ feature {NONE} -- Implementation
 						Result.remove (i)
 					end
 					i := i + 1
+				variant
+					Result.count - (i - 1)
 				end
 			end
 		ensure
@@ -599,7 +589,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Preprocessor commands
 
-	preprocessor_include is
+	preprocessor_include
 		local
 			include_name: STRING
 			included_file: KL_TEXT_INPUT_FILE
@@ -623,7 +613,7 @@ feature {NONE} -- Preprocessor commands
 			read_token
 		end
 
-	preprocessor_use is
+	preprocessor_use
 		local
 			use_name: STRING
 			use_file: KL_TEXT_INPUT_FILE

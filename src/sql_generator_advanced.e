@@ -7,8 +7,6 @@ note
 	author: "Berend de Boer <berend@pobox.com>"
 	copyright: "Copyright (c) 2005, Berend de Boer and others"
 	license: "Eiffel Forum License v2 (see forum.txt)"
-	date: "$Date: 2008/12/15 $"
-	revision: "$Revision: #2 $"
 
 
 deferred class

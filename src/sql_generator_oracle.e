@@ -216,7 +216,7 @@ feature -- Oracle specific SQL creation statements
 	create_domain (base: XPLAIN_BASE)
 			-- Does not work, only when I create a single package.
 		local
-			s: STRING
+			s: detachable STRING
 		do
 			std.output.put_string ("subtype ")
 			std.output.put_string (quote_identifier (domain_identifier (base)))
@@ -638,7 +638,7 @@ feature -- Stored procedure support
 			Result := "$s out $s"
 		end
 
-	sp_start (a_procedure: XPLAIN_PROCEDURE)
+	sp_start (a_procedure: detachable XPLAIN_PROCEDURE)
 			-- Write statements to start a procedure, including the
 			-- "create procedure " statement itself (including space).
 		do
@@ -650,7 +650,7 @@ feature -- Stored procedure support
 			end
 		end
 
-	sp_result_parameter (a_procedure: XPLAIN_PROCEDURE)
+	sp_result_parameter (a_procedure: detachable XPLAIN_PROCEDURE)
 			-- Emit the result parameter of the stored procedure, if
 			-- applicable.
 			-- For example DB/2 and Oracle needs to know if rows are returned.
@@ -662,16 +662,13 @@ feature -- Stored procedure support
 
 	sp_user_declaration (procedure: XPLAIN_PROCEDURE)
 			-- Emit value declarations
-		local
-			value_statement: XPLAIN_VALUE_STATEMENT
 		do
 			from
 				procedure.statements.start
 			until
 				procedure.statements.after
 			loop
-				value_statement ?= procedure.statements.item_for_iteration
-				if value_statement /= Void then
+				if attached {XPLAIN_VALUE_STATEMENT} procedure.statements.item_for_iteration as value_statement then
 					optional_create_value_declare (value_statement.value)
 				end
 				procedure.statements.forth

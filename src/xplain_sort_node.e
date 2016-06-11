@@ -5,8 +5,6 @@ note
 
 	author:		"Berend de Boer <berend@pobox.com>"
 	copyright:	"Copyright (c) 2000, Berend de Boer"
-	date:			"$Date: 2008/12/15 $"
-	revision:	"$Revision: #4 $"
 
 
 class
@@ -28,7 +26,7 @@ create
 
 feature -- Creation
 
-	make (a_item: XPLAIN_ATTRIBUTE_NAME_NODE; a_ascending: BOOLEAN; a_next: like Current)
+	make (a_item: XPLAIN_ATTRIBUTE_NAME_NODE; a_ascending: BOOLEAN; a_next: detachable like Current)
 		require
 			has_item: a_item /= Void
 			a_item_contains_types: a_item.item.abstracttype_if_known /= Void

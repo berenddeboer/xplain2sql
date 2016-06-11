@@ -67,6 +67,7 @@ feature -- Some sp support to support some hacks
 			-- that is supported for sp's.
 		do
 			-- not applicable
+			Result := ""
 		end
 
 	sp_define_param_name (name: STRING): STRING
@@ -75,30 +76,35 @@ feature -- Some sp support to support some hacks
 			-- clients. It must be quoted, if it can be quoted.
 		do
 			-- not applicable
+			Result := ""
 		end
 
 	sp_delete_name (type: XPLAIN_TYPE): STRING
 			-- Name of stored procedure that deletes an instance of a type
 		do
 			-- not applicable
+			Result := ""
 		end
 
 	sp_insert_name (type: XPLAIN_TYPE): STRING
 			-- Name of stored procedure that inserts an instance of a type
 		do
 			-- not applicable
+			Result := ""
 		end
 
 	sp_name (name: STRING): STRING
 			-- Turn an Xplain name into a stored procedure name.
 		do
 			-- I suppose we should not be called here
+			Result := ""
 		end
 
 	sp_update_name (type: XPLAIN_TYPE): STRING
 			-- Name of stored procedure that updates an instance of a type
 		do
 			-- not applicable
+			Result := ""
 		end
 
 	sp_use_param (name: STRING): STRING
@@ -110,6 +116,7 @@ feature -- Some sp support to support some hacks
 			-- entry should be quoted if that is supported for sp's.
 		do
 			-- I suppose we should not be called here
+			Result := ""
 		end
 
 end

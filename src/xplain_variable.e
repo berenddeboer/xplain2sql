@@ -3,8 +3,6 @@ note
 	description: "Xplain constant (previously variable)"
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #6 $"
 
 class
 
@@ -20,10 +18,12 @@ create
 
 feature
 
-	create_expression (node: XPLAIN_ATTRIBUTE_NAME_NODE): XPLAIN_EXPRESSION
+	create_expression (node: XPLAIN_ATTRIBUTE_NAME_NODE): detachable XPLAIN_EXPRESSION
 			-- return suitable expression for variable
 		do
-			create {XPLAIN_VARIABLE_EXPRESSION} Result.make (node.item.variable)
+			if attached node.item.variable as v then
+				create {XPLAIN_VARIABLE_EXPRESSION} Result.make (v)
+			end
 		end
 
 feature -- Names
@@ -43,7 +43,7 @@ feature -- Drop statement
 
 feature -- Constant state
 
-	value: XPLAIN_EXPRESSION
+	value: detachable XPLAIN_EXPRESSION
 			-- last set value, Void if no value given.
 
 	set_value (new_value: XPLAIN_EXPRESSION)

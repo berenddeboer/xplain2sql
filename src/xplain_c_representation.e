@@ -90,20 +90,6 @@ feature  -- required implementations
 			Result := "''"
 		end
 
-	max_value (sqlgenerator: SQL_GENERATOR): STRING
-			-- Maximum value that fits in this representation
-		do
-			std.error.put_string ("A (C) base doesn't have a maximum value.%N")
-			Result := "not applicable"
-		end
-
-	min_value (sqlgenerator: SQL_GENERATOR): STRING
-			-- Minimum value that fits in this representation
-		do
-			std.error.put_string ("A (C) base doesn't have a minimum value.%N")
-			Result := "not applicable"
-		end
-
 
 feature -- middleware specific routines
 

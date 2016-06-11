@@ -3,13 +3,15 @@ note
 	description: "Xplain general node, used a lot when parsing."
 
 	author:		"Berend de Boer <berend@pobox.com>"
-	copyright:	"Copyright (c) 1999, Berend de Boer"
-	date:			"$Date: 2008/12/15 $"
-	revision:	"$Revision: #6 $"
 
 class
 
 	XPLAIN_NODE [G]
+
+
+create
+
+	make
 
 
 feature -- Access
@@ -17,13 +19,13 @@ feature -- Access
 	item: G
 			-- Current item
 
-	next: like Current
+	next: detachable like Current
 			-- Next node or Void
 
 
 feature {NONE} -- Initialization
 
-	make (an_item: G; a_next: like Current)
+	make (an_item: like item; a_next: like next)
 		require
 			item_not_void: an_item /= Void
 		do
@@ -37,7 +39,7 @@ feature -- Status
 	has (v: G): BOOLEAN
 			-- Does container include `v'?
 		local
-			node: like Current
+			node: detachable like Current
 		do
 			from
 				node := Current
@@ -45,7 +47,7 @@ feature -- Status
 				Result or else
 				node = Void
 			loop
-				Result := node.item.is_equal (v)
+				Result := node.item ~ v
 				node := node.next
 			end
 		end
@@ -53,10 +55,10 @@ feature -- Status
 
 feature -- List building
 
-	last: like Current
+	last: detachable like Current
 			-- Return last item in list.
 		local
-			node: like Current
+			node: detachable like Current
 		do
 			from
 				node := Current
@@ -70,7 +72,7 @@ feature -- List building
 			valid_result: Result /= Void
 		end
 
-	set_next (anext: like Current)
+	set_next (anext: detachable like Current)
 			-- Set the next item.
 		require
 			is_last_node: next = Void

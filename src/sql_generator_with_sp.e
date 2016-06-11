@@ -271,6 +271,8 @@ feature -- create stored procedures
 			param_name := type.sqlpkname (Current)
 			if CreateTimestamp then
 				ts_param_name := table_ts_name (type)
+			else
+				ts_param_name := "" -- silence compiler
 			end
 			std.output.put_string (Tab)
 			if NamedParametersSupported then
@@ -583,6 +585,8 @@ feature -- create stored procedures
 			pk_param_name := type.sqlpkname(Current)
 			if CreateTimestamp then
 				ts_param_name := table_ts_name (type)
+			else
+				ts_param_name := "" -- silence compiler
 			end
 			if NamedParametersSupported then
 				std.output.put_string (sp_define_in_param (pk_param_name))
@@ -905,7 +909,7 @@ feature -- SQL code inside procedures
 			end
 		end
 
-	sp_result_parameter (a_procedure: XPLAIN_PROCEDURE)
+	sp_result_parameter (a_procedure: detachable XPLAIN_PROCEDURE)
 			-- Emit the result parameter of the stored procedure, if
 			-- applicable.
 			-- For example DB/2 and Oracle needs to know if rows are returned.
@@ -923,7 +927,7 @@ feature -- SQL code inside procedures
 			-- result_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sp_start (a_procedure: XPLAIN_PROCEDURE)
+	sp_start (a_procedure: detachable XPLAIN_PROCEDURE)
 			-- Write statements to start a procedure, including the
 			-- "create procedure " statement itself (including space).
 			-- If `a_procedure' is Void, it is an auto-generated

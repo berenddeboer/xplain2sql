@@ -6,9 +6,6 @@ note
 
 	author: "Berend de Boer <berend@pobox.com>"
 	copyright: "Copyright (c) 2007, Berend de Boer"
-	license: "Eiffel Forum License v2 (see forum.txt)"
-	date: "$Date: 2008/12/15 $"
-	revision: "$Revision: #3 $"
 
 
 class
@@ -34,7 +31,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (an_assertion: XPLAIN_ASSERTION; an_anode: XPLAIN_ATTRIBUTE_NAME_NODE)
+	make (an_assertion: XPLAIN_ASSERTION; an_anode: like anode)
 			-- Initialise.
 		require
 			assertion_not_void: an_assertion /= Void
@@ -119,7 +116,7 @@ feature -- SQL specifics
 			Result := assertion.expression.representation (sqlgenerator)
 		end
 
-	sqlfromaliasname: STRING
+	sqlfromaliasname: detachable STRING
 			-- Joining with assertion table/view requires an outer join
 			-- name, but when building a function assertion only.
 		do
@@ -147,14 +144,11 @@ feature -- SQL specifics
 	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Assertion when used in get/value statement. Name includes
 			-- prefix of table if we have such a prefix.
-		local
-			function: XPLAIN_EXTENSION_FUNCTION_EXPRESSION
 		do
 			Result := assertion.sql_qualified_name (sqlgenerator, anode.last.prefix_table)
 			-- Asserts can have partial results when some function is
 			-- used as there might be no data in that case.
-			function ?= assertion.expression
-			if function /= Void then
+			if attached {XPLAIN_EXTENSION_FUNCTION_EXPRESSION} assertion.expression as function then
 				Result := sqlgenerator.SQLCoalesce + once "(" + Result + once ", " + function.selection.function.sqlextenddefault (sqlgenerator, function.selection.property) + once ")"
 			else
 				-- This shouldn't happen as it is not a some function so

@@ -3,8 +3,6 @@ note
 	description: "Xplain expression that is a function with a single operand."
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2004, Berend de Boer"
-	date:       "$Date: 2010/02/11 $"
-	revision:   "$Revision: #4 $"
 
 
 deferred class
@@ -36,7 +34,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	column_name: STRING
+	column_name: detachable STRING
 			-- Try to come up with the most likely column name for this
 			-- expression, only applicable for attributes. If nothing
 			-- found, return Void.

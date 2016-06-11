@@ -4,8 +4,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #13 $"
 
 deferred class
 
@@ -16,6 +14,7 @@ inherit
 
 	SQL_GENERATOR_ADVANCED
 		redefine
+			make,
 			OneLineCommentPrefix,
 			AutoPrimaryKeySupported,
 			DomainNullAllowed,
@@ -48,9 +47,19 @@ inherit
 		end
 
 
+feature {NONE} -- Initialisation
+
+	make
+		do
+			precursor
+			init_error := ""
+		end
+
+
 feature -- SQL Comments
 
-	OneLineCommentPrefix: STRING once result := Void end
+	OneLineCommentPrefix: detachable STRING once end
+
 
 feature -- command separation
 
@@ -141,7 +150,7 @@ feature -- Booleans
 
 feature -- functions
 
-	SQLCoalesce: STRING
+	SQLCoalesce: detachable STRING
 		once
 			Result := Void
 		end
@@ -162,7 +171,6 @@ feature -- sql creation
 	create_init (type: XPLAIN_TYPE)
 		local
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE]
-			if_expression: XPLAIN_IF_EXPRESSION
 		do
 			begin_new_separator
 			std.output.put_string ("create trigger ")
@@ -191,8 +199,7 @@ feature -- sql creation
 						std.output.put_string (Tab)
 					end
 					-- Because InterBase has no case expression, we need to trick a bit.
-					if_expression ?= cursor.item.init
-					if if_expression = Void then
+					if not attached {XPLAIN_IF_EXPRESSION} cursor.item.init as if_expression then
 						std.output.put_string ("new.")
 						std.output.put_string (cursor.item.q_sql_select_name (Current))
 						std.output.put_string (" = ")
@@ -481,7 +488,7 @@ feature -- Stored procedure names and parameter conventions
 			Result.append_string (CommandSeparator)
 		end
 
-	sp_start (a_procedure: XPLAIN_PROCEDURE)
+	sp_start (a_procedure: detachable XPLAIN_PROCEDURE)
 		do
 			begin_new_separator
 			precursor (a_procedure)

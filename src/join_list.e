@@ -9,9 +9,6 @@ note
 	%given their proper alias."
 
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #5 $"
 
 
 class
@@ -44,7 +41,7 @@ feature -- Access
 	base_aggregate: XPLAIN_TYPE
 			-- the table name after the from statement.
 
-	first: JOIN_NODE
+	first: detachable JOIN_NODE
 			--- First JOIN to output to SQL or Void if there are no joins
 		require
 			finalized_called: is_finalized
@@ -101,7 +98,7 @@ feature {NONE} -- chain handling
 
 	root: JOIN_TREE_NODE
 
-	my_first: JOIN_NODE
+	my_first: like first
 			-- Set by `finalize'
 
 	force_left_outer_join: BOOLEAN
@@ -131,7 +128,7 @@ feature -- Main commands
 		local
 			attr: XPLAIN_ATTRIBUTE
 			aname: XPLAIN_ATTRIBUTE_NAME
-			anode: XPLAIN_ATTRIBUTE_NAME_NODE
+			anode: detachable XPLAIN_ATTRIBUTE_NAME_NODE
 			save_base_aggregate: XPLAIN_TYPE
 			save_root: JOIN_TREE_NODE
 			dummy: XPLAIN_ATTRIBUTE_NAME_NODE
@@ -202,7 +199,7 @@ feature -- Main commands
 
 	extend (
 			sqlgenerator: SQL_GENERATOR
-			attribute_list: XPLAIN_ATTRIBUTE_NAME_NODE)
+			attribute_list: detachable XPLAIN_ATTRIBUTE_NAME_NODE)
 			-- Add more joins if somewhere in attribute_list a chain is
 			-- not in the joins already present.
 		require
@@ -210,8 +207,8 @@ feature -- Main commands
 			have_attribute_list: attribute_list /= Void
 			not_finalized: not is_finalized
 		local
-			anode: XPLAIN_ATTRIBUTE_NAME_NODE
-			jnode: JOIN_TREE_NODE
+			anode: detachable XPLAIN_ATTRIBUTE_NAME_NODE
+			jnode: detachable JOIN_TREE_NODE
 			indent: INTEGER
 			spaces: STRING
 		do
@@ -245,8 +242,10 @@ feature -- Main commands
 					end
 					if jnode.has_immediate_child (anode, is_upward_join) then
 						-- Add leaf of attribute list to tree so it gets a prefix.
-						jnode := jnode.found_immediate_child
-						jnode.add_additional_item (anode)
+						if attached jnode.found_immediate_child as j then
+							jnode := j
+							jnode.add_additional_item (anode)
+						end
 					else
 						debug ("xplain2sql_join")
 							create spaces.make_filled (' ', indent)
@@ -307,19 +306,19 @@ feature {NONE} -- Implementation
 
 	existential_join_optimisation_count: INTEGER
 
-	copy_role_to_next (anode: XPLAIN_ATTRIBUTE_NAME_NODE)
+	copy_role_to_next (anode: detachable XPLAIN_ATTRIBUTE_NAME_NODE)
 		do
-			if anode.next /= Void then
+			if attached anode.next then
 				copy_role_to_next (anode.next)
 				anode.next.item.set_role (anode.item.role)
 			end
 		end
 
-	revert_alist (anode: XPLAIN_ATTRIBUTE_NAME_NODE): XPLAIN_ATTRIBUTE_NAME_NODE
+	revert_alist (anode: detachable XPLAIN_ATTRIBUTE_NAME_NODE): XPLAIN_ATTRIBUTE_NAME_NODE
 		local
 			last: XPLAIN_ATTRIBUTE_NAME_NODE
 		do
-			if anode.next = Void then
+			if not attached anode.next then
 				create Result.make (anode.item, Void)
 			else
 				Result := revert_alist (anode.next)

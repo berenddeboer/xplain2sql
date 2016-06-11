@@ -3,8 +3,6 @@ note
 	description: "selection of a single value using a set function"
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2010/02/11 $"
-	revision:   "$Revision: #12 $"
 
 class
 
@@ -24,8 +22,8 @@ feature {NONE} -- Initialization
 	make (
 			a_function: XPLAIN_FUNCTION
 			a_subject: XPLAIN_SUBJECT
-			a_property: XPLAIN_EXPRESSION
-			a_predicate: XPLAIN_EXPRESSION)
+			a_property: detachable XPLAIN_EXPRESSION
+			a_predicate: detachable XPLAIN_EXPRESSION)
 		require
 			function_not_void: a_function /= Void
 			subject_not_void: a_subject /= Void

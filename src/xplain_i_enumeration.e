@@ -6,8 +6,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #5 $"
 
 class
 
@@ -65,16 +63,13 @@ feature -- Check restriction against representation
 	check_attachment (sqlgenerator: SQL_GENERATOR; a_representation: XPLAIN_REPRESENTATION)
 			-- Print warning if restriction is not ok for representation.
 		local
-			i: XPLAIN_I_REPRESENTATION
-			r: XPLAIN_R_REPRESENTATION
-			n: XPLAIN_I_NODE
+			n: detachable XPLAIN_I_NODE
 			i_min_number,
 			i_max_number: INTEGER
 			r_min_number,
 			r_max_number: DOUBLE
 		do
-			i ?= a_representation
-			if i /= Void then
+			if attached {XPLAIN_I_REPRESENTATION} a_representation as i then
 				-- We can only check this if we're dealing with stuff that
 				-- fits in a 32 bit integer right now...
 				if i.length <= 9 then
@@ -93,23 +88,20 @@ feature -- Check restriction against representation
 						n := n.next
 					end
 				end
-			else
-				r ?= a_representation
-				if r /= Void then
-					r_max_number := (10.0) ^ (r.before) - 1
-					r_min_number := - r_max_number
-					from
-						n := first
-					until
-						n = Void
-					loop
-						if n.item.item > r_max_number then
-							std.error.put_string (format("Value $i in real enumeration exceeds maximum possible number $0.0f of domain (R$i,$i).%N", <<integer_cell (n.item), double_cell (r_max_number), integer_cell (r.before), integer_cell (r.after)>>))
-						elseif n.item.item < r_min_number then
-							std.error.put_string (format("Value $i in real enumeration is lower than minimum possible number $0.0f of domain (R$i,$i).%N", <<integer_cell (n.item), double_cell (r_min_number), integer_cell (r.before), integer_cell (r.after)>>))
-						end
-						n := n.next
+			elseif attached {XPLAIN_R_REPRESENTATION} a_representation as r then
+				r_max_number := (10.0) ^ (r.before) - 1
+				r_min_number := - r_max_number
+				from
+					n := first
+				until
+					n = Void
+				loop
+					if n.item.item > r_max_number then
+						std.error.put_string (format("Value $i in real enumeration exceeds maximum possible number $0.0f of domain (R$i,$i).%N", <<integer_cell (n.item), double_cell (r_max_number), integer_cell (r.before), integer_cell (r.after)>>))
+					elseif n.item.item < r_min_number then
+						std.error.put_string (format("Value $i in real enumeration is lower than minimum possible number $0.0f of domain (R$i,$i).%N", <<integer_cell (n.item), double_cell (r_min_number), integer_cell (r.before), integer_cell (r.after)>>))
 					end
+					n := n.next
 				end
 			end
 		end

@@ -7,8 +7,6 @@ note
 	author: "Berend de Boer <berend@pobox.com>"
 	copyright: "Copyright (c) 2006, Berend de Boer and others"
 	license: "Eiffel Forum License v2 (see forum.txt)"
-	date: "$Date: 2010/02/11 $"
-	revision: "$Revision: #3 $"
 
 
 deferred class
@@ -48,7 +46,7 @@ feature -- Access
 	representation (
 			 sqlgenerator: SQL_GENERATOR;
 			 type: XPLAIN_TYPE;
-			 expression: XPLAIN_EXPRESSION): XPLAIN_REPRESENTATION
+			 expression: detachable XPLAIN_EXPRESSION): XPLAIN_REPRESENTATION
 			-- What's the xplain representation for this function?
 		do
 			Result := sqlgenerator.value_representation_boolean

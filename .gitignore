@@ -15,3 +15,5 @@ samples/test2.ddl
 *.tar.gz
 *.zip
 src/EIFGENs
+samples/*.tmp
+samples/*.sql

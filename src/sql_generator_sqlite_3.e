@@ -201,6 +201,7 @@ feature -- Stored procedures
 			-- output parameters. Statement should end with CommandSeperator.
 		do
 			-- We should not be called
+			Result := ""
 		end
 
 

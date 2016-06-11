@@ -44,18 +44,6 @@ feature  -- required implementations
 			-- SQL dialect does not have the necessary before-insert
 			-- trigger.
 
-	max_value (sqlgenerator: SQL_GENERATOR): STRING
-			-- maximum value that fits in this representation
-		do
-			std.error.put_string ("A (P) base doesn't have a maximum value.%N")
-		end
-
-	min_value (sqlgenerator: SQL_GENERATOR): STRING
-			-- minimum value that fits in this representation
-		do
-			std.error.put_string ("A (P) base doesn't have a minimum value.%N")
-		end
-
 	is_blob (sqlgenerator: SQL_GENERATOR): BOOLEAN
 			-- we need to be careful with storage space for blobs
 		do

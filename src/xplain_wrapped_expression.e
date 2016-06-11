@@ -3,8 +3,6 @@ note
 	description: "Expression that wraps another expression. Does some default behaviour to operate correctly in such cases."
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2003, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #6 $"
 
 deferred class
 
@@ -96,7 +94,7 @@ feature -- SQL generation
 			expression.add_to_join (sqlgenerator, join_list)
 		end
 
-	column_name: STRING
+	column_name: detachable STRING
 			-- The Xplain based column heading name, if any. It is used
 			-- by XML_GENERATOR to give clients some idea what the column
 			-- name of a select is going to be.
@@ -104,7 +102,7 @@ feature -- SQL generation
 			Result := expression.column_name
 		end
 
-	sqlname (sqlgenerator: SQL_GENERATOR): STRING
+	sqlname (sqlgenerator: SQL_GENERATOR): detachable STRING
 			-- Try to come up with the most likely column name for this
 			-- expression, only applicable for attributes. If nothing
 			-- found, return Void.

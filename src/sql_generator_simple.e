@@ -63,6 +63,7 @@ feature -- generation of init [default] expressions
 			-- inits are not supported, we should not be called
 		do
 			-- n/a
+			Result := ""
 		end
 
 
@@ -73,6 +74,7 @@ feature -- Stored procedures
 			-- output parameters. Statement should end with CommandSeperator.
 		do
 			-- We should not be called
+			Result := ""
 		end
 
 

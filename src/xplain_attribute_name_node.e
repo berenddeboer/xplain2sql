@@ -4,9 +4,6 @@ note
 		"Xplain node for linked list of attribute names"
 
 	author:		"Berend de Boer <berend@pobox.com>"
-	copyright:	"Copyright (c) 1999, Berend de Boer"
-	date:			"$Date: 2008/12/15 $"
-	revision:	"$Revision: #6 $"
 
 
 class
@@ -26,7 +23,7 @@ create
 
 feature
 
-	prefix_table: STRING
+	prefix_table: detachable STRING
 			-- Prefix attribute with this table (or table alias);
 			-- This prefix must be quoted!
 
@@ -42,7 +39,7 @@ feature
 			-- XPLAIN_EXTENSION_FUNCTION_EXPRESSION to set a prefix to
 			-- the outer table to correlated queries have the correct
 			-- prefix to the outer table.
-			if prefix_table = Void then
+			if not attached prefix_table then
 				prefix_table := a_prefix
 			end
 		end

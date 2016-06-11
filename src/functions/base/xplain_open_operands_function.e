@@ -3,8 +3,6 @@ note
 	description: "Xplain expression that is a function with one or more operands."
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2004, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #2 $"
 
 
 deferred class
@@ -52,7 +50,7 @@ feature -- Status
 			-- Does the expression contain the Xplain wildcard characters
 			-- '*' or '?'?
 		local
-			n: XPLAIN_EXPRESSION_NODE
+			n: detachable XPLAIN_EXPRESSION_NODE
 		do
 			from
 				n := operands
@@ -66,7 +64,7 @@ feature -- Status
 
 	is_literal: BOOLEAN
 		local
-			n: XPLAIN_EXPRESSION_NODE
+			n: detachable XPLAIN_EXPRESSION_NODE
 		do
 			from
 				n := operands
@@ -82,7 +80,7 @@ feature -- Status
 			-- Does this expression refer to other attributes as `an_attribute'?
 			-- It is used to output better optimized SQL code.
 		local
-			n: XPLAIN_EXPRESSION_NODE
+			n: detachable XPLAIN_EXPRESSION_NODE
 		do
 			from
 				n := operands
@@ -97,7 +95,7 @@ feature -- Status
 	uses_its: BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		local
-			n: XPLAIN_EXPRESSION_NODE
+			n: detachable XPLAIN_EXPRESSION_NODE
 		do
 			from
 				n := operands
@@ -112,7 +110,7 @@ feature -- Status
 	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		local
-			n: XPLAIN_EXPRESSION_NODE
+			n: detachable XPLAIN_EXPRESSION_NODE
 		do
 			from
 				n := operands
@@ -131,7 +129,7 @@ feature -- SQL code
 			-- Possibility of expression to add something to join part of
 			-- a select statement.
 		local
-			n: XPLAIN_EXPRESSION_NODE
+			n: detachable XPLAIN_EXPRESSION_NODE
 		do
 			from
 				n := operands

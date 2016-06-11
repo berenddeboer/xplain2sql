@@ -3,8 +3,6 @@ note
 	description: "Xplain abstract function"
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2010/02/11 $"
-	revision:   "$Revision: #8 $"
 
 
 deferred class
@@ -67,7 +65,7 @@ feature -- Access
 	representation (
 			sqlgenerator: SQL_GENERATOR;
 			type: XPLAIN_TYPE;
-			expression: XPLAIN_EXPRESSION): XPLAIN_REPRESENTATION
+			expression: detachable XPLAIN_EXPRESSION): XPLAIN_REPRESENTATION
 			-- What's the Xplain representation for this function?
 		require
 			have_sqlgenerator: sqlgenerator /= Void
@@ -78,7 +76,7 @@ feature -- Access
 			has_representation: Result /= Void
 		end
 
-	sqlextenddefault (sqlgenerator: SQL_GENERATOR; expression: XPLAIN_EXPRESSION): STRING
+	sqlextenddefault (sqlgenerator: SQL_GENERATOR; expression: detachable XPLAIN_EXPRESSION): STRING
 			-- default to use for extension when function can return a Null value
 		require
 			have_sqlgenerator: sqlgenerator /= Void
@@ -98,11 +96,10 @@ feature -- Access
 			if a_selection.property = Void then
 				Result := sqlgenerator.sp_function_type_for_selection_value (a_selection.subject.type.sqlname (sqlgenerator), a_selection.subject.type.representation, an_emit_path)
 			else
-				column_name := a_selection.property.column_name
-				if column_name = Void then
-					column_name := a_selection.function.name
+				if attached a_selection.property.column_name as cn then
+					column_name := a_selection.function.name + once "_" + cn
 				else
-					column_name := a_selection.function.name + once "_" + column_name
+					column_name := a_selection.function.name
 				end
 				Result := sqlgenerator.sp_function_type_for_selection_value (column_name, a_selection.property.representation (sqlgenerator), an_emit_path)
 			end

@@ -60,18 +60,6 @@ feature -- Access
 			-- SQL dialect does not have the necessary before-insert
 			-- trigger.
 
-	max_value (sqlgenerator: SQL_GENERATOR): STRING
-			-- maximum value that fits in this representation
-		do
-			std.error.put_string ("A (T) base doesn't have a maximum value.%N")
-		end
-
-	min_value (sqlgenerator: SQL_GENERATOR): STRING
-			-- minimum value that fits in this representation
-		do
-			std.error.put_string ("A (T) base doesn't have a minimum value.%N")
-		end
-
 	xml_schema_data_type: STRING
 			-- Best matching XML schema data type
 		do

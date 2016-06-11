@@ -59,7 +59,7 @@ feature -- Stored procedure support
 			std.output.put_character ('%N')
 		end
 
-	sp_result_parameter (a_procedure: XPLAIN_PROCEDURE)
+	sp_result_parameter (a_procedure: detachable XPLAIN_PROCEDURE)
 			-- Emit the result parameter of the stored procedure, if
 			-- applicable.
 			-- For example DB/2/Oracle needs to know if rows are returned.
@@ -82,7 +82,7 @@ feature -- Stored procedure support
 			std.output.put_string ("return result_cursor")
 		end
 
-	sp_start (a_procedure: XPLAIN_PROCEDURE)
+	sp_start (a_procedure: detachable XPLAIN_PROCEDURE)
 			-- Write statements to start a procedure, including the
 			-- "create procedure " statement itself (including space).
 		do

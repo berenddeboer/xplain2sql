@@ -5,9 +5,6 @@ note
 		"Xplain string enumerations"
 
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #6 $"
 
 class
 
@@ -24,6 +21,9 @@ inherit
 		end
 
 	XPLAIN_ENUMERATION [XPLAIN_A_NODE]
+		redefine
+			first
+		end
 
 	KL_SHARED_STANDARD_FILES
 		export
@@ -44,6 +44,11 @@ feature
 			first := afirst
 		end
 
+feature -- Access
+
+	first: XPLAIN_A_NODE
+
+
 feature
 
 	sqldomainconstraint (sqlgenerator: SQL_GENERATOR; column_name: STRING): STRING
@@ -59,12 +64,10 @@ feature
 			-- Print warning if a value in enumeration does not fit in max
 			-- base type length.
 		local
-			node: XPLAIN_A_NODE
+			node: detachable XPLAIN_A_NODE
 			maxlength: INTEGER
-			representation: XPLAIN_A_REPRESENTATION
 		do
-			representation ?= a_representation
-			if representation /= Void then
+			if attached {XPLAIN_A_REPRESENTATION} a_representation as representation then
 				maxlength := representation.length
 				from
 					node := first

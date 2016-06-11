@@ -4,8 +4,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2010/02/11 $"
-	revision:   "$Revision: #10 $"
 
 
 deferred class
@@ -24,7 +22,7 @@ feature -- Access
 			synchronized: subject.type = Result
 		end
 
-	predicate: XPLAIN_EXPRESSION
+	predicate: detachable XPLAIN_EXPRESSION
 			-- Optional predicate (where clause).
 
 	subject: XPLAIN_SUBJECT

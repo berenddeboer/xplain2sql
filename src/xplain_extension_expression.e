@@ -17,8 +17,6 @@ specializations of this class. This one is used when using the extension.
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2010/02/11 $"
-	revision:   "$Revision: #14 $"
 
 
 class
@@ -54,7 +52,7 @@ feature {NONE} -- Initialization
 		do
 			extension := an_extension
 			anode := an_anode
-			extension.hack_anode (anode)
+			extension.hack_anode (an_anode)
 		end
 
 
@@ -68,11 +66,11 @@ feature -- Access
 			Result := extension.name
 		end
 
-	extension: XPLAIN_ABSTRACT_EXTENSION
+	extension: detachable XPLAIN_ABSTRACT_EXTENSION
 			-- Extension;
 			-- Can be Void in certain cases (when expression is build).
 
-	anode: XPLAIN_ATTRIBUTE_NAME_NODE
+	anode: detachable XPLAIN_ATTRIBUTE_NAME_NODE
 			-- The way (its list) this extension was derived
 
 
@@ -80,11 +78,10 @@ feature -- Status
 
 	is_logical_expression: BOOLEAN
 			-- Is this a logical expression?
-		local
-			b: XPLAIN_B_REPRESENTATION
 		do
-			b ?= extension.representation
-			Result := b /= Void
+			if attached {XPLAIN_B_REPRESENTATION} extension.representation then
+				Result := True
+			end
 		end
 
 	is_nil_expression: BOOLEAN
@@ -200,6 +197,7 @@ feature -- SQL specifics
 			sqlgenerator_not_void: sqlgenerator /= Void
 		do
 			-- Not applicable here, but used in descendants.
+			Result := ""
 		ensure
 			not_empty: Result /= Void and then not Result.is_empty
 		end
@@ -216,13 +214,17 @@ feature -- SQL specifics
 					-- have_prefix: anode.last.prefix_table /= Void and then not anode.last.prefix_table.is_empty
 				end
 			if sqlgenerator.InUpdateStatement then
-				Result := sqlgenerator.sql_subselect_for_extension (extension)
+				if attached extension as e then
+					Result := sqlgenerator.sql_subselect_for_extension (e)
+				else
+					Result := "-- should not happen"
+				end
 			else
 				Result := extension.sql_qualified_name (sqlgenerator, anode.last.prefix_table)
 			end
 		end
 
-	sql_alias (sqlgenerator: SQL_GENERATOR): STRING
+	sql_alias (sqlgenerator: SQL_GENERATOR): detachable STRING
 			-- Used in `do_do_create_select_list' if output comes from an
 			-- optimised extension and therefore doesn't have a nice
 			-- colum name. With this the column name can be forced even

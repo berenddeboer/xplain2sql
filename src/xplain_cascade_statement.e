@@ -4,8 +4,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2004, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #6 $"
 
 class
 
@@ -65,9 +63,9 @@ feature {NONE} -- Initialization
 			finished: XPLAIN_VALUE
 			finished_selection: XPLAIN_SELECTION_FUNCTION
 			finished_expression: XPLAIN_EXTENSION_FUNCTION_EXPRESSION
-			first_path_value: XPLAIN_EXTENSION_EXPRESSION
-			previous_first_path_expression: XPLAIN_EXTENSION_EXPRESSION_EXPRESSION
-			previous_firsth_path: XPLAIN_EXTENSION
+			-- first_path_value: XPLAIN_EXTENSION_EXPRESSION
+			-- previous_first_path_expression: XPLAIN_EXTENSION_EXPRESSION_EXPRESSION
+			-- previous_firsth_path: XPLAIN_EXTENSION
 		do
 			subtype := a_subtype
 			cascade_attribute := a_cascade_attribute
@@ -84,7 +82,7 @@ feature {NONE} -- Initialization
 			-- 2. extend node with round visited = counter.
 			create round_visited_expression.make (counter_expression)
 			-- FIX COMPILE: create round_visited.make (sqlgenerator, subtype, round_visited_name, round_visited_expression)
-			create round_visited_statement.make (round_visited)
+			-- FIX COMPILE: create round_visited_statement.make (round_visited)
 
 			-- 3. extend node with this round =
 			--      nil arc
@@ -94,7 +92,7 @@ feature {NONE} -- Initialization
 			create this_round_selection.make (nil_function, definition.selection.subject, Void, Void)
 			create this_round_expression.make (this_round_selection, definition.grouping_attributes)
 			-- FIX COMPILE: create this_round.make (sqlgenerator, subtype, this_round_name, this_round_expression)
-			create first_round_statement.make (this_round)
+			-- FIX COMPILE: create first_round_statement.make (this_round)
 
 			-- repeat until finished:
 
@@ -113,16 +111,18 @@ feature {NONE} -- Initialization
 			--      where
 			--        this round.
 			create round_visited_attribute_name.make (Void, round_visited_name)
-			round_visited_attribute_name.set_attribute (subtype.find_attribute (round_visited_attribute_name))
+			if attached subtype.find_attribute (round_visited_attribute_name) as a then
+				round_visited_attribute_name.set_attribute (a)
+			end
 			create round_visited_assigment.make (round_visited_attribute_name, counter_current_value)
 			create round_visited_assignment_node.make (round_visited_assigment, Void)
 			create this_round_attribute_name.make (Void, this_round_name)
-			this_round_attribute_name.set_object (this_round)
+			-- FIX COMPILE: this_round_attribute_name.set_object (this_round)
 			create this_round_attribute_name_node.make (this_round_attribute_name, Void)
-			create this_round_value.make (this_round, this_round_attribute_name_node)
-			create where_this_round.make (this_round_value)
+			-- FIX COMPILE: create this_round_value.make (this_round, this_round_attribute_name_node)
+			-- FIX COMPILE: create where_this_round.make (this_round_value)
 			create round_visited_subject.make (subtype, Void)
-			create update_round_visited_statement.make (round_visited_subject, round_visited_assignment_node, where_this_round)
+			-- FIX COMPILE: create update_round_visited_statement.make (round_visited_subject, round_visited_assignment_node, where_this_round)
 
 			-- Have to remove temporary table, or update it if that is supported.
 			-- 3. purge node its this round.
@@ -137,17 +137,19 @@ feature {NONE} -- Initialization
 			-- This might be pretty hard to figure out: need to find the cycle
 			-- or the link node in the expression. Hardcoded for now...
 			create from_node_attribute_name.make ("from", subtype.name)
-			from_node_attribute := definition.selection.subject.type.find_attribute (from_node_attribute_name)
-			create from_node_attribute_name.make_from_attribute (from_node_attribute)
+			if attached definition.selection.subject.type.find_attribute (from_node_attribute_name) as a then
+				from_node_attribute := a
+				create from_node_attribute_name.make_from_attribute (from_node_attribute)
+			end
 			create from_node_attribute_name_node.make (from_node_attribute_name, Void)
 			create current_round_property.make (from_node_attribute_name_node)
 			create round_visited_attribute_name_node.make (round_visited_attribute_name, Void)
-			create round_visited_value.make (round_visited, round_visited_attribute_name_node)
-			create current_round_where.make (round_visited_value, "=", counter_current_value)
-			create current_round_selection.make (current_round_function, definition.selection.subject, current_round_property, current_round_where)
-			create current_round_expression.make (current_round_selection, definition.grouping_attributes)
+			-- FIX COMPILE: create round_visited_value.make (round_visited, round_visited_attribute_name_node)
+			-- FIX COMPILE: create current_round_where.make (round_visited_value, "=", counter_current_value)
+			-- FIX COMPILE: create current_round_selection.make (current_round_function, definition.selection.subject, current_round_property, current_round_where)
+			-- FIX COMPILE: create current_round_expression.make (current_round_selection, definition.grouping_attributes)
 			-- FIX COMPILE: create current_round.make (sqlgenerator, subtype, this_round_name, current_round_expression)
-			create current_round_statement.make (current_round)
+			-- FIX COMPILE: create current_round_statement.make (current_round)
 
 			-- Are we finished?
 			-- value finished =
@@ -244,24 +246,29 @@ feature {NONE} -- Xplain statements
 	increment_value_statement: XPLAIN_VALUE_STATEMENT
 			-- Increment counter by one
 
-	round_visited_statement: XPLAIN_EXTEND_STATEMENT
+	round_visited_statement: detachable XPLAIN_EXTEND_STATEMENT
 			-- Indicates for every node in what round it was visited;
 			-- Every nodes should be visited just once, if we visit a
 			-- node twice, we have a circular reference.
+			-- FIX ME: is not detachable
 
-	first_round_statement: XPLAIN_EXTEND_STATEMENT
+	first_round_statement: detachable XPLAIN_EXTEND_STATEMENT
 			-- Nodes to be visited in the first round
+			-- FIX ME: is not detachable
 
-	current_round_statement: XPLAIN_EXTEND_STATEMENT
+	current_round_statement: detachable XPLAIN_EXTEND_STATEMENT
 			-- Nodes to be visited in the current round
+			-- FIX ME: is not detachable
 
-	update_round_visited_statement: XPLAIN_UPDATE_STATEMENT
+	update_round_visited_statement: detachable XPLAIN_UPDATE_STATEMENT
 			-- Update the round visited extended attribute
+			-- FIX ME: is not detachable
 
 	finished_statement: XPLAIN_VALUE_STATEMENT
 			-- Determine if finished
 
-	previous_first_path_statement: XPLAIN_EXTEND_STATEMENT
+	previous_first_path_statement: detachable XPLAIN_EXTEND_STATEMENT
+			-- FIX ME: is not detachable
 
 
 feature {NONE} -- Once strings used in building the Xplain statements

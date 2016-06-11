@@ -9,8 +9,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2010/02/11 $"
-	revision:   "$Revision: #15 $"
 
 deferred class
 
@@ -451,8 +449,6 @@ feature -- Identifiers
 			else
 				from
 					i := 1
-				variant
-					identifier.count - i + 1
 				until
 					i > identifier.count
 				loop
@@ -463,6 +459,8 @@ feature -- Identifiers
 						Result.append_character (c)
 					end
 					i := i + 1
+				variant
+					identifier.count - i + 1
 				end
 			end
 			Result.append_character ('"')
@@ -551,7 +549,7 @@ feature -- Stored procedure support
 			-- The function type for output of a get statement.
 			-- Required for PostgreSQL output.
 		local
-			e: XPLAIN_EXPRESSION_NODE
+			e: detachable XPLAIN_EXPRESSION_NODE
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE]
 			my_attribute: XPLAIN_ATTRIBUTE
 			s: STRING
@@ -746,7 +744,6 @@ feature -- Stored procedure support
 	sp_user_declaration (procedure: XPLAIN_PROCEDURE)
 			-- Emit value declarations.
 		local
-			value_statement: XPLAIN_VALUE_STATEMENT
 			value: XPLAIN_VALUE
 			parameter: XPLAIN_ATTRIBUTE_NAME
 			i: INTEGER
@@ -777,8 +774,7 @@ feature -- Stored procedure support
 			until
 				procedure.statements.after
 			loop
-				value_statement ?= procedure.statements.item_for_iteration
-				if value_statement /= Void then
+				if attached {XPLAIN_VALUE_STATEMENT} procedure.statements.item_for_iteration as value_statement then
 					value := value_statement.value
 					if not is_value_declared (value) then
 						create_value_declare_inside_sp (value)

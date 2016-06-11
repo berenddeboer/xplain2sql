@@ -4,8 +4,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2002, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #4 $"
 
 
 deferred class
@@ -29,13 +27,6 @@ feature -- Commands
 		do
 		end
 
-	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
-			-- Is parameter `a_parameter' used by this statement?
-		require
-			parameter_not_void: a_parameter /= Void
-		deferred
-		end
-
 	write (a_generator: ABSTRACT_GENERATOR)
 			-- Write output according to this generator.
 		require
@@ -45,6 +36,13 @@ feature -- Commands
 
 
 feature -- Status
+
+	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
+			-- Is parameter `a_parameter' used by this statement?
+		require
+			parameter_not_void: a_parameter /= Void
+		deferred
+		end
 
 	updates_attribute (a_type: XPLAIN_TYPE; an_attribute_name: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this statement update the attribute `an_attribute_name'

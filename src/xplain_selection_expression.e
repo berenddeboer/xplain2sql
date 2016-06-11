@@ -5,8 +5,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #10 $"
 
 class
 
@@ -61,7 +59,7 @@ feature -- Status
 
 feature -- SQL output
 
-	column_name: STRING
+	column_name: detachable STRING
 			-- The Xplain based column heading name, if any. It is used
 			-- by PostgreSQL output to create the proper function type
 			-- for example. The XML_GENERATOR uses it to give clients

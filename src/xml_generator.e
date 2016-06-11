@@ -4,8 +4,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2002, Berend de Boer, see forum.txt"
-	date:       "$Date: 2010/02/11 $"
-	revision:   "$Revision: #16 $"
 
 
 class
@@ -28,6 +26,20 @@ inherit
 	EXCEPTIONS
 		export
 			{NONE} all
+		end
+
+
+create
+
+	make
+
+
+feature {NONE} -- Initialisation
+
+	make (a_sqlgenerator: like sqlgenerator)
+		do
+			sqlgenerator := a_sqlgenerator
+			create xml.make_with_capacity (4096)
 		end
 
 
@@ -147,8 +159,6 @@ feature -- Write callbacks
 			-- Dump stored procedure info.
 		local
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE_NAME]
-			get_statement: XPLAIN_GET_STATEMENT
-			value_statement: XPLAIN_VALUE_SELECTION_STATEMENT
 			param_name,
 			param_type: STRING
 		do
@@ -190,14 +200,10 @@ feature -- Write callbacks
 					cursor.forth
 				end
 				-- write columns for last get statement, if any
-				get_statement := procedure.last_get_statement
-				if get_statement /= Void then
+				if attached procedure.last_get_statement as get_statement then
 					get_statement.selection.write_select (Current)
-				else
-					value_statement := procedure.last_value_selection_statement
-					if value_statement /= Void then
-						value_statement.write (Current)
-					end
+				elseif attached procedure.last_value_selection_statement as value_statement then
+					value_statement.write (Current)
 				end
 				xml.stop_tag
 			end
@@ -229,9 +235,14 @@ feature -- Write callbacks
 					representation.xml_schema_data_type)
 			else
 				representation := selection_list.property.exact_representation (sqlgenerator)
-				xplain_name := selection_list.property.column_name
-				sql_name := selection_list.property.sqlname (sqlgenerator)
-				if xplain_name = Void then
+				if attached selection_list.property.column_name as n then
+					xplain_name := n
+					if attached selection_list.property.sqlname (sqlgenerator) as s then
+						sql_name := s
+					else
+						sql_name := n
+					end
+				else
 					xplain_name := selection_list.function.name
 					sql_name := xplain_name
 				end
@@ -250,7 +261,7 @@ feature -- Write callbacks
 	write_select_list (selection_list: XPLAIN_SELECTION_LIST)
 			-- Write get with zero or more attributes.
 		local
-			node: XPLAIN_EXPRESSION_NODE
+			node: detachable XPLAIN_EXPRESSION_NODE
 			xplain_name,
 			column_name: STRING
 			r: XPLAIN_REPRESENTATION
@@ -278,15 +289,20 @@ feature -- Write callbacks
 						node = Void
 					loop
 						xml.start_tag ("column")
-						if node.new_name = Void then
-							xplain_name := node.item.column_name
-							column_name := node.item.sqlname (sqlgenerator)
-							if column_name = Void then
+						if attached node.new_name as n then
+							xplain_name := n
+							column_name := n
+						else
+							if attached node.item.column_name as c then
+								xplain_name := c
+							else
+								xplain_name := "no_column_name_given"
+							end
+							if attached node.item.sqlname (sqlgenerator) as c then
+								column_name := c
+							else
 								column_name := "no_name_given"
 							end
-						else
-							xplain_name := node.new_name
-							column_name := node.new_name
 						end
 						r := node.item.exact_representation (sqlgenerator)
 						set_names (
@@ -373,7 +389,6 @@ feature {NONE} -- Write helpers
 		local
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE]
 			my_attribute: XPLAIN_ATTRIBUTE
-			my_type: XPLAIN_TYPE
 		do
 			-- primary key
 			xml.start_tag (once "column")
@@ -423,8 +438,7 @@ feature {NONE} -- Write helpers
 					else
 						xml.set_attribute (once "init", once "always")
 					end
-					my_type ?= my_attribute.abstracttype
-					if my_type /= Void then
+					if attached {XPLAIN_TYPE} my_attribute.abstracttype as my_type then
 						xml.set_attribute (once "references", my_type.name)
 						xml.set_attribute (once "sqlReferences", my_type.quoted_name (sqlgenerator))
 					end
@@ -439,7 +453,7 @@ feature {NONE} -- Write helpers
 			-- time stamp
 		end
 
-	set_names (xplain_name, xplain_domain, sql_name, sql_type, an_ncname, an_xs_data_type: STRING)
+	set_names (xplain_name: STRING; xplain_domain: detachable STRING; sql_name: STRING; sql_type, an_ncname, an_xs_data_type: detachable STRING)
 			-- Write the bunch of name attributes.
 			-- `sql_name' should be unquoted.
 		require

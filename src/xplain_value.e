@@ -3,8 +3,6 @@ note
 	description: "Xplain value"
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #10 $"
 
 class
 
@@ -56,10 +54,12 @@ feature -- Status
 
 feature -- SQL
 
-	create_expression (node: XPLAIN_ATTRIBUTE_NAME_NODE): XPLAIN_EXPRESSION
+	create_expression (node: XPLAIN_ATTRIBUTE_NAME_NODE): detachable XPLAIN_EXPRESSION
 			-- Return suitable expression for variable.
 		do
-			create {XPLAIN_VALUE_EXPRESSION} Result.make (node.item.value)
+			if attached node.item.value as v then
+				create {XPLAIN_VALUE_EXPRESSION} Result.make (v)
+			end
 		end
 
 	quoted_name (sqlgenerator: SQL_GENERATOR): STRING

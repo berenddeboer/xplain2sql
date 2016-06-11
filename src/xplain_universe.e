@@ -6,9 +6,6 @@ note
 		%should be singleton"
 
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #7 $"
 
 class
 
@@ -87,7 +84,7 @@ feature -- Access
 
 feature -- find objects or types
 
-	find_object (name: STRING): XPLAIN_ABSTRACT_OBJECT
+	find_object (name: STRING): detachable XPLAIN_ABSTRACT_OBJECT
 			-- Return object if found. Uses `objects'.`search'.
 		do
 			objects.search (name)
@@ -98,29 +95,39 @@ feature -- find objects or types
 			found_item_set: Result /= Void implies objects.found
 		end
 
-	find_base_or_type (name: STRING): XPLAIN_ABSTRACT_TYPE
+	find_base_or_type (name: STRING): detachable XPLAIN_ABSTRACT_TYPE
 		do
-			result ?= find_object (name)
+			if attached {XPLAIN_ABSTRACT_TYPE} find_object (name) as t then
+				result := t
+			end
 		end
 
-	find_base (name: STRING): XPLAIN_BASE
+	find_base (name: STRING): detachable XPLAIN_BASE
 		do
-			result ?= find_object (name)
+			if attached {XPLAIN_BASE} find_object (name) as b then
+				result := b
+			end
 		end
 
-	find_type (name: STRING): XPLAIN_TYPE
+	find_type (name: STRING): detachable XPLAIN_TYPE
 		do
-			result ?= find_object (name)
+			if attached {XPLAIN_TYPE} find_object (name) as t then
+				result := t
+			end
 		end
 
-	find_value (name: STRING): XPLAIN_VALUE
+	find_value (name: STRING): detachable XPLAIN_VALUE
 		do
-			result ?= find_object (name)
+			if attached {XPLAIN_VALUE} find_object (name) as v then
+				result := v
+			end
 		end
 
-	find_variable (name: STRING): XPLAIN_VARIABLE
+	find_variable (name: STRING): detachable XPLAIN_VARIABLE
 		do
-			result ?= find_object (name)
+			if attached {XPLAIN_VARIABLE} find_object (name) as v then
+				result := v
+			end
 		end
 
 

@@ -3,9 +3,6 @@ note
 	description: "Xplain domain restriction abstraction"
 
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #5 $"
 
 deferred class
 
@@ -28,7 +25,7 @@ feature -- Access
 
 feature -- SQL code
 
-	sqldomainconstraint (sqlgenerator: SQL_GENERATOR; a_column_name: STRING): STRING
+	sqldomainconstraint (sqlgenerator: SQL_GENERATOR; a_column_name: STRING): detachable STRING
 			-- Constraint used when creating domains
 			-- Void means no domain constraints.
 			-- If you want `a_column_name' to be quoted, you need to pass a
@@ -36,7 +33,7 @@ feature -- SQL code
 		deferred
 		end
 
-	sqlcolumnconstraint (sqlgenerator: SQL_GENERATOR; a_column_name: STRING): STRING
+	sqlcolumnconstraint (sqlgenerator: SQL_GENERATOR; a_column_name: STRING): detachable STRING
 			-- Constraint to use when creating columns;
 			-- Void means no column constraints
 		do

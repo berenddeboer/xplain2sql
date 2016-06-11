@@ -6,9 +6,7 @@ note
 		%and middleware code."
 
 	author:	"Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 1999, Berend de Boer, see forum.txt"
-	date:		"$Date: 2010/02/11 $"
-	revision:	"$Revision: #12 $"
+	copyright:  "Copyright (c) 1999, Berend de Boer"
 
 deferred class
 
@@ -251,7 +249,7 @@ feature -- Code writing
 		deferred
 		end
 
-	write_delete (subject: XPLAIN_SUBJECT; predicate: XPLAIN_EXPRESSION)
+	write_delete (subject: XPLAIN_SUBJECT; predicate: detachable XPLAIN_EXPRESSION)
 			-- Code for delete statement.
 		require
 			subject_not_void: subject /= Void
@@ -269,7 +267,7 @@ feature -- Code writing
 		a_selection: XPLAIN_SELECTION_LIST
 		an_insert_type: XPLAIN_TYPE
 		an_auto_primary_key: BOOLEAN
-		an_assignment_list: XPLAIN_ATTRIBUTE_NAME_NODE)
+		an_assignment_list: detachable XPLAIN_ATTRIBUTE_NAME_NODE)
 			-- Get into a table.
 		require
 			selection_not_void: a_selection /= Void
@@ -277,7 +275,7 @@ feature -- Code writing
 		deferred
 		end
 
-	write_insert (type: XPLAIN_TYPE; id: XPLAIN_EXPRESSION; assignment_list: XPLAIN_ASSIGNMENT_NODE)
+	write_insert (type: XPLAIN_TYPE; id: detachable XPLAIN_EXPRESSION; assignment_list: XPLAIN_ASSIGNMENT_NODE)
 			-- Code for insert statement.
 		require
 			type_not_void: type /= Void
@@ -335,7 +333,7 @@ feature -- Code writing
 	write_update (
 			subject: XPLAIN_SUBJECT;
 			assignment_list: XPLAIN_ASSIGNMENT_NODE;
-			predicate: XPLAIN_EXPRESSION)
+			predicate: detachable XPLAIN_EXPRESSION)
 			-- Code for update statement.
 		require
 			subject_not_void: subject /= Void

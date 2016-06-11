@@ -6,8 +6,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #8 $"
 
 
 deferred class
@@ -71,7 +69,7 @@ feature -- Access
 			at_least_three_characters: Result.count >= 3
 		end
 
-	domain_restriction: XPLAIN_DOMAIN_RESTRICTION
+	domain_restriction: detachable XPLAIN_DOMAIN_RESTRICTION
 
 	value_representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- Representation suitable for the value statement. This
@@ -84,7 +82,7 @@ feature -- Access
 			-- for many representations, this routine is not applicable
 			-- because you don't encounter them in value expressions.
 			-- override in descendents to really do something
-			Result := void
+			Result := Current
 		ensure
 			valid_result: Result /= Void
 		end
@@ -138,7 +136,9 @@ feature  -- SQL code
 			-- Maximum value that fits in this representation.
 		require
 			sqlgenerator_not_void: sqlgenerator /= Void
-		deferred
+		do
+			Result := "XPLAIN_REPRESENTATION " + domain + " does not have a maximum value"
+			std.error.put_string ("A " + domain + " base doesn't have a maximum value.%N")
 		ensure
 			min_value_not_empty: Result /= Void and then not Result.is_empty
 		end
@@ -147,7 +147,9 @@ feature  -- SQL code
 			-- Minimum value that fits in this representation.
 		require
 			sqlgenerator_not_void: sqlgenerator /= Void
-		deferred
+		do
+			Result := "XPLAIN_REPRESENTATION " + domain + " does not have a minimum value"
+			std.error.put_string ("A " + domain + " base doesn't have a minimum value.%N")
 		ensure
 			min_value_not_empty: Result /= Void and then not Result.is_empty
 		end

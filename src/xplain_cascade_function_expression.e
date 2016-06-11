@@ -66,6 +66,7 @@ feature -- SQL
 	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 		do
 			-- to be implemented
+			create {XPLAIN_I_REPRESENTATION} Result.make (1)
 		end
 
 	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING

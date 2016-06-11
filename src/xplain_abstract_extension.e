@@ -5,8 +5,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999-2007, Berend de Boer"
-	date:       "$Date: 2010/02/11 $"
-	revision:   "$Revision: #9 $"
 
 
 deferred class
@@ -24,7 +22,7 @@ inherit
 
 feature -- SQL
 
-	sql_qualified_name (sqlgenerator: SQL_GENERATOR; prefix_override: STRING): STRING
+	sql_qualified_name (sqlgenerator: SQL_GENERATOR; prefix_override: detachable STRING): STRING
 			-- Name used in select statements. prefix overrides the
 			-- default prefix, used when joining the extend table more
 			-- than one time.
@@ -35,7 +33,7 @@ feature -- SQL
 			have_name: Result /= Void and then not Result.is_empty
 		end
 
-	sql_alias (sqlgenerator: SQL_GENERATOR): STRING
+	sql_alias (sqlgenerator: SQL_GENERATOR): detachable STRING
 			-- Used in `do_do_create_select_list' if output comes from an
 			-- optimised extension and therefore doesn't have a nice
 			-- colum name. With this the column name can be forced even

@@ -2,9 +2,6 @@ note
 
 	description: "Xplain attribute"
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2010/02/11 $"
-	revision:   "$Revision: #10 $"
 
 class
 
@@ -17,8 +14,8 @@ create
 feature {NONE} -- Initialization
 
 	make (
-		a_role: STRING;
-		an_abstracttype: XPLAIN_ABSTRACT_TYPE;
+		a_role: detachable STRING;
+		an_abstracttype: like abstracttype;
 		a_overrule_required,
 		a_required,
 		a_specialization,
@@ -80,7 +77,7 @@ feature -- Status
 
 feature -- Access
 
-	abstracttype: XPLAIN_ABSTRACT_TYPE
+	abstracttype: detachable XPLAIN_ABSTRACT_TYPE
 			-- Base/type/extension that defines this attribute
 
 	full_name: STRING
@@ -96,7 +93,7 @@ feature -- Access
 			name_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	init: XPLAIN_EXPRESSION
+	init: detachable XPLAIN_EXPRESSION
 			-- init or init default expression
 
 	name: STRING
@@ -104,7 +101,7 @@ feature -- Access
 			Result := abstracttype.name
 		end
 
-	role: STRING
+	role: detachable STRING
 
 	overrule_required: BOOLEAN
 			-- Use non-standard Xplain extension to allow user to specify
@@ -113,7 +110,7 @@ feature -- Access
 
 feature -- Change
 
-	set_abstracttype (aowner: XPLAIN_TYPE)
+	set_abstracttype (aowner: like abstracttype)
 			-- fix abstracttype when it is a self reference (reference to
 			-- its owner in this case)
 		require

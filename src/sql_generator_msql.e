@@ -7,8 +7,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2000, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #7 $"
 
 class
 
@@ -113,6 +111,7 @@ feature -- type specification for xplain types
 	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING
 		do
 			-- not suported
+			Result := ""
 		end
 
 	datatype_text (representation: XPLAIN_T_REPRESENTATION): STRING

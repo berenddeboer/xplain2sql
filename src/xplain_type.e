@@ -3,8 +3,6 @@ note
 	description: "Xplain type"
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #12 $"
 
 
 class
@@ -32,13 +30,13 @@ feature {NONE} -- Initialization
 			valid_attributes: -- every attribute has abstracttype /= Void
 			-- when it is Void, it's a self reference
 		local
-			id_restriction: XPLAIN_IDENTIFICATION_RESTRICTION
-			node: XPLAIN_ATTRIBUTE_NODE
+			node: detachable XPLAIN_ATTRIBUTE_NODE
 		do
 			make_abstract_type (aname, arepresentation)
 			representation := arepresentation
-			id_restriction ?= representation.domain_restriction
-			id_restriction.set_owner (Current)
+			if attached {XPLAIN_IDENTIFICATION_RESTRICTION} representation.domain_restriction as id_restriction then
+				id_restriction.set_owner (Current)
+			end
 
 			create  attributes.make
 			-- add `a_attributes' to `attributes'
@@ -106,17 +104,17 @@ feature -- SQL access
 
 feature -- SQL code
 
-	sqlcolumnidentifier (sqlgenerator: SQL_GENERATOR; role: STRING): STRING
+	sqlcolumnidentifier (sqlgenerator: SQL_GENERATOR; role: detachable STRING): STRING
 		do
 			Result := sqlgenerator.sqlcolumnidentifier_type (Current, role)
 		end
 
-	sqlcolumndefault (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING
+	sqlcolumndefault (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): detachable STRING
 		do
 			Result := sqlgenerator.sqlcolumndefault_type (an_attribute)
 		end
 
-	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING
+	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): detachable STRING
 		do
 			Result := sqlgenerator.sqlcolumnrequired_type (an_attribute)
 		end
@@ -169,7 +167,7 @@ feature -- questions about the type itself
 			Result := number_of_specializations = 1
 		end
 
-	generalization: XPLAIN_TYPE
+	generalization: detachable XPLAIN_TYPE
 		require
 			has_single_supertype: contains_one_is_a_relation
 		do
@@ -178,8 +176,9 @@ feature -- questions about the type itself
 			until
 				attributes.after or else Result /= Void
 			loop
-				if attributes.item_for_iteration.is_specialization then
-					Result ?= attributes.item_for_iteration.abstracttype
+				if attributes.item_for_iteration.is_specialization and
+					attached {XPLAIN_TYPE} attributes.item_for_iteration.abstracttype as at then
+					Result := at
 				end
 				attributes.forth
 			end
@@ -235,7 +234,7 @@ feature -- questions about the type itself
 
 feature -- Attribute handling
 
-	find_attribute (attribute_name: XPLAIN_ATTRIBUTE_NAME): XPLAIN_ATTRIBUTE
+	find_attribute (attribute_name: XPLAIN_ATTRIBUTE_NAME): detachable XPLAIN_ATTRIBUTE
 			-- Attribute if type has an attribute with this name
 		require
 			valid_attribute_name: attribute_name /= Void
@@ -254,7 +253,7 @@ feature -- Attribute handling
 			end
 		end
 
-	has_attribute (a_role, a_name: STRING): BOOLEAN
+	has_attribute (a_role: detachable STRING; a_name: STRING): BOOLEAN
 			-- Has this type an attribute by this role and name?
 		local
 			an: XPLAIN_ATTRIBUTE_NAME

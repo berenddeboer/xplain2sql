@@ -5,9 +5,6 @@ note
 	"Xplain domain restriction abstraction"
 
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #5 $"
 
 
 class
@@ -67,8 +64,6 @@ feature -- Check restriction against representation
 			-- Print warning if a value in enumeration does not fit in
 			-- max base type length.
 		local
-			Irepresentation: XPLAIN_I_REPRESENTATION
-			Rrepresentation: XPLAIN_R_REPRESENTATION
 			min_length,
 			max_length: INTEGER
 		do
@@ -80,8 +75,7 @@ feature -- Check restriction against representation
 			if max.item (1) = '-' then
 				max_length := max.count -1
 			end
-			Irepresentation ?= representation
-			if Irepresentation /= Void then
+			if attached {XPLAIN_I_REPRESENTATION} representation as Irepresentation then
 				if min_length > Irepresentation.length then
 					std.error.put_string ("Minimum value ")
 					std.error.put_string (min)
@@ -96,23 +90,20 @@ feature -- Check restriction against representation
 					std.error.put_integer (Irepresentation.length)
 					std.error.put_string (" of integer representation.%N")
 				end
-			else
-				Rrepresentation ?= representation
-				if Rrepresentation /= Void then
-					if min_length > Rrepresentation.before then
-						std.error.put_string ("Minimum value ")
-						std.error.put_string (min)
-						std.error.put_string (" in trajectory exceeds maximum length ")
-						std.error.put_integer (Rrepresentation.before)
-						std.error.put_string (" of real representation.%N")
-					end
-					if max_length > Rrepresentation.before then
-						std.error.put_string ("Maximum value ")
-						std.error.put_string (max)
-						std.error.put_string (" in trajectory exceeds maximum length ")
-						std.error.put_integer (Rrepresentation.before)
-						std.error.put_string (" of real representation.%N")
-					end
+			elseif attached {XPLAIN_R_REPRESENTATION} representation as Rrepresentation then
+				if min_length > Rrepresentation.before then
+					std.error.put_string ("Minimum value ")
+					std.error.put_string (min)
+					std.error.put_string (" in trajectory exceeds maximum length ")
+					std.error.put_integer (Rrepresentation.before)
+					std.error.put_string (" of real representation.%N")
+				end
+				if max_length > Rrepresentation.before then
+					std.error.put_string ("Maximum value ")
+					std.error.put_string (max)
+					std.error.put_string (" in trajectory exceeds maximum length ")
+					std.error.put_integer (Rrepresentation.before)
+					std.error.put_string (" of real representation.%N")
 				end
 			end
 		end

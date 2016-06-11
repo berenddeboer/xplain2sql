@@ -3,8 +3,6 @@ note
 	description: "Xplain any function"
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #6 $"
 
 class
 
@@ -24,7 +22,7 @@ feature -- Access
 	name: STRING = "any"
 			-- Xplain name of function
 
-	sqlextenddefault (sqlgenerator: SQL_GENERATOR; expression: XPLAIN_EXPRESSION): STRING
+	sqlextenddefault (sqlgenerator: SQL_GENERATOR; expression: detachable XPLAIN_EXPRESSION): STRING
 			-- default to use for extension when function returns a Null value
 		do
 			Result := sqlgenerator.sqlfunction_nil

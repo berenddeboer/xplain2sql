@@ -5,8 +5,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2001, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #7 $"
 
 
 class
@@ -50,15 +48,14 @@ feature -- Filter checks
 
 	is_generated_attribute: BOOLEAN
 			-- Is current item included in the filter?
-		local
-			assertion: XPLAIN_ASSERTION
 		do
-			assertion ?= item.abstracttype
-			Result :=
-				not item.is_assertion or else
-				(generate_assert and then
-					(assertion.is_literal or else
-						assertion.is_simple))
+			if attached {XPLAIN_ASSERTION} item.abstracttype as assertion then
+				Result :=
+					not item.is_assertion or else
+					(generate_assert and then
+						(assertion.is_literal or else
+							assertion.is_simple))
+			end
 		end
 
 

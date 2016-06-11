@@ -3,8 +3,6 @@ note
 	description: "Xplain count function"
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #7 $"
 
 class
 
@@ -41,13 +39,13 @@ feature -- Access
 	representation (
 			 sqlgenerator: SQL_GENERATOR;
 			 type: XPLAIN_TYPE;
-			 expression: XPLAIN_EXPRESSION): XPLAIN_REPRESENTATION
+			 expression: detachable XPLAIN_EXPRESSION): XPLAIN_REPRESENTATION
 			-- What's the xplain representation for this function?
 		do
 			Result := sqlgenerator.value_representation_integer (9)
 		end
 
-	sqlextenddefault (sqlgenerator: SQL_GENERATOR; expression: XPLAIN_EXPRESSION): STRING
+	sqlextenddefault (sqlgenerator: SQL_GENERATOR; expression: detachable XPLAIN_EXPRESSION): STRING
 			-- default to use for extension when function returns a Null value
 		once
 			Result := "0"

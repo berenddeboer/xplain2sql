@@ -3,8 +3,6 @@ note
 	description: "Selection of a single value."
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2001, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #7 $"
 
 deferred class
 
@@ -22,7 +20,7 @@ inherit
 
 feature -- Access
 
-	property: XPLAIN_EXPRESSION
+	property: detachable XPLAIN_EXPRESSION
 			-- value if applicable; void otherwise
 
 

@@ -6,8 +6,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #9 $"
 
 
 class XPLAIN_R_REPRESENTATION
@@ -21,7 +19,9 @@ inherit
 			mw_numeric_scale,
 			mw_precision,
 			value_representation,
-			write_with_quotes
+			write_with_quotes,
+			min_value,
+			max_value
 		end
 
 

@@ -110,8 +110,7 @@ feature {NONE} -- Update SQL
 		require
 			join_list_not_void: join_list /= Void
 		local
-			jnode: JOIN_NODE
-			tablename: STRING
+			jnode: detachable JOIN_NODE
 			code: STRING
 		do
 			create code.make (512)
@@ -132,10 +131,10 @@ feature {NONE} -- Update SQL
 					code := code + ", "
 				end
 				code := code + jnode.item.aggregate_attribute.quoted_name (Current)
-				if not equal(tablename, jnode.item.attribute_alias_name) then
+				if attached jnode.item.attribute_alias_name as n then
 					-- only write alias when not equal to table/view name
 					code := code + " "
-					code := code + quote_identifier(jnode.item.attribute_alias_name)
+					code := code + quote_identifier(n)
 				end
 				jnode := jnode.next
 			end

@@ -3,8 +3,6 @@ note
 	description: "Turns a logical expression into correct output for SQL dialects that don't support Booleans."
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #6 $"
 
 class
 

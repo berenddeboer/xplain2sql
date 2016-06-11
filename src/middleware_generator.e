@@ -7,9 +7,6 @@ note
 	remark: "Class should become obsolete, as soon as XSLT stylesheet has been developed that can replace DELPHI_ADO_GENERATOR."
 
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 2000, Berend de Boer, see forum.txt"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #3 $"
 
 deferred class
 

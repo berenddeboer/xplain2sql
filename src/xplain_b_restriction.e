@@ -6,8 +6,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #4 $"
 
 class
 
@@ -30,7 +28,7 @@ feature
 
 feature
 
-	sqldomainconstraint(sqlgenerator: SQL_GENERATOR; column_name: STRING): STRING
+	sqldomainconstraint(sqlgenerator: SQL_GENERATOR; column_name: STRING): detachable STRING
 		do
 			result := sqlgenerator.sqlcheck_boolean (Current, column_name)
 		end

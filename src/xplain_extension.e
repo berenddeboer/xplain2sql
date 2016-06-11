@@ -7,8 +7,6 @@ note
 		%is calculated, and a use-face where it is used."
 	author:		"Berend de Boer <berend@pobox.com>"
 	copyright:	"Copyright (c) 1999, Berend de Boer"
-	date:			"$Date: 2010/02/11 $"
-	revision:	"$Revision: #12 $"
 
 class
 
@@ -79,14 +77,18 @@ feature {NONE} -- Initialization
 			-- XPLAIN_ABSTRACT_TYPE instead of XPLAIN_TYPE??
 			create  attributes.make
 			-- use abstract_representation when seen as base
-			if an_attribute.domain = Void then
-				r := expression.representation (sqlgenerator)
+			if attached an_attribute.domain as d then
+				r := d
 			else
-				r := an_attribute.domain
+				r := expression.representation (sqlgenerator)
 			end
 			make_abstract_type (an_attribute.name, r)
 			-- use representation when seen as type
 			representation := type.representation
+
+			-- silence compiler:
+			abstract_extension_representation := representation
+
 			expression.set_extension (Current, OuterTableName)
 			type.add_extension (Current)
 		ensure
@@ -116,21 +118,19 @@ feature -- Access
 			Result := abstract_representation.datatype (mygenerator)
 		end
 
-	sqlcolumnidentifier (sqlgenerator: SQL_GENERATOR; role: STRING): STRING
+	sqlcolumnidentifier (sqlgenerator: SQL_GENERATOR; role: detachable STRING): STRING
 			-- return name used for joins
 		do
 			Result := sqlpkname (sqlgenerator)
 		end
 
-	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING
+	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): detachable STRING
 		do
 			Result := Void -- not applicable
 		end
 
 	sql_qualified_name (sqlgenerator: SQL_GENERATOR; prefix_override: STRING): STRING
 			-- Extension specific column name used in subselects
-		local
-			function: XPLAIN_EXTENSION_FUNCTION_EXPRESSION
 		do
 			if prefix_override = Void then
 				Result := sqlgenerator.quote_identifier (sqlname (sqlgenerator)).twin
@@ -144,8 +144,7 @@ feature -- Access
 						supported: sqlgenerator.CoalesceSupported
 						left_outer_join_supported: True
 					end
-				function ?= expression
-				if function /= Void then
+				if attached {XPLAIN_EXTENSION_FUNCTION_EXPRESSION} expression as function then
 					Result := sqlgenerator.SQLCoalesce + once "(" + Result + once ", " + function.selection.function.sqlextenddefault (sqlgenerator, function.selection.property) + once ")"
 				else
 					Result := sqlgenerator.SQLCoalesce + once "(" + Result + once ", " + sqlgenerator.SQLFalse + once ")"
@@ -153,7 +152,7 @@ feature -- Access
 			end
 		end
 
-	sql_alias (sqlgenerator: SQL_GENERATOR): STRING
+	sql_alias (sqlgenerator: SQL_GENERATOR): detachable STRING
 			-- Used in `do_do_create_select_list' if output comes from an
 			-- optimised extension and therefore doesn't have a nice
 			-- colum name. With this the column name can be forced even
@@ -168,13 +167,13 @@ feature -- Access
 
 feature -- SQL code
 
-	sql_insert_name (sqlgenerator: SQL_GENERATOR; role: STRING): STRING
+	sql_insert_name (sqlgenerator: SQL_GENERATOR; role: detachable STRING): STRING
 			-- Name of base/type/extension when used in an update statement.
 		do
 			Result := sqlgenerator.make_valid_identifier (name)
 		end
 
-	sql_select_name (sqlgenerator: SQL_GENERATOR; role: STRING): STRING
+	sql_select_name (sqlgenerator: SQL_GENERATOR; role: detachable STRING): STRING
 			-- Name of base/type/extension when used in a select or order
 			-- by statement.
 			-- Note that it probably needs to be prefixed by its

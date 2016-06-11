@@ -222,7 +222,7 @@ feature -- commands that expand `xml'
 			end
 		end
 
-	get_attribute (an_attribute: STRING): STRING
+	get_attribute (an_attribute: STRING): detachable STRING
 			-- Get contents of attribute `attribute' for current tag.
 			-- Returns Void if attribute doesn't exist
 		do
@@ -345,7 +345,6 @@ feature {NONE} -- internal xml change
 			-- sure the tag is really written
 		local
 			i: INTEGER
-			v: STRING
 		do
 			tag_closed := False
 			if not tag_written then
@@ -365,8 +364,7 @@ feature {NONE} -- internal xml change
 					extend (" ")
 					extend (attributes.item (i))
 					extend ("=%"")
-					v := values.item (i)
-					if v /= Void then
+					if attached values.item (i) as v then
 						extend (v)
 					end
 					extend ("%"")
@@ -405,7 +403,7 @@ feature {NONE} -- internal xml change
 			end
 		end
 
-	make_valid_attribute_value (value: STRING): STRING
+	make_valid_attribute_value (value: STRING): detachable STRING
 		local
 			i: INTEGER
 		do
@@ -472,7 +470,7 @@ feature {NONE} -- tag attributes
 
 	attributes: ARRAY[STRING]
 
-	values: ARRAY[STRING]
+	values: ARRAY[detachable STRING]
 
 	current_attribute: INTEGER
 
@@ -496,7 +494,7 @@ feature {NONE} -- tag attributes
 			attribute_count := 0
 		end
 
-	do_set_attribute (an_attribute, value: STRING)
+	do_set_attribute (an_attribute: STRING; value: detachable STRING)
 		do
 			if exist_attribute (an_attribute) then
 				set_value (value)
@@ -522,14 +520,14 @@ feature {NONE} -- tag attributes
 			Result implies valid_current_attribute
 		end
 
-	get_value: STRING
+	get_value: detachable STRING
 		require
 			valid_index: valid_current_attribute
 		do
 			Result := values.item (current_attribute)
 		end
 
-	set_value (value: STRING)
+	set_value (value: detachable STRING)
 		require
 			valid_index: valid_current_attribute
 		do

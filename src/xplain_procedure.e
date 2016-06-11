@@ -3,8 +3,6 @@ note
 	description: "Xplain procedure (xplain2sql extension)"
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2002, Berend de Boer"
-	date:       "$Date: 2010/02/11 $"
-	revision:   "$Revision: #8 $"
 
 
 class
@@ -34,15 +32,15 @@ create
 
 feature {NONE} -- Initialization
 
-	make (a_name: STRING; a_parameters: XPLAIN_ATTRIBUTE_NAME_NODE; a_procedure_kind: INTEGER; a_statements: XPLAIN_STATEMENT_NODE)
+	make (a_name: STRING; a_parameters: detachable XPLAIN_ATTRIBUTE_NAME_NODE; a_procedure_kind: INTEGER; a_statements: detachable XPLAIN_STATEMENT_NODE)
 			-- Initialize stored procedure.
 		require
 			valid_name: a_name /= Void and then not a_name.is_empty
 			-- a_parameters /= Void implies for_each p in a_parameters it_holds p.item.abstracttype /= Void
 		local
 			r: XPLAIN_I_REPRESENTATION
-			anode: XPLAIN_ATTRIBUTE_NAME_NODE
-			snode: XPLAIN_STATEMENT_NODE
+			anode: detachable XPLAIN_ATTRIBUTE_NAME_NODE
+			snode: detachable XPLAIN_STATEMENT_NODE
 		do
 			-- dummy representation for now, perhaps when stored
 			-- procedures can return a value, we have to do something
@@ -152,7 +150,7 @@ feature -- Commands
 
 feature -- Access
 
-	last_get_statement: XPLAIN_GET_STATEMENT
+	last_get_statement: detachable XPLAIN_GET_STATEMENT
 			-- Last get statement, if any.
 		local
 			cursor: DS_BILINEAR_CURSOR [XPLAIN_STATEMENT]
@@ -164,12 +162,14 @@ feature -- Access
 				Result /= Void or else
 				cursor.before
 			loop
-				Result ?= cursor.item
+				if attached {XPLAIN_GET_STATEMENT} cursor.item as s then
+					Result := s
+				end
 				cursor.back
 			end
 		end
 
-	last_value_selection_statement: XPLAIN_VALUE_SELECTION_STATEMENT
+	last_value_selection_statement: detachable XPLAIN_VALUE_SELECTION_STATEMENT
 			-- Last value selection statement, if any.
 		local
 			cursor: DS_BILINEAR_CURSOR [XPLAIN_STATEMENT]
@@ -181,7 +181,9 @@ feature -- Access
 				Result /= Void or else
 				cursor.before
 			loop
-				Result ?= cursor.item
+				if attached {XPLAIN_VALUE_SELECTION_STATEMENT} cursor.item as s then
+					Result := s
+				end
 				cursor.back
 			end
 		end
@@ -218,6 +220,7 @@ feature -- Expression builder support
 			-- Return suitable expression for attribute/variable/value/extension.
 		do
 			-- not applicable.
+			create {XPLAIN_STRING_EXPRESSION} Result.make ("SHOULD NOT HAPPEN")
 		end
 
 

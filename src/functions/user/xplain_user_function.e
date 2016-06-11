@@ -7,9 +7,6 @@ note
 	library: "xplain2sql"
 	author: "Berend de Boer <berend@pobox.com>"
 	copyright: "Copyright (c) 2006, Berend de Boer and others"
-	license: "Eiffel Forum License v2 (see forum.txt)"
-	date: "$Date: 2008/12/15 $"
-	revision: "$Revision: #5 $"
 
 
 class
@@ -35,7 +32,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (a_name: STRING; a_parameters: XPLAIN_EXPRESSION_NODE)
+	make (a_name: STRING; a_parameters: detachable XPLAIN_EXPRESSION_NODE)
 			-- Initialize.
 		require
 			name_not_empty: a_name /= Void and then not a_name.is_empty
@@ -47,7 +44,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	parameters: XPLAIN_EXPRESSION_NODE
+	parameters: detachable XPLAIN_EXPRESSION_NODE
 
 	name: STRING
 			-- User function name
@@ -59,7 +56,7 @@ feature -- Status
 			-- Does this expression refer to other attributes as `an_attribute'?
 			-- It is used to output better optimized SQL code.
 		local
-			p: XPLAIN_EXPRESSION_NODE
+			p: detachable XPLAIN_EXPRESSION_NODE
 		do
 			from
 				p := parameters
@@ -75,7 +72,7 @@ feature -- Status
 	uses_its: BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		local
-			p: XPLAIN_EXPRESSION_NODE
+			p: detachable XPLAIN_EXPRESSION_NODE
 		do
 			from
 				p := parameters
@@ -91,7 +88,7 @@ feature -- Status
 	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		local
-			p: XPLAIN_EXPRESSION_NODE
+			p: detachable XPLAIN_EXPRESSION_NODE
 		do
 			from
 				p := parameters
@@ -111,7 +108,7 @@ feature -- SQL code
 			-- Possibility of expression to add something to join part of
 			-- a select statement.
 		local
-			p: XPLAIN_EXPRESSION_NODE
+			p: detachable XPLAIN_EXPRESSION_NODE
 		do
 			from
 				p := parameters
@@ -159,7 +156,7 @@ feature -- SQL code
 	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Expression in generator syntax
 		local
-			p: XPLAIN_EXPRESSION_NODE
+			p: detachable XPLAIN_EXPRESSION_NODE
 		do
 			create Result.make (name.count + 2)
 			Result.append_string (name)

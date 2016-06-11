@@ -6,9 +6,6 @@ note
 
 	author: "Berend de Boer <berend@pobox.com>"
 	copyright: "Copyright (c) 2005, Berend de Boer and others"
-	license: "Eiffel Forum License v2 (see forum.txt)"
-	date: "$Date: 2008/12/15 $"
-	revision: "$Revision: #5 $"
 
 
 deferred class
@@ -100,9 +97,9 @@ feature -- generation of init [default] expressions
 			an_attribute_not_void: an_attribute /=  Void
 		do
 			create Result.make (64)
-			if CoalesceSupported then
+			if CoalesceSupported and then attached SQLCoalesce as coalesce then
 				if an_attribute.is_init_default then
-					Result.append_string (format ("$s(new.$s, ", <<SQLCoalesce, an_attribute.q_sql_select_name (Current)>>))
+					Result.append_string (format ("$s(new.$s, ", <<coalesce, an_attribute.q_sql_select_name (Current)>>))
 				end
 			end
 			Tab.append_string ("  ")
@@ -217,7 +214,7 @@ sql_operator: STRING
 		require
 			list_not_empty: a_list /= Void
 		local
-			n: XPLAIN_EXPRESSION_NODE
+			n: detachable XPLAIN_EXPRESSION_NODE
 		do
 			create Result.make (64)
 			Result.append_string (sql_string_combine_start)
@@ -281,7 +278,7 @@ feature -- Cast expressions
 
 feature -- generate columns either base or type columns
 
-	sqlcolumnrequired_base (an_attribute: XPLAIN_ATTRIBUTE): STRING
+	sqlcolumnrequired_base (an_attribute: XPLAIN_ATTRIBUTE): detachable STRING
 			-- Produce null or not null status of a column that is a base
 		do
 			if init_forced_null (an_attribute) then
@@ -291,7 +288,7 @@ feature -- generate columns either base or type columns
 			end
 		end
 
-	sqlcolumnrequired_type (an_attribute: XPLAIN_ATTRIBUTE): STRING
+	sqlcolumnrequired_type (an_attribute: XPLAIN_ATTRIBUTE): detachable STRING
 			-- Produce null or not null status of a column that refers to a type
 		do
 			if init_forced_null (an_attribute) then

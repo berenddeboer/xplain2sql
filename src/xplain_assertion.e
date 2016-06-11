@@ -3,8 +3,6 @@ note
 	description: "Describes an Xplain assertion."
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2001, Berend de Boer"
-	date:       "$Date: 2010/02/11 $"
-	revision:   "$Revision: #8 $"
 
 
 class
@@ -51,8 +49,11 @@ create
 
 feature {NONE} -- creation
 
-	make (sqlgenerator: SQL_GENERATOR; atype: XPLAIN_TYPE
-			aname: STRING; arange: XPLAIN_DOMAIN_RESTRICTION
+	make (
+			sqlgenerator: SQL_GENERATOR;
+			atype: XPLAIN_TYPE
+			aname: STRING;
+			arange: like range
 			aexpression: XPLAIN_EXTENSION_EXPRESSION)
 		require
 			valid_args: aname /= Void and
@@ -69,6 +70,12 @@ feature {NONE} -- creation
 			create  attributes.make
 
 			make_abstract_type (aname, expression.representation (sqlgenerator))
+
+			-- silence compiler, need to assign dummy values
+			-- (or an indication of code trouble?):
+			create {XPLAIN_PK_I_REPRESENTATION} representation.make (1)
+			abstract_extension_representation := representation
+
 			expression.set_extension (Current, atype.sqlname (sqlgenerator))
 			type.add_assertion (Current)
 			-- Turn on no update optimisation, because either with (left
@@ -82,7 +89,7 @@ feature {NONE} -- creation
 
 feature -- Access
 
-	range: XPLAIN_DOMAIN_RESTRICTION
+	range: detachable XPLAIN_DOMAIN_RESTRICTION
 			-- Allowed range
 
 
@@ -111,11 +118,10 @@ feature -- Status
 
 	is_function: BOOLEAN
 			-- Is this assertion a function?
-		local
-			f: XPLAIN_EXTENSION_FUNCTION_EXPRESSION
 		do
-			f ?= expression
-			Result := f /= Void
+			if attached {XPLAIN_EXTENSION_FUNCTION_EXPRESSION} expression then
+				Result := True
+			end
 		end
 
 
@@ -159,26 +165,24 @@ feature -- Access
 			end
 		end
 
-	sqlcolumndefault (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING
+	sqlcolumndefault (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): detachable STRING
 		do
-			Result := Void
 		end
 
-	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): STRING
+	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): detachable STRING
 		do
-			Result := Void
 		end
 
-	sql_qualified_name (sqlgenerator: SQL_GENERATOR; prefix_override: STRING): STRING
+	sql_qualified_name (sqlgenerator: SQL_GENERATOR; prefix_override: detachable STRING): STRING
 			-- Name used in select statements
 		do
 			-- If there is no `prefix_override', no join was used to get
 			-- our data, so assume calculated column.
-			if prefix_override = Void then
+			if attached prefix_override as p then
+				Result := sqlgenerator.quote_identifier (prefix_override).twin
+			else
 				Result := type.quoted_name (sqlgenerator).twin
 				--Result := sqlgenerator.quote_identifier (sqlname (sqlgenerator)).twin
-			else
-				Result := sqlgenerator.quote_identifier (prefix_override).twin
 			end
 			Result.append_character ('.')
 			Result.append_string (q_sql_select_name (sqlgenerator, Void))
@@ -187,7 +191,7 @@ feature -- Access
 
 feature -- SQL code
 
-	sql_select_name (sqlgenerator: SQL_GENERATOR; role: STRING): STRING
+	sql_select_name (sqlgenerator: SQL_GENERATOR; role: detachable STRING): STRING
 			-- Name of base/type/extension when used in a select or order
 			-- by statement.
 			-- Note that it probably needs to be prefixed by its

@@ -4,8 +4,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2010/02/11 $"
-	revision:   "$Revision: #7 $"
 
 class
 
@@ -26,7 +24,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (a_item: XPLAIN_EXPRESSION; a_new_name: STRING; a_next: like Current)
+	make (a_item: XPLAIN_EXPRESSION; a_new_name: like new_name; a_next: detachable like Current)
 		require
 			item_not_void: a_item /= Void
 			new_name_is_void_or_not_empty: a_new_name = Void or else not a_new_name.is_empty
@@ -46,10 +44,12 @@ feature -- Access
 		require
 			have_column_name: new_name = Void implies item.column_name /= Void
 		do
-			if new_name = Void then
-				Result := item.column_name
+			if attached new_name as n then
+				Result := n
+			elseif attached item.column_name as c then
+				Result := c
 			else
-				Result := new_name
+				Result := "SHOULD NOT HAPPEN"
 			end
 		ensure
 			result_is_not_empty: Result /= Void and then not Result.is_empty
@@ -61,16 +61,18 @@ feature -- Access
 		require
 			have_column_name: new_name = Void implies item.column_name /= Void
 		do
-			if new_name = Void then
-				Result := item.path_name
+			if attached new_name as n then
+				Result := n
+			elseif attached item.path_name as n then
+				Result := n
 			else
-				Result := new_name
+				Result := "SHOULD NOT HAPPEN"
 			end
 		ensure
 			result_is_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	new_name: STRING
+	new_name: detachable STRING
 			-- Optional new name; `new_name' is required if
 			-- `item'.`column_name' is Void.
 

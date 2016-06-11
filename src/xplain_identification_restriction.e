@@ -5,25 +5,47 @@ note
 	"Xplain foreign key constraint restriction"
 
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #2 $"
 
 deferred class XPLAIN_IDENTIFICATION_RESTRICTION
 
 inherit
-   
-   XPLAIN_DOMAIN_RESTRICTION
+
+	XPLAIN_DOMAIN_RESTRICTION
+		redefine
+			sqlcolumnconstraint
+		end
 
 feature
-   
-   owner: XPLAIN_TYPE
+
+	owner: detachable XPLAIN_TYPE
 
 feature
-   
-   set_owner (aowner: XPLAIN_TYPE)
-      do
-         owner := aowner
-      end       
-   
-end -- class XPLAIN_IDENTIFICATION_RESTRICTION
+
+	set_owner (aowner: XPLAIN_TYPE)
+		do
+			owner := aowner
+		end
+
+
+feature
+
+	sqldomainconstraint (sqlgenerator: SQL_GENERATOR; column_name: STRING): detachable STRING
+			-- Table never used in create domain statements
+		do
+				check
+					call_never: False
+				end
+		end
+
+	sqlcolumnconstraint (sqlgenerator: SQL_GENERATOR; column_name: STRING): detachable STRING
+			-- Constraint used when creating columns
+		do
+				check
+					valid_type: owner /= Void
+				end
+			if attached owner as o then
+				Result := sqlgenerator.sqlcolumnconstraint_type (Current, o)
+			end
+		end
+
+end

@@ -3,8 +3,6 @@ note
 	description: "Base for all expression types."
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2010/02/11 $"
-	revision:   "$Revision: #14 $"
 
 deferred class
 
@@ -128,7 +126,7 @@ feature -- SQL generation
 			valid_result: Result /= Void
 		end
 
-	column_name: STRING
+	column_name: detachable STRING
 			-- The Xplain based column heading name, if any; it is used
 			-- by PostgreSQL output to create the proper function type
 			-- for example. The XML_GENERATOR uses it to give clients
@@ -142,7 +140,7 @@ feature -- SQL generation
 			result_is_void_or_not_empty: Result = Void or else not Result.is_empty
 		end
 
-	path_name: STRING
+	path_name: detachable STRING
 			-- XML path name, keeping Xplain structure intact; user for
 			-- path procedures
 		do
@@ -197,7 +195,7 @@ feature -- SQL generation
 			min_value_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sqlname (sqlgenerator: SQL_GENERATOR): STRING
+	sqlname (sqlgenerator: SQL_GENERATOR): detachable STRING
 			-- Try to come up with the most likely column name for this
 			-- expression, only applicable for attributes. If nothing
 			-- found, return Void.
@@ -244,7 +242,7 @@ feature -- SQL generation
 			valid_result: Result /= Void
 		end
 
-	sql_alias (sqlgenerator: SQL_GENERATOR): STRING
+	sql_alias (sqlgenerator: SQL_GENERATOR): detachable STRING
 			-- Used in `do_do_create_select_list' if output comes from an
 			-- optimised extension and therefore doesn't have a nice
 			-- colum name. With this the column name can be forced even

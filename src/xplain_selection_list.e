@@ -2,9 +2,6 @@ note
 
 	description: "selection of multiple values"
 	author:      "Berend de Boer <berend@pobox.com>"
-	copyright:   "Copyright (c) 1999, Berend de Boer"
-	date:        "$Date: 2010/02/11 $"
-	revision:    "$Revision: #10 $"
 
 
 class
@@ -30,9 +27,9 @@ feature {NONE} -- Initialization
 
 	make (
 			a_subject: XPLAIN_SUBJECT
-			an_expression_list: XPLAIN_EXPRESSION_NODE
-			a_predicate: XPLAIN_EXPRESSION
-			a_sort_order: XPLAIN_SORT_NODE)
+			an_expression_list: like expression_list
+			a_predicate: like predicate
+			a_sort_order: like sort_order)
 		require
 			subject_not_void: a_subject /= Void
 		do
@@ -45,28 +42,27 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	expression_list: XPLAIN_EXPRESSION_NODE
+	expression_list: detachable XPLAIN_EXPRESSION_NODE
 			-- Attributes of `type' that needs to be written;
 			-- Void if all attributes of `subject' are to be written.
 
-	identification_text: STRING
+	identification_text: detachable STRING
 			-- Text that is output before the type identification column
 
 	show_only_identifier_column: BOOLEAN
 			-- Does user asks for get t its ""?
-		local
-			se: XPLAIN_STRING_EXPRESSION
 		do
 			if
 				expression_list /= Void and then
 				expression_list.next = Void and then
 				expression_list.item.is_literal then
-				se ?= expression_list.item
-				Result := se /= Void and then se.value.is_empty
+				if attached {XPLAIN_STRING_EXPRESSION} expression_list.item as se then
+					Result := se.value.is_empty
+				end
 			end
 		end
 
-	sort_order: XPLAIN_SORT_NODE
+	sort_order: detachable XPLAIN_SORT_NODE
 
 
 feature -- Status
@@ -74,7 +70,7 @@ feature -- Status
 	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Is parameter `a_parameter' used by this statement?
 		local
-			node: like expression_list
+			node: detachable like expression_list
 		do
 			Result := precursor (a_parameter)
 			from
@@ -95,8 +91,8 @@ feature -- SQL generation
 			-- Retrieval statement can make sure the join_list is up to
 			-- date.
 		local
-			enode: XPLAIN_EXPRESSION_NODE
-			snode: XPLAIN_SORT_NODE
+			enode: detachable XPLAIN_EXPRESSION_NODE
+			snode: detachable XPLAIN_SORT_NODE
 		do
 			-- add the retrieved attributes to the list
 			from

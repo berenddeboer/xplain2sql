@@ -4,8 +4,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2002, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #5 $"
 
 class
 
@@ -24,7 +22,7 @@ create
 
 feature -- Initialization
 
-	make (a_subject: XPLAIN_SUBJECT; a_predicate: XPLAIN_EXPRESSION)
+	make (a_subject: XPLAIN_SUBJECT; a_predicate: detachable XPLAIN_EXPRESSION)
 		require
 			subject_not_void: a_subject /= Void
 		do
@@ -57,7 +55,7 @@ feature --  Warnings
 feature -- Access
 
 	subject: XPLAIN_SUBJECT
-	predicate: XPLAIN_EXPRESSION
+	predicate: detachable XPLAIN_EXPRESSION
 
 
 invariant

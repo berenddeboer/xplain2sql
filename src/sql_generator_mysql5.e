@@ -4,8 +4,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2005, Berend de Boer"
-	date:       "$Date: 2010/02/11 $"
-	revision:   "$Revision: #9 $"
 
 
 class
@@ -390,12 +388,12 @@ feature -- Extends
 
 feature -- Updates
 
-	output_update_extend_join_clause (a_subject: XPLAIN_SUBJECT; an_extension: XPLAIN_EXTENSION; a_join_list: JOIN_LIST)
+	output_update_extend_join_clause (a_subject: XPLAIN_SUBJECT; an_extension: XPLAIN_EXTENSION; a_join_list: detachable JOIN_LIST)
 			-- Output join to necessary tables when updating extended table.
 		do
-			if a_join_list /= Void then
+			if attached a_join_list as j then
 				std.output.put_string (a_subject.type.quoted_name (Current))
-				std.output.put_string (sql_select_joins (a_join_list))
+				std.output.put_string (sql_select_joins (j))
 			else
 				precursor (a_subject, an_extension, a_join_list)
 			end
@@ -414,7 +412,7 @@ feature -- Updates
 
 feature -- Deletes
 
-	create_delete (subject: XPLAIN_SUBJECT; predicate: XPLAIN_EXPRESSION)
+	create_delete (subject: XPLAIN_SUBJECT; predicate: detachable XPLAIN_EXPRESSION)
 			-- Emit MySQL delete statement which supports joins in
 			-- the delete statement itself.
 		local
@@ -521,7 +519,7 @@ feature -- Stored procedure SQL
 			std.output.put_character ('%N')
 		end
 
-	sp_start (a_procedure: XPLAIN_PROCEDURE)
+	sp_start (a_procedure: detachable XPLAIN_PROCEDURE)
 			-- Start MySQL procedure.
 		do
 			std.output.put_string ("delimiter //%N")

@@ -1,5 +1,5 @@
 %{
-indexing
+note
 
 	description:
 
@@ -42,9 +42,6 @@ indexing
 	%23. update allows update a * its attr = 1, shouldn't allow *."
 
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 1999-2007 Berend de Boer, see forum.txt"
-	date:       "$Date: 2010/02/11 $"
-	revision:   "$Revision: #17 $"
 
 
 class
@@ -145,7 +142,7 @@ create
 %type <STRING> script_start
 %type <STRING> database_name
 %type <XPLAIN_BASE> base_definition
-%type <XPLAIN_DOMAIN_RESTRICTION> optional_trajectory
+%type <detachable XPLAIN_DOMAIN_RESTRICTION> optional_trajectory
 %type <XPLAIN_DOMAIN_RESTRICTION> domain_constraint
 %type <XPLAIN_DOMAIN_RESTRICTION> enumeration
 %type <XPLAIN_A_NODE> string_enumeration
@@ -169,8 +166,8 @@ create
 %type <XPLAIN_ATTRIBUTE_NAME_NODE> property_name
 %type <XPLAIN_ATTRIBUTE_NAME> any_name
 %type <XPLAIN_ATTRIBUTE_NAME> parameter_name
-%type <XPLAIN_TYPE> initialization
-%type <XPLAIN_EXPRESSION> init_specification
+%type <detachable XPLAIN_TYPE> initialization
+%type <detachable XPLAIN_EXPRESSION> init_specification
 %type <XPLAIN_LOGICAL_EXPRESSION> condition
 %type <XPLAIN_EXPRESSION> selector
 %type <XPLAIN_REPRESENTATION> domain
@@ -180,7 +177,7 @@ create
 %type <STRING> constant
 %type <STRING> type_or_constant
 %type <STRING> role
-%type <XPLAIN_ATTRIBUTE_NODE> attribute_list
+%type <detachable XPLAIN_ATTRIBUTE_NODE> attribute_list
 %type <XPLAIN_ATTRIBUTE> definition_attribute
 %type <XPLAIN_ATTRIBUTE_NAME> attribute
 %type <STRING> name
@@ -196,61 +193,69 @@ create
 %type <XPLAIN_EXPRESSION> constant_logical_term
 %type <XPLAIN_EXPRESSION> constant_logical_factor
 
-%type <XPLAIN_ASSERTION> assert_definition
+%type <detachable XPLAIN_ASSERTION> assert_definition
 %type <STRING> virtual_attribute
 
-%type <XPLAIN_ATTRIBUTE_NAME_NODE> optional_simple_attribute_list
-%type <XPLAIN_ATTRIBUTE_NAME_NODE> simple_attribute_list
+%type <detachable XPLAIN_ATTRIBUTE_NAME_NODE> optional_simple_attribute_list
+%type <detachable XPLAIN_ATTRIBUTE_NAME_NODE> simple_attribute_list
 
-%type <XPLAIN_ASSIGNMENT_NODE> assignment_list
+%type <detachable XPLAIN_ASSIGNMENT_NODE> assignment_list
 %type <XPLAIN_ASSIGNMENT> attribute_assignment
 %type <XPLAIN_EXPRESSION> assigned_value
-%type <XPLAIN_SUBJECT> subject
-%type <XPLAIN_EXPRESSION> idstring
+%type <detachable XPLAIN_SUBJECT> subject
+%type <detachable XPLAIN_EXPRESSION> idstring
 %type <XPLAIN_ATTRIBUTE_NAME> attribute_name
 %type <XPLAIN_EXPRESSION> value_definition
-%type <XPLAIN_SELECTION_FUNCTION> value_selection_expression
-%type <XPLAIN_EXTENSION> extension_expression
+%type <detachable XPLAIN_NON_ATTRIBUTE_EXPRESSION> input
+%type <detachable XPLAIN_SELECTION_FUNCTION> value_selection_expression
+%type <detachable XPLAIN_EXTENSION> extension_expression
 %type <XPLAIN_EXTEND_ATTRIBUTE> extend_attribute
-%type <XPLAIN_EXTENSION_EXPRESSION> extension_definition
-%type <XPLAIN_SELECTION> selection_expression
-%type <XPLAIN_SELECTION_LIST> selection_without_set_function
-%type <XPLAIN_SORT_NODE> selection_sort_order
-%type <XPLAIN_SORT_NODE> sort_order_list
-%type <XPLAIN_SELECTION_FUNCTION> selection_with_set_function
+%type <detachable XPLAIN_EXTENSION_EXPRESSION> extension_definition
+%type <detachable XPLAIN_SELECTION> selection_expression
+%type <detachable XPLAIN_SELECTION_LIST> selection_without_set_function
+%type <detachable XPLAIN_SORT_NODE> selection_sort_order
+%type <detachable XPLAIN_SORT_NODE> sort_order_list
+%type <detachable XPLAIN_SELECTION_FUNCTION> selection_with_set_function
 %type <XPLAIN_FUNCTION> set_function
-%type <XPLAIN_EXPRESSION_NODE> selection_list
-%type <XPLAIN_EXPRESSION_NODE> property_list
-%type <XPLAIN_EXPRESSION> property
-%type <STRING> optional_new_name
-%type <XPLAIN_EXPRESSION> predicate
+%type <detachable XPLAIN_EXPRESSION_NODE> selection_list
+-- property_list is actually attached: we error if we can't, but
+-- this is not something the compiler can detect
+%type <detachable XPLAIN_EXPRESSION_NODE> property_list
+%type <detachable XPLAIN_EXPRESSION> property
+%type <detachable STRING> optional_new_name
+%type <detachable XPLAIN_EXPRESSION> predicate
 
-%type <XPLAIN_ATTRIBUTE_NAME_NODE> optional_procedure_parameters
+%type <detachable XPLAIN_ATTRIBUTE_NAME_NODE> optional_procedure_parameters
 %type <XPLAIN_ATTRIBUTE_NAME_NODE> procedure_parameter_list
-%type <XPLAIN_STATEMENT_NODE> optional_procedure_statement_list
-%type <XPLAIN_STATEMENT_NODE> procedure_statement_list
-%type <XPLAIN_STATEMENT> procedure_supported_command
+%type <detachable XPLAIN_STATEMENT_NODE> optional_procedure_statement_list
+%type <detachable XPLAIN_STATEMENT_NODE> procedure_statement_list
+%type <detachable XPLAIN_STATEMENT> procedure_supported_command
 
-%type <XPLAIN_STATEMENT> user_command
-%type <XPLAIN_STATEMENT> definition_command
-%type <XPLAIN_STATEMENT> command
-%type <XPLAIN_STATEMENT> definition
-%type <XPLAIN_CONSTANT_STATEMENT> constant_definition
-%type <XPLAIN_CONSTANT_ASSIGNMENT_STATEMENT> constant_assignment
-%type <XPLAIN_CASCADE_STATEMENT> cascade
-%type <XPLAIN_CASCADE_FUNCTION_EXPRESSION> cascade_definition
+%type <detachable XPLAIN_STATEMENT> user_command
+%type <detachable XPLAIN_STATEMENT> definition_command
+%type <detachable XPLAIN_STATEMENT> command
+%type <detachable XPLAIN_STATEMENT> retrieval
+%type <detachable XPLAIN_STATEMENT> modification
+%type <detachable XPLAIN_STATEMENT> definition
+%type <detachable XPLAIN_STATEMENT> deletion
+%type <detachable XPLAIN_STATEMENT> type_deletion
+%type <detachable XPLAIN_STATEMENT> general_deletion
+%type <detachable XPLAIN_CONSTANT_STATEMENT> constant_definition
+%type <detachable XPLAIN_CONSTANT_ASSIGNMENT_STATEMENT> constant_assignment
+%type <detachable XPLAIN_CASCADE_STATEMENT> cascade
+%type <detachable XPLAIN_CASCADE_FUNCTION_EXPRESSION> cascade_definition
 %type <XPLAIN_ATTRIBUTE_NAME_NODE> grouping_attribute
-%type <XPLAIN_DELETE_STATEMENT> delete
-%type <XPLAIN_EXTEND_STATEMENT> extension
-%type <XPLAIN_GET_STATEMENT> selection
-%type <XPLAIN_STATEMENT> insert
-%type <XPLAIN_PROCEDURE_STATEMENT> procedure
+%type <detachable XPLAIN_DELETE_STATEMENT> delete
+%type <detachable XPLAIN_EXTEND_STATEMENT> extension
+%type <detachable XPLAIN_GET_STATEMENT> selection
+%type <detachable XPLAIN_STATEMENT> insert
+%type <detachable XPLAIN_PROCEDURE_STATEMENT> procedure
 %type <INTEGER> procedure_kind
 %type <XPLAIN_SQL_STATEMENT> sql
-%type <XPLAIN_TYPE_STATEMENT> type_definition
-%type <XPLAIN_UPDATE_STATEMENT> update
+%type <detachable XPLAIN_TYPE> type_definition
+%type <detachable XPLAIN_UPDATE_STATEMENT> update
 %type <XPLAIN_VALUE_STATEMENT> value
-%type <XPLAIN_VALUE_SELECTION_STATEMENT> value_selection
+%type <detachable XPLAIN_VALUE_SELECTION_STATEMENT> value_selection
 
 -- representation tokens
 
@@ -319,8 +324,8 @@ user_command_list
 	: user_command '.'
 		{
 			if not use_mode then
-				if $1 /= Void then -- because statement support is partial at the moment
-					statements.add ($1)
+				if attached $1 as s then -- because statement support is partial at the moment
+					statements.add (s)
 				end
 			end
 		}
@@ -331,8 +336,8 @@ user_command_list
 	| user_command '.' user_command_list
 		{
 			if not use_mode then
-				if $1 /= Void then -- because statement support is partial at the moment
-					statements.add ($1)
+				if attached $1 as s then -- because statement support is partial at the moment
+					statements.add (s)
 				end
 			end
 		}
@@ -369,14 +374,27 @@ definition_command
 	: definition
 		{ $$ := $1 }
 	| deletion
+		{ $$ := $1 }
 	| constant_assignment
 		{ $$ := $1 }
 	;
 
 definition
 	: type_definition
-		{ $$ := $1 }
+		{
+			if attached $1 as t then
+				create {XPLAIN_TYPE_STATEMENT} $$.make (t)
+				universe.add (t)
+			end
+		}
 	| base_definition
+		{
+			create {XPLAIN_BASE_STATEMENT} $$.make ($1)
+			if not use_mode then
+				sqlgenerator.write_base($1)
+			end
+			universe.add($1)
+		}
 	| init_definition
 	| default_definition
 	| constant_definition
@@ -390,23 +408,25 @@ definition
 
 deletion
 	: type_deletion
+		{ $$ := $1 }
 	| general_deletion
+		{ $$ := $1 }
 	;
 
 constant_assignment
 	: constant '=' '(' constant_expression ')'
-		{ write_pending_statement
-			myvariable := universe.find_variable($1)
-			if myvariable = Void then
+		{
+			write_pending_statement
+			if attached universe.find_variable($1) as variable then
+				if not use_mode then
+					sqlgenerator.write_constant_assignment (variable, $4)
+				end
+				variable.set_value ($4)
+				create $$.make (variable, $4)
+			else
 				report_error ("Not a valid variable: " + $1)
 				abort
-			else
-				if not use_mode then
-					sqlgenerator.write_constant_assignment (myvariable, $4)
-				end
-				myvariable.set_value ($4)
 			end
-			create $$.make (myvariable, $4)
 		}
 	| constant '=' error
 		{
@@ -421,41 +441,18 @@ base_definition
 	: XPLAIN_BASE base_name domain
 	{
 		write_pending_statement
-		if $3.domain.is_equal ("(B)") then
-			create {XPLAIN_B_RESTRICTION} dummyrestriction.make (False)
-		else
-			create {XPLAIN_REQUIRED} dummyrestriction.make (False)
-		end
-		$3.set_domain_restriction (sqlgenerator, dummyrestriction)
-		create {XPLAIN_BASE} $$.make ($2, $3)
-		if not use_mode then
-			sqlgenerator.write_base($$)
-		end
-		universe.add($$)
+		$$ := new_base ($2, $3, False)
 	}
 	| XPLAIN_BASE base_name domain XPLAIN_REQUIRED
 	{
 		write_pending_statement
-		if $3.domain.is_equal ("(B)") then
-			create {XPLAIN_B_RESTRICTION} dummyrestriction.make (True)
-		else
-			create {XPLAIN_REQUIRED} dummyrestriction.make (True)
-		end
-		$3.set_domain_restriction (sqlgenerator, dummyrestriction)
-		create {XPLAIN_BASE} $$.make ($2, $3)
-		if not use_mode then
-			sqlgenerator.write_base($$)
-		end
-		universe.add($$)
+		$$ := new_base ($2, $3, True)
 	}
 	| XPLAIN_BASE base_name domain domain_constraint
-	{ write_pending_statement
+	{
+		write_pending_statement
 		$3.set_domain_restriction (sqlgenerator, $4)
-		create {XPLAIN_BASE} $$.make ($2, $3)
-		if not use_mode then
-			sqlgenerator.write_base($$)
-		end
-		universe.add ($$)
+		$$ := new_base ($2, $3, False)
 	}
 	;
 
@@ -463,10 +460,10 @@ type_definition
 	: XPLAIN_TYPE type_name identification_domain '=' attribute_list
 		{
 			write_pending_statement
-			create mytype.make ($2, $3, $5)
-			universe.add (mytype)
-			pending_type := mytype
-			create $$.make (mytype)
+			if attached $5 as al then
+				create $$.make ($2, $3, al)
+				pending_type := $$
+			end
 		}
 	;
 
@@ -478,7 +475,7 @@ init_definition
 			if pending_init /= $3 then
 				write_pending_init
 			end
-			if $3 /= Void then
+			if attached $3 then
 				pending_init := $3
 			end
 		}
@@ -492,7 +489,7 @@ default_definition
 			if pending_init /= $4 then
 				write_pending_init
 			end
-			if $4 /= Void then
+			if attached $4 then
 				pending_init := $4
 			end
 		}
@@ -505,18 +502,19 @@ constant_definition
 			create {XPLAIN_REQUIRED} dummyrestriction.make (False)
 			$3.set_domain_restriction (sqlgenerator, dummyrestriction)
 			create myvariable.make ($2, $3)
-			if not use_mode then
-				sqlgenerator.write_constant (myvariable)
+			if attached myvariable as v then
+				if not use_mode then
+					sqlgenerator.write_constant (v)
+				end
+				universe.add(v)
+				create $$.make (v)
 			end
-			universe.add(myvariable)
-			create $$.make (myvariable)
 	}
   ;
 
 type_deletion: XPLAIN_PURGE type_or_constant
 	{ write_pending_statement
-		myobject := get_known_object ($2)
-		if myobject /= Void then
+		if attached get_known_object ($2) as myobject then
 			if immediate_output_mode then
 				sqlgenerator.write_drop (myobject)
 			end
@@ -530,13 +528,12 @@ general_deletion
 	XPLAIN_ITS attribute_name
 		{
 			write_pending_statement
-			myattribute := subject_type.find_attribute ($5)
-			if myattribute = Void then
-				error_unknown_attribute ($2, $5)
-			else
+			if attached subject_type.find_attribute ($5) as myattribute then
 				if immediate_output_mode then
 					subject_type.write_drop_attribute	(sqlgenerator, myattribute)
 				end
+			else
+				error_unknown_attribute ($2, $5)
 			end
 		}
 	| XPLAIN_PURGE XPLAIN_INIT type_name { subject_type := get_known_type ($3) }
@@ -556,6 +553,8 @@ domain_constraint
 		{
 			report_error ("Domain restriction not supported for this data type or error in domain restriction definition.")
 			abort
+			-- silence compiler:
+			create {XPLAIN_A_PATTERN} $$.make ("")
 		}
 	;
 
@@ -582,6 +581,8 @@ integer_enumeration
 		{
 			report_error ("An integer enumeration cannot contain a %"..%". If you want to specify a trajectory, the format should be (I2) (1..*) for example.")
 			abort
+			-- silence compiler:
+			create {XPLAIN_I_NODE} $$.make (0, Void)
 		}
 	;
 
@@ -636,10 +637,9 @@ mult_or_div: '*'
 
 logical_expression
 	: logical_term  XPLAIN_OR logical_expression
-	{
-		  create {XPLAIN_LOGICAL_INFIX_EXPRESSION} dummye.make ($1, once "or", $3)
-		  create $$.make (dummye)
-	}
+		{
+			$$ := new_logical_expression ($1, once "or", $3)
+		}
 	| logical_term
 		{
 			create $$.make ($1)
@@ -661,15 +661,17 @@ logical_term
 logical_factor
 	: property_name
 		{
-			if subject_type /= Void then
-				myobject := get_object_if_valid_tree ($1)
-				if myobject /= Void then
+			-- silence compiler, we either return something valid or abort:
+			create {XPLAIN_LOGICAL_VALUE_EXPRESSION} $$.make (False)
+			if attached subject_type then
+				if attached get_object_if_valid_tree ($1) then
 					-- the last object in the tree knows what expression to build here
-					dummye := last_object_in_tree.create_expression ($1)
-					if dummye.is_logical_expression then
-						create {XPLAIN_NOTNOT_EXPRESSION} $$.make (dummye)
-					else
-						$$ := dummye
+					if attached last_object_in_tree.create_expression ($1) as e then
+						if e.is_logical_expression then
+							create {XPLAIN_NOTNOT_EXPRESSION} $$.make (e)
+						else
+							$$ := e
+						end
 					end
 				end
 			else
@@ -679,16 +681,19 @@ logical_factor
 			}
 	| XPLAIN_NOT property_name
 		{
-			if subject_type /= Void then
-				myobject := get_object_if_valid_tree ($2)
-				if myobject /= Void then
+			if attached subject_type then
+				if attached get_object_if_valid_tree ($2) and then attached last_object_in_tree.create_expression ($2) as e then
 					-- the last object in the tree knows what expression to build here
-					dummye := last_object_in_tree.create_expression ($2)
-					create {XPLAIN_NOT_EXPRESSION} $$.make (dummye)
+					create {XPLAIN_NOT_EXPRESSION} $$.make (e)
+				else
+					-- silence compiler, we either return something valid or abort:
+					create {XPLAIN_LOGICAL_VALUE_EXPRESSION} $$.make (False)
 				end
 			else
 				report_error ("type or attribute name not valid here.")
 				abort
+				-- silence compiler, we either return something valid or abort:
+				create {XPLAIN_LOGICAL_VALUE_EXPRESSION} $$.make (False)
 			end
 
 		}
@@ -696,6 +701,9 @@ logical_factor
 		{
 			if is_parameter_declared ($2) then
 				create {XPLAIN_PARAMETER_EXPRESSION} $$.make ($2)
+			else
+				-- silence compiler, we either return something valid or abort:
+				create {XPLAIN_LOGICAL_VALUE_EXPRESSION} $$.make (False)
 			end
 			}
 	| XPLAIN_NOT '?' parameter_name
@@ -703,6 +711,9 @@ logical_factor
 			if is_parameter_declared ($3) then
 				create {XPLAIN_PARAMETER_EXPRESSION} $$.make ($3)
 				create {XPLAIN_NOT_EXPRESSION} $$.make ($$)
+			else
+				-- silence compiler, we either return something valid or abort:
+				create {XPLAIN_LOGICAL_VALUE_EXPRESSION} $$.make (False)
 			end
 			}
 	| property_expression '=' XPLAIN_NULL
@@ -715,8 +726,7 @@ logical_factor
 		}
 	| XPLAIN_NOT property_expression relation property_expression
 		{
-			dummye := new_logical_infix_expression ($2, $3, $4)
-			create {XPLAIN_NOT_EXPRESSION} $$.make (dummye)
+			create {XPLAIN_NOT_EXPRESSION} $$.make (new_logical_infix_expression ($2, $3, $4))
 		}
 	| '(' logical_expression ')'
 		{ create {XPLAIN_PARENTHESIS_EXPRESSION} $$.make ($2) }
@@ -754,7 +764,7 @@ system_variable
 	: XPLAIN_SYSTEMDATE
 		{ create {XPLAIN_SYSTEMDATE_EXPRESSION} $$ }
 	| XPLAIN_LOGINNAME
-		{ create {XPLAIN_LOGINNAME_EXPRESSION}$$ }
+		{ create {XPLAIN_LOGINNAME_EXPRESSION} $$ }
 	;
 
 property_expression
@@ -779,29 +789,45 @@ property_factor
 			-- we have something here that can be an
 			-- attribute/extension/value/variable.
 			-- let's get the correct object associated with this tree
-			if subject_type /= Void then
-				myobject := get_object_if_valid_tree ($1)
-				if myobject /= Void then
+			if attached subject_type then
+				if attached get_object_if_valid_tree ($1) then
 					-- the last object in the tree knows what expression to build here
-					$$ := last_object_in_tree.create_expression ($1)
+					if attached last_object_in_tree.create_expression ($1) as o then
+						$$ := o
+					else
+						-- silence compiler, we either return something valid or abort:
+						create {XPLAIN_LOGINNAME_EXPRESSION} $$
+					end
+				else
+					-- silence compiler, we either return something valid or abort:
+					create {XPLAIN_LOGINNAME_EXPRESSION} $$
 				end
 			else
 				report_error ("type or attribute name not valid here.")
 				abort
+				-- silence compiler, we either return something valid or abort:
+				create {XPLAIN_LOGINNAME_EXPRESSION} $$
 			end
 		}
 	| '-' property_name
 		{
-			if subject_type /= Void then
-				myobject := get_object_if_valid_tree ($2)
-				if myobject /= Void then
+			if attached subject_type then
+				if attached get_object_if_valid_tree ($2) then
 					-- the last object in the tree knows what expression to build here
-					dummye := last_object_in_tree.create_expression ($2)
-					create {XPLAIN_PREFIX_EXPRESSION} $$.make ("-", dummye)
+					if attached last_object_in_tree.create_expression ($2) as e then
+						create {XPLAIN_PREFIX_EXPRESSION} $$.make ("-", e)
+					else
+						-- silence compiler, we either return something valid or abort:
+						create {XPLAIN_LOGINNAME_EXPRESSION} $$
+					end
+				else
+					-- silence compiler, we either return something valid or abort:
+					create {XPLAIN_LOGINNAME_EXPRESSION} $$
 				end
 			else
 				report_error ("type or attribute name not valid here.")
 				abort
+				$$ := silence_compiler_expression
 			end
 		}
 	| system_variable
@@ -810,7 +836,11 @@ property_factor
 -- put here string functions
 	| XPLAIN_COMBINE property_list ')'
 		{
-			create {XPLAIN_COMBINE_FUNCTION} $$.make ($2)
+			if attached $2 as pl then
+				create {XPLAIN_COMBINE_FUNCTION} $$.make (pl)
+			else
+				$$ := silence_compiler_expression
+			end
 		}
 --	| XPLAIN_HEAD property_expression ')'
 --	| XPLAIN_TAIL property_expression ')'
@@ -837,7 +867,14 @@ property_factor
 
 		-- enhanced Xplain functions:
 	| XPLAIN_ID
-		{ create {XPLAIN_ID_FUNCTION} $$.make (subject_type) }
+		{
+			if attached subject_type as t then
+				create {XPLAIN_ID_FUNCTION} $$.make (t)
+			else
+				-- silence compiler, we either return something valid or abort:
+				create {XPLAIN_LOGINNAME_EXPRESSION} $$
+			end
+		}
 
 	| '(' property_expression ')'
 		{ create {XPLAIN_PARENTHESIS_EXPRESSION} $$.make ($2) }
@@ -856,8 +893,11 @@ property_factor
 		{
 			if is_parameter_declared ($2) then
 				create {XPLAIN_PARAMETER_EXPRESSION} $$.make ($2)
+			else
+				-- silence compiler, we either return something valid or abort:
+				create {XPLAIN_LOGINNAME_EXPRESSION} $$
 			end
-			}
+		}
 
 		-- user functions
 	| '$' name '(' ')'
@@ -904,19 +944,20 @@ initialization: type_name
 		{ subject_type := get_known_type ($1) }
 	XPLAIN_ITS attribute_name '=' init_specification
 		{
-			myattribute := subject_type.find_attribute ($4)
-			if myattribute = Void then
-				error_unknown_attribute ($1, $4)
-			else
+			if attached subject_type as t and then attached t.find_attribute ($4) as myattribute then
 				if myattribute.init /= Void then
 					report_warning (format ("Attribute `$s' already has an initialization expression.", <<myattribute.full_name>>))
 				end
-				if is_init_default then
-					myattribute.set_init_default ($6)
-				else
-					myattribute.set_init ($6)
+				if attached $6 as s then
+					if is_init_default then
+						myattribute.set_init_default (s)
+					else
+						myattribute.set_init (s)
+					end
 				end
-				$$ := subject_type
+				$$ := t
+			else
+				error_unknown_attribute ($1, $4)
 			end
 			subject_type := Void
 		}
@@ -927,7 +968,7 @@ init_specification
 		{ $$ := $1 }
 	| '(' logical_expression ')'
 		{ $$ := $2 }
-	| XPLAIN_CASE selector XPLAIN_OF case_list
+	| XPLAIN_CASE selector XPLAIN_OF case_list error
 	;
 
 condition
@@ -993,11 +1034,15 @@ domain
 		{
 			report_error ("Comma expected in R representation instead of: " + text)
 			abort
+			-- silence compiler:
+			create {XPLAIN_B_REPRESENTATION} $$
 		}
 	| error
 		{
 			report_error ("Representation expected instead of: " + text)
 			abort
+			-- silence compiler:
+			create {XPLAIN_B_REPRESENTATION} $$
 		}
 	;
 
@@ -1006,18 +1051,24 @@ identification_domain
 		{
 			create {XPLAIN_PK_A_REPRESENTATION} $$.make ($2)
 			create {XPLAIN_A_REFERENCES} dummya.make
-			$$.set_domain_restriction(sqlgenerator, dummya)
+			if attached dummya as r then
+				$$.set_domain_restriction(sqlgenerator, r)
+			end
 		}
 	| XPLAIN_I XPLAIN_INTEGER ')'
 		{
-			create {XPLAIN_PK_I_REPRESENTATION}$$.make ($2)
+			create {XPLAIN_PK_I_REPRESENTATION} $$.make ($2)
 			create {XPLAIN_I_REFERENCES} dummyi.make
-			$$.set_domain_restriction(sqlgenerator, dummyi)
+			if attached dummyi as r then
+				$$.set_domain_restriction(sqlgenerator, r)
+			end
 		}
 	| error
 		{
 			report_error ("type identification expected instead of: " + text)
 			abort
+			-- silence compiler:
+			create {XPLAIN_PK_I_REPRESENTATION}$$.make (1)
 		}
 	;
 
@@ -1082,20 +1133,24 @@ definition_attribute: '[' attribute ']'
 attribute
 	: name
 	{
-		myabstracttype := get_known_base_or_type ($1)
-		create $$.make (Void, $1)
-		if myabstracttype /= Void then
+		if attached get_known_base_or_type ($1) as t then
+			create $$.make (Void, $1)
 			-- when self reference, it is valid to be Void
-			$$.set_object (myabstracttype)
+			$$.set_object (t)
+		else
+			-- silence compiler:
+			create $$.make (Void, "BAD")
 		end
 	}
 	| role '_' name
 	{
-		myabstracttype := get_known_base_or_type ($3)
-		create $$.make ($1, $3)
-		if myabstracttype /= Void then
+		if attached get_known_base_or_type ($3) as t then
+			create $$.make ($1, $3)
 			-- when self reference, it is valid to be Void
-			$$.set_object (myabstracttype)
+			$$.set_object (t)
+		else
+			-- silence compiler:
+			create $$.make (Void, "BAD")
 		end
 	}
 	;
@@ -1133,17 +1188,15 @@ constant_expression
 constant_logical_expression
 	: constant_logical_term
 		{
-			dummyl ?= $1
-			if dummyl = Void then
-				create $$.make ($1)
-			else
+			if attached {XPLAIN_LOGICAL_EXPRESSION} $1 as dummyl then
 				$$ := dummyl
+			else
+				create $$.make ($1)
 			end
 		}
 	| constant_logical_term XPLAIN_OR constant_logical_expression
 		{
-			create {XPLAIN_LOGICAL_INFIX_EXPRESSION} dummye.make ($1, "or", $3)
-			create $$.make (dummye)
+			$$ := new_logical_expression ($1, once "or", $3)
 		}
 	;
 
@@ -1164,24 +1217,25 @@ constant_logical_factor
 		{ $$ := $1 }
 	| XPLAIN_NOT constant
 	{
+		$$ := silence_compiler_logical_expression
 		-- @@BdB: This seems tricky: I shouldn't be able to assign a
 		-- variable to a constant. And it looks like that isn't
 		-- forbidden in the following code:
-		myvariable := universe.find_variable ($2)
-		if myvariable = Void then
+		if attached universe.find_variable ($2) as variable then
+			create {XPLAIN_VARIABLE_EXPRESSION} dummye.make (variable)
+			if attached dummye as e then
+				create {XPLAIN_NOT_EXPRESSION} $$.make (e)
+			end
+		elseif attached universe.find_value ($2) as value then
 			-- not a variable, maybe a value?
 			-- depends on context, not checked now
-			myvalue := universe.find_value ($2)
-			if myvalue = Void then
-				report_error ("Not a known variable: " + $2)
-				abort
-			else
-				create {XPLAIN_VALUE_EXPRESSION} dummye.make (myvalue)
-				create {XPLAIN_NOT_EXPRESSION} $$.make (dummye)
+			create {XPLAIN_VALUE_EXPRESSION} dummye.make (value)
+			if attached dummye as e then
+				create {XPLAIN_NOT_EXPRESSION} $$.make (e)
 			end
 		else
-			create {XPLAIN_VARIABLE_EXPRESSION} dummye.make (myvariable)
-			create {XPLAIN_NOT_EXPRESSION} $$.make (dummye)
+			report_error ("Not a known variable: " + $2)
+			abort
 		end
 	}
 	| text
@@ -1220,25 +1274,23 @@ number_factor
 	: '(' number_expression ')'
 		{ create {XPLAIN_PARENTHESIS_EXPRESSION} $$.make ($2) }
 	| numeric
-	{ create {XPLAIN_NUMBER_EXPRESSION} $$.make ($1) }
+		{ create {XPLAIN_NUMBER_EXPRESSION} $$.make ($1) }
 	| '-' number_factor
-	{ create {XPLAIN_PREFIX_EXPRESSION} $$.make ("-", $2) }
+		{ create {XPLAIN_PREFIX_EXPRESSION} $$.make ("-", $2) }
 	| constant
-	{ myvariable := universe.find_variable ($1)
-		if myvariable = Void then
-			-- not a variable, maybe a value?
-			-- depends on context, not checked now
-			myvalue := universe.find_value ($1)
-			if myvalue = Void then
+		{
+			if attached universe.find_variable ($1) as variable then
+				create {XPLAIN_VARIABLE_EXPRESSION} $$.make (variable)
+			elseif attached universe.find_value ($1) as value then
+				-- not a variable, maybe a value?
+				-- depends on context, not checked now
+				create {XPLAIN_VALUE_EXPRESSION} $$.make (value)
+			else
 				report_error ("Not a known variable: " + $1)
 				abort
-			else
-				create {XPLAIN_VALUE_EXPRESSION} $$.make (myvalue)
+				$$ := silence_compiler_expression
 			end
-		else
-			create {XPLAIN_VARIABLE_EXPRESSION} $$.make (myvariable)
-		end
-	}
+		}
 	;
 
 
@@ -1259,11 +1311,13 @@ assert_definition: XPLAIN_ASSERT type_name XPLAIN_ITS
 		}
 	virtual_attribute optional_trajectory '=' extension_definition
 		{
-			create {XPLAIN_ASSERTION} $$.make (sqlgenerator, extend_type, $5, $6, $8)
-			if immediate_output_mode and then
-				($$.is_function or else $$.is_complex or else not sqlgenerator.CalculatedColumnsSupported) then
-				write_pending_statement
-				sqlgenerator.write_assertion ($$)
+			if attached extend_type as et and attached $8 as ed then
+				create {XPLAIN_ASSERTION} $$.make (sqlgenerator, et, $5, $6, ed)
+				if immediate_output_mode and then
+					($$.is_function or else $$.is_complex or else not sqlgenerator.CalculatedColumnsSupported) then
+					write_pending_statement
+					sqlgenerator.write_assertion ($$)
+				end
 			end
 		}
 	| XPLAIN_ASSERT type_name XPLAIN_WITH error
@@ -1296,9 +1350,11 @@ index_definition:
 	}
 	XPLAIN_ITS name '=' simple_attribute_list
 	{
-		create myindex.make (subject_type, $5, False, False, $7)
-		if not use_mode then
-			sqlgenerator.write_index (myindex)
+		if attached subject_type as st and attached $7 as al then
+			create myindex.make (st, $5, False, False, al)
+			if not use_mode and then attached myindex as index then
+				sqlgenerator.write_index (index)
+			end
 		end
 	}
   | XPLAIN_UNIQUE XPLAIN_INDEX type_name
@@ -1307,9 +1363,11 @@ index_definition:
 	}
 	XPLAIN_ITS name '=' simple_attribute_list
 	{
-		create myindex.make (subject_type, $6, True, False, $8)
-		if not use_mode then
-			sqlgenerator.write_index (myindex)
+		if attached subject_type as st and attached $8 as al then
+			create myindex.make (st, $6, True, False, al)
+			if not use_mode and then attached myindex as index then
+				sqlgenerator.write_index (index)
+			end
 		end
 	}
   | XPLAIN_CLUSTERED XPLAIN_INDEX type_name
@@ -1318,9 +1376,11 @@ index_definition:
 	}
 	XPLAIN_ITS name '=' simple_attribute_list
 	{
-		create myindex.make (subject_type, $6, False, True, $8)
-		if not use_mode then
-			sqlgenerator.write_index (myindex)
+		if attached subject_type as st and attached $8 as al then
+			create myindex.make (st, $6, False, True, al)
+			if not use_mode and then attached myindex as index then
+				sqlgenerator.write_index (index)
+			end
 		end
 	}
   | XPLAIN_UNIQUE XPLAIN_CLUSTERED XPLAIN_INDEX type_name
@@ -1329,9 +1389,11 @@ index_definition:
 	}
 	XPLAIN_ITS name '=' simple_attribute_list
 	{
-		create myindex.make (subject_type, $7, True, True, $9)
-		if not use_mode then
-			sqlgenerator.write_index (myindex)
+		if attached subject_type as st and attached $9 as al then
+			create myindex.make (st, $7, True, True, al)
+			if not use_mode and then attached myindex as index then
+				sqlgenerator.write_index (index)
+			end
 		end
 	}
 	;
@@ -1344,20 +1406,18 @@ optional_simple_attribute_list
 simple_attribute_list
 	: attribute
 		{
-			myattribute := subject_type.find_attribute ($1)
-			if myattribute = Void then
-				error_unknown_attribute (subject_type.name, $1)
-			else
+			if attached subject_type.find_attribute ($1) as myattribute then
 			  create $$.make ($1, Void)
+			else
+				error_unknown_attribute (subject_type.name, $1)
 			end
 		}
 	| attribute ',' simple_attribute_list
 		{
-			myattribute := subject_type.find_attribute ($1)
-			if myattribute = Void then
-				error_unknown_attribute (subject_type.name, $1)
-			else
+			if attached subject_type.find_attribute ($1) as  myattribute then
 				create $$.make ($1, $3)
+			else
+				error_unknown_attribute (subject_type.name, $1)
 			end
 		}
 	| attribute error
@@ -1376,14 +1436,20 @@ simple_attribute_list
 
 command
 	: retrieval
+		{ $$ := $1 }
 	| modification
+		{ $$ := $1 }
 	;
 
 modification
 	: update
+		{ $$ := $1 }
 	| delete
+		{ $$ := $1 }
 	| insert
+		{ $$ := $1 }
 	| cascade
+		{ $$ := $1 }
 	;
 
 insert
@@ -1391,23 +1457,23 @@ insert
 		{
 			write_pending_statement
 			mytype := $2.type
-			warn_attributes_with_inits ($4)
-			if
-				$2.identification = Void
-			then
-				report_error ("Identification expected.")
-				abort
-			elseif
-				mytype.representation.is_integer and then
-				$2.identification.is_constant and then
-				not $2.identification.sqlvalue (sqlgenerator).is_integer
-			then
-				report_error (format ("Primary key %"$s%" is not an integer.", <<$2.identification.sqlvalue (sqlgenerator)>>))
-				abort
-			else
-				create {XPLAIN_INSERT_STATEMENT} $$.make (mytype, $2.identification, $4)
-				if immediate_output_mode then
-					sqlgenerator.write_insert (mytype, $2.identification, $4)
+			if attached $4 as al then
+				warn_attributes_with_inits (al)
+				if not attached $2.identification then
+					report_error ("Identification expected.")
+					abort
+				elseif
+					mytype.representation.is_integer and then
+					$2.identification.is_constant and then
+					not $2.identification.sqlvalue (sqlgenerator).is_integer
+				then
+					report_error (format ("Primary key %"$s%" is not an integer.", <<$2.identification.sqlvalue (sqlgenerator)>>))
+					abort
+				elseif attached mytype as t then
+					create {XPLAIN_INSERT_STATEMENT} $$.make (t, $2.identification, al)
+					if immediate_output_mode then
+						sqlgenerator.write_insert (t, $2.identification, al)
+					end
 				end
 			end
 			subject_type := Void
@@ -1427,9 +1493,11 @@ insert
 				report_error ("Auto-primary keys on character instance identification not supported.")
 				abort
 			end
-			create {XPLAIN_INSERT_STATEMENT} $$.make (mytype, Void, $5)
-			if immediate_output_mode then
-				sqlgenerator.write_insert (mytype, Void, $5)
+			if attached mytype as t and attached $5 as al then
+				create {XPLAIN_INSERT_STATEMENT} $$.make (t, Void, al)
+				if immediate_output_mode then
+					sqlgenerator.write_insert (t, Void, al)
+				end
 			end
 			subject_type := Void
 		}
@@ -1441,31 +1509,31 @@ insert
 	| XPLAIN_GET selection_without_set_function XPLAIN_INSERT subject optional_simple_attribute_list
 		{
 			write_pending_statement
-			mytype := $4.type
-			create {XPLAIN_GET_INSERT_STATEMENT} $$.make ($2, mytype, False, $5)
-			if immediate_output_mode then
-				$$.write (sqlgenerator)
+			if attached $2 as swsf and attached $4 as subject then
+				create {XPLAIN_GET_INSERT_STATEMENT} $$.make (swsf, subject.type, False, $5)
+				if immediate_output_mode then
+					$$.write (sqlgenerator)
+				end
 			end
 			subject_type := Void
 		}
 	| XPLAIN_GET selection_without_set_function XPLAIN_INSERT subject '*' optional_simple_attribute_list
 		{
 			write_pending_statement
-			mytype := $4.type
-			if not sqlgenerator.CreateAutoPrimaryKey
-			then
-				-- Can't abort as it might be output for a dialect that
-				-- doesn't support auto primary keys.
-				report_warning ("auto primary key support disabled, but insert with '*' as primary key specified.")
-			elseif
-				not mytype.representation.is_integer
-			then
-				report_error ("Auto-primary keys on character instance identification not supported.")
-				abort
-			end
-			create {XPLAIN_GET_INSERT_STATEMENT} $$.make ($2, mytype, True, $6)
-			if immediate_output_mode then
-				$$.write (sqlgenerator)
+			if attached $2 as swsf and attached $4 as subject then
+				if not sqlgenerator.CreateAutoPrimaryKey then
+					-- Can't abort as it might be output for a dialect that
+					-- doesn't support auto primary keys.
+					report_warning ("auto primary key support disabled, but insert with '*' as primary key specified.")
+				elseif not subject.type.representation.is_integer
+				then
+					report_error ("Auto-primary keys on character instance identification not supported.")
+					abort
+				end
+				create {XPLAIN_GET_INSERT_STATEMENT} $$.make (swsf, subject.type, True, $6)
+				if immediate_output_mode then
+					$$.write (sqlgenerator)
+				end
 			end
 			subject_type := Void
 		}
@@ -1503,10 +1571,11 @@ cascade
 		attribute_name '=' cascade_definition
 		{
 			if $7 /= Void then
-				subject_type := get_known_type ($2) -- subject_type changed by cascade_definition I think
-				create $$.make (sqlgenerator, subject_type, $5, $7)
-				if immediate_output_mode then
-					$$.write (sqlgenerator)
+				if attached get_known_type ($2) as st and then attached $7 as cd then -- subject_type changed by cascade_definition I think
+					create $$.make (sqlgenerator, st, $5, cd)
+					if immediate_output_mode then
+						$$.write (sqlgenerator)
+					end
 				end
 			end
 		}
@@ -1520,9 +1589,8 @@ cascade
 cascade_definition
 	: selection_with_set_function XPLAIN_PER grouping_attribute
 		{
-			myobject := get_object_if_valid_tree ($3)
-			if myobject /= Void then
-				create {XPLAIN_CASCADE_FUNCTION_EXPRESSION} $$.make ($1, $3)
+			if attached get_object_if_valid_tree ($3) and attached $1 as sf then
+				create {XPLAIN_CASCADE_FUNCTION_EXPRESSION} $$.make (sf, $3)
 			end
 		}
 	| property_expression
@@ -1537,31 +1605,32 @@ grouping_attribute
 	;
 
 delete: XPLAIN_DELETE subject predicate
-	{
-		write_pending_statement
-		if immediate_output_mode then
-			sqlgenerator.write_delete ($2, $3)
-		end
-		subject_type := Void
-		create $$.make ($2, $3)
-	}
+		{
+			write_pending_statement
+			if attached $2 as s then
+				if immediate_output_mode then
+					sqlgenerator.write_delete (s, $3)
+				end
+				create $$.make (s, $3)
+			end
+			subject_type := Void
+		}
 	;
 
 subject
 	: name idstring
 		{
-			subject_type := get_known_type ($1)
-			if subject_type = Void then
-				report_error ("Type `" + $1 + "' not known.")
-				abort
-			else
-				my_str ?= $2
-				if my_str /= Void and then subject_type.representation.length < my_str.value.count then
-					report_error ("Instance identification %"" + my_str.value + "%" does not fit in domain " + subject_type.representation.domain + " of type " + subject_type.name + ".")
+			if attached get_known_type ($1) as t then
+				subject_type := t
+				if attached {XPLAIN_STRING_EXPRESSION} $2 as my_str and then t.representation.length < my_str.value.count then
+					report_error ("Instance identification %"" + my_str.value + "%" does not fit in domain " + t.representation.domain + " of type " + t.name + ".")
 					abort
 				else
-					create {XPLAIN_SUBJECT} $$.make (subject_type, $2)
+					create {XPLAIN_SUBJECT} $$.make (t, $2)
 				end
+			else
+				report_error ("Type `" + $1 + "' not known.")
+				abort
 			end
 		}
 	;
@@ -1585,9 +1654,8 @@ idstring
 		}
 	| '(' name ')'
 		{
-			myvalue := get_known_value ($2)
-			if myvalue /= Void then
-				create {XPLAIN_VALUE_EXPRESSION} $$.make (myvalue)
+			if attached get_known_value ($2) as value then
+				create {XPLAIN_VALUE_EXPRESSION} $$.make (value)
 			end
 		}
 	| '(' error
@@ -1601,11 +1669,13 @@ update
 	: XPLAIN_UPDATE subject	XPLAIN_ITS assignment_list predicate
 	{
 		write_pending_statement
-		if immediate_output_mode then
-			sqlgenerator.write_update ($2, $4, $5)
+		if attached $4 as al and attached $2 as s then
+			if immediate_output_mode then
+				sqlgenerator.write_update (s, al, $5)
+			end
+			subject_type := Void
+			create $$.make (s, al, $5)
 		end
-		subject_type := Void
-		create $$.make ($2, $4, $5)
 	}
 	| XPLAIN_UPDATE subject error
 		{ report_error ("its expected instead of: '" + text + "'")
@@ -1615,21 +1685,19 @@ update
 attribute_name: name
 	{
 		create {XPLAIN_ATTRIBUTE_NAME} $$.make (Void, $1)
-		myattribute := subject_type.find_attribute ($$)
-		if myattribute = Void then
-			error_unknown_attribute (subject_type.name, $$)
-		else
+		if attached subject_type.find_attribute ($$) as myattribute then
 			$$.set_attribute (myattribute)
+		else
+			error_unknown_attribute (subject_type.name, $$)
 		end
 	}
 	| role '_' name
 	{
 		create {XPLAIN_ATTRIBUTE_NAME} $$.make ($1, $3)
-		myattribute := subject_type.find_attribute ($$)
-		if myattribute = Void then
-			error_unknown_attribute (subject_type.name, $$)
-		else
+		if attached subject_type.find_attribute ($$) as myattribute then
 			$$.set_attribute (myattribute)
+		else
+			error_unknown_attribute (subject_type.name, $$)
 		end
 	}
 	;
@@ -1646,12 +1714,11 @@ value
 	: XPLAIN_VALUE name '=' value_definition
 		{
 			write_pending_statement
-			create myvalue.make (sqlgenerator, $2, $4)
+			$$ := new_value_statement (sqlgenerator, $2, $4)
 			if immediate_output_mode then
-				sqlgenerator.write_value (myvalue)
+				sqlgenerator.write_value ($$.value)
 			end
-			universe.add (myvalue)
-			create $$.make (myvalue)
+			universe.add ($$.value)
 		}
 	;
 
@@ -1659,18 +1726,27 @@ value_definition
 	: constant_expression
 		{ $$ := $1 }
 	| value_selection_expression
-		{ create {XPLAIN_SELECTION_EXPRESSION} $$.make ($1) }
+		{
+			if attached $1 as e then
+				create {XPLAIN_SELECTION_EXPRESSION} $$.make (e)
+			else
+				$$ := silence_compiler_expression
+			end
+		}
 	| XPLAIN_INSERTED type_name
 		{
 			mytype := get_known_type ($2)
 			if not sqlgenerator.CreateAutoPrimaryKey then
 				report_error ("Auto primary key support disabled or not supported. Cannot retrieve auto-generated primary key.")
 			end
-			if mytype /= Void then
-				create {XPLAIN_LAST_AUTO_PK_EXPRESSION} $$.make (mytype)
+			if attached mytype as t then
+				create {XPLAIN_LAST_AUTO_PK_EXPRESSION} $$.make (t)
+			else
+				$$ := silence_compiler_expression
 			end
 		}
 	| input
+		{ $$ := silence_compiler_expression }
 	| ':' parameter_name
 		{ create {XPLAIN_UNMANAGED_PARAMETER_EXPRESSION} $$.make ($2.full_name) }
 	| system_variable
@@ -1679,6 +1755,8 @@ value_definition
 		{
 			if is_parameter_declared ($2) then
 				create {XPLAIN_PARAMETER_EXPRESSION} $$.make ($2)
+			else
+				$$ := silence_compiler_expression
 			end
 			}
 
@@ -1717,12 +1795,11 @@ value_selection
 	: XPLAIN_VALUE name
 		{
 			write_pending_statement
-			myvalue := get_known_value ($2)
-			if myvalue /= Void then
+			if attached get_known_value ($2) as value then
 				if immediate_output_mode then
-					sqlgenerator.write_select_value (myvalue)
+					sqlgenerator.write_select_value (value)
 				end
-				create $$.make (myvalue)
+				create $$.make (value)
 			end
 		}
 	;
@@ -1743,14 +1820,14 @@ input
 value_selection_expression
 	: set_function subject property predicate
 		 {
-			if $1.property_required = 0 and $3 /= Void then
+			if $1.property_required = 0 and attached $3 then
 				report_error ("Function " + $1.name + " does not allow a property to be present.")
 				abort
-			elseif $1.property_required = 1 and $3 = Void then
+			elseif $1.property_required = 1 and not attached $3 then
 				report_error ("Function " + $1.name + " requires the presence of a property.")
 				abort
-			else
-				create $$.make ($1, $2, $3, $4)
+			elseif attached $2 as s then
+				create $$.make ($1, s, $3, $4)
 			end
 		}
 	;
@@ -1759,10 +1836,12 @@ value_selection_expression
 selection
 	: XPLAIN_GET selection_expression
 	{
-		create {XPLAIN_GET_STATEMENT} $$.make ($2)
-		write_pending_statement
-		if immediate_output_mode then
-			sqlgenerator.write_select ($2)
+		if attached $2 as se then
+			create {XPLAIN_GET_STATEMENT} $$.make (se)
+			write_pending_statement
+			if immediate_output_mode then
+				sqlgenerator.write_select (se)
+			end
 		end
 		subject_type := Void
 	}
@@ -1771,11 +1850,13 @@ selection
 extension
 	: XPLAIN_EXTEND extension_expression
 		{
-			if immediate_output_mode then
-				sqlgenerator.write_extend ($2)
+			if attached $2 as ee then
+				if immediate_output_mode then
+					sqlgenerator.write_extend (ee)
+				end
+				create $$.make (ee)
 			end
 			subject_type := Void
-			create $$.make ($2)
 		}
 	;
 
@@ -1788,15 +1869,15 @@ extension_expression
 			}
 	extend_attribute '=' extension_definition
 		{
-			if extend_type.has_attribute (Void, $4.name) then
-				report_error (format ("Cannot extend type `$s' with attribute `$s', because it already has an attribute with that name.", <<$1, $4.name>>))
-				abort
-			else
-				if universe.has ($4.name) then
+			if attached extend_type as et and attached $6 as ed then
+				if et.has_attribute (Void, $4.name) then
+					report_error (format ("Cannot extend type `$s' with attribute `$s', because it already has an attribute with that name.", <<$1, $4.name>>))
+					abort
+				elseif universe.has ($4.name) then
 					report_error (format ("There is already an object (constant, value, base, type or procedure) with name `$s'. The name of an extend must be unique to avoid ambiguous expressions.", <<$4.name>>))
 					abort
 				else
-					create $$.make (sqlgenerator, extend_type, $4, $6)
+					create $$.make (sqlgenerator, et, $4, ed)
 					--extend_type.add_extension ($$)
 				end
 			end
@@ -1822,10 +1903,9 @@ extension_definition
 		{ create {XPLAIN_EXTENSION_EXPRESSION_EXPRESSION} $$.make ($2) }
 	| selection_with_set_function XPLAIN_PER property_name
 	{ -- check per attribute tree for validness
-		myobject := get_object_if_valid_tree ($3)
-		if myobject /= Void then
+		if attached get_object_if_valid_tree ($3) and attached $1 as sf then
 			if $3.last.item.object = extend_type then
-				create {XPLAIN_EXTENSION_FUNCTION_EXPRESSION} $$.make ($1, $3)
+				create {XPLAIN_EXTENSION_FUNCTION_EXPRESSION} $$.make (sf, $3)
 			else
 				report_error ("Error in per clause. The given type is `" + $3.last.item.object.name + "', while the expected type is `" + extend_type.name + "'. Make sure the per property ends in the same type that is being extended.")
 				abort
@@ -1841,8 +1921,10 @@ extension_definition
 		end
 	}
 	| selection_with_set_function error
-	{ report_error("per keyword expected instead of: " + text)
-		abort }
+		{
+			report_error("per keyword expected instead of: " + text)
+			abort
+		}
 	;
 
 selection_expression
@@ -1854,12 +1936,17 @@ selection_expression
 
 selection_without_set_function
 	: subject selection_list predicate selection_sort_order
-		{ create {XPLAIN_SELECTION_LIST} $$.make ($1, $2, $3, $4)
+		{
+			if attached $1 as s then
+				create {XPLAIN_SELECTION_LIST} $$.make (s, $2, $3, $4)
+			end
 		}
 	| text subject selection_list predicate selection_sort_order
 		{
-		  create {XPLAIN_SELECTION_LIST} $$.make ($2, $3, $4, $5)
-			$$.set_identification_text ($1)
+			if attached $2 as s then
+				create {XPLAIN_SELECTION_LIST} $$.make (s, $3, $4, $5)
+				$$.set_identification_text ($1)
+			end
 		}
 	;
 
@@ -1869,39 +1956,43 @@ selection_sort_order: -- empty
   ;
 
 sort_order_list
-	: property_name {
-		myobject := get_object_if_valid_tree ($1)
-		if myobject /= Void then
-			create {XPLAIN_SORT_NODE} $$.make ($1, True, Void)
-		end }
-	| '-' property_name {
-		myobject := get_object_if_valid_tree ($2)
-		if myobject /= Void then
-			create {XPLAIN_SORT_NODE} $$.make ($2, False, Void)
-		end }
-	| property_name ',' sort_order_list	{
-		myobject := get_object_if_valid_tree ($1)
-		if myobject /= Void then
-			create {XPLAIN_SORT_NODE} $$.make ($1, True, $3)
-		end }
-	| '-' property_name ',' sort_order_list {
-		myobject := get_object_if_valid_tree ($2)
-		if myobject /= Void then
-			create {XPLAIN_SORT_NODE} $$.make ($2, False, $4)
-		end }
+	: property_name
+		{
+			if attached get_object_if_valid_tree ($1) then
+				create {XPLAIN_SORT_NODE} $$.make ($1, True, Void)
+			end
+		}
+	| '-' property_name
+		{
+			if attached get_object_if_valid_tree ($2) then
+				create {XPLAIN_SORT_NODE} $$.make ($2, False, Void)
+			end
+		}
+	| property_name ',' sort_order_list
+		{
+			if attached get_object_if_valid_tree ($1) then
+				create {XPLAIN_SORT_NODE} $$.make ($1, True, $3)
+			end
+		}
+	| '-' property_name ',' sort_order_list
+		{
+			if attached get_object_if_valid_tree ($2) then
+				create {XPLAIN_SORT_NODE} $$.make ($2, False, $4)
+			end
+		}
   ;
 
 selection_with_set_function
 	: set_function subject property predicate
 		{
-			if $1.property_required = 0 and $3 /= Void then
+			if $1.property_required = 0 and attached $3 then
 				report_error ("Function " + $1.name + " does not allow a property to be present.")
 				abort
-			elseif $1.property_required = 1 and $3 = Void then
+			elseif $1.property_required = 1 and not attached $3 then
 				report_error ("Function " + $1.name + " requires the presence of a property.")
 				abort
-			else
-				create $$.make ($1, $2, $3, $4)
+			elseif attached $2 as s then
+				create $$.make ($1, s, $3, $4)
 			end
 		}
 	;
@@ -2005,12 +2096,11 @@ procedure
 		optional_procedure_statement_list XPLAIN_END
 		{
 			procedure_mode := False
-			create myprocedure.make ($3, $4, $1, $7)
-			universe.add (myprocedure)
+			$$ := new_procedure_statement ($3, $4, $1, $7)
+			universe.add ($$.procedure)
 			if immediate_output_mode then
-				sqlgenerator.write_procedure (myprocedure)
+				sqlgenerator.write_procedure ($$.procedure)
 			end
-			create $$.make (myprocedure)
 		}
 	;
 
@@ -2043,19 +2133,19 @@ optional_procedure_statement_list
 procedure_statement_list
 	: procedure_supported_command '.'
 		{
-			create $$.make ($1, Void)
+			if attached $1 as s then create $$.make (s, Void) end
 		}
 	| procedure_supported_command '.' procedure_statement_list
 		{
-			create $$.make ($1, $3)
+			if attached $1 as s then create $$.make (s, $3) end
 		}
 	| sql
 		{
-			create $$.make ($1, Void)
+			if attached $1 as s then create $$.make (s, Void) end
 		}
 	| sql procedure_statement_list
 		{
-			create $$.make ($1, $2)
+			if attached $2 as s then create $$.make ($1, s) end
 		}
 	| error
 		{
@@ -2116,7 +2206,7 @@ sql
 
 feature -- Initialization
 
-	make_with_file (a_file: KI_CHARACTER_INPUT_STREAM; a_sqlgenerator: SQL_GENERATOR) is
+	make_with_file (a_file: KI_CHARACTER_INPUT_STREAM; a_sqlgenerator: SQL_GENERATOR)
 		require
 			sqlgenerator_not_void: a_sqlgenerator /= Void
 		do
@@ -2124,7 +2214,7 @@ feature -- Initialization
 			make (a_sqlgenerator)
 		end
 
-	make_with_stdin (a_sqlgenerator: SQL_GENERATOR) is
+	make_with_stdin (a_sqlgenerator: SQL_GENERATOR)
 		require
 			sqlgenerator_not_void: a_sqlgenerator /= Void
 		do
@@ -2135,21 +2225,22 @@ feature -- Initialization
 
 feature {NONE} -- private creation
 
-	make (a_sqlgenerator: SQL_GENERATOR) is
+	make (a_sqlgenerator: SQL_GENERATOR)
 		do
 			make_parser_skeleton
 			create statements.make
 			set_sqlgenerator (a_sqlgenerator)
+			-- Set some dummy values so we can avoid using detachable
+			create {XPLAIN_REQUIRED} dummyrestriction.make (True)
 		end
 
 
 feature {NONE} -- dummy variables to store created objects in
 
-	dummya: XPLAIN_A_REFERENCES
-	dummyi: XPLAIN_I_REFERENCES
-	dummye: XPLAIN_EXPRESSION
-	dummyl: XPLAIN_LOGICAL_EXPRESSION
-	dummybool: XPLAIN_LOGICAL_VALUE_EXPRESSION
+	dummya: detachable XPLAIN_A_REFERENCES
+	dummyi: detachable XPLAIN_I_REFERENCES
+	dummye: detachable XPLAIN_EXPRESSION
+	dummybool: detachable XPLAIN_LOGICAL_VALUE_EXPRESSION
 	dummyrestriction: XPLAIN_DOMAIN_RESTRICTION
 
 	last_width: INTEGER
@@ -2157,18 +2248,13 @@ feature {NONE} -- dummy variables to store created objects in
 
 feature {NONE} -- local variables, do not survive outside a code block!
 
-	myobject: XPLAIN_ABSTRACT_OBJECT
-	myabstracttype: XPLAIN_ABSTRACT_TYPE
-	mytype: XPLAIN_TYPE
-	myvariable: XPLAIN_VARIABLE
-	myvalue: XPLAIN_VALUE
-	myattribute: XPLAIN_ATTRIBUTE
-	myindex: XPLAIN_INDEX
-	myprocedure: XPLAIN_PROCEDURE
-	current_type_name: STRING
+	mybase: detachable XPLAIN_BASE
+	mytype: detachable XPLAIN_TYPE
+	myvariable: detachable XPLAIN_VARIABLE
+	myindex: detachable XPLAIN_INDEX
+	current_type_name: detachable STRING
 	auto_identifier: BOOLEAN
-	my_selection_function: XPLAIN_SELECTION_FUNCTION
-	my_str: XPLAIN_STRING_EXPRESSION
+	my_selection_function: detachable XPLAIN_SELECTION_FUNCTION
 
 	is_init_default: BOOLEAN
 			-- Determine if init or init default statement has to be created.
@@ -2176,9 +2262,9 @@ feature {NONE} -- local variables, do not survive outside a code block!
 
 feature {NONE} -- these vars survive a little bit longer
 
-	subject_type: XPLAIN_TYPE  -- used to check if valid attribute
-	extend_type: XPLAIN_TYPE   -- used in extend statement
-	my_parameters: XPLAIN_ATTRIBUTE_NAME_NODE
+	subject_type: detachable XPLAIN_TYPE  -- used to check if valid attribute
+	extend_type: detachable XPLAIN_TYPE   -- used in extend statement
+	my_parameters: detachable XPLAIN_ATTRIBUTE_NAME_NODE
 			-- List of declared parameters for a procedure
 
 feature -- Xplain
@@ -2189,7 +2275,15 @@ feature -- Xplain
 
 feature {NONE} -- Expression generation
 
-	new_logical_infix_expression (a_left: XPLAIN_EXPRESSION; an_operator: STRING; a_right: XPLAIN_EXPRESSION): XPLAIN_INFIX_EXPRESSION is
+	new_logical_expression (a_left: XPLAIN_EXPRESSION; an_operator: STRING; a_right: XPLAIN_EXPRESSION): XPLAIN_LOGICAL_EXPRESSION
+		local
+			e: XPLAIN_EXPRESSION
+		do
+			create {XPLAIN_LOGICAL_INFIX_EXPRESSION} e.make (a_left, an_operator, a_right)
+			create Result.make (e)
+		end
+
+	new_logical_infix_expression (a_left: XPLAIN_EXPRESSION; an_operator: STRING; a_right: XPLAIN_EXPRESSION): XPLAIN_INFIX_EXPRESSION
 			-- Create a new infix expression. It's main purpose is to
 			-- determine when to use the like operator instead of the '='
 			-- operator.
@@ -2200,6 +2294,7 @@ feature {NONE} -- Expression generation
 		local
 			equal_operator,
 			not_equal_operator: BOOLEAN
+			r: detachable XPLAIN_INFIX_EXPRESSION
 		do
 			if an_operator.is_equal (once_equal) then
 				equal_operator := True
@@ -2209,27 +2304,79 @@ feature {NONE} -- Expression generation
 			if equal_operator or else not_equal_operator then
 				if a_left.has_wild_card_characters or a_right.has_wild_card_characters then
 					if equal_operator then
-						create {XPLAIN_LIKE_EXPRESSION} Result.make (a_left, a_right)
+						create {XPLAIN_LIKE_EXPRESSION} r.make (a_left, a_right)
 					else
-						create {XPLAIN_NOT_LIKE_EXPRESSION} Result.make (a_left, a_right)
+						create {XPLAIN_NOT_LIKE_EXPRESSION} r.make (a_left, a_right)
 					end
 				end
 			end
 
 			-- Fallback to standard infix expression.
-			if Result = Void then
-				create {XPLAIN_LOGICAL_INFIX_EXPRESSION} Result.make (a_left, an_operator, a_right)
+			if not attached r then
+				create {XPLAIN_LOGICAL_INFIX_EXPRESSION} r.make (a_left, an_operator, a_right)
 			end
+			Result := r
 		ensure
 			new_infix_expression_not_void: Result /= Void
 		end
 
 
+feature -- Code blocks
+
+	new_base (a_name: STRING; a_definition: XPLAIN_REPRESENTATION; a_required: BOOLEAN): XPLAIN_BASE
+		local
+			r: XPLAIN_DOMAIN_RESTRICTION
+		do
+			if not attached a_definition.domain_restriction then
+				if a_definition.domain.is_equal ("(B)") then
+					create {XPLAIN_B_RESTRICTION} r.make (a_required)
+				else
+					create {XPLAIN_REQUIRED} r.make (a_required)
+				end
+				a_definition.set_domain_restriction (sqlgenerator, r)
+			end
+			create Result.make (a_name, a_definition)
+		end
+
+
+
+feature -- Statement generation
+
+	new_procedure_statement (a_name: STRING; a_parameters: detachable XPLAIN_ATTRIBUTE_NAME_NODE; a_procedure_kind: INTEGER; a_statements: detachable XPLAIN_STATEMENT_NODE): XPLAIN_PROCEDURE_STATEMENT
+		local
+			myprocedure: XPLAIN_PROCEDURE
+		do
+			create myprocedure.make (a_name, a_parameters, a_procedure_kind, a_statements)
+			create Result.make (myprocedure)
+		end
+
+	new_value_statement (an_sqlgenerator: SQL_GENERATOR; a_name: STRING; a_expression: XPLAIN_EXPRESSION): XPLAIN_VALUE_STATEMENT
+		local
+			myvalue: XPLAIN_VALUE
+		do
+			create myvalue.make (an_sqlgenerator, a_name, a_expression)
+			create Result.make (myvalue)
+		end
+
+
+feature -- Silence compiler
+
+	silence_compiler_logical_expression: XPLAIN_LOGICAL_VALUE_EXPRESSION
+		once
+			create {XPLAIN_LOGICAL_VALUE_EXPRESSION} Result.make (False)
+		end
+
+	silence_compiler_expression: XPLAIN_EXPRESSION
+		once
+			create {XPLAIN_STRING_EXPRESSION} Result.make ("")
+		end
+
+
 feature -- Middleware
 
-	mwgenerator: MIDDLEWARE_GENERATOR
+	mwgenerator: detachable MIDDLEWARE_GENERATOR
 
-	set_mwgenerator (mwg: MIDDLEWARE_GENERATOR) is
+	set_mwgenerator (mwg: MIDDLEWARE_GENERATOR)
 		do
 			mwgenerator := mwg
 		end
@@ -2237,14 +2384,14 @@ feature -- Middleware
 
 feature {NONE} -- Error handling
 
-	error_unknown_attribute (a_type: STRING; an_attribute: XPLAIN_ATTRIBUTE_NAME) is
+	error_unknown_attribute (a_type: STRING; an_attribute: XPLAIN_ATTRIBUTE_NAME)
 			-- abort with unknown attribute error
 		local
 			s: STRING
 		do
 			s := "Type `" + a_type + "' does not have the attribute `"
-			if an_attribute.role /= Void then
-				s := s + an_attribute.role + "_"
+			if attached an_attribute.role as r then
+				s := s + r + "_"
 			end
 			s := s + an_attribute.name + "'."
 			report_error (s)
@@ -2253,16 +2400,16 @@ feature {NONE} -- Error handling
 
 feature {NONE} -- pending statements
 
-	pending_type: XPLAIN_TYPE
+	pending_type: detachable XPLAIN_TYPE
 			-- set for type not yet written
 
-	write_pending_init is
+	write_pending_init
 		require
 			pending_type_written: pending_init = Void or else pending_type = Void
 		do
-			if pending_init /= Void then
+			if attached pending_init as pi then
 				if not use_mode then
-					sqlgenerator.write_init (pending_init)
+					sqlgenerator.write_init (pi)
 				end
 				pending_init := Void
 			end
@@ -2270,7 +2417,7 @@ feature {NONE} -- pending statements
 			pending_init_void: pending_init = Void
 		end
 
-	write_pending_statement is
+	write_pending_statement
 			-- Call this before outputting anything!
 		do
 			write_pending_type
@@ -2279,13 +2426,13 @@ feature {NONE} -- pending statements
 			pending_init_void: pending_init = Void
 		end
 
-	write_pending_type is
+	write_pending_type
 		do
-			if pending_type /= Void then
+			if attached pending_type as t then
 				if not use_mode then
-					sqlgenerator.write_type (pending_type)
+					sqlgenerator.write_type (t)
 					if mwgenerator /= Void then
-						mwgenerator.dump_type (pending_type, sqlgenerator)
+						mwgenerator.dump_type (t, sqlgenerator)
 					end
 				end
 				pending_type := Void
@@ -2297,36 +2444,36 @@ feature {NONE} -- pending statements
 
 feature {NONE} -- Checks for validness of parsed code
 
-	get_known_base_or_type (name: STRING): XPLAIN_ABSTRACT_TYPE is
+	get_known_base_or_type (name: STRING): detachable XPLAIN_ABSTRACT_TYPE
 			-- Test if known type, but be aware of self-reference.
 		do
 			Result := universe.find_base_or_type (name)
-			if Result = Void and then
+			if not attached Result and then
 				not equal(current_type_name, name) then
 				report_error ("Unknown base or type: " + name)
 				abort
 			end
 		end
 
-	get_known_object (name: STRING): XPLAIN_ABSTRACT_OBJECT is
+	get_known_object (name: STRING): detachable XPLAIN_ABSTRACT_OBJECT
 			-- Return object, must exist.
 		do
 			Result := universe.find_object (name)
-			if Result = Void then
+			if not attached Result then
 				report_error ("Not a defined object: " + name)
 				abort
 			end
 		end
 
-	get_known_type (name: STRING): XPLAIN_TYPE is
+	get_known_type (name: STRING): detachable XPLAIN_TYPE
 			-- Return the type for `name' or die.
 		local
-			b: XPLAIN_BASE
+			b: detachable XPLAIN_BASE
 		do
 			Result := universe.find_type (name)
-			if Result = Void then
+			if not attached Result then
 				b := universe.find_base (name)
-				if b = Void then
+				if not attached b then
 					report_error ("Type unknown: " + name)
 				else
 					report_error (format ("`$s' is a base, but a type is expected here.", <<name>>))
@@ -2335,19 +2482,19 @@ feature {NONE} -- Checks for validness of parsed code
 			end
 		end
 
-	get_known_value (name: STRING): XPLAIN_VALUE is
+	get_known_value (name: STRING): detachable XPLAIN_VALUE
 		do
 			Result := universe.find_value (name)
-			if Result = Void then
+			if not attached Result then
 				report_error ("Value unknown: " + name)
 				abort
 			end
 		end
 
-	last_object_in_tree: XPLAIN_ABSTRACT_OBJECT
+	last_object_in_tree: detachable XPLAIN_ABSTRACT_OBJECT
 			-- Set by `get_object_if_valid_tree' to last object in list.
 
-	get_object_if_valid_tree (first: XPLAIN_ATTRIBUTE_NAME_NODE): XPLAIN_ABSTRACT_OBJECT is
+	get_object_if_valid_tree (first: XPLAIN_ATTRIBUTE_NAME_NODE): detachable XPLAIN_ABSTRACT_OBJECT
 			-- The object for the first name of this tree, if this
 			-- is a valid tree;
 			-- Also augment tree with type information.
@@ -2355,12 +2502,10 @@ feature {NONE} -- Checks for validness of parsed code
 			first_not_void: first /= Void
 			subject_type_set: subject_type /= Void
 		local
-			my_attribute: XPLAIN_ATTRIBUTE
-			value: XPLAIN_VALUE
-			variable: XPLAIN_VARIABLE
-			node: XPLAIN_ATTRIBUTE_NAME_NODE
-			preceding_type: XPLAIN_TYPE
-			atype: XPLAIN_ABSTRACT_TYPE
+			my_attribute: detachable XPLAIN_ATTRIBUTE
+			node: detachable XPLAIN_ATTRIBUTE_NAME_NODE
+			preceding_type: detachable XPLAIN_TYPE
+			atype: detachable XPLAIN_ABSTRACT_TYPE
 			valid_attribute: BOOLEAN
 			msg: STRING
 		do
@@ -2369,21 +2514,28 @@ feature {NONE} -- Checks for validness of parsed code
 				-- Something like a its b its c, should all be attributes.
 				from
 					node := first
-					preceding_type := subject_type
+					if attached subject_type as t then
+						preceding_type := t
+					end
 					valid_attribute := True
 				until
 					node = Void or
 					not valid_attribute
 				loop
-					my_attribute := preceding_type.find_attribute (node.item)
-					valid_attribute := my_attribute /= Void
-					if valid_attribute then
-						node.item.set_attribute (my_attribute)
-						atype := my_attribute.abstracttype
+					if attached preceding_type as t then
+						my_attribute := t.find_attribute (node.item)
+					end
+					if attached my_attribute then
+						valid_attribute := True
+					end
+					if valid_attribute and attached my_attribute as a then
+						node.item.set_attribute (a)
+						atype := a.abstracttype
 						--node.item.set_object (atype)
 						if node.next /= Void then
-							preceding_type ?= atype
-							if preceding_type = Void then
+							if attached {XPLAIN_TYPE} atype as t then
+								preceding_type := t
+							else
 								-- we've a base here (but missed extension
 								-- because it's a type, need to fix this)
 								valid_attribute := False
@@ -2413,9 +2565,7 @@ feature {NONE} -- Checks for validness of parsed code
 						abort
 					else
 						-- check if value/variable
-						value ?= Result
-						variable ?= Result
-						if value = Void and then variable = Void then
+						if attached {XPLAIN_VALUE} Result as value and then attached {XPLAIN_VARIABLE} Result as variable then
 							create msg.make (128)
 							msg.append_string ("base/type '")
 							if first.item.role /= Void then
@@ -2449,13 +2599,13 @@ feature {NONE} -- Checks for validness of parsed code
 			last_object_set: Result /= Void implies last_object_in_tree /= Void
 		end
 
-	is_parameter_declared (a_name: XPLAIN_ATTRIBUTE_NAME): BOOLEAN is
+	is_parameter_declared (a_name: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Has `a_name' been declared in the parameter list for the
 			-- current procedure?
 		require
 			name_not_empty: a_name /= Void
 		do
-			Result := my_parameters /= Void and then my_parameters.has (a_name)
+			Result := attached my_parameters as p and then p.has (a_name)
 			if not Result then
 				report_error ("Parameter `" + a_name.full_name + "' has not been declared.")
 				abort
@@ -2465,14 +2615,14 @@ feature {NONE} -- Checks for validness of parsed code
 
 feature {NONE} -- Checks
 
-	warn_attributes_with_inits (an_assignment_list: XPLAIN_ASSIGNMENT_NODE) is
+	warn_attributes_with_inits (an_assignment_list: XPLAIN_ASSIGNMENT_NODE)
 			-- Check if user has specified an attribute for which an init
 			-- expression exists. Assignment will be (should be...)
 			-- ignored in that case.
 		require
 			an_assignment_list_not_void: an_assignment_list /= Void
 		local
-			node: XPLAIN_ASSIGNMENT_NODE
+			node: detachable XPLAIN_ASSIGNMENT_NODE
 		do
 			from
 				node := an_assignment_list
@@ -2492,8 +2642,8 @@ feature {NONE} -- Checks
 
 feature {NONE} -- Once strings
 
-	once_equal: STRING is "="
-	once_not_equal: STRING is "<>"
+	once_equal: STRING = "="
+	once_not_equal: STRING = "<>"
 
 
 invariant

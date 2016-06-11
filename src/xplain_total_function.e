@@ -3,8 +3,6 @@ note
 	description: "Xplain total function"
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #5 $"
 
 class
 
@@ -33,7 +31,7 @@ feature -- Access
 	representation (
 			sqlgenerator: SQL_GENERATOR;
 			type: XPLAIN_TYPE;
-			expression: XPLAIN_EXPRESSION): XPLAIN_REPRESENTATION
+			expression: detachable XPLAIN_EXPRESSION): XPLAIN_REPRESENTATION
 			-- What's the xplain representation for this function?
 		do
 				check
@@ -42,7 +40,7 @@ feature -- Access
 			Result := expression.representation (sqlgenerator)
 		end
 
-	sqlextenddefault (sqlgenerator: SQL_GENERATOR; expression: XPLAIN_EXPRESSION): STRING
+	sqlextenddefault (sqlgenerator: SQL_GENERATOR; expression: detachable XPLAIN_EXPRESSION): STRING
 			-- default to use for extension when function returns a Null value
 		do
 			Result := "0"

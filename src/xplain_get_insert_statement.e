@@ -7,8 +7,6 @@ note
 	author: "Berend de Boer <berend@pobox.com>"
 	copyright: "Copyright (c) 2007, Berend de Boer"
 	license: "Eiffel Forum License v2 (see forum.txt)"
-	date: "$Date: 2008/12/15 $"
-	revision: "$Revision: #2 $"
 
 
 class
@@ -32,7 +30,7 @@ feature {NONE} -- Initialization
 		a_selection: XPLAIN_SELECTION_LIST;
 		an_insert_type: XPLAIN_TYPE;
 		an_auto_primary_key: BOOLEAN
-		an_assignment_list: XPLAIN_ATTRIBUTE_NAME_NODE)
+		an_assignment_list: like assignment_list)
 		require
 			selection_not_void: a_selection /= Void
 			type_not_void: an_insert_type /= Void
@@ -70,7 +68,7 @@ feature -- Access
 
 	auto_primary_key: BOOLEAN
 
-	assignment_list: XPLAIN_ATTRIBUTE_NAME_NODE
+	assignment_list: detachable XPLAIN_ATTRIBUTE_NAME_NODE
 			-- List of attributes; Void to mean all attributes of this type
 
 

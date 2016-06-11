@@ -3,8 +3,6 @@ note
 	description: "Set function extension expression."
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2010/02/11 $"
-	revision:   "$Revision: #9 $"
 
 
 class
@@ -44,6 +42,7 @@ feature {NONE} -- Initialization
 		do
 			selection := a_selection
 			per_property := a_per_property
+			sqlfromaliasname := ""
 		end
 
 
@@ -96,17 +95,17 @@ feature -- SQL generation
 			parenthesis: XPLAIN_PARENTHESIS_EXPRESSION
 		do
 			precursor (an_extension, an_outer_table_name)
-			if not supports_left_outer_join then
+			if not supports_left_outer_join and then attached extension as e then
 				sqlfromaliasname := an_outer_table_name
 				create left_operand.make (per_property)
 				create access_type.make (Void, extension.name)
-				access_type.set_object (extension)
+				access_type.set_object (e)
 				create access_type_node.make (access_type, Void)
 				create right_operand.make (access_type_node)
 				right_operand.first.set_prefix_table (an_outer_table_name)
 				create predicate.make (left_operand, "=", right_operand)
-				if selection.predicate /= Void then
-					create parenthesis.make (selection.predicate)
+				if attached selection.predicate as p then
+					create parenthesis.make (p)
 					create predicate.make (predicate, "and", parenthesis)
 				end
 				selection.set_predicate (predicate)

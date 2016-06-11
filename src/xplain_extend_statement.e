@@ -4,8 +4,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2002, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #4 $"
 
 class
 
@@ -47,7 +45,7 @@ feature -- Commands
 
 	optimize_for_procedure (a_procedure : XPLAIN_PROCEDURE)
 		local
-			cursor: DS_BILINEAR_CURSOR [XPLAIN_STATEMENT]
+			cursor: DS_BILINKED_LIST_CURSOR [XPLAIN_STATEMENT]
 			updated: BOOLEAN
 			an: XPLAIN_ATTRIBUTE_NAME
 			optimization_possible: BOOLEAN

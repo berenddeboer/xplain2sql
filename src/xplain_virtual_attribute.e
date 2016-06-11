@@ -34,7 +34,7 @@ feature {NONE} -- Initialization
 		require
 			valid_assertion: an_assertion /= Void
 		local
-			f: XPLAIN_EXTENSION_FUNCTION_EXPRESSION
+			-- f: XPLAIN_EXTENSION_FUNCTION_EXPRESSION
 			required: BOOLEAN
 		do
 			-- Assertions can usually be joined to the type, except when

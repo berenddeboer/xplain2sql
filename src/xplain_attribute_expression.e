@@ -3,8 +3,6 @@ note
 	description: "Xplain its expression"
 	author:	"Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:		"$Date: 2010/02/11 $"
-	revision:	"$Revision: #12 $"
 
 class
 
@@ -56,8 +54,7 @@ feature -- Access
 	path_name: STRING
 			-- The path of the its list
 		local
-			n: XPLAIN_ATTRIBUTE_NAME_NODE
-			type: XPLAIN_TYPE
+			n: detachable XPLAIN_ATTRIBUTE_NAME_NODE
 		do
 			from
 				Result := first.item.full_name.twin
@@ -69,8 +66,7 @@ feature -- Access
 				Result.append_string (n.item.full_name)
 				n := n.next
 			end
-			type ?= first.last.item.object
-			if type /= Void then
+			if attached {XPLAIN_TYPE} first.last.item.object as type then
 				Result.append_string (once "/@instance")
 			end
 		end
@@ -91,11 +87,10 @@ feature -- Status
 		end
 
 	is_logical_expression: BOOLEAN
-		local
-			b: XPLAIN_B_REPRESENTATION
 		do
-			b ?= first.last.item.abstracttype.representation
-			Result := b /= Void
+			if attached {XPLAIN_B_REPRESENTATION} first.last.item.abstracttype.representation then
+				Result := True
+			end
 		end
 
 	is_specialization: BOOLEAN
@@ -184,7 +179,7 @@ feature -- SQL specifics
 	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- SQL for name of last attribute in list
 		local
-			lastnode: XPLAIN_ATTRIBUTE_NAME_NODE
+			lastnode: detachable XPLAIN_ATTRIBUTE_NAME_NODE
 		do
 			create Result.make (64)
 			-- usually this should be true:
@@ -196,8 +191,8 @@ feature -- SQL specifics
 				Result := sqlgenerator.sql_subselect_for_attribute (first)
 			else
 				lastnode := first.last
-				if lastnode.prefix_table /= Void then
-					Result.append_string (sqlgenerator.quote_identifier (lastnode.prefix_table))
+				if attached lastnode.prefix_table as p then
+					Result.append_string (sqlgenerator.quote_identifier (p))
 					Result.append_character ('.')
 				end
 				Result.append_string (lastnode.item.quoted_name (sqlgenerator))

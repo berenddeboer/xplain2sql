@@ -4,8 +4,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2002, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #4 $"
 
 class
 
@@ -30,7 +28,7 @@ feature -- Initialization
 	make (
 			a_subject: XPLAIN_SUBJECT;
 			a_assignment_list: XPLAIN_ASSIGNMENT_NODE;
-			a_predicate: XPLAIN_EXPRESSION)
+			a_predicate: detachable XPLAIN_EXPRESSION)
 		require
 			subject_not_void: a_subject /= Void
 			assignment_list_not_void: a_assignment_list /= Void
@@ -55,7 +53,7 @@ feature --  Warnings
 	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Is parameter `a_parameter' used by this statement?
 		local
-			node: like assignment_list
+			node: detachable like assignment_list
 		do
 			Result :=
 				subject.identification /= Void and then
@@ -81,7 +79,7 @@ feature -- Access
 
 	subject: XPLAIN_SUBJECT
 	assignment_list: XPLAIN_ASSIGNMENT_NODE
-	predicate: XPLAIN_EXPRESSION
+	predicate: detachable XPLAIN_EXPRESSION
 
 
 feature -- Status
@@ -90,7 +88,7 @@ feature -- Status
 			-- Does this statement update the attribute `an_attribute_name'
 			-- of type ``a_type_name'?
 		local
-			p: XPLAIN_ASSIGNMENT_NODE
+			p: detachable XPLAIN_ASSIGNMENT_NODE
 		do
 			if subject.type = a_type then
 				from

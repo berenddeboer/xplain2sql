@@ -9,8 +9,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2001-2002, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #14 $"
 
 class
 
@@ -428,7 +426,7 @@ feature -- Stored procedure support
 			std.output.put_string ("language sql%N")
 		end
 
-	sp_result_parameter (a_procedure: XPLAIN_PROCEDURE)
+	sp_result_parameter (a_procedure: detachable XPLAIN_PROCEDURE)
 			-- Output the proper clause when rows are returned or not.
 		do
 			std.output.put_character ('%N')
@@ -455,8 +453,6 @@ feature -- Stored procedure support
 			-- declarations for the value statement or cursors.
 			-- Exact location depends on
 			-- `StoredProcedureUserDeclarationBeforeBody'.
-		local
-			value_statement: XPLAIN_VALUE_STATEMENT
 		do
 			-- For DB2 I perhaps want to put the cursor declarations here
 			-- as well. In that case I don't need to have additional
@@ -466,8 +462,7 @@ feature -- Stored procedure support
 			until
 				procedure.statements.after
 			loop
-				value_statement ?= procedure.statements.item_for_iteration
-				if value_statement /= Void then
+				if attached {XPLAIN_VALUE_STATEMENT} procedure.statements.item_for_iteration as value_statement then
 					optional_create_value_declare (value_statement.value)
 				end
 				procedure.statements.forth

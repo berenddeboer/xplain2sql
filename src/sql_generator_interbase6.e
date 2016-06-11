@@ -17,8 +17,6 @@ note
 
   author:     "Berend de Boer <berend@pobox.com>"
   copyright:  "Copyright (c) 2000, Berend de Boer"
-  date:       "$Date: 2008/12/15 $"
-  revision:   "$Revision: #10 $"
 
 class
 
@@ -121,7 +119,7 @@ feature -- SQL creation
 			-- For Interbase selects in a stored procedure have to be
 			-- treated differently.
 		local
-			node: XPLAIN_EXPRESSION_NODE
+			node: detachable XPLAIN_EXPRESSION_NODE
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE]
 			my_attribute: XPLAIN_ATTRIBUTE
 		do
@@ -158,10 +156,10 @@ feature -- SQL creation
 							std.output.put_string (",%N")
 							std.output.put_string (Tab)
 							std.output.put_character (':')
-							if node.new_name = Void then
-								std.output.put_string (quote_valid_identifier ("column " + node.item.sqlname (Current)))
-							else
-								std.output.put_string (quote_identifier (make_valid_identifier (node.new_name)))
+							if attached node.new_name as n then
+								std.output.put_string (quote_identifier (make_valid_identifier (n)))
+							elseif attached node.item.sqlname (Current) as n then
+								std.output.put_string (quote_valid_identifier ("column " + n))
 							end
 							node := node.next
 						end
@@ -200,13 +198,13 @@ feature -- SQL creation
 			-- Emit code to assign `a_value'.`expression' to `a_value'
 			-- inside a stored procedure.
 		local
-			selection: XPLAIN_SELECTION_EXPRESSION
 			can_assign: BOOLEAN
 		do
-			selection ?= a_value.expression
-			can_assign :=
-				a_value.expression.is_literal or else
-				selection = Void
+			if attached {XPLAIN_SELECTION_EXPRESSION} a_value.expression as selection then
+				can_assign :=
+					a_value.expression.is_literal or else
+					selection = Void
+			end
 			if can_assign then
 				-- Expression does not generate an SQL select,
 				-- so assume we can assign it. We have to distinguish
@@ -285,16 +283,13 @@ feature -- Stored procedures
 
 	sp_user_declaration (procedure: XPLAIN_PROCEDURE)
 			-- Emit value declarations.
-		local
-			value_statement: XPLAIN_VALUE_STATEMENT
 		do
 			from
 				procedure.statements.start
 			until
 				procedure.statements.after
 			loop
-				value_statement ?= procedure.statements.item_for_iteration
-				if value_statement /= Void then
+				if attached {XPLAIN_VALUE_STATEMENT} procedure.statements.item_for_iteration as value_statement then
 					optional_create_value_declare (value_statement.value)
 				end
 				procedure.statements.forth
@@ -304,23 +299,17 @@ feature -- Stored procedures
 	sp_user_result (procedure: XPLAIN_PROCEDURE)
 			-- Output the proper clause when rows are returned or not.
 		local
-			get_statement: XPLAIN_GET_STATEMENT
-			value_statement: XPLAIN_VALUE_SELECTION_STATEMENT
 			type: XPLAIN_TYPE
 			value: XPLAIN_VALUE
-			node: XPLAIN_EXPRESSION_NODE
-			selection_list: XPLAIN_SELECTION_LIST
-			selection_function: XPLAIN_SELECTION_FUNCTION
+			node: detachable XPLAIN_EXPRESSION_NODE
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE]
 			my_attribute: XPLAIN_ATTRIBUTE
 		do
 			if procedure.returns_rows then
 				std.output.put_string ("%Nreturns (%N")
-				get_statement := procedure.last_get_statement
-				if get_statement /= Void then
+				if attached procedure.last_get_statement as get_statement then
 					type := get_statement.selection.subject.type
-					selection_list ?= get_statement.selection
-					if selection_list /= Void then
+					if attached {XPLAIN_SELECTION_LIST} get_statement.selection as selection_list then
 						std.output.put_string (Tab)
 						std.output.put_string (quote_valid_identifier ("column " + type.sqlpkname (Current)))
 						std.output.put_character (' ')
@@ -351,10 +340,10 @@ feature -- Stored procedures
 								loop
 									std.output.put_string (",%N")
 									std.output.put_string (Tab)
-									if node.new_name = Void then
-										std.output.put_string (quote_valid_identifier ("column " + node.item.sqlname (Current)))
-									else
-										std.output.put_string (quote_valid_identifier (node.new_name))
+									if attached node.new_name as n then
+										std.output.put_string (quote_valid_identifier (n))
+									elseif attached node.item.sqlname (Current) as n then
+										std.output.put_string (quote_valid_identifier ("column " + n))
 									end
 									std.output.put_character (' ')
 									std.output.put_string (node.item.exact_representation (Current).datatype (Current))
@@ -366,8 +355,7 @@ feature -- Stored procedures
 							end
 						end
 					else
-						selection_function ?= get_statement.selection
-						if selection_function /= Void then
+						if attached {XPLAIN_SELECTION_FUNCTION} get_statement.selection as selection_function then
 							std.output.put_string (Tab)
 							std.output.put_string (quote_valid_identifier (selection_function.function.name + " " + type.name))
 							std.output.put_character (' ')
@@ -375,8 +363,7 @@ feature -- Stored procedures
 						end
 					end
 				else
-					value_statement := procedure.last_value_selection_statement
-					if value_statement /= Void then
+					if attached procedure.last_value_selection_statement as value_statement then
 						std.output.put_string (Tab)
 						value := value_statement.value
 						std.output.put_string (quote_valid_identifier (value.name))

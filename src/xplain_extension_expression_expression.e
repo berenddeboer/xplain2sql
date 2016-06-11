@@ -3,8 +3,6 @@ note
 	description: "Extension definition that is an expression, not a function"
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2010/02/11 $"
-	revision:   "$Revision: #8 $"
 
 
 class

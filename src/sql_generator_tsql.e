@@ -6,8 +6,6 @@ note
 
 	author:		"Berend de Boer <berend@pobox.com>"
 	copyright:	"Copyright (c) 1999, Berend de Boer"
-	date:			"$Date: 2008/12/15 $"
-	revision:	"$Revision: #14 $"
 
 	known_bugs:
 		"1. A value can get out of scope earlier than wanted."
@@ -196,7 +194,7 @@ feature -- TransactSQL specific SQL creation statements
 			end_with_go
 		end
 
-	create_delete (subject: XPLAIN_SUBJECT; predicate: XPLAIN_EXPRESSION)
+	create_delete (subject: XPLAIN_SUBJECT; predicate: detachable XPLAIN_EXPRESSION)
 			-- Emit Transact-SQL delete statement which supports joins in
 			-- the delete statement itself.
 		local
@@ -223,8 +221,6 @@ feature -- TransactSQL specific SQL creation statements
 		end
 
 	create_domain (base: XPLAIN_BASE)
-		local
-			s: STRING
 		do
 			std.output.put_string ("exec sp_addtype '")
 			std.output.put_string (domain_identifier(base))
@@ -240,8 +236,7 @@ feature -- TransactSQL specific SQL creation statements
 			std.output.put_string (CommandSeparator)
 			end_with_go
 			if CreateDomainCheck then
-				s := base.representation.domain_restriction.sqldomainconstraint (Current, "@value")
-				if s /= Void then
+				if attached base.representation.domain_restriction.sqldomainconstraint (Current, "@value") as s then
 					std.output.put_string ("create rule ")
 					std.output.put_string (rule_identifier(base))
 					std.output.put_string (" as ")
@@ -263,7 +258,6 @@ feature -- TransactSQL specific SQL creation statements
 	create_extend (extension: XPLAIN_EXTENSION)
 		local
 			join_list: JOIN_LIST
-			f: XPLAIN_EXTENSION_FUNCTION_EXPRESSION
 			type: XPLAIN_TYPE
 		do
 			std.output.put_character ('%N')
@@ -300,8 +294,7 @@ feature -- TransactSQL specific SQL creation statements
 			end
 			std.output.put_string (sql_select_joins (join_list))
 			std.output.put_character ('%N')
-			f ?= extension.expression
-			if f /= Void then
+			if attached {XPLAIN_EXTENSION_FUNCTION_EXPRESSION} extension.expression as f then
 				type := f.per_property.last.item.type
 				std.output.put_string (Tab)
 				std.output.put_string (once "group by%N")
@@ -414,7 +407,7 @@ feature -- TransactSQL specific SQL creation statements
 			end_with_go
 		end
 
-	create_insert (type: XPLAIN_TYPE; id: XPLAIN_EXPRESSION; assignment_list: XPLAIN_ASSIGNMENT_NODE)
+	create_insert (type: XPLAIN_TYPE; id: detachable XPLAIN_EXPRESSION; assignment_list: XPLAIN_ASSIGNMENT_NODE)
 		local
 			auto_identifier: BOOLEAN
 		do
@@ -835,7 +828,7 @@ feature -- stored procedure names and parameter conventions
 			Result := "$s $s output"
 		end
 
-	sp_start (a_procedure: XPLAIN_PROCEDURE)
+	sp_start (a_procedure: detachable XPLAIN_PROCEDURE)
 		do
 			std.output.put_character ('%N')
 			end_with_go -- make sure this is the first command in the batch

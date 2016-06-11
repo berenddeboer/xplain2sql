@@ -3,8 +3,6 @@ note
 	description: "Xplain some function"
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2010/02/11 $"
-	revision:   "$Revision: #8 $"
 
 class
 
@@ -47,7 +45,7 @@ feature -- Access
 	representation (
 			 sqlgenerator: SQL_GENERATOR;
 			 type: XPLAIN_TYPE;
-			 expression: XPLAIN_EXPRESSION): XPLAIN_REPRESENTATION
+			 expression: detachable XPLAIN_EXPRESSION): XPLAIN_REPRESENTATION
 			-- The xplain representation for this function
 		do
 			if expression = Void then

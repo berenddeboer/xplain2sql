@@ -3,8 +3,6 @@ note
 	description: "Xplain integer representation"
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #9 $"
 
 class
 
@@ -16,7 +14,9 @@ inherit
 		redefine
 			default_value,
 			value_representation,
-			write_with_quotes
+			write_with_quotes,
+			min_value,
+			max_value
 		end
 
 
@@ -57,17 +57,17 @@ feature -- Access
 	xml_schema_data_type: STRING
 			-- Best matching XML schema data type
 		local
-			trajectory: XPLAIN_TRAJECTORY
 			min: INTEGER
 			max: INTEGER
 		do
-			trajectory ?= domain_restriction
-			if trajectory /= Void and then trajectory.min.is_integer then
+			if attached {XPLAIN_TRAJECTORY} domain_restriction as trajectory
+				and then trajectory.min.is_integer then
 				min := trajectory.min.to_integer
 			else
 				min := -1
 			end
-			if trajectory /= Void and then trajectory.max.is_integer then
+			if attached {XPLAIN_TRAJECTORY} domain_restriction as trajectory
+				and then trajectory.max.is_integer then
 				max := trajectory.max.to_integer
 			else
 				max := 1

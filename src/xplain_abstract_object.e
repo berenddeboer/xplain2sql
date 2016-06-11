@@ -3,8 +3,6 @@ note
 	description: "Xplain abstract object, parent for base, type, value and such"
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #7 $"
 
 deferred class
 
@@ -54,7 +52,7 @@ feature -- Status
 
 feature -- Expression builder support
 
-	create_expression (node: XPLAIN_ATTRIBUTE_NAME_NODE): XPLAIN_EXPRESSION
+	create_expression (node: XPLAIN_ATTRIBUTE_NAME_NODE): detachable XPLAIN_EXPRESSION
 			-- Suitable expression for attribute/variable/value/extension
 		deferred
 		end

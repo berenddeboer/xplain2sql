@@ -3,8 +3,6 @@ note
 	description: "Xplain integer representation"
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #6 $"
 
 class
 
@@ -16,6 +14,9 @@ inherit
 		rename
 			value_representation as undefined_value_representation,
 			write_with_quotes as undefined_write_with_quotes
+		undefine
+			min_value,
+			max_value
 		redefine
 			is_integer
 		end
@@ -36,10 +37,11 @@ create
 feature
 
 	undefined_datatype (mygenerator: ABSTRACT_GENERATOR): STRING
-		require
+		require else
 			fail: False
 		do
 			-- undefined
+			Result := "undefined"
 		end
 
 feature  -- SQL access

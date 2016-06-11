@@ -6,8 +6,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2001, Berend de Boer, see forum.txt"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #5 $"
 
 
 class
@@ -72,7 +70,7 @@ feature {NONE} -- initialization
 feature -- state
 
 	directory,
-	filename: STRING
+	filename: detachable STRING
 
 	input_buffer: YY_BUFFER
 
@@ -92,14 +90,14 @@ feature {NONE} -- directory
 		do
 			from
 				i := filename.count
-			variant
-				i
 			until
 				i = 0 or dir_separator_found
 			loop
 				dir_separator_found :=
 					filename.item (i) = '/' or else filename.item (i) = '\'
 				i := i - 1
+			variant
+				i
 			end
 			if dir_separator_found then
 				directory := filename.substring (1, i+1)

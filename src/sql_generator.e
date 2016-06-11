@@ -60,8 +60,6 @@ inherit
 feature {NONE} -- Initialization
 
 	make
-		local
-			tester: UC_STRING_EQUALITY_TESTER
 		do
 			-- domain options
 			DomainsEnabled := True
@@ -76,9 +74,7 @@ feature {NONE} -- Initialization
 			ViewsEnabled := False
 			ExtendIndex := True
 
-			create declared_values.make (8)
-			create tester
-			declared_values.set_key_equality_tester (tester)
+			create declared_values.make_equal (8)
 		end
 
 
@@ -103,7 +99,7 @@ feature -- Text output options
 
 feature -- SQL Comments
 
-	OneLineCommentPrefix: STRING once Result := "--" end
+	OneLineCommentPrefix: detachable STRING once Result := "--" end
 	MultiLineCommentPrefix: STRING once Result := "/*" end
 	MultiLineCommentPostfix: STRING once Result :=	"*/" end
 
@@ -483,7 +479,7 @@ feature -- select options
 			Result := True
 		end
 
-	ExistentialFromTable: STRING
+	ExistentialFromTable: detachable STRING
 			-- Name of the dual table (Oracle) or sysibm.sysdumm1 (DB2)
 			-- to be used in a select statement where a from is required;
 			-- The name of the get table is used when this routine
@@ -491,7 +487,6 @@ feature -- select options
 		require
 			from_needed: ExistentialFromNeeded
 		do
-			Result := Void
 		end
 
 
@@ -562,21 +557,21 @@ feature -- Strings
 		once
 			Result := ""
 		ensure
-			sql_string_combine_start_not_void: sql_string_combine_start /= Void
+			sql_string_combine_start_not_void: Result /= Void
 		end
 
 	sql_string_combine_separator: STRING
 		once
 			Result := ", "
 		ensure
-			sql_string_combine_separator_not_void: sql_string_combine_separator /= Void
+			sql_string_combine_separator_not_void: Result /= Void
 		end
 
 	sql_string_combine_end: STRING
 		once
 			Result := ""
 		ensure
-			sql_string_combine_end_not_void: sql_string_combine_end /= Void
+			sql_string_combine_end_not_void: Result /= Void
 		end
 
 	sql_like_operator: STRING
@@ -607,7 +602,7 @@ feature -- Numeric precision
 
 feature -- functions
 
-	SQLCoalesce: STRING
+	SQLCoalesce: detachable STRING
 		once
 			Result := "coalesce"
 		end
@@ -629,11 +624,10 @@ feature -- Assertions
 				AssertEnabled
 		end
 
-	asserted_format_string: STRING
+	asserted_format_string: detachable STRING
 		require
 			assert_supported: CalculatedColumnsSupported
 		do
-			Result := Void
 		ensure
 			correct_string: Result /= Void and then not Result.is_empty
 		end
@@ -654,7 +648,7 @@ feature {NONE} -- Implementation
 	declared_values: DS_HASH_TABLE [XPLAIN_VALUE, STRING]
 			-- List of declared values
 
-	update_type: XPLAIN_TYPE
+	update_type: detachable XPLAIN_TYPE
 			-- Hack to pass the type to get proper subselects in
 			-- `sql_subselect_for_attribute'
 
@@ -683,8 +677,8 @@ feature -- Comments
 		do
 			if NoOneLineCommentsSupported then
 				std.output.put_string (MultiLineCommentPrefix)
-			else
-				std.output.put_string (OneLineCommentPrefix)
+			elseif attached OneLineCommentPrefix as p then
+				std.output.put_string (p)
 			end
 			line_starts_with_space :=
 				line.count > 0 and
@@ -728,7 +722,7 @@ feature -- Convert Xplain definition to sql, you usually do not redefine these
 			create_constant_assignment (constant, expression)
 		end
 
-	write_delete (subject: XPLAIN_SUBJECT; predicate: XPLAIN_EXPRESSION)
+	write_delete (subject: XPLAIN_SUBJECT; predicate: detachable XPLAIN_EXPRESSION)
 			-- Code for delete statement.
 		do
 			create_delete (subject, predicate)
@@ -793,7 +787,7 @@ feature -- Convert Xplain definition to sql, you usually do not redefine these
 		a_selection: XPLAIN_SELECTION_LIST
 		an_insert_type: XPLAIN_TYPE
 		an_auto_primary_key: BOOLEAN
-		an_assignment_list: XPLAIN_ATTRIBUTE_NAME_NODE)
+		an_assignment_list: detachable XPLAIN_ATTRIBUTE_NAME_NODE)
 			-- Get into a table.
 		do
 			create_get_insert (a_selection, an_insert_type, an_auto_primary_key, an_assignment_list)
@@ -816,7 +810,7 @@ feature -- Convert Xplain definition to sql, you usually do not redefine these
 		deferred
 		end
 
-	write_insert (type: XPLAIN_TYPE; id: XPLAIN_EXPRESSION; assignment_list: XPLAIN_ASSIGNMENT_NODE)
+	write_insert (type: XPLAIN_TYPE; id: detachable XPLAIN_EXPRESSION; assignment_list: XPLAIN_ASSIGNMENT_NODE)
 		do
 			create_insert (type, id, assignment_list)
 		end
@@ -880,7 +874,7 @@ feature -- Convert Xplain definition to sql, you usually do not redefine these
 	write_update (
 			subject: XPLAIN_SUBJECT;
 			assignment_list: XPLAIN_ASSIGNMENT_NODE;
-			predicate: XPLAIN_EXPRESSION)
+			predicate: detachable XPLAIN_EXPRESSION)
 		do
 			create_update (subject, assignment_list, predicate)
 		end
@@ -977,7 +971,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			std.output.put_character ('%N')
 		end
 
-	create_delete (subject: XPLAIN_SUBJECT; predicate: XPLAIN_EXPRESSION)
+	create_delete (subject: XPLAIN_SUBJECT; predicate: detachable XPLAIN_EXPRESSION)
 			-- Emit SQL delete statement.
 		require
 			subject_not_void: subject /= Void
@@ -1023,20 +1017,16 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 	create_domain (base: XPLAIN_BASE)
 		require
 			sql_with_domains: DomainsSupported
-		local
-			s: STRING
 		do
 			std.output.put_string ("create domain ")
 			std.output.put_string (quote_identifier (domain_identifier (base)))
 			std.output.put_string (" as ")
 			std.output.put_string (base.representation.datatype (Current))
-			s := domain_null_or_not_null (base.representation.domain_restriction)
-			if s /= Void then
+			if attached domain_null_or_not_null (base.representation.domain_restriction) as s then
 				std.output.put_string (" ")
 				std.output.put_string (s)
 			end
-			s := base.representation.domain_restriction.sqldomainconstraint (Current, "value")
-			if s /= Void then
+			if attached base.representation.domain_restriction.sqldomainconstraint (Current, "value") as s then
 				std.output.put_string (" check ")
 				std.output.put_string (s)
 			end
@@ -1090,7 +1080,6 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			valid_extension: extension /= Void
 		local
 			emulate_coalesce: BOOLEAN
-			function_expression: XPLAIN_EXTENSION_FUNCTION_EXPRESSION
 		do
 			-- create (temporary) table for extension
 			std.output.put_character ('%N')
@@ -1114,30 +1103,31 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			std.output.put_string (CommandSeparator)
 			std.output.put_string (once "%N%N")
 
-			function_expression ?= extension.expression
-			emulate_coalesce :=
-				function_expression /= Void and then
-				function_expression.selection.function.needs_coalesce and then
-				not CoalesceSupported
-			if emulate_coalesce then
-				std.output.put_string ("update ")
-				std.output.put_string (TemporaryTablePrefix)
-				std.output.put_string (quote_identifier (extension.sqlname (Current)))
-				std.output.put_character ('%N')
-				std.output.put_string (Tab)
-				std.output.put_string ("set ")
-				std.output.put_string (extension.q_sql_insert_name (Current, Void))
-				std.output.put_string (" = ")
-				std.output.put_string (function_expression.selection.function.sqlextenddefault (Current, function_expression.selection.property))
-				std.output.put_character ('%N')
-				std.output.put_string (Tab)
-				std.output.put_string ("where%N")
-				std.output.put_string (Tab)
-				std.output.put_string (Tab)
-				std.output.put_string (extension.q_sql_insert_name (Current, Void))
-				std.output.put_string (" is null")
-				std.output.put_string (CommandSeparator)
-				std.output.put_string ("%N%N")
+			if attached {XPLAIN_EXTENSION_FUNCTION_EXPRESSION} extension.expression as function_expression then
+				emulate_coalesce :=
+					function_expression /= Void and then
+					function_expression.selection.function.needs_coalesce and then
+					not CoalesceSupported
+				if emulate_coalesce then
+					std.output.put_string ("update ")
+					std.output.put_string (TemporaryTablePrefix)
+					std.output.put_string (quote_identifier (extension.sqlname (Current)))
+					std.output.put_character ('%N')
+					std.output.put_string (Tab)
+					std.output.put_string ("set ")
+					std.output.put_string (extension.q_sql_insert_name (Current, Void))
+					std.output.put_string (" = ")
+					std.output.put_string (function_expression.selection.function.sqlextenddefault (Current, function_expression.selection.property))
+					std.output.put_character ('%N')
+					std.output.put_string (Tab)
+					std.output.put_string ("where%N")
+					std.output.put_string (Tab)
+					std.output.put_string (Tab)
+					std.output.put_string (extension.q_sql_insert_name (Current, Void))
+					std.output.put_string (" is null")
+					std.output.put_string (CommandSeparator)
+					std.output.put_string ("%N%N")
+				end
 			end
 		end
 
@@ -1225,13 +1215,13 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 		a_selection: XPLAIN_SELECTION_LIST
 		an_insert_type: XPLAIN_TYPE
 		an_auto_primary_key: BOOLEAN
-		an_assignment_list: XPLAIN_ATTRIBUTE_NAME_NODE)
+		an_assignment_list: detachable XPLAIN_ATTRIBUTE_NAME_NODE)
 			-- Emit insert into table (column, ...) select.
 		require
 			selection_not_void: a_selection /= Void
 			insert_type_not_void: an_insert_type /= Void
 		local
-			node: XPLAIN_ATTRIBUTE_NAME_NODE
+			node: detachable XPLAIN_ATTRIBUTE_NAME_NODE
 			is_integer_id: BOOLEAN
 			self_insert: BOOLEAN
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE]
@@ -1240,7 +1230,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			-- insert into statement itself
 			std.output.put_string ("%Ninsert into ")
 			std.output.put_string (an_insert_type.quoted_name (Current))
-			if self_insert or else an_assignment_list /= Void then
+			if self_insert or else attached an_assignment_list then
 				std.output.put_string (" (")
 			end
 
@@ -1251,15 +1241,15 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 					std.output.put_string (", ")
 				end
 			end
-			if an_assignment_list /= Void then
+			if attached an_assignment_list then
 				from
 					node := an_assignment_list
 				until
-					node = Void
+					not attached node
 				loop
 					std.output.put_string (node.item.quoted_name (Current))
 					node := node.next
-					if node /= Void then
+					if attached node then
 						std.output.put_string (", ")
 					end
 				end
@@ -1278,7 +1268,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 					end
 				end
 			end
-			if self_insert or else an_assignment_list /= Void then
+			if self_insert or else attached an_assignment_list then
 				std.output.put_character (')')
 			end
 
@@ -1302,7 +1292,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 	create_index (index: XPLAIN_INDEX)
 			-- create the index statement
 		local
-			anode: XPLAIN_ATTRIBUTE_NAME_NODE
+			anode: detachable XPLAIN_ATTRIBUTE_NAME_NODE
 		do
 			std.output.put_string ("create ")
 			if index.is_unique then
@@ -1332,7 +1322,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			std.output.put_character ('%N')
 		end
 
-	create_insert (type: XPLAIN_TYPE; id: XPLAIN_EXPRESSION; assignment_list: XPLAIN_ASSIGNMENT_NODE)
+	create_insert (type: XPLAIN_TYPE; id: detachable XPLAIN_EXPRESSION; assignment_list: XPLAIN_ASSIGNMENT_NODE)
 			-- Generate SQL insert statement. If id not Void, it contains
 			-- a user supplied instance identification.
 		require
@@ -1340,7 +1330,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			assignment_list_not_void: assignment_list /= Void
 		local
 			output_identifier_column: BOOLEAN
-			node: XPLAIN_ASSIGNMENT_NODE
+			node: detachable XPLAIN_ASSIGNMENT_NODE
 			is_integer_id: BOOLEAN
 		do
 			-- insert into statement itself
@@ -1409,7 +1399,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			end
 		end
 
-	create_predicate (subject: XPLAIN_SUBJECT; predicate: XPLAIN_EXPRESSION)
+	create_predicate (subject: XPLAIN_SUBJECT; predicate: detachable XPLAIN_EXPRESSION)
 			-- generate a where clause
 		require
 			subject_not_void: subject /= Void
@@ -1462,8 +1452,8 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			selection_list_not_void: selection_list /= Void
 		local
 			type: XPLAIN_TYPE
-			snode: XPLAIN_SORT_NODE
-			sort_attribute: XPLAIN_ATTRIBUTE_NAME_NODE
+			snode: detachable XPLAIN_SORT_NODE
+			sort_attribute: detachable XPLAIN_ATTRIBUTE_NAME_NODE
 		do
 			-- upper aggregate
 			type := selection_list.type
@@ -1493,7 +1483,9 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 					std.output.put_string (Tab)
 					std.output.put_string (Tab)
 					sort_attribute := snode.item.last
-					std.output.put_string (quote_identifier (sort_attribute.prefix_table))
+					if attached sort_attribute.prefix_table as p then
+						std.output.put_string (quote_identifier (p))
+					end
 					std.output.put_character ('.')
 					std.output.put_string (sort_attribute.item.q_sql_select_name (Current))
 					if snode.ascending then
@@ -1517,12 +1509,11 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 		require
 			selection_list_not_void: selection_list /= Void
 		local
-			enode: XPLAIN_EXPRESSION_NODE
+			enode: detachable XPLAIN_EXPRESSION_NODE
 			type: XPLAIN_TYPE
 			join_list: JOIN_LIST
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE]
 			table_alias: STRING
-			column_alias: STRING
 		do
 			-- upper aggregate
 			type := selection_list.type
@@ -1562,11 +1553,11 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 				end
 			else
 				std.output.put_character ('%N')
-				if selection_list.identification_text /= Void then
+				if attached selection_list.identification_text as id then
 					std.output.put_string (Tab)
 					std.output.put_string (Tab)
 					std.output.put_string (once "'")
-					std.output.put_string (selection_list.identification_text)
+					std.output.put_string (id)
 					std.output.put_string (once "',%N")
 				end
 				if not a_self_insert then
@@ -1588,12 +1579,11 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 						enode = Void
 					loop
 						std.output.put_string (enode.item.outer_sqlvalue (Current))
-						if enode.new_name /= Void then
+						if attached enode.new_name as n then
 							std.output.put_string (once " as ")
-							std.output.put_string (quote_valid_identifier (enode.new_name))
+							std.output.put_string (quote_valid_identifier (n))
 						else
-							column_alias := enode.item.sql_alias (Current)
-							if column_alias /= Void then
+							if attached enode.item.sql_alias (Current) as column_alias then
 								std.output.put_string (once " as ")
 								std.output.put_string (quote_identifier (column_alias))
 							end
@@ -1663,8 +1653,8 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			-- Generate SQL create table statement.
 		local
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE]
-			s: STRING
-			null_keyword: STRING
+			s: detachable STRING
+			null_keyword: detachable STRING
 			column_name: STRING
 		do
 			-- create table statement
@@ -1802,17 +1792,16 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 	create_update (
 			subject: XPLAIN_SUBJECT;
 			assignment_list: XPLAIN_ASSIGNMENT_NODE;
-			predicate: XPLAIN_EXPRESSION)
+			predicate: detachable XPLAIN_EXPRESSION)
 		require
 			subject_not_void: subject /= Void
 			assignment_list_not_void: assignment_list /= Void
 		local
-			node: XPLAIN_ASSIGNMENT_NODE
-			extension: XPLAIN_EXTENSION
+			node: detachable XPLAIN_ASSIGNMENT_NODE
 			have_non_extended_columns: BOOLEAN
 			extension_subject: XPLAIN_SUBJECT
 			update_needs_join: BOOLEAN
-			join_list: JOIN_LIST
+			join_list: detachable JOIN_LIST
 			attribute_node: XPLAIN_ATTRIBUTE_NAME_NODE
 			extension_expression: XPLAIN_EXTENSION_EXPRESSION
 		do
@@ -1832,8 +1821,8 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			until
 				node = Void
 			loop
-				if node.item.attribute_name.type_attribute.is_extension then
-					extension ?= node.item.attribute_name.object
+				if node.item.attribute_name.type_attribute.is_extension and then
+				attached {XPLAIN_EXTENSION} node.item.attribute_name.object as extension then
 					updated_extension := extension
 					-- @@BdB: Should output subselects when referring to
 					-- (extended) attributes of type. This code allows
@@ -1881,8 +1870,8 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 					std.output.put_string (once " = ")
 					std.output.put_string (node.item.expression.outer_sqlvalue (Current))
 					-- Support for TSQL/PostgreSQL from clause
-					if update_needs_join and then SupportsJoinInUpdate then
-						output_update_extend_from_clause (subject, join_list)
+					if update_needs_join and then SupportsJoinInUpdate and then attached join_list as jl then
+						output_update_extend_from_clause (subject, jl)
 					end
 
 					create extension_subject.make (extension, subject.identification)
@@ -1920,7 +1909,9 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 
 				std.output.put_character ('%N')
 				std.output.put_string (once "update ")
-				output_update_join_clause (subject, join_list)
+				if attached join_list as jl then
+					output_update_join_clause (subject, jl)
+				end
 				std.output.put_character ('%N')
 				std.output.put_string (Tab)
 				std.output.put_string (once "set")
@@ -1948,8 +1939,8 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 				end
 
 				-- Emit TSQL specific way to join tables in an update
-				if SupportsJoinInUpdate and then not join_list.is_empty then
-					output_update_from_clause (subject, join_list)
+				if SupportsJoinInUpdate and then attached join_list as jl and then not jl.is_empty then
+					output_update_from_clause (subject, jl)
 				end
 				-- TODO: if its list appears only in predicate, I can do a
 				-- trick like `create_delete', i.e. use a subselect.
@@ -2323,7 +2314,7 @@ feature -- Generate constraints definitions
 									<<column_name, trajectory.min, trajectory.max>>)
 		end
 
-	sqlcheck_boolean (restriction: XPLAIN_B_RESTRICTION; column_name: STRING): STRING
+	sqlcheck_boolean (restriction: XPLAIN_B_RESTRICTION; column_name: STRING): detachable STRING
 			-- SQL code for domain restriction for booleans
 		do
 			-- Not implemented it seems??
@@ -2333,7 +2324,7 @@ feature -- Generate constraints definitions
 	sqlcheck_in (list: XPLAIN_ENUMERATION_NODE [ANY]; column_name: STRING): STRING
 		local
 			s: STRING
-			node: XPLAIN_ENUMERATION_NODE[ANY]
+			node: detachable XPLAIN_ENUMERATION_NODE[ANY]
 		do
 			s := "(" + column_name + " in ("
 			from
@@ -2413,7 +2404,7 @@ feature -- Expression that returns the contents of a variable/value
 
 feature -- generate columns either base or type columns
 
-	sqlcolumnidentifier_base (base: XPLAIN_BASE; role: STRING): STRING
+	sqlcolumnidentifier_base (base: XPLAIN_BASE; role: detachable STRING): STRING
 			-- Column name for a `base'
 		require
 			base_not_void: base /= Void
@@ -2433,7 +2424,7 @@ feature -- generate columns either base or type columns
 			result_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sqlcolumnidentifier_type (type: XPLAIN_TYPE; role: STRING): STRING
+	sqlcolumnidentifier_type (type: XPLAIN_TYPE; role: detachable STRING): STRING
 			-- Column name for a `type'
 		require
 			type_not_void: type /= Void
@@ -2470,10 +2461,14 @@ feature -- generate columns either base or type columns
 			-- returns a valid SQL expression like "computed by price *
 			-- amount"
 		do
-			Result := format (asserted_format_string, <<assertion.expression.sqlvalue (Current)>>)
+			if attached asserted_format_string as f then
+				Result := format (f, <<assertion.expression.sqlvalue (Current)>>)
+			else
+				Result := precursor (assertion)
+			end
 		end
 
-	sqlcolumndefault_base (an_attribute: XPLAIN_ATTRIBUTE): STRING
+	sqlcolumndefault_base (an_attribute: XPLAIN_ATTRIBUTE): detachable STRING
 			-- Produce SQL that defines the default for a base column
 		do
 			if
@@ -2485,7 +2480,7 @@ feature -- generate columns either base or type columns
 			end
 		end
 
-	sqlcolumndefault_type (an_attribute: XPLAIN_ATTRIBUTE): STRING
+	sqlcolumndefault_type (an_attribute: XPLAIN_ATTRIBUTE): detachable STRING
 			-- Produce SQL that defines default for a type column
 		do
 			if an_attribute.init /= Void and then an_attribute.init.is_literal then
@@ -2493,7 +2488,7 @@ feature -- generate columns either base or type columns
 			end
 		end
 
-	sqlcolumnrequired_base (an_attribute: XPLAIN_ATTRIBUTE): STRING
+	sqlcolumnrequired_base (an_attribute: XPLAIN_ATTRIBUTE): detachable STRING
 			-- Produce null or not null status of a column that is a base
 		do
 			if an_attribute.overrule_required then
@@ -2505,7 +2500,7 @@ feature -- generate columns either base or type columns
 			end
 		end
 
-	sqlcolumnrequired_type (an_attribute: XPLAIN_ATTRIBUTE): STRING
+	sqlcolumnrequired_type (an_attribute: XPLAIN_ATTRIBUTE): detachable STRING
 			-- Produce null or not null status of a column that refers to a type
 		do
 			if an_attribute.overrule_required then
@@ -2645,7 +2640,7 @@ feature -- Return sql code
 		require
 			list_not_empty: a_list /= Void
 		local
-			n: XPLAIN_EXPRESSION_NODE
+			n: detachable XPLAIN_EXPRESSION_NODE
 		do
 			create Result.make (64)
 			Result.append_string (sql_string_combine_start)
@@ -2671,7 +2666,7 @@ feature -- Return sql code
 		require
 			list_not_empty: a_list /= Void
 		local
-			n: XPLAIN_EXPRESSION_NODE
+			n: detachable XPLAIN_EXPRESSION_NODE
 		do
 			create Result.make (64)
 			Result.append_string (sql_string_combine_start)
@@ -2715,7 +2710,7 @@ feature -- Return sql code
 			sql_notnot_expression_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	sql_predicate (subject: XPLAIN_SUBJECT; predicate: XPLAIN_EXPRESSION): STRING
+	sql_predicate (subject: XPLAIN_SUBJECT; predicate: detachable XPLAIN_EXPRESSION): STRING
 			-- Generate a where clause.
 		require
 			subject_not_void: subject /= Void
@@ -3009,7 +3004,7 @@ feature -- Return sql code
 			join_list: JOIN_LIST
 			code: STRING
 			surround_column_with_parentheses: BOOLEAN
-			from_table: STRING
+			from_table: detachable STRING
 			surround_function_with_coalesce: BOOLEAN
 			column_name: STRING
 		do
@@ -3132,12 +3127,11 @@ feature -- Return sql code
 					code.append_character (')')
 				end
 				code.append_string (once " as ")
-				if selection_list.property = Void then
+				if not attached selection_list.property then
 					column_name := selection_list.function.name + once " " + selection_list.subject.type.sqlname (Current)
 				else
-					column_name := selection_list.property.column_name
-					if column_name /= Void then
-						column_name := selection_list.function.name + once " " + selection_list.property.column_name
+					if attached selection_list.property.column_name as c then
+						column_name := selection_list.function.name + once " " + c
 					else
 						column_name := selection_list.function.name
 					end
@@ -3382,7 +3376,7 @@ feature -- Return sql code
 			cursos_pos: True -- at end of line
 			valid_join_list: join_list /= Void
 		local
-			jnode: JOIN_NODE
+			jnode: detachable JOIN_NODE
 			tablename,
 			alias_name: STRING
 			code: STRING
@@ -3438,7 +3432,7 @@ feature -- Return sql code
 			cursos_pos: True -- at end of line
 			valid_join_list: join_list /= Void
 		local
-			jnode: JOIN_NODE
+			jnode: detachable JOIN_NODE
 			tablename: STRING
 			code: STRING
 		do
@@ -3512,7 +3506,9 @@ feature -- Return sql code
 				create join_list.make (an_its_list.item.type)
 				join_list.extend (Current, an_its_list.next)
 				join_list.finalize (Current)
-				Result.append_string (quote_identifier (an_its_list.last.prefix_table))
+				check attached an_its_list.last.prefix_table as p then
+					Result.append_string (quote_identifier (p))
+				end
 				Result.append_character ('.')
 				Result.append_string (an_its_list.last.item.quoted_name (Current))
 				Result.append_string (once " from ")
@@ -3637,6 +3633,7 @@ feature -- Some sp functions that are needed by clients
 			selection_not_void: selection /= Void
 		do
 			-- Implement in PostgreSQL
+			Result := ""
 		ensure
 			function_type_not_empty: Result /= Void and then not Result.is_empty
 		end
@@ -3649,6 +3646,7 @@ feature -- Some sp functions that are needed by clients
 			representation_not_void: a_representation /= Void
 		do
 			-- Implement in PostgreSQL
+			Result := ""
 		ensure
 			function_type_not_empty: Result /= Void and then not Result.is_empty
 		end
@@ -3789,7 +3787,7 @@ feature -- Domain specific methods
 			Result := make_valid_identifier(s)
 		end
 
-	domain_null_or_not_null (domain_restriction: XPLAIN_DOMAIN_RESTRICTION): STRING
+	domain_null_or_not_null (domain_restriction: detachable XPLAIN_DOMAIN_RESTRICTION): detachable STRING
 			-- will this domain be null or not null?
 		require
 			supported: DomainsSupported
@@ -3827,13 +3825,13 @@ feature -- Domain specific methods
 
 feature -- Table specific methods
 
-	check_if_required (type: XPLAIN_ABSTRACT_TYPE): BOOLEAN
+	check_if_required (type: detachable XPLAIN_ABSTRACT_TYPE): BOOLEAN
 			-- returns True if it is a good thing to make this base/type
 			-- a required attribute.
 			-- Xplain doesn't have Nulls, but for blobs it's best to
 			-- allow them to be Null, to save disk space
 		do
-			if type = Void then
+			if not attached type then
 				Result := False -- assume it's a self reference
 			elseif type.representation.is_blob (Current) then
 				Result := False
@@ -3844,12 +3842,8 @@ feature -- Table specific methods
 
 	constraint_names: DS_SET [STRING]
 			-- List of generated constraint names.
-		local
-			et: KL_STRING_EQUALITY_TESTER
 		once
-			create { DS_HASH_SET [STRING] } Result.make (256)
-			create et
-			Result.set_equality_tester (et)
+			create { DS_HASH_SET [STRING] } Result.make_equal (256)
 		ensure
 			constraint_names_not_void: Result /= Void
 		end
@@ -3968,7 +3962,7 @@ feature -- Table specific methods
 			result_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	column_null_or_not_null (required: BOOLEAN): STRING
+	column_null_or_not_null (required: BOOLEAN): detachable STRING
 			-- return null or not null, to be used when creating a column
 		do
 			if required then
@@ -4000,16 +3994,13 @@ feature -- Table specific methods
 		end
 
 	sqlcolumnconstraint_base (restriction: XPLAIN_DOMAIN_RESTRICTION
-									column_name: STRING): STRING
+									column_name: STRING): detachable STRING
 			-- return base column constraint except if constraint already
 			-- specified on domain
-		local
-			s: STRING
 		do
 			if not CreateDomainCheck then
 				if CheckConstraintSupported then
-					s := restriction.sqldomainconstraint (Current, quote_identifier (column_name))
-					if s /= Void then
+					if attached restriction.sqldomainconstraint (Current, quote_identifier (column_name)) as s then
 						Result := "check " + s
 					else
 						Result := Void
@@ -4337,7 +4328,7 @@ feature -- Extension specific methods
 			valid_identifier: equal (Result, make_valid_identifier (Result))
 		end
 
-	updated_extension: XPLAIN_EXTENSION
+	updated_extension: detachable XPLAIN_EXTENSION
 			-- Set inside `create_update' when this extension is being
 			-- updated. Can be used in `sqlvalue' to return an
 			-- unqualified expression when the extensions value itself is
@@ -4371,7 +4362,7 @@ feature {NONE} -- Update SQL
 			-- do nothing
 		end
 
-	output_update_extend_join_clause (a_subject: XPLAIN_SUBJECT; an_extension: XPLAIN_EXTENSION; a_join_list: JOIN_LIST)
+	output_update_extend_join_clause (a_subject: XPLAIN_SUBJECT; an_extension: XPLAIN_EXTENSION; a_join_list: detachable JOIN_LIST)
 			-- Output from clause and optional join to necessary tables
 			-- when updating extended table.
 			-- If a dialect doesn't support it, just the update for the
@@ -4384,7 +4375,7 @@ feature {NONE} -- Update SQL
 			std.output.put_string (an_extension.quoted_name (Current))
 		end
 
-	output_update_join_clause (a_subject: XPLAIN_SUBJECT; a_join_list: JOIN_LIST)
+	output_update_join_clause (a_subject: XPLAIN_SUBJECT; a_join_list: detachable JOIN_LIST)
 			-- Output join to necessary tables for an update statement.
 			-- If a dialect doesn't support it, just the update for
 			-- the extended table is emitted and it will need

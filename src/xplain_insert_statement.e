@@ -4,8 +4,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2002, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #4 $"
 
 class
 
@@ -24,7 +22,7 @@ create
 
 feature -- Initialization
 
-	make (a_type: XPLAIN_TYPE; an_id: XPLAIN_EXPRESSION; an_assignment_list: XPLAIN_ASSIGNMENT_NODE)
+	make (a_type: XPLAIN_TYPE; an_id: like id; an_assignment_list: XPLAIN_ASSIGNMENT_NODE)
 		require
 			type_not_void: a_type /= Void
 			assignment_list_not_void: an_assignment_list /= Void
@@ -49,7 +47,7 @@ feature --  Warnings
 	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Is parameter `a_parameter' used by this statement?
 		local
-			node: like assignment_list
+			node: detachable like assignment_list
 		do
 			Result :=
 				id /= Void and then
@@ -69,7 +67,7 @@ feature --  Warnings
 feature -- Access
 
 	type: XPLAIN_TYPE
-	id: XPLAIN_EXPRESSION
+	id: detachable XPLAIN_EXPRESSION
 	assignment_list: XPLAIN_ASSIGNMENT_NODE
 
 

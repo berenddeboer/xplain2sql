@@ -3,9 +3,6 @@ note
 	description: "Node in a tree, basically XPLAIN_NODE, but can branch."
 
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 2002, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #7 $"
 
 class
 
@@ -22,7 +19,7 @@ create
 feature {NONE} -- Initialisation
 
 	make (
-		an_item: XPLAIN_ATTRIBUTE_NAME_NODE;
+		an_item: detachable XPLAIN_ATTRIBUTE_NAME_NODE;
 		an_is_upward_join,
 		an_is_forced_left_outer_join,
 		an_is_forced_inner_join: BOOLEAN)
@@ -37,19 +34,17 @@ feature {NONE} -- Initialisation
 
 feature -- Tree querying
 
-	found_immediate_child: JOIN_TREE_NODE
+	found_immediate_child: detachable JOIN_TREE_NODE
 			-- Last node found by `has_immediate_child'
 
-	get_immediate_child (anode: XPLAIN_ATTRIBUTE_NAME_NODE; an_is_upward_join: BOOLEAN): JOIN_TREE_NODE
+	get_immediate_child (anode: XPLAIN_ATTRIBUTE_NAME_NODE; an_is_upward_join: BOOLEAN): detachable JOIN_TREE_NODE
 			-- The child where `anode' is an item
 		require
 			has_child: has_immediate_child (anode, an_is_upward_join)
 		do
-			if has_immediate_child (anode, an_is_upward_join) then
-				Result := found_immediate_child
+			if has_immediate_child (anode, an_is_upward_join) and attached found_immediate_child as child then
+				Result := child
 			end
-		ensure
-			item_found: Result /= Void
 		end
 
 	has_immediate_child (anode: XPLAIN_ATTRIBUTE_NAME_NODE; an_is_upward_join: BOOLEAN): BOOLEAN
@@ -72,7 +67,7 @@ feature -- Tree querying
 				found_immediate_child := next.item_for_iteration
 			end
 		ensure
-			found_child_set: Result implies found_immediate_child /= Void
+			found_child_set: Result implies attached found_immediate_child
 			no_false_positives: not has_children implies not Result
 		end
 
@@ -127,7 +122,7 @@ feature -- JOIN_NODE generation
 	generate_join_nodes (
 			sqlgenerator: SQL_GENERATOR;
 			aggregate: XPLAIN_TYPE;
-			aggregate_alias: STRING): JOIN_NODE
+			aggregate_alias: STRING): detachable JOIN_NODE
 			-- Return JOIN_NODEs for self and any children.
 			-- Also set prefix for all managed XPLAIN_ATTRIBUTE_NAME_NODE.
 		require
@@ -141,10 +136,10 @@ feature -- JOIN_NODE generation
 			attribute_alias: STRING
 			aggregate_fk: STRING
 			first,
-			next_join_nodes: JOIN_NODE
+			next_join_nodes: detachable JOIN_NODE
 		do
 			if has_children then
-				if item /= Void then
+				if attached item and attached item.item.type_attribute as type_attribute then
 					my_attribute := item.item.type
 					attribute_alias := alias_name (sqlgenerator, my_attribute)
 					if is_upward_join then
@@ -153,7 +148,7 @@ feature -- JOIN_NODE generation
 						aggregate_fk := item.item.sqlcolumnidentifier (sqlgenerator)
 					end
 					create join.make (
-						item.item.type_attribute,
+						type_attribute,
 						my_attribute,
 						attribute_alias,
 						aggregate,
@@ -333,9 +328,9 @@ feature -- Access
 	is_upward_join: BOOLEAN
 			-- Is join actually upward instead of downward?
 
-	item: XPLAIN_ATTRIBUTE_NAME_NODE
+	item: detachable XPLAIN_ATTRIBUTE_NAME_NODE
 
-	other_items: DS_LINKED_LIST [XPLAIN_ATTRIBUTE_NAME_NODE]
+	other_items: detachable DS_LINKED_LIST [XPLAIN_ATTRIBUTE_NAME_NODE]
 
 feature {JOIN_LIST} -- Chain
 

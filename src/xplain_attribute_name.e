@@ -10,8 +10,6 @@ note
 
 	author:		"Berend de Boer <berend@pobox.com>"
 	copyright:	"Copyright (c) 1999, Berend de Boer"
-	date:			"$Date: 2008/12/15 $"
-	revision:	"$Revision: #10 $"
 
 
 class
@@ -41,7 +39,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (a_role, a_name: STRING)
+	make (a_role: detachable STRING; a_name: STRING)
 			-- Make with name, attribute not yet known. Don't forget to
 			-- call `set_attribute' later.
 		require
@@ -68,7 +66,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	role: STRING
+	role: detachable STRING
 
 	name: STRING
 
@@ -87,11 +85,11 @@ feature -- Access
 
 feature -- Change
 
-	set_role (a_role: STRING)
+	set_role (a_role: detachable STRING)
 		do
 			role := a_role
 		ensure
-			definition: role = a_role or else STRING_.same_string (role, a_role)
+			-- definition: role = a_role or else STRING_.same_string (role, a_role)
 		end
 
 
@@ -100,18 +98,24 @@ feature -- Equality
 	is_equal (other: like Current): BOOLEAN
 		do
 			Result :=
-				STRING_.same_string (other.name, name) and then
-					((role = Void and other.role = Void) or else
-					 (role /= Void and then other.role /= Void and then STRING_.same_string (other.role, role)))
+				STRING_.same_string (other.name, name)
+			if Result then
+				if role = Void and other.role = Void then
+				elseif attached role as r1 and then attached other.role as r2 then
+					Result := STRING_.same_string (r2, r1)
+				else
+					Result := False
+				end
+			end
 		end
 
 
 feature -- Type info
 
-	type_attribute: XPLAIN_ATTRIBUTE
+	type_attribute: detachable XPLAIN_ATTRIBUTE
 			-- Set when attribute of a type.
 
-	object: XPLAIN_ABSTRACT_OBJECT
+	object: detachable XPLAIN_ABSTRACT_OBJECT
 			-- base or type, this is the only one set when parsing a type
 			-- statement. In that case the attribute is not yet known,
 			-- because the type has not been created.
@@ -145,40 +149,52 @@ feature -- Be more specific about type of attribute
 
 	abstracttype: XPLAIN_ABSTRACT_TYPE
 		do
-			Result ?= object
+			check attached {XPLAIN_ABSTRACT_TYPE} object as at then
+				Result := at
+			end
 		ensure
 			valid_base_or_type_or_extension: Result /= Void
 		end
 
-	abstractextension_if_known: XPLAIN_ABSTRACT_EXTENSION
+	abstractextension_if_known: detachable XPLAIN_ABSTRACT_EXTENSION
 		do
-			Result ?= object
+			if attached {XPLAIN_ABSTRACT_EXTENSION} object as e then
+				Result := e
+			end
 		end
 
-	abstracttype_if_known: XPLAIN_ABSTRACT_TYPE
+	abstracttype_if_known: detachable XPLAIN_ABSTRACT_TYPE
 		do
-			Result ?= object
+			if attached {XPLAIN_ABSTRACT_TYPE} object as at then
+				Result := at
+			end
 		end
 
 	type: XPLAIN_TYPE
 			-- `object' cast as Xplain type;
 			-- `object' must denote a type.
 		do
-			Result ?= object
+			check attached {XPLAIN_TYPE} object as t then
+				Result := t
+			end
 		ensure
 			valid_type: Result /= Void
 		end
 
 	value: XPLAIN_VALUE
 		do
-			Result ?= object
+			check attached {XPLAIN_VALUE} object as v then
+				Result := v
+			end
 		ensure
 			valid_value: Result /= Void
 		end
 
 	variable: XPLAIN_VARIABLE
 		do
-			Result ?= object
+			check attached {XPLAIN_VARIABLE} object as v then
+				Result := v
+			end
 		ensure
 			valid_variable: Result /= Void
 		end

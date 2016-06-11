@@ -4,8 +4,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #5 $"
 
 class
 
@@ -34,7 +32,7 @@ feature -- About this generator
 
 feature -- SQL Comments
 
-	OneLineCommentPrefix: STRING once Result := Void end
+	OneLineCommentPrefix: detachable STRING once end
 
 feature -- identifiers
 

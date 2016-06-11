@@ -6,8 +6,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #11 $"
 
 
 class
@@ -88,20 +86,6 @@ feature  -- required implementations
 			-- trigger.
 		once
 			Result := "''"
-		end
-
-	max_value (sqlgenerator: SQL_GENERATOR): STRING
-			-- Maximum value that fits in this representation
-		do
-			std.error.put_string ("An (A) base doesn't have a maximum value.%N")
-			Result := "not applicable"
-		end
-
-	min_value (sqlgenerator: SQL_GENERATOR): STRING
-			-- Minimum value that fits in this representation
-		do
-			std.error.put_string ("An (A) base doesn't have a minimum value.%N")
-			Result := "not applicable"
 		end
 
 
