@@ -4,8 +4,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2001, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #4 $"
 
 
 class
@@ -42,7 +40,7 @@ feature -- checks
 
 	is_initialized_attribute: BOOLEAN
 		do
-			Result := item.init /= Void
+			Result := attached item.init
 		end
 
 

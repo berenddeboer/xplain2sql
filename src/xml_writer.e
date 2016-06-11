@@ -479,7 +479,7 @@ feature {NONE} -- tag attributes
 	add_attribute (an_attribute: STRING)
 		do
 			if attributes.count = attribute_count then
-				attributes.resize (attributes.lower, attributes.upper * 2)
+				attributes.conservative_resize_with_default ("", attributes.lower, attributes.upper * 2)
 				values.resize (values.lower, values.upper * 2)
 			end
 			attributes.put (an_attribute, attribute_count)

@@ -4,8 +4,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2003, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #3 $"
 
 
 deferred class
@@ -19,7 +17,18 @@ inherit
 		redefine
 			forth,
 			is_first,
-			start
+			start,
+			new_iterator
+		end
+
+
+feature -- Access
+
+	new_iterator: DS_LINKED_LIST_CURSOR [G]
+			-- New external cursor to be used in the 'across' construct
+			-- to traverse `container'
+		do
+			Result := container.new_iterator
 		end
 
 
