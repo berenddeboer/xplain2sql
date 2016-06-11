@@ -95,8 +95,6 @@ feature -- SQL code
 			s := value.twin
 			from
 				i := 1
-			variant
-				s.count - (i - 1)
 			until
 				i > s.count
 			loop
@@ -109,6 +107,8 @@ feature -- SQL code
 					-- Don't change
 				end
 				i := i + 1
+			variant
+				s.count - (i - 1)
 			end
 			Result := mygenerator.as_string (s)
 		end
