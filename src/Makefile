@@ -197,7 +197,7 @@ show: build
 # general transform .ddl to .sql
 .ddl.sql: build
 	rm -f $@
-	./xplain2sql $(SQLDIALECT) $(SQLOPTIONS) $< > temp.sql 2> $*.err
-	mv temp.sql $@
+	./xplain2sql $(SQLDIALECT) $(SQLOPTIONS) $< > $@.tmp 2> $*.err
+	mv $@.tmp $@
 	@echo "Compilation errors:"
 	cat $*.err
