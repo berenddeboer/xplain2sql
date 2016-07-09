@@ -3,8 +3,6 @@ note
 	description: "Set function cascade expression."
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2004, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #6 $"
 
 
 class
@@ -51,7 +49,11 @@ feature -- Status
 			-- Does expression has an its list somewhere?
 		do
 			-- Probably not applicable; don't think will be called at where we need to know this
-			Result := selection.property.uses_its or else selection.predicate.uses_its
+			if attached selection.property as property then
+				Result :=
+					property.uses_its or else
+					(attached selection.predicate as predicate and then predicate.uses_its)
+			end
 		end
 
 	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN

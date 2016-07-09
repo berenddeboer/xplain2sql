@@ -58,7 +58,7 @@ feature -- obsolete deferred ones, should call routine in SQL_GENERATOR
 		deferred
 		end
 
-	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): detachable STRING
+	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): READABLE_STRING_GENERAL
 			-- null or not null in create table statement. Return Void to
 			-- use database default
 		deferred

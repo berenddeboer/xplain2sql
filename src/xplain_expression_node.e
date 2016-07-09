@@ -87,12 +87,12 @@ feature -- Commands
 		require
 			valid_position: a_position > 0
 		do
-			if new_name = Void then
+			if not attached new_name then
 				if item.column_name = Void then
 					new_name := "column" + a_position.out
 				end
-				if next /= Void then
-					next.give_column_names (a_position + 1)
+				if attached next as n then
+					n.give_column_names (a_position + 1)
 				end
 			end
 		ensure
@@ -102,6 +102,6 @@ feature -- Commands
 
 invariant
 
-	new_name_is_void_or_not_empty: new_name = Void or else not new_name.is_empty
+	new_name_is_void_or_not_empty: not attached new_name as n or else not n.is_empty
 
 end

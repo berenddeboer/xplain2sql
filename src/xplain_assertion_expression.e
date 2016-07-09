@@ -69,7 +69,7 @@ feature -- Status
 		do
 			-- Hmm, were is my invariant that anode.next.next exists???
 			Result :=
-				anode.next.next /= Void or else
+				attached anode.next as next and then attached next.next as nextnext or else
 				not anode.item.is_equal (an_attribute)
 		end
 
@@ -145,7 +145,9 @@ feature -- SQL specifics
 			-- Assertion when used in get/value statement. Name includes
 			-- prefix of table if we have such a prefix.
 		do
-			Result := assertion.sql_qualified_name (sqlgenerator, anode.last.prefix_table)
+			check attached anode.last as last then
+				Result := assertion.sql_qualified_name (sqlgenerator, last.prefix_table)
+			end
 			-- Asserts can have partial results when some function is
 			-- used as there might be no data in that case.
 			if attached {XPLAIN_EXTENSION_FUNCTION_EXPRESSION} assertion.expression as function then
@@ -166,5 +168,6 @@ invariant
 
 	assertion_not_void: assertion /= Void
 	anode_not_void: anode /= Void
+	anode_has_next: attached anode.next
 
 end

@@ -48,7 +48,7 @@ feature -- Access
 	column_name: STRING
 			-- The name of the last attribute in the attribute its chain.
 		do
-			Result := first.last.item.full_name
+			Result := last.item.full_name
 		end
 
 	path_name: STRING
@@ -66,7 +66,7 @@ feature -- Access
 				Result.append_string (n.item.full_name)
 				n := n.next
 			end
-			if attached {XPLAIN_TYPE} first.last.item.object as type then
+			if attached {XPLAIN_TYPE} last.item.object as type then
 				Result.append_string (once "/@instance")
 			end
 		end
@@ -81,14 +81,16 @@ feature -- Status
 			-- Can the result of this expression be a Null value?
 		do
 				check
-					have_attribute: first.last.item.type_attribute /= Void
+					have_attribute: last.item.type_attribute /= Void
 				end
-			Result := not first.last.item.type_attribute.is_required
+			if attached first.last as l and then attached l.item.type_attribute as ta then
+				Result := not ta.is_required
+			end
 		end
 
 	is_logical_expression: BOOLEAN
 		do
-			if attached {XPLAIN_B_REPRESENTATION} first.last.item.abstracttype.representation then
+			if attached first.last as l and then attached l.item.abstracttype as at and then attached {XPLAIN_B_REPRESENTATION} at.representation then
 				Result := True
 			end
 		end
@@ -98,7 +100,9 @@ feature -- Status
 			-- to an attribute that is a specialization?
 			-- Used for XML generation.
 		do
-			Result := first.last.item.type_attribute.is_specialization
+			if attached first.last as l and then attached l.item.type_attribute as ta then
+				Result := ta.is_specialization
+			end
 		end
 
 	is_using_other_attributes (an_attribute: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
@@ -139,7 +143,7 @@ feature -- SQL specifics
 			-- Most exact representation of this expression, should not
 			-- try to accomodate larger values.
 		do
-			Result := first.last.item.abstracttype.representation
+			Result := last.item.abstracttype.representation
 		end
 
 	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
@@ -149,19 +153,19 @@ feature -- SQL specifics
 			-- is usually wider than required.
 			-- Use `exact_reprsentation' to get a more precise representation.
 		do
-			Result := first.last.item.abstracttype.representation.value_representation (sqlgenerator)
+			Result := last.item.abstracttype.representation.value_representation (sqlgenerator)
 		end
 
 	sqlmaxvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- return the maximum value of this expression according to its type
 		do
-			Result := first.last.item.abstracttype.representation.max_value (sqlgenerator)
+			Result := last.item.abstracttype.representation.max_value (sqlgenerator)
 		end
 
 	sqlminvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- return the minimum value of this expression according to its type
 		do
-			Result := first.last.item.abstracttype.representation.min_value (sqlgenerator)
+			Result := last.item.abstracttype.representation.min_value (sqlgenerator)
 		end
 
 	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING
@@ -173,13 +177,11 @@ feature -- SQL specifics
 			-- For attributes, the column name of an expression is the
 			-- column name used in the table.
 		do
-			Result := first.last.item.sqlcolumnidentifier (sqlgenerator)
+			Result := last.item.sqlcolumnidentifier (sqlgenerator)
 		end
 
 	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- SQL for name of last attribute in list
-		local
-			lastnode: detachable XPLAIN_ATTRIBUTE_NAME_NODE
 		do
 			create Result.make (64)
 			-- usually this should be true:
@@ -187,15 +189,30 @@ feature -- SQL specifics
 			-- for example with get/extend statements
 			-- however, for update statements (update t its a = a + 1)
 			-- we don't have a prefix nor should we output one.
-			if sqlgenerator.InUpdateStatement and then (first.next /= Void or else sqlgenerator.updated_extension /= Void) then
+			if sqlgenerator.InUpdateStatement and then (attached first.next or else attached sqlgenerator.updated_extension) then
 				Result := sqlgenerator.sql_subselect_for_attribute (first)
 			else
-				lastnode := first.last
-				if attached lastnode.prefix_table as p then
-					Result.append_string (sqlgenerator.quote_identifier (p))
-					Result.append_character ('.')
+				check attached first.last as lastnode then
+					if attached lastnode.prefix_table as p then
+						Result.append_string (sqlgenerator.quote_identifier (p))
+						Result.append_character ('.')
+					end
+					Result.append_string (lastnode.item.quoted_name (sqlgenerator))
 				end
-				Result.append_string (lastnode.item.quoted_name (sqlgenerator))
+			end
+		end
+
+
+feature {NONE} -- Implementation
+
+	last: XPLAIN_ATTRIBUTE_NAME_NODE
+			-- `first'.`last';
+			-- we assume we are only called in cases where this exist
+		require
+			first_has_last: attached first.last
+		do
+			check attached first.last as l then
+				Result := l
 			end
 		end
 

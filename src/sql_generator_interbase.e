@@ -150,9 +150,9 @@ feature -- Booleans
 
 feature -- functions
 
-	SQLCoalesce: detachable STRING
+	SQLCoalesce: STRING
 		once
-			Result := Void
+			Result := ""
 		end
 
 
@@ -186,7 +186,8 @@ feature -- sql creation
 			until
 				cursor.after
 			loop
-				if not cursor.item.init.is_constant then
+				if attached cursor.item.init as init and then
+					not init.is_constant then
 					-- Prepare error msg here because in
 					-- `sqlinitvalue_attribute' we don't have access to all
 					-- information necessary to provide a decent error

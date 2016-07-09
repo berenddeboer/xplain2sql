@@ -3,8 +3,6 @@ note
 	description: "Describes a procedure parameter being used in an expression."
 	author:      "Berend de Boer <berend@pobox.com>"
 	copyright:   "Copyright (c) 2000, Berend de Boer"
-	date:        "$Date: 2008/12/15 $"
-	revision:    "$Revision: #9 $"
 
 class
 
@@ -61,7 +59,9 @@ feature -- SQL output
 	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- representation is value representation
 		do
-			Result := name.object.representation
+			check attached name.object as o then
+				Result := o.representation
+			end
 		end
 
 	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING

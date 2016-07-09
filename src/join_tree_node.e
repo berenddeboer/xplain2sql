@@ -57,12 +57,12 @@ feature -- Tree querying
 				next.start
 			until
 				next.after or else
-				(next.item_for_iteration.item.item.is_equal (anode.item) and then
+				(attached next.item_for_iteration.item as i and then i.item.is_equal (anode.item) and then
 				 an_is_upward_join = next.item_for_iteration.is_upward_join)
 			loop
 				next.forth
 			end
-			Result := not next.after and then next.item_for_iteration.item.item.is_equal (anode.item) and then an_is_upward_join = next.item_for_iteration.is_upward_join
+			Result := not next.after and then attached next.item_for_iteration.item as i and then i.item.is_equal (anode.item) and then an_is_upward_join = next.item_for_iteration.is_upward_join
 			if Result then
 				found_immediate_child := next.item_for_iteration
 			end
@@ -105,15 +105,17 @@ feature -- Tree changing
 			-- Add more name nodes to this level, we need to keep track
 			-- of them to be able to set their prefix properly.
 		require
-			has_node: anode /= Void
-			is_really_additional: anode /= item and then other_items /= Void implies not other_items.has (anode)
+			has_node: attached anode
+			is_really_additional: anode /= item and then attached other_items as oi implies not oi.has (anode)
 		do
-			if other_items = Void then
+			if not attached other_items then
 				create other_items.make
 			end
-			other_items.put_last (anode)
+			if attached other_items as oi then
+				oi.put_last (anode)
+			end
 		ensure
-			item_added: other_items.has (anode)
+			item_added: attached other_items as oi and then oi.has (anode)
 		end
 
 
@@ -139,13 +141,13 @@ feature -- JOIN_NODE generation
 			next_join_nodes: detachable JOIN_NODE
 		do
 			if has_children then
-				if attached item and attached item.item.type_attribute as type_attribute then
-					my_attribute := item.item.type
+				if attached item as i and then attached i.item.type_attribute as type_attribute then
+					my_attribute := i.item.type
 					attribute_alias := alias_name (sqlgenerator, my_attribute)
 					if is_upward_join then
-						aggregate_fk := aggregate.sqlcolumnidentifier (sqlgenerator, item.item.role)
+						aggregate_fk := aggregate.sqlcolumnidentifier (sqlgenerator, i.item.role)
 					else
-						aggregate_fk := item.item.sqlcolumnidentifier (sqlgenerator)
+						aggregate_fk := i.item.sqlcolumnidentifier (sqlgenerator)
 					end
 					create join.make (
 						type_attribute,
@@ -177,10 +179,12 @@ feature -- JOIN_NODE generation
 						sqlgenerator,
 						my_attribute,
 						attribute_alias)
-					if first = Void then
-						first := next_join_nodes
+					if attached first as f then
+						check attached f.last as last then
+							last.set_next (next_join_nodes)
+						end
 					else
-						first.last.set_next (next_join_nodes)
+						first := next_join_nodes
 					end
 					next.forth
 				end
@@ -233,17 +237,17 @@ feature {NONE} -- Implementation
 		require
 			have_prefix: prefix_table /= Void and then not prefix_table.is_empty
 		do
-			if item /= Void then
-				item.set_prefix_table (prefix_table)
+			if attached item as i then
+				i.set_prefix_table (prefix_table)
 			end
-			if other_items /= Void then
+			if attached other_items as oi then
 				from
-					other_items.start
+					oi.start
 				until
-					other_items.after
+					oi.after
 				loop
-					other_items.item_for_iteration.set_prefix_table (prefix_table)
-					other_items.forth
+					oi.item_for_iteration.set_prefix_table (prefix_table)
+					oi.forth
 				end
 			end
 		ensure
@@ -261,17 +265,17 @@ feature -- Debugging
 	have_all_items_a_prefix: BOOLEAN
 			-- Do all items have a prefix?
 		do
-			Result := item = Void or else item.prefix_table /= Void
+			Result := not attached item as i or else attached i.prefix_table
 			if Result then
-				if other_items /= Void then
+				if attached other_items as oi then
 					from
-						other_items.start
+						oi.start
 					until
 						not Result or else
-						other_items.after
+						oi.after
 					loop
-						Result := other_items.item_for_iteration.prefix_table /= Void
-						other_items.forth
+						Result := attached oi.item_for_iteration.prefix_table
+						oi.forth
 					end
 				end
 			end
@@ -284,26 +288,26 @@ feature -- Debugging
 		do
 			create spaces.make_filled (' ', indent)
 			print (spaces)
-			if item = Void then
-				print ("root%N")
-			else
-				print (item.prefix_table)
+			if attached item as i then
+				print (i.prefix_table)
 				print (".")
-				print (item.item.full_name)
+				print (i.item.full_name)
 				print ("%N")
+			else
+				print ("root%N")
 			end
-			if other_items /= Void then
+			if attached other_items as oi then
 				from
-					other_items.start
+					oi.start
 				until
-					other_items.after
+					oi.after
 				loop
 					print (spaces)
-					print (other_items.item_for_iteration.prefix_table)
+					print (oi.item_for_iteration.prefix_table)
 					print (".")
-					print (other_items.item_for_iteration.item.full_name)
+					print (oi.item_for_iteration.item.full_name)
 					print ("%N")
-					other_items.forth
+					oi.forth
 				end
 			end
 			from

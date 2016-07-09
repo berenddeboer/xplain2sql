@@ -40,7 +40,7 @@ feature -- Access
 			Result := expression.representation (sqlgenerator)
 		end
 
-	sqlextenddefault (sqlgenerator: SQL_GENERATOR; expression: detachable XPLAIN_EXPRESSION): STRING
+	sqlextenddefault (sqlgenerator: SQL_GENERATOR; expression: XPLAIN_EXPRESSION): STRING
 			-- default to use for extension when function returns a Null value
 		do
 			Result := expression.sqlminvalue (sqlgenerator)

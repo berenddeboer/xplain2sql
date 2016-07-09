@@ -65,7 +65,9 @@ feature
 
 	write_drop (sqlgenerator: SQL_GENERATOR; a_type: XPLAIN_TYPE)
 		do
-			abstracttype.write_drop (sqlgenerator)
+			check attached abstracttype as t then
+				t.write_drop (sqlgenerator)
+			end
 		end
 
 

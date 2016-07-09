@@ -50,8 +50,8 @@ feature --  Warnings
 			node: detachable like assignment_list
 		do
 			Result :=
-				id /= Void and then
-				id.uses_parameter (a_parameter)
+				attached id as my_id and then
+				my_id.uses_parameter (a_parameter)
 			from
 				node := assignment_list
 			until

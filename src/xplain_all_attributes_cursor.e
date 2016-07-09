@@ -49,9 +49,9 @@ feature -- Filter checks
 	is_generated_attribute: BOOLEAN
 			-- Is current item included in the filter?
 		do
-			if attached {XPLAIN_ASSERTION} item.abstracttype as assertion then
+			Result := not item.is_assertion
+			if not Result and then attached {XPLAIN_ASSERTION} item.abstracttype as assertion then
 				Result :=
-					not item.is_assertion or else
 					(generate_assert and then
 						(assertion.is_literal or else
 							assertion.is_simple))

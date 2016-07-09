@@ -2,7 +2,7 @@
 <system xmlns="http://www.eiffel.com/developers/xml/configuration-1-15-0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.eiffel.com/developers/xml/configuration-1-15-0 http://www.eiffel.com/developers/xml/configuration-1-15-0.xsd" name="xplain2sql" uuid="224B93D4-B16E-44BC-8D42-0395CA86807D">
 	<target name="xplain2sql">
 		<root class="XPLAIN2SQL" feature="make"/>
-		<option warning="true" cat_call_detection="conformance" void_safety="initialization" syntax="standard">
+		<option warning="true" cat_call_detection="conformance" void_safety="transitional" syntax="standard">
 			<assertions precondition="true" postcondition="true" check="true" invariant="true" loop="true" supplier_precondition="true"/>
 		</option>
 		<setting name="console_application" value="true"/>

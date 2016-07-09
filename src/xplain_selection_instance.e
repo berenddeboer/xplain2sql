@@ -3,8 +3,6 @@ note
 	description: "selection of a single value using an instance id."
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2001, Berend de Boer"
-	date:       "$Date: 2010/02/11 $"
-	revision:   "$Revision: #8 $"
 
 
 class
@@ -15,6 +13,9 @@ class
 inherit
 
 	XPLAIN_SELECTION_VALUE
+		redefine
+			property
+		end
 
 
 create
@@ -36,6 +37,10 @@ feature {NONE} -- Initialization
 
 
 feature -- Access
+
+feature -- Access
+
+	property: XPLAIN_EXPRESSION
 
 	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- suitable representation

@@ -104,7 +104,7 @@ feature -- Change
 			valid_attatchment: True -- domain_restriction.check_attachment (sqlgenerator, Current)
 		do
 			domain_restriction := adomain_restriction
-			domain_restriction.check_attachment (sqlgenerator, Current)
+			adomain_restriction.check_attachment (sqlgenerator, Current)
 		end
 
 

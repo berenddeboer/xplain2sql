@@ -109,7 +109,9 @@ feature -- Write callbacks
 					constant.representation.datatype (sqlgenerator),
 					Void,
 					constant.representation.xml_schema_data_type)
-				value := constant.value.sqlvalue (sqlgenerator)
+				check attached constant.value as v then
+					value := v.sqlvalue (sqlgenerator)
+				end
 				-- strip surrounding quotes, if any
 				if value.count >= 2 then
 					if value.item (1) = '%'' and then value.item (value.count) = '%'' then
@@ -128,7 +130,7 @@ feature -- Write callbacks
 			-- no output
 		end
 
-	write_delete (subject: XPLAIN_SUBJECT; predicate: XPLAIN_EXPRESSION)
+	write_delete (subject: XPLAIN_SUBJECT; predicate: detachable XPLAIN_EXPRESSION)
 			-- Code for delete statement.
 		do
 			-- no output.
@@ -150,7 +152,7 @@ feature -- Write callbacks
 			-- no output
 		end
 
-	write_insert (type: XPLAIN_TYPE; id: XPLAIN_EXPRESSION; assignment_list: XPLAIN_ASSIGNMENT_NODE)
+	write_insert (type: XPLAIN_TYPE; id: detachable XPLAIN_EXPRESSION; assignment_list: XPLAIN_ASSIGNMENT_NODE)
 		do
 			-- no output
 		end
@@ -233,11 +235,11 @@ feature -- Write callbacks
 					representation.datatype (sqlgenerator),
 					Void,
 					representation.xml_schema_data_type)
-			else
-				representation := selection_list.property.exact_representation (sqlgenerator)
-				if attached selection_list.property.column_name as n then
+			elseif attached selection_list.property as property then
+				representation := property.exact_representation (sqlgenerator)
+				if attached property.column_name as n then
 					xplain_name := n
-					if attached selection_list.property.sqlname (sqlgenerator) as s then
+					if attached property.sqlname (sqlgenerator) as s then
 						sql_name := s
 					else
 						sql_name := n
@@ -368,7 +370,7 @@ feature -- Write callbacks
 	write_update (
 			subject: XPLAIN_SUBJECT;
 			assignment_list: XPLAIN_ASSIGNMENT_NODE;
-			predicate: XPLAIN_EXPRESSION)
+			predicate: detachable XPLAIN_EXPRESSION)
 			-- Code for update statement.
 		do
 			-- no output.
@@ -415,13 +417,15 @@ feature {NONE} -- Write helpers
 				my_attribute := cursor.item
 				if sqlgenerator.CalculatedColumnsSupported or else not my_attribute.is_assertion then
 					xml.start_tag (once "column")
-					set_names (
-						my_attribute.full_name,
-						my_attribute.abstracttype.representation.domain,
-						my_attribute.sql_select_name (sqlgenerator),
-						my_attribute.abstracttype.columndatatype (sqlgenerator),
-						Void,
-						my_attribute.abstracttype.representation.xml_schema_data_type)
+					check attached my_attribute.abstracttype as at then
+						set_names (
+							my_attribute.full_name,
+							at.representation.domain,
+							my_attribute.sql_select_name (sqlgenerator),
+							at.columndatatype (sqlgenerator),
+							Void,
+							at.representation.xml_schema_data_type)
+					end
 					if my_attribute.is_specialization then
 						xml.set_attribute (once "specialization", once "true")
 					end
@@ -443,7 +447,9 @@ feature {NONE} -- Write helpers
 						xml.set_attribute (once "sqlReferences", my_type.quoted_name (sqlgenerator))
 					end
 					if sqlgenerator.StoredProcedureSupported then
-						xml.set_attribute (once "sqlParamName", sqlgenerator.sp_define_param_name (my_attribute.abstracttype.sqlcolumnidentifier (sqlgenerator, my_attribute.role)))
+						if attached my_attribute.abstracttype as at then
+							xml.set_attribute (once "sqlParamName", sqlgenerator.sp_define_param_name (at.sqlcolumnidentifier (sqlgenerator, my_attribute.role)))
+						end
 					end
 					xml.stop_tag
 				end

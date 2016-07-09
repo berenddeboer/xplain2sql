@@ -73,10 +73,10 @@ feature -- Access
 	full_name: STRING
 			-- `role'_`name'
 		do
-			if role = Void then
+			if not attached role as r then
 				Result := name
 			else
-				Result := role.twin
+				Result := r.twin
 				Result.append_character ('_')
 				Result.append_string (name)
 			end
@@ -124,11 +124,13 @@ feature -- Type info
 			-- Set `attribute' and `object' for cases where the actual
 			-- attribute of the type is known.
 		require
-			attribute_not_void: an_attribute /= Void
-			atttribute_is_resolved: an_attribute.abstracttype /= Void
+			attribute_not_void: attached an_attribute
+			atttribute_is_resolved: attached an_attribute.abstracttype
 		do
 			type_attribute := an_attribute
-			object := type_attribute.abstracttype
+			check attached an_attribute.abstracttype as at then
+				object := at
+			end
 		ensure
 			attribute_set: type_attribute = an_attribute
 			object_set: object = an_attribute.abstracttype
@@ -234,7 +236,7 @@ feature -- for sql conversion
 invariant
 
 	name_not_empty: name /= Void and then not name.is_empty
-	role_void_or_not_empty: role = Void or else not role.is_empty
-	attribute_and_object_in_sync: type_attribute /= Void implies type_attribute.abstracttype = object
+	role_void_or_not_empty: not attached role as r or else not r.is_empty
+	attribute_and_object_in_sync: attached type_attribute as ta implies ta.abstracttype = object
 
 end

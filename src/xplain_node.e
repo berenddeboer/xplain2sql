@@ -58,14 +58,16 @@ feature -- List building
 	last: detachable like Current
 			-- Return last item in list.
 		local
-			node: detachable like Current
+			node: like Current
 		do
 			from
 				node := Current
 			until
-				node.next = Void
+				not attached node.next
 			loop
-				node := node.next
+				if attached node.next as n then
+					node := n
+				end
 			end
 			Result := node
 		ensure
@@ -83,5 +85,6 @@ feature -- List building
 invariant
 
 	item_not_void: item /= Void
+	next_implies_there_is_a_last: attached next implies attached last
 
 end

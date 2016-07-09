@@ -47,7 +47,7 @@ feature {NONE} -- Initialization
 			until
 				node = Void
 			loop
-				if node.item.abstracttype = Void then
+				if not node.item.is_abstracttype_attached then
 					node.item.set_abstracttype (Current)
 				end
 				attributes.put_last (node.item)
@@ -114,7 +114,7 @@ feature -- SQL code
 			Result := sqlgenerator.sqlcolumndefault_type (an_attribute)
 		end
 
-	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): detachable STRING
+	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): READABLE_STRING_GENERAL
 		do
 			Result := sqlgenerator.sqlcolumnrequired_type (an_attribute)
 		end
@@ -203,8 +203,8 @@ feature -- questions about the type itself
 				Result or else attributes.after
 			loop
 				Result :=
-					attributes.item_for_iteration.init /= Void and then
-					not attributes.item_for_iteration.init.is_constant
+					attached attributes.item_for_iteration.init as init and then
+					not init.is_constant
 				attributes.forth
 			end
 		end
@@ -218,8 +218,8 @@ feature -- questions about the type itself
 				Result or else attributes.after
 			loop
 				Result :=
-					attributes.item_for_iteration.init /= Void and then
-					not attributes.item_for_iteration.init.is_literal
+					attached attributes.item_for_iteration.init as init and then
+					not init.is_literal
 				attributes.forth
 			end
 		end

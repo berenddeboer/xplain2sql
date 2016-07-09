@@ -53,10 +53,10 @@ feature -- Access
 			-- Does user asks for get t its ""?
 		do
 			if
-				expression_list /= Void and then
-				expression_list.next = Void and then
-				expression_list.item.is_literal then
-				if attached {XPLAIN_STRING_EXPRESSION} expression_list.item as se then
+				attached expression_list as el and then
+				not attached el.next and then
+				el.item.is_literal then
+				if attached {XPLAIN_STRING_EXPRESSION} el.item as se then
 					Result := se.value.is_empty
 				end
 			end

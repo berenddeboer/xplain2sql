@@ -52,26 +52,30 @@ feature {NONE} -- Initialization
 		do
 			extension := an_extension
 			anode := an_anode
-			extension.hack_anode (an_anode)
+			an_extension.hack_anode (an_anode)
 		end
 
 
 feature -- Access
 
-	column_name: STRING
+	column_name: detachable STRING
 			-- The Xplain based column heading name, if any. It is used
 			-- by XML_GENERATOR to give clients some idea what the column
 			-- name of a select is going to be.
 		do
-			Result := extension.name
+			if attached extension as e then
+				Result := e.name
+			end
 		end
 
 	extension: detachable XPLAIN_ABSTRACT_EXTENSION
 			-- Extension;
-			-- Can be Void in certain cases (when expression is build).
+			-- Can be Void in certain cases (when expression is build);
+			-- Has to detachable for child classes such as XPLAIN_EXTENSION_EXPRESSION_EXPRESSION
 
 	anode: detachable XPLAIN_ATTRIBUTE_NAME_NODE
-			-- The way (its list) this extension was derived
+			-- The way (its list) this extension was derived;
+			-- Has to detachable for child classes such as XPLAIN_EXTENSION_EXPRESSION_EXPRESSION
 
 
 feature -- Status
@@ -79,7 +83,7 @@ feature -- Status
 	is_logical_expression: BOOLEAN
 			-- Is this a logical expression?
 		do
-			if attached {XPLAIN_B_REPRESENTATION} extension.representation then
+			if attached extension as e and then attached {XPLAIN_B_REPRESENTATION} e.representation then
 				Result := True
 			end
 		end
@@ -100,8 +104,10 @@ feature -- Status
 		do
 			-- Hmm, were is my invariant that anode.next.next exists???
 			Result :=
-				anode.next.next /= Void or else
-				not anode.item.is_equal (an_attribute)
+				(attached anode as n and then
+				 attached n.next as next and then
+				 attached next.next) or else
+				(attached anode as n and then not n.item.is_equal (an_attribute))
 		end
 
 	is_update_optimization_supported: BOOLEAN
@@ -162,7 +168,9 @@ feature -- SQL specifics
 			-- Note that this feature is only called when this class is
 			-- instantiated because an extension has been used in an expression.
 		do
-			Result := extension.expression.representation (sqlgenerator)
+			check attached extension as e then
+				Result := e.expression.representation (sqlgenerator)
+			end
 		end
 
 	sqlfromaliasname: STRING
@@ -172,11 +180,13 @@ feature -- SQL specifics
 			Result := ""
 		end
 
-	sqlname (sqlgenerator: SQL_GENERATOR): STRING
+	sqlname (sqlgenerator: SQL_GENERATOR): detachable STRING
 			-- Try to come up with the most likely column name for this
 			-- extension.
 		do
-			Result := extension.sql_select_name (sqlgenerator, Void)
+			if attached extension as e then
+				Result := e.sql_select_name (sqlgenerator, Void)
+			end
 		end
 
 	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING
@@ -206,21 +216,14 @@ feature -- SQL specifics
 			-- Extension when used in get/value statement. Name includes
 			-- prefix of table if we have such a prefix.
 		do
-				check
-					valid_extension: extension /= Void
-					have_anode: anode /= Void
-					anode_has_one_more_item: anode.next /= Void
-					-- have_prefix is only true when there were joins, for updates this doesn't hold true.
-					-- have_prefix: anode.last.prefix_table /= Void and then not anode.last.prefix_table.is_empty
-				end
-			if sqlgenerator.InUpdateStatement then
-				if attached extension as e then
+			check attached extension as e and then attached anode as n and then attached n.last as last then
+				-- have_prefix is only true when there were joins, for updates this doesn't hold true.
+				-- have_prefix: anode.last.prefix_table /= Void and then not anode.last.prefix_table.is_empty
+				if sqlgenerator.InUpdateStatement then
 					Result := sqlgenerator.sql_subselect_for_extension (e)
 				else
-					Result := "-- should not happen"
+					Result := e.sql_qualified_name (sqlgenerator, last.prefix_table)
 				end
-			else
-				Result := extension.sql_qualified_name (sqlgenerator, anode.last.prefix_table)
 			end
 		end
 
@@ -231,7 +234,9 @@ feature -- SQL specifics
 			-- if the user doesn't specify " as ".
 			-- Void if not applicable.
 		do
-			Result := extension.sql_alias (sqlgenerator)
+			if attached extension as e then
+				Result := e.sql_alias (sqlgenerator)
+			end
 		end
 
 

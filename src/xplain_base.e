@@ -56,7 +56,7 @@ feature -- implementation of deferred routines
 			Result := sqlgenerator.sqlcolumndefault_base (an_attribute)
 		end
 
-	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): detachable STRING
+	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): READABLE_STRING_GENERAL
 		do
 			Result := sqlgenerator.sqlcolumnrequired_base (an_attribute)
 		end

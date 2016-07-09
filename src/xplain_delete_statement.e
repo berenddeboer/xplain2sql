@@ -46,9 +46,9 @@ feature --  Warnings
 			-- Is parameter `a_parameter' used by this statement?
 		do
 			Result :=
-				(subject.identification /= Void and then
-				 subject.identification.uses_parameter (a_parameter)) or else
-				(predicate /= Void and then predicate.uses_parameter (a_parameter))
+				(attached subject.identification as identification and then
+				 identification.uses_parameter (a_parameter)) or else
+				(attached predicate as p and then p.uses_parameter (a_parameter))
 		end
 
 

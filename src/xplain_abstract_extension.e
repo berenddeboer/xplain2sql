@@ -69,9 +69,11 @@ feature
 			create next_name.make (Void, name)
 			next_name.set_object (Current)
 			create next_node.make (next_name, Void)
-			anode.last.set_next (next_node)
+			if attached anode as n and then attached n.last as last and then attached next_node as nn then
+				last.set_next (nn)
+			end
 		ensure then
-			anode_has_next: anode.next /= Void
+			anode_has_next: attached anode.next
 		end
 
 
@@ -92,7 +94,9 @@ feature -- Optimizations
 			-- not required, which will cause a left outer join.
 			if no_update_optimization then
 				create an.make (Void, name)
-				type.find_attribute (an).set_required (False)
+				if attached type.find_attribute (an) as a then
+					a.set_required (False)
+				end
 				-- Note that for performance reasons a join is greatly
 				-- preferred, so in the actual select we turn this into a
 				-- join for any/nil functions when possible.

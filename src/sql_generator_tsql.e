@@ -227,7 +227,7 @@ feature -- TransactSQL specific SQL creation statements
 			std.output.put_string ("', '")
 			std.output.put_string (base.representation.datatype(Current))
 			std.output.put_string ("', '")
-			if base.representation.domain_restriction.required then
+			if attached base.representation.domain_restriction as domain_restriction and then domain_restriction.required then
 				std.output.put_string ("not null")
 			else
 				std.output.put_string ("null")
@@ -236,7 +236,7 @@ feature -- TransactSQL specific SQL creation statements
 			std.output.put_string (CommandSeparator)
 			end_with_go
 			if CreateDomainCheck then
-				if attached base.representation.domain_restriction.sqldomainconstraint (Current, "@value") as s then
+				if attached base.representation.domain_restriction as domain_restriction and then attached domain_restriction.sqldomainconstraint (Current, "@value") as s then
 					std.output.put_string ("create rule ")
 					std.output.put_string (rule_identifier(base))
 					std.output.put_string (" as ")
@@ -295,7 +295,9 @@ feature -- TransactSQL specific SQL creation statements
 			std.output.put_string (sql_select_joins (join_list))
 			std.output.put_character ('%N')
 			if attached {XPLAIN_EXTENSION_FUNCTION_EXPRESSION} extension.expression as f then
-				type := f.per_property.last.item.type
+				check attached f.per_property.last as last then
+					type := last.item.type
+				end
 				std.output.put_string (Tab)
 				std.output.put_string (once "group by%N")
 				std.output.put_string (TabTab)
@@ -348,8 +350,9 @@ feature -- TransactSQL specific SQL creation statements
 			until
 				cursor.after
 			loop
-				if not cursor.item.init.is_literal then
-					cursor.item.init.add_to_join (Current, join_list)
+				if attached cursor.item.init as init and then
+					not init.is_literal then
+					init.add_to_join (Current, join_list)
 				end
 				cursor.forth
 			end
@@ -360,22 +363,21 @@ feature -- TransactSQL specific SQL creation statements
 			until
 				cursor.after
 			loop
-				if
-					not cursor.item.is_init_default or else
-					not cursor.item.init.is_literal
-				then
-					if previous_line then
-						std.output.put_string (",")
-						std.output.put_character ('%N')
+				if not cursor.item.is_init_default then
+					if attached cursor.item.init as init and then not init.is_literal then
+						if previous_line then
+							std.output.put_string (",")
+							std.output.put_character ('%N')
+						end
+						std.output.put_string (Tab)
+						std.output.put_string (Tab)
+						if cursor.item.is_init_default then
+							std.output.put_string (format ("$s = coalesce($s.$s, $s)", <<cursor.item.q_sql_select_name (Current), quote_identifier (type.sqltablename(Current)), cursor.item.q_sql_select_name (Current), init.outer_sqlvalue (Current)>>))
+						else
+							std.output.put_string (format ("$s = $s", <<cursor.item.q_sql_select_name (Current), init.outer_sqlvalue (Current)>>))
+						end
+						previous_line := True
 					end
-					std.output.put_string (Tab)
-					std.output.put_string (Tab)
-					if cursor.item.is_init_default then
-						std.output.put_string (format ("$s = coalesce($s.$s, $s)", <<cursor.item.q_sql_select_name (Current), quote_identifier (type.sqltablename(Current)), cursor.item.q_sql_select_name (Current), cursor.item.init.outer_sqlvalue (Current)>>))
-					else
-						std.output.put_string (format ("$s = $s", <<cursor.item.q_sql_select_name (Current), cursor.item.init.outer_sqlvalue (Current)>>))
-					end
-					previous_line := True
 				end
 				cursor.forth
 			end

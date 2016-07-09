@@ -43,7 +43,7 @@ feature -- Commands
 		require
 			object_not_void: object /= Void
 		do
-			if has (object.name) and then not find_object (object.name).may_be_redefined then
+			if attached find_object (object.name) as o and then o.may_be_redefined then
 				std.error.put_string ("object already created: ")
 				std.error.put_string (object.name)
 				std.error.put_character ('%N')

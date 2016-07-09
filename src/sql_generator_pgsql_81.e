@@ -120,12 +120,14 @@ feature {NONE} -- Update SQL
 			-- table mentioned in the from clause.
 			from
 				if a_skip_first then
-					jnode := join_list.first.next
+					check attached join_list.first as first then
+						jnode := first.next
+					end
 				else
 					jnode := join_list.first
 				end
 			until
-				jnode = Void
+				not attached jnode
 			loop
 				if not code.is_empty or else a_skip_first then
 					code := code + ", "
@@ -147,7 +149,7 @@ feature {NONE} -- Update SQL
 					WhereWritten := True -- no conflict when writing predicate
 				end
 			until
-				jnode = Void
+				not attached jnode
 			loop
 				code := code + quote_identifier(jnode.item.attribute_alias_name)
 				code := code + "."
@@ -157,7 +159,7 @@ feature {NONE} -- Update SQL
 				code := code + "."
 				code := code + quote_identifier(jnode.item.aggregate_fk)
 				jnode := jnode.next
-				if jnode /= Void then
+				if attached jnode then
 					code := code + " and%N" + Tab + Tab
 				else
 					code := code + ")"

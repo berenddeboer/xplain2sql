@@ -331,7 +331,8 @@ feature -- create SQL
 			loop
 				if
 					not cursor.item.is_init_default or else
-					not cursor.item.init.is_constant
+					(attached cursor.item.init as init and then
+					 not init.is_constant)
 				then
 					std.output.put_string (Tab)
 					Tab.append_string ("  ")

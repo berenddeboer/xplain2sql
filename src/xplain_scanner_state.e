@@ -39,6 +39,8 @@ feature {NONE} -- Initialization
 			valid_buffer: a_input_buffer /= Void
 		do
 			do_make (a_input_buffer)
+			filename := ""
+			directory := ""
 		end
 
 	make_use (a_input_buffer: YY_BUFFER; a_filename: STRING)
@@ -70,7 +72,7 @@ feature {NONE} -- initialization
 feature -- state
 
 	directory,
-	filename: detachable STRING
+	filename: STRING
 
 	input_buffer: YY_BUFFER
 
@@ -83,7 +85,7 @@ feature {NONE} -- directory
 	set_directory
 			-- extract the directory part from `filename' and set `directory'
 		require
-			need_filename: filename /= Void and then not filename.is_empty
+			need_filename: not filename.is_empty
 		local
 			i: INTEGER
 			dir_separator_found: BOOLEAN

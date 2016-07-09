@@ -156,7 +156,7 @@ feature -- Access
 			Result := mygenerator.columndatatype_assertion (Current)
 		end
 
-	sqlcolumnidentifier (sqlgenerator: SQL_GENERATOR; role: STRING): STRING
+	sqlcolumnidentifier (sqlgenerator: SQL_GENERATOR; role: detachable STRING): STRING
 		do
 			if sqlgenerator.assert_implemented_as_view (Current) then
 				Result := sqlpkname (sqlgenerator)
@@ -169,8 +169,9 @@ feature -- Access
 		do
 		end
 
-	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): detachable STRING
-		do
+	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): READABLE_STRING_GENERAL
+		once
+			Result := ""
 		end
 
 	sql_qualified_name (sqlgenerator: SQL_GENERATOR; prefix_override: detachable STRING): STRING

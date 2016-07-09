@@ -602,7 +602,7 @@ feature -- Numeric precision
 
 feature -- functions
 
-	SQLCoalesce: detachable STRING
+	SQLCoalesce: STRING
 		once
 			Result := "coalesce"
 		end
@@ -1026,7 +1026,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 				std.output.put_string (" ")
 				std.output.put_string (s)
 			end
-			if attached base.representation.domain_restriction.sqldomainconstraint (Current, "value") as s then
+			if attached base.representation.domain_restriction as domain_restriction and then attached domain_restriction.sqldomainconstraint (Current, "value") as s then
 				std.output.put_string (" check ")
 				std.output.put_string (s)
 			end
@@ -1260,7 +1260,9 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 				until
 					cursor.after
 				loop
-					std.output.put_string (cursor.item.abstracttype.sqlcolumnidentifier (Current, cursor.item.role))
+					check attached cursor.item.abstracttype as abstracttype then
+						std.output.put_string (abstracttype.sqlcolumnidentifier (Current, cursor.item.role))
+					end
 					cursor.forth
 					if not cursor.after then
 						std.output.put_character (',')
@@ -1339,7 +1341,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			std.output.put_string (" (")
 
 			-- name of columns which are inserted
-			output_identifier_column := id /= Void
+			output_identifier_column := attached id
 			if output_identifier_column then
 				std.output.put_string (quote_identifier (table_pk_name (type)))
 				if assignment_list /= Void then
@@ -1363,9 +1365,9 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 
 			-- actual values
 			std.output.put_string ("values (")
-			if output_identifier_column then
-				std.output.put_string (id.sqlvalue (Current))
-				if assignment_list /= Void then
+			if output_identifier_column and then attached id as identification then
+				std.output.put_string (identification.sqlvalue (Current))
+				if attached assignment_list then
 					std.output.put_string (", ")
 				end
 			end
@@ -1453,7 +1455,6 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 		local
 			type: XPLAIN_TYPE
 			snode: detachable XPLAIN_SORT_NODE
-			sort_attribute: detachable XPLAIN_ATTRIBUTE_NAME_NODE
 		do
 			-- upper aggregate
 			type := selection_list.type
@@ -1477,24 +1478,23 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 				from
 					snode := selection_list.sort_order
 				until
-					snode = Void
+					not attached snode
 				loop
 					std.output.put_character ('%N')
 					std.output.put_string (Tab)
 					std.output.put_string (Tab)
-					sort_attribute := snode.item.last
-					if attached sort_attribute.prefix_table as p then
+					check attached snode.item.last as sort_attribute and then attached sort_attribute.prefix_table as p then
 						std.output.put_string (quote_identifier (p))
-					end
-					std.output.put_character ('.')
-					std.output.put_string (sort_attribute.item.q_sql_select_name (Current))
-					if snode.ascending then
-						std.output.put_string (" asc")
-					else
-						std.output.put_string (" desc")
+						std.output.put_character ('.')
+						std.output.put_string (sort_attribute.item.q_sql_select_name (Current))
+						if snode.ascending then
+							std.output.put_string (" asc")
+						else
+							std.output.put_string (" desc")
+						end
 					end
 					snode := snode.next
-					if snode /= Void then
+					if attached snode then
 						std.output.put_character (',')
 					end
 				end
@@ -1539,7 +1539,9 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 					loop
 						std.output.put_string (table_alias)
 						std.output.put_character ('.')
-						std.output.put_string (cursor.item.abstracttype.sqlcolumnidentifier (Current, cursor.item.role))
+						check attached cursor.item.abstracttype as abstracttype then
+							std.output.put_string (abstracttype.sqlcolumnidentifier (Current, cursor.item.role))
+						end
 						cursor.forth
 						if not cursor.after then
 							std.output.put_character (',')
@@ -1654,7 +1656,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 		local
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE]
 			s: detachable STRING
-			null_keyword: detachable STRING
+			null_keyword: READABLE_STRING_GENERAL
 			column_name: STRING
 		do
 			-- create table statement
@@ -1684,68 +1686,69 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 				std.output.put_string (Tab)
 
 				-- write column and datatype
-				column_name := cursor.item.abstracttype.sqlcolumnidentifier (Current, cursor.item.role)
-				std.output.put_string (quote_identifier (column_name))
-				std.output.put_string (" ")
-				-- columndatatype is either a domain type or a standard
-				-- data type. If it is a domain type, make sure it is quoted.
-				std.output.put_string (cursor.item.abstracttype.columndatatype (Current))
+				check attached cursor.item.abstracttype as abstracttype then
+					column_name := abstracttype.sqlcolumnidentifier (Current, cursor.item.role)
+					std.output.put_string (quote_identifier (column_name))
+					std.output.put_string (" ")
+					-- columndatatype is either a domain type or a standard
+					-- data type. If it is a domain type, make sure it is quoted.
+					std.output.put_string (abstracttype.columndatatype (Current))
 
-				-- write default, first check if a simple init expression
-				-- is defined.
-				s := cursor.item.abstracttype.sqlcolumndefault (Current, cursor.item)
-				-- If not we need a default to allow a trigger to fill in
-				-- the details after the actual insert. It seems the check
-				-- constraint doesn't fire until the triggers have been
-				-- processed, so we do not need to take domain
-				-- restrictions into account here.
-				if s = Void and then init_forced_default (cursor.item) then
-					s := cursor.item.abstracttype.representation.default_value
-				end
-				if s /= Void then
-					std.output.put_character ('%N')
-					std.output.put_string (Tab)
-					std.output.put_string (Tab)
-					std.output.put_string ("default ")
-					std.output.put_string (s)
-				end
-
-				-- write null / not null
-				null_keyword := cursor.item.abstracttype.sqlcolumnrequired (Current, cursor.item)
-				if null_keyword /= Void then
-					std.output.put_character (' ')
-					std.output.put_string (null_keyword)
-				end
-
-				-- Write unique, no conflict with check constraint??
-				-- Also if self reference and specialization, the column
-				-- won't be required, so at least InterBase rejects the
-				-- unique constraint in that case. Have to check other
-				-- databases.
-				if
-					cursor.item.is_unique or else
-					cursor.item.is_specialization and cursor.item.is_required then
-					if UniqueConstraintSupported and
-						InlineUniqueConstraintSupported then
-						std.output.put_string(" unique")
+					-- write default, first check if a simple init expression
+					-- is defined.
+					s := abstracttype.sqlcolumndefault (Current, cursor.item)
+					-- If not we need a default to allow a trigger to fill in
+					-- the details after the actual insert. It seems the check
+					-- constraint doesn't fire until the triggers have been
+					-- processed, so we do not need to take domain
+					-- restrictions into account here.
+					if s = Void and then init_forced_default (cursor.item) then
+						s := abstracttype.representation.default_value
 					end
-				end
+					if s /= Void then
+						std.output.put_character ('%N')
+						std.output.put_string (Tab)
+						std.output.put_string (Tab)
+						std.output.put_string ("default ")
+						std.output.put_string (s)
+					end
 
-				-- write references and check constraint, if any
-				s := cursor.item.abstracttype.representation.domain_restriction.sqlcolumnconstraint (Current, column_name)
-				if s /= Void then
-					std.output.put_character ('%N')
-					std.output.put_string (Tab)
-					std.output.put_string (Tab)
-					if ConstraintNameSupported then
-						if OldConstraintNames then
-							type.next_constraint_number
-						end
-						std.output.put_string ("constraint ")
-						std.output.put_string (quote_identifier (column_constraint_name (type, cursor.item)))
+					-- write null / not null
+					null_keyword := abstracttype.sqlcolumnrequired (Current, cursor.item)
+					if not null_keyword.is_empty then
 						std.output.put_character (' ')
+						std.output.put_string (null_keyword.out)
 					end
-					std.output.put_string (s)
+
+					-- Write unique, no conflict with check constraint??
+					-- Also if self reference and specialization, the column
+					-- won't be required, so at least InterBase rejects the
+					-- unique constraint in that case. Have to check other
+					-- databases.
+					if
+						cursor.item.is_unique or else
+						cursor.item.is_specialization and cursor.item.is_required then
+						if UniqueConstraintSupported and
+							InlineUniqueConstraintSupported then
+							std.output.put_string(" unique")
+						end
+					end
+
+					-- write references and check constraint, if any
+					if attached  abstracttype.representation.domain_restriction as domain_restriction and then attached domain_restriction.sqlcolumnconstraint (Current, column_name) as ss then
+						std.output.put_character ('%N')
+						std.output.put_string (Tab)
+						std.output.put_string (Tab)
+						if ConstraintNameSupported then
+							if OldConstraintNames then
+								type.next_constraint_number
+							end
+							std.output.put_string ("constraint ")
+							std.output.put_string (quote_identifier (column_constraint_name (type, cursor.item)))
+							std.output.put_character (' ')
+						end
+						std.output.put_string (ss)
+					end
 				end
 
 				cursor.forth
@@ -1771,12 +1774,14 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 					cursor.after
 				loop
 					if cursor.item.is_unique or else cursor.item.is_specialization then
-						std.output.put_string (",%N")
-						std.output.put_string (Tab)
-						std.output.put_string("unique (")
-						column_name := cursor.item.abstracttype.sqlcolumnidentifier (Current, cursor.item.role)
-						std.output.put_string (quote_identifier(column_name))
-						std.output.put_string(")")
+						check attached cursor.item.abstracttype as abstracttype then
+							std.output.put_string (",%N")
+							std.output.put_string (Tab)
+							std.output.put_string("unique (")
+							column_name := abstracttype.sqlcolumnidentifier (Current, cursor.item.role)
+							std.output.put_string (quote_identifier(column_name))
+							std.output.put_string(")")
+						end
 					end
 					cursor.forth
 				end
@@ -1821,8 +1826,9 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			until
 				node = Void
 			loop
-				if node.item.attribute_name.type_attribute.is_extension and then
-				attached {XPLAIN_EXTENSION} node.item.attribute_name.object as extension then
+				if attached node.item.attribute_name.type_attribute as type_attribute and then
+					type_attribute.is_extension and then
+					attached {XPLAIN_EXTENSION} node.item.attribute_name.object as extension then
 					updated_extension := extension
 					-- @@BdB: Should output subselects when referring to
 					-- (extended) attributes of type. This code allows
@@ -1919,21 +1925,23 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 				from
 					node := assignment_list
 				until
-					node = Void
+					not attached node
 				loop
-					if not node.item.attribute_name.type_attribute.is_extension then
-						std.output.put_string (Tab)
-						std.output.put_string (Tab)
-						if SupportsQualifiedSetInUpdate and then not join_list.is_empty then
-							std.output.put_string (subject.type.quoted_name (Current))
-							std.output.put_character ('.')
+					check attached node.item.attribute_name.type_attribute as type_attribute then
+						if not type_attribute.is_extension then
+							std.output.put_string (Tab)
+							std.output.put_string (Tab)
+							if SupportsQualifiedSetInUpdate and then attached join_list as jl and then not jl.is_empty then
+								std.output.put_string (subject.type.quoted_name (Current))
+								std.output.put_character ('.')
+							end
+							std.output.put_string (quote_identifier (node.item.attribute_name.sqlcolumnidentifier (Current)))
+							std.output.put_string (once " = ")
+							std.output.put_string (node.item.expression.outer_sqlvalue (Current))
 						end
-						std.output.put_string (quote_identifier (node.item.attribute_name.sqlcolumnidentifier (Current)))
-						std.output.put_string (once " = ")
-						std.output.put_string (node.item.expression.outer_sqlvalue (Current))
 					end
 					node := node.next
-					if node /= Void then
+					if attached node then
 						std.output.put_string (once ",%N")
 					end
 				end
@@ -2324,17 +2332,22 @@ feature -- Generate constraints definitions
 	sqlcheck_in (list: XPLAIN_ENUMERATION_NODE [ANY]; column_name: STRING): STRING
 		local
 			s: STRING
-			node: detachable XPLAIN_ENUMERATION_NODE[ANY]
+			node: XPLAIN_ENUMERATION_NODE[ANY]
+			stop: BOOLEAN
 		do
 			s := "(" + column_name + " in ("
 			from
 				node := list
 				s := s + node.to_sqlcode (Current)
 			until
-				node.next = Void
+				stop
 			loop
-				node := node.next
-				s := s + ", " + node.to_sqlcode (Current)
+				if attached node.next as next then
+					node := next
+					s := s + ", " + next.to_sqlcode (Current)
+				else
+					stop := True
+				end
 			end
 			s := s + "))"
 			Result := s
@@ -2389,15 +2402,15 @@ feature -- Expression that returns the contents of a variable/value
 	sqlgetconstant (variable: XPLAIN_VARIABLE): STRING
 			-- SQL expression to retrieve the value of a constant
 		do
-			if variable.value = Void then
-				std.error.put_string (format("The value of constant '$s' has not yet been set.%N", <<variable.name>>))
-				Result := "no value"
-			else
-				if variable.value.is_literal then
-					Result := variable.value.sqlvalue (Current)
+			if attached variable.value as value then
+				if value.is_literal then
+					Result := value.sqlvalue (Current)
 				else
 					Result := "(select " + variable.quoted_name (Current) + " from " + ConstantTableName + ")"
 				end
+			else
+				std.error.put_string (format("The value of constant '$s' has not yet been set.%N", <<variable.name>>))
+				Result := "no value"
 			end
 		end
 
@@ -2472,41 +2485,47 @@ feature -- generate columns either base or type columns
 			-- Produce SQL that defines the default for a base column
 		do
 			if
-				an_attribute.init /= Void and then
-				(an_attribute.init.is_constant or else
-				 (ExpressionsInDefaultClauseSupported and then an_attribute.init.is_literal))
+				attached an_attribute.init as init and then
+				(init.is_constant or else
+				 (ExpressionsInDefaultClauseSupported and then init.is_literal))
 			then
-				Result := an_attribute.init.sqlvalue (Current)
+				Result := init.sqlvalue (Current)
 			end
 		end
 
 	sqlcolumndefault_type (an_attribute: XPLAIN_ATTRIBUTE): detachable STRING
 			-- Produce SQL that defines default for a type column
 		do
-			if an_attribute.init /= Void and then an_attribute.init.is_literal then
-				Result := an_attribute.init.sqlvalue (Current)
+			if attached an_attribute.init as init and then init.is_literal then
+				Result := init.sqlvalue (Current)
 			end
 		end
 
-	sqlcolumnrequired_base (an_attribute: XPLAIN_ATTRIBUTE): detachable STRING
+	sqlcolumnrequired_base (an_attribute: XPLAIN_ATTRIBUTE): READABLE_STRING_GENERAL
 			-- Produce null or not null status of a column that is a base
 		do
 			if an_attribute.overrule_required then
 				Result := column_null_or_not_null (an_attribute.is_required)
 			else
 				if not CreateDomains then
-					Result := column_null_or_not_null (an_attribute.abstracttype.representation.domain_restriction.required)
+					check attached an_attribute.abstracttype as abstracttype and then attached abstracttype.representation.domain_restriction as domain_restriction then
+						Result := column_null_or_not_null (domain_restriction.required)
+					end
+				else
+					Result := ""
 				end
 			end
 		end
 
-	sqlcolumnrequired_type (an_attribute: XPLAIN_ATTRIBUTE): detachable STRING
+	sqlcolumnrequired_type (an_attribute: XPLAIN_ATTRIBUTE): READABLE_STRING_GENERAL
 			-- Produce null or not null status of a column that refers to a type
 		do
 			if an_attribute.overrule_required then
 				Result := column_null_or_not_null (an_attribute.is_required)
 			else
-				Result := column_null_or_not_null (an_attribute.abstracttype.representation.domain_restriction.required)
+				check attached an_attribute.abstracttype as abstracttype and then attached abstracttype.representation.domain_restriction as domain_restriction then
+					Result := column_null_or_not_null (domain_restriction.required)
+				end
 			end
 		end
 
@@ -2720,7 +2739,7 @@ feature -- Return sql code
 		do
 			create code.make (64)
 
-			if subject.identification /= Void then
+			if attached subject.identification as identification then
 				-- support for get type "1"
 				if WhereWritten then
 					code.append_string (once " and %N")
@@ -2736,7 +2755,7 @@ feature -- Return sql code
 				code.append_character ('.')
 				code.append_string (quote_identifier (subject.type.sqlpkname (Current)))
 				code.append_string (once " = ")
-				code.append_string (subject.identification.sqlvalue (Current))
+				code.append_string (identification.sqlvalue (Current))
 			end
 
 			if predicate /= Void then
@@ -2788,13 +2807,12 @@ feature -- Return sql code
 			-- SQL for the full select statement that emits the data used
 			-- to create an extension based on an attribute expression.
 		local
-			type: XPLAIN_TYPE
 			join_list: JOIN_LIST
 			table_alias: STRING
 			optimised: BOOLEAN
 		do
-			type := an_expression.extension.type
-			optimised := an_expression.is_logical_expression and an_expression.extension.no_update_optimization
+			check attached an_expression.extension as extension and then attached extension.type as type then
+			optimised := an_expression.is_logical_expression and extension.no_update_optimization
 
 			-- build join statements (applies only to expression extension)
 			create join_list.make (type)
@@ -2816,7 +2834,7 @@ feature -- Return sql code
 			Result.append_character ('.')
 			Result.append_string (type.q_sqlpkname (Current))
 			Result.append_string (once ", ")
-			if an_expression.is_logical_expression and an_expression.extension.no_update_optimization then
+			if an_expression.is_logical_expression and extension.no_update_optimization then
 				Result.append_string (SQLTrue)
 			else
 				Result.append_string (an_expression.sqlvalue (Current))
@@ -2836,6 +2854,7 @@ feature -- Return sql code
 				Result.append_string (once "where%N")
 				Result.append_string (TabTab)
 				Result.append_string (an_expression.sqlvalue (Current))
+			end
 			end
 		ensure
 			not_empty: Result /= Void and then not Result.is_empty
@@ -2872,7 +2891,8 @@ feature -- Return sql code
 			group_by_elimination: BOOLEAN
 			distinct_elimination: BOOLEAN
 		do
-			type := an_expression.per_property.last.item.type
+			check attached an_expression.per_property.last as last then
+			type := last.item.type
 
 			-- build join statements (applies only to expression extension)
 			create join_list.make (type)
@@ -2882,7 +2902,7 @@ feature -- Return sql code
 			-- that's only possible if the where clause doesn't have an
 			-- its (or an extend attribute, but that's also caught by
 			-- this test).
-			use_where_clause := an_expression.selection.predicate /= Void and then an_expression.selection.predicate.uses_its
+			use_where_clause := attached an_expression.selection.predicate as predicate and then predicate.uses_its
 			--use_where_clause := True
 
 			-- Code
@@ -2890,8 +2910,9 @@ feature -- Return sql code
 			Result.append_string (once "select ")
 			if an_expression.selection.function.is_existential then
 				distinct_elimination :=
-					an_expression.per_property.next = Void and then
-					an_expression.per_property.item.type_attribute.is_specialization
+					not attached an_expression.per_property.next and then
+					attached an_expression.per_property.item.type_attribute as ta and then
+					ta.is_specialization
 				if not distinct_elimination then
 					Result.append_string (once "distinct ")
 				end
@@ -2952,6 +2973,7 @@ feature -- Return sql code
 				Result.append_character ('%N')
 				Result.append_string (sql_extend_insert_missing_rows (an_expression, an_extension))
 			end
+			end
 		ensure
 			not_empty: Result /= Void and then not Result.is_empty
 		end
@@ -2965,10 +2987,12 @@ feature -- Return sql code
 		require
 			expression: an_expression /= Void
 			extension_not_void: an_extension /= Void
+			per_property_has_last: attached an_expression.per_property.last
 		local
 			type: XPLAIN_TYPE
 		do
-			type := an_expression.per_property.last.item.type
+			check attached an_expression.per_property.last as last then
+			type := last.item.type
 			create Result.make (512)
 			Result.append_string (once "insert into ")
 			Result.append_string (TemporaryTablePrefix)
@@ -2993,6 +3017,7 @@ feature -- Return sql code
 			Result.append_string (TemporaryTablePrefix)
 			Result.append_string (quote_identifier (an_extension.sqlname (Current)))
 			Result.append_string (once ")")
+			end
 		end
 
 	sql_select_function_as_subselect (selection_list: XPLAIN_SELECTION_FUNCTION): STRING
@@ -3079,7 +3104,7 @@ feature -- Return sql code
 			if surround_column_with_parentheses then
 				code.append_character ('(')
 			end
-			if selection_list.property = Void then
+			if not attached selection_list.property as property then
 				if selection_list.function.needs_limit (Current) then
 					if not selection_list.function.is_existential then
 						-- for the some function we need the instance identifier
@@ -3103,12 +3128,12 @@ feature -- Return sql code
 				if selection_list.function.needs_distinct then
 					code.append_string (once "distinct ")
 				end
-				if CoalesceSupported and then selection_list.property.can_be_null then
+				if CoalesceSupported and then property.can_be_null then
 					code.append_string (SQLCoalesce)
 					code.append_character ('(')
 				end
-				code.append_string (selection_list.property.sqlvalue (Current))
-				if CoalesceSupported and then selection_list.property.can_be_null then
+				code.append_string (property.sqlvalue (Current))
+				if CoalesceSupported and then property.can_be_null then
 					code.append_string (once ", ")
 					code.append_string (selection_list.function.sqlextenddefault (Current, selection_list.property))
 					code.append_character (')')
@@ -3127,10 +3152,10 @@ feature -- Return sql code
 					code.append_character (')')
 				end
 				code.append_string (once " as ")
-				if not attached selection_list.property then
+				if not attached selection_list.property as property then
 					column_name := selection_list.function.name + once " " + selection_list.subject.type.sqlname (Current)
 				else
-					if attached selection_list.property.column_name as c then
+					if attached property.column_name as c then
 						column_name := selection_list.function.name + once " " + c
 					else
 						column_name := selection_list.function.name
@@ -3219,7 +3244,7 @@ feature -- Return sql code
 				Result.append_string (sql_select_function_limit_before (selection_list))
 			end
 
-			if selection_list.function.is_existential and then an_expression.extension.no_update_optimization then
+			if selection_list.function.is_existential and then attached an_expression.extension as extension and then extension.no_update_optimization then
 				Result.append_string (selection_list.function.sqlfunction (Current))
 			else
 				if selection_list.function.is_existential then
@@ -3237,7 +3262,7 @@ feature -- Return sql code
 				if surround_column_with_parentheses then
 					Result.append_character ('(')
 				end
-				if selection_list.property = Void then
+				if not attached selection_list.property as property then
 					if selection_list.function.property_required = 0 then
 						Result.append_character ('*')
 					else
@@ -3250,12 +3275,12 @@ feature -- Return sql code
 					if selection_list.function.needs_distinct then
 						Result.append_string (once "distinct ")
 					end
-					if CoalesceSupported and then selection_list.property.can_be_null then
+					if CoalesceSupported and then property.can_be_null then
 						Result.append_string (SQLCoalesce)
 						Result.append_character ('(')
 					end
-					Result.append_string (selection_list.property.sqlvalue (Current))
-					if CoalesceSupported and then selection_list.property.can_be_null then
+					Result.append_string (property.sqlvalue (Current))
+					if CoalesceSupported and then property.can_be_null then
 						Result.append_string (once ", ")
 						Result.append_string (selection_list.function.sqlextenddefault (Current, selection_list.property))
 						Result.append_character (')')
@@ -3343,12 +3368,14 @@ feature -- Return sql code
 			code.append_string (".")
 			code.append_string (quote_identifier(type.sqlpkname (Current)))
 			code.append_string (" = ")
-			if type.representation.write_with_quotes then
-				code.append_string ("'")
-				code.append_string (selection_list.subject.identification.sqlvalue (Current))
-				code.append_string ("'")
-			else
-				code.append_string (selection_list.subject.identification.sqlvalue (Current))
+			check attached selection_list.subject.identification as identification then
+				if type.representation.write_with_quotes then
+					code.append_string ("'")
+					code.append_string (identification.sqlvalue (Current))
+					code.append_string ("'")
+				else
+					code.append_string (identification.sqlvalue (Current))
+				end
 			end
 			Result := code
 			WhereWritten := False
@@ -3493,56 +3520,52 @@ feature -- Return sql code
 			list_not_void: an_its_list /= Void
 			--is_list: an_its_list.next /= Void
 		local
-			is_list: BOOLEAN
 			join_list: JOIN_LIST
 		do
-				check
-					update_type_set: update_type /= Void
-				end
 			create Result.make (512)
 			Result.append_string (once "( select ")
-			is_list := an_its_list.next /= Void
-			if is_list then
-				create join_list.make (an_its_list.item.type)
-				join_list.extend (Current, an_its_list.next)
-				join_list.finalize (Current)
-				check attached an_its_list.last.prefix_table as p then
+			check attached update_type as ut then
+				if attached an_its_list.next and then attached an_its_list.last as last then
+					create join_list.make (an_its_list.item.type)
+					join_list.extend (Current, an_its_list.next)
+					join_list.finalize (Current)
+						check attached last.prefix_table as p then
 					Result.append_string (quote_identifier (p))
-				end
-				Result.append_character ('.')
-				Result.append_string (an_its_list.last.item.quoted_name (Current))
-				Result.append_string (once " from ")
-				Result.append_string (an_its_list.item.type.quoted_name (Current))
-				Result.append_string (sql_select_joins (join_list))
-				Result.append_string (once " where ")
-				Result.append_string (an_its_list.item.type.quoted_name (Current))
-				Result.append_character ('.')
-				Result.append_string (an_its_list.item.type.q_sqlpkname (Current))
-				Result.append_string (once " = ")
-				if updated_extension = Void then
-					Result.append_string (update_type.quoted_name (Current))
+						end
 					Result.append_character ('.')
-					Result.append_string (an_its_list.item.q_sql_select_name (Current))
-				else
-					Result.append_string (updated_extension.quoted_name (Current))
+					Result.append_string (last.item.quoted_name (Current))
+					Result.append_string (once " from ")
+					Result.append_string (an_its_list.item.type.quoted_name (Current))
+					Result.append_string (sql_select_joins (join_list))
+					Result.append_string (once " where ")
+					Result.append_string (an_its_list.item.type.quoted_name (Current))
 					Result.append_character ('.')
-					Result.append_string (update_type.q_sql_select_name (Current, Void))
-				end
-			else
-				-- If there's no list and we still come here, an extension
-				-- is updated with an attribute.
-					check
-						updated_extension_not_void: updated_extension /= Void
+					Result.append_string (an_its_list.item.type.q_sqlpkname (Current))
+					Result.append_string (once " = ")
+					if attached updated_extension as ue then
+						Result.append_string (ue.quoted_name (Current))
+						Result.append_character ('.')
+						Result.append_string (ut.q_sql_select_name (Current, Void))
+					else
+						Result.append_string (ut.quoted_name (Current))
+						Result.append_character ('.')
+						Result.append_string (an_its_list.item.q_sql_select_name (Current))
 					end
-				Result.append_string (an_its_list.item.quoted_name (Current))
-				Result.append_string (once " from ")
-				Result.append_string (update_type.quoted_name (Current))
-				Result.append_string (once " where ")
-				Result.append_string (update_type.q_sql_select_name (Current, Void))
-				Result.append_string (once " = ")
-				Result.append_string (updated_extension.quoted_name (Current))
-				Result.append_character ('.')
-				Result.append_string (update_type.q_sql_select_name (Current, Void))
+				else
+					-- If there's no list and we still come here, an extension
+					-- is updated with an attribute.
+					check attached updated_extension as ue then
+						Result.append_string (an_its_list.item.quoted_name (Current))
+						Result.append_string (once " from ")
+						Result.append_string (ut.quoted_name (Current))
+						Result.append_string (once " where ")
+						Result.append_string (ut.q_sql_select_name (Current, Void))
+						Result.append_string (once " = ")
+						Result.append_string (ue.quoted_name (Current))
+						Result.append_character ('.')
+						Result.append_string (ut.q_sql_select_name (Current, Void))
+					end
+				end
 			end
 			Result.append_string (once " )")
 		end
@@ -3566,10 +3589,10 @@ feature -- Return sql code
 			-- Distinguish between the case of updating an extension
 			-- table with another extension or updating the type with an
 			-- extension.
-			if updated_extension = Void then
+			if not attached updated_extension as ue then
 				Result.append_string (extension.type.quoted_name (Current))
 			else
-				Result.append_string (updated_extension.quoted_name (Current))
+				Result.append_string (ue.quoted_name (Current))
 			end
 			Result.append_character('.')
 			Result.append_string (quote_identifier (extension.type.sqlpkname (Current)))
@@ -3962,8 +3985,9 @@ feature -- Table specific methods
 			result_not_empty: Result /= Void and then not Result.is_empty
 		end
 
-	column_null_or_not_null (required: BOOLEAN): detachable STRING
-			-- return null or not null, to be used when creating a column
+	column_null_or_not_null (required: BOOLEAN): READABLE_STRING_GENERAL
+			-- return null or not null, to be used when creating a column,
+			-- or empty string if not applicable
 		do
 			if required then
 				if ColumnNullDefault then
@@ -3972,7 +3996,7 @@ feature -- Table specific methods
 					if ColumnNotNullAllowed then
 						Result := "not null"
 					else
-						Result := Void
+						Result := ""
 					end
 				end
 			else
@@ -3980,7 +4004,7 @@ feature -- Table specific methods
 					if ColumnNullAllowed then
 						Result := "null"
 					else
-						Result := Void
+						Result := ""
 					end
 				else
 					Result := "null"

@@ -4,8 +4,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2002, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #11 $"
 
 class
 
@@ -194,7 +192,8 @@ feature -- Oracle specific SQL creation statements
 			loop
 				if
 					not cursor.item.is_init_default or else
-					not cursor.item.init.is_constant
+					(attached cursor.item.init as init and then
+					 not init.is_constant)
 				then
 					std.output.put_string (Tab)
 					Tab.append_string ("  ")
@@ -751,7 +750,9 @@ feature -- generation of init [default] expressions
 			-- and for init statements we should emit an after insert
 			-- trigger actually.
 			Tab.append_string ("  ")
-			create Result.make_from_string (an_attribute.init.sqlinitvalue (Current))
+			check attached an_attribute.init as init then
+				create Result.make_from_string (init.sqlinitvalue (Current))
+			end
 			Tab.remove_tail (2)
 		end
 

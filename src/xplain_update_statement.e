@@ -56,8 +56,8 @@ feature --  Warnings
 			node: detachable like assignment_list
 		do
 			Result :=
-				subject.identification /= Void and then
-				subject.identification.uses_parameter (a_parameter)
+				attached subject.identification as identification and then
+				identification.uses_parameter (a_parameter)
 			from
 				node := assignment_list
 			until
@@ -69,8 +69,8 @@ feature --  Warnings
 			end
 			if not Result then
 				Result :=
-					predicate /= Void and then
-					predicate.uses_parameter (a_parameter)
+					attached predicate as p and then
+					p.uses_parameter (a_parameter)
 			end
 		end
 

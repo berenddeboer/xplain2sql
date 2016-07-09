@@ -128,7 +128,7 @@ feature -- Main commands
 		local
 			attr: XPLAIN_ATTRIBUTE
 			aname: XPLAIN_ATTRIBUTE_NAME
-			anode: detachable XPLAIN_ATTRIBUTE_NAME_NODE
+			anode: XPLAIN_ATTRIBUTE_NAME_NODE
 			save_base_aggregate: XPLAIN_TYPE
 			save_root: JOIN_TREE_NODE
 			dummy: XPLAIN_ATTRIBUTE_NAME_NODE
@@ -152,7 +152,9 @@ feature -- Main commands
 			-- Don't actually include the last node (which now has become
 			-- the first), because it will be in the from clause, so we
 			-- shouldn't join that.
-			anode := anode.next
+			check attached anode.next as next then
+				anode := next
+			end
 			-- We want to join up to the last, which won't happen,
 			-- because the last attribute is supposed to be part of the
 			-- previous (a reference or a base). But our last attribute
@@ -160,7 +162,9 @@ feature -- Main commands
 			-- attribute of that type.
 			create aname.make_from_attribute (a_selection.subject.type.attributes.first)
 			create dummy.make (aname, Void)
-			anode.last.set_next (dummy)
+			check attached anode.last as last then
+				last.set_next (dummy)
+			end
 			extend (sqlgenerator, anode)
 			is_upward_join := False
 			debug ("xplain2sql_join")
@@ -208,7 +212,7 @@ feature -- Main commands
 			not_finalized: not is_finalized
 		local
 			anode: detachable XPLAIN_ATTRIBUTE_NAME_NODE
-			jnode: detachable JOIN_TREE_NODE
+			jnode: JOIN_TREE_NODE
 			indent: INTEGER
 			spaces: STRING
 		do
@@ -233,11 +237,11 @@ feature -- Main commands
 					anode = Void
 				loop
 					debug ("xplain2sql_join")
-						if jnode.item /= Void then
+						if attached jnode.item as item then
 							create spaces.make_filled (' ', indent)
 							print (spaces)
 							indent := indent + 2
-							print (jnode.item.item.name + " (descending)%N")
+							print (item.item.name + " (descending)%N")
 						end
 					end
 					if jnode.has_immediate_child (anode, is_upward_join) then
@@ -252,8 +256,10 @@ feature -- Main commands
 							print (spaces)
 							print (anode.item.full_name + " (strand extended)%N")
 						end
-						jnode.append_child (anode, is_upward_join, force_left_outer_join, existential_join_optimisation and then anode.item.type_attribute /= Void and then anode.item.type_attribute.is_logical_extension)
-						jnode := jnode.get_immediate_child (anode, is_upward_join)
+						jnode.append_child (anode, is_upward_join, force_left_outer_join, existential_join_optimisation and then attached anode.item.type_attribute as type_attribute and then type_attribute.is_logical_extension)
+						check attached jnode.get_immediate_child (anode, is_upward_join) as child then
+							jnode := child
+						end
 					end
 					anode := anode.next
 				end
@@ -306,24 +312,26 @@ feature {NONE} -- Implementation
 
 	existential_join_optimisation_count: INTEGER
 
-	copy_role_to_next (anode: detachable XPLAIN_ATTRIBUTE_NAME_NODE)
+	copy_role_to_next (anode: XPLAIN_ATTRIBUTE_NAME_NODE)
 		do
-			if attached anode.next then
-				copy_role_to_next (anode.next)
-				anode.next.item.set_role (anode.item.role)
+			if attached anode.next as n then
+				copy_role_to_next (n)
+				n.item.set_role (anode.item.role)
 			end
 		end
 
-	revert_alist (anode: detachable XPLAIN_ATTRIBUTE_NAME_NODE): XPLAIN_ATTRIBUTE_NAME_NODE
+	revert_alist (anode: XPLAIN_ATTRIBUTE_NAME_NODE): XPLAIN_ATTRIBUTE_NAME_NODE
 		local
 			last: XPLAIN_ATTRIBUTE_NAME_NODE
 		do
-			if not attached anode.next then
-				create Result.make (anode.item, Void)
-			else
-				Result := revert_alist (anode.next)
+			if attached anode.next as n then
+				Result := revert_alist (n)
 				create last.make (anode.item, Void)
-				Result.last.set_next (last)
+				check attached Result.last as l then
+					l.set_next (last)
+				end
+			else
+				create Result.make (anode.item, Void)
 			end
 		end
 

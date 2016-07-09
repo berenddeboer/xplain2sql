@@ -52,7 +52,7 @@ feature -- Status
 
 feature -- Expression builder support
 
-	create_expression (node: XPLAIN_ATTRIBUTE_NAME_NODE): detachable XPLAIN_EXPRESSION
+	create_expression (node: XPLAIN_ATTRIBUTE_NAME_NODE): XPLAIN_EXPRESSION
 			-- Suitable expression for attribute/variable/value/extension
 		deferred
 		end

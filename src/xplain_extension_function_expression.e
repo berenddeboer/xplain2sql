@@ -39,6 +39,7 @@ feature {NONE} -- Initialization
 		require
 			selection_not_void: a_selection /= Void
 			per_property_not_void: a_per_property /= Void
+			void_safe_seems_to_suggest_we_need_last: attached a_per_property.last
 		do
 			selection := a_selection
 			per_property := a_per_property
@@ -98,7 +99,7 @@ feature -- SQL generation
 			if not supports_left_outer_join and then attached extension as e then
 				sqlfromaliasname := an_outer_table_name
 				create left_operand.make (per_property)
-				create access_type.make (Void, extension.name)
+				create access_type.make (Void, an_extension.name)
 				access_type.set_object (e)
 				create access_type_node.make (access_type, Void)
 				create right_operand.make (access_type_node)
@@ -122,8 +123,8 @@ feature
 
 	add_to_join (sqlgenerator: SQL_GENERATOR; a_join_list: JOIN_LIST)
 		do
-			if supports_left_outer_join then
-				a_join_list.add_join_to_aggregate (sqlgenerator, per_property, selection, not extension.no_update_optimization)
+			if supports_left_outer_join and then attached extension as e then
+				a_join_list.add_join_to_aggregate (sqlgenerator, per_property, selection, not e.no_update_optimization)
 			else
 				-- During creation of extension we have nothing to do.
 				-- Everything is described in `selection'.
@@ -165,7 +166,7 @@ feature
 			else
 				-- The some function can use a left outer join if it returns
 				-- max 1 row.
-				Result := selection.predicate /= Void and then selection.predicate.selects_max_one_row
+				Result := attached selection.predicate as predicate and then predicate.selects_max_one_row
 			end
 		end
 

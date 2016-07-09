@@ -221,7 +221,8 @@ feature -- Table SQL
 			loop
 				if
 					not cursor.item.is_init_default or else
-					not cursor.item.init.is_constant
+					(attached cursor.item.init as init and then
+					 not init.is_constant)
 				then
 					std.output.put_string (Tab)
 					std.output.put_string (format ("set new.$s = $s", <<cursor.item.q_sql_select_name (Current), sql_init_expression (cursor.item)>>))
@@ -338,7 +339,9 @@ feature -- Extends
 		local
 			type: XPLAIN_TYPE
 		do
-			type := an_expression.per_property.last.item.type
+			check attached an_expression.per_property.last as last then
+				type := last.item.type
+			end
 			create Result.make (512)
 			Result.append_string ("drop temporary table if exists extend_self_select")
 			Result.append_string (CommandSeparator)

@@ -93,15 +93,15 @@ feature -- Access
 		local
 			column_name: STRING
 		do
-			if a_selection.property = Void then
-				Result := sqlgenerator.sp_function_type_for_selection_value (a_selection.subject.type.sqlname (sqlgenerator), a_selection.subject.type.representation, an_emit_path)
-			else
-				if attached a_selection.property.column_name as cn then
+			if attached a_selection.property as property then
+				if attached property.column_name as cn then
 					column_name := a_selection.function.name + once "_" + cn
 				else
 					column_name := a_selection.function.name
 				end
-				Result := sqlgenerator.sp_function_type_for_selection_value (column_name, a_selection.property.representation (sqlgenerator), an_emit_path)
+				Result := sqlgenerator.sp_function_type_for_selection_value (column_name, property.representation (sqlgenerator), an_emit_path)
+			else
+				Result := sqlgenerator.sp_function_type_for_selection_value (a_selection.subject.type.sqlname (sqlgenerator), a_selection.subject.type.representation, an_emit_path)
 			end
 		end
 

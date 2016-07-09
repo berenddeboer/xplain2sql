@@ -34,8 +34,8 @@ feature {NONE} -- Initialization
 		do
 			create my_xml.make (a_capacity)
 			create tags.make
-			create attributes.make (0, 32)
-			create values.make (0, 32)
+			create attributes.make_filled ("", 0, 32)
+			create values.make_filled (Void, 0, 32)
 			clear
 		end
 
@@ -489,8 +489,8 @@ feature {NONE} -- tag attributes
 
 	clear_attributes
 		do
-			attributes.clear_all
-			values.clear_all
+			attributes.make_filled ("", 0, 32)
+			values.make_filled (Void, 0, 32)
 			attribute_count := 0
 		end
 

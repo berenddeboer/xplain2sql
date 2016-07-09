@@ -124,15 +124,15 @@ feature -- Access
 			Result := sqlpkname (sqlgenerator)
 		end
 
-	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): detachable STRING
-		do
-			Result := Void -- not applicable
+	sqlcolumnrequired (sqlgenerator: SQL_GENERATOR; an_attribute: XPLAIN_ATTRIBUTE): READABLE_STRING_GENERAL
+		once
+			Result := ""
 		end
 
-	sql_qualified_name (sqlgenerator: SQL_GENERATOR; prefix_override: STRING): STRING
+	sql_qualified_name (sqlgenerator: SQL_GENERATOR; prefix_override: detachable STRING): STRING
 			-- Extension specific column name used in subselects
 		do
-			if prefix_override = Void then
+			if not attached prefix_override then
 				Result := sqlgenerator.quote_identifier (sqlname (sqlgenerator)).twin
 			else
 				Result := sqlgenerator.quote_identifier (prefix_override).twin

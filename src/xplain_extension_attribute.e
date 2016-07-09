@@ -14,8 +14,10 @@ inherit
 	XPLAIN_ATTRIBUTE
 		rename
 			make as inherited_make,
+			internal_abstracttype as internal_extension,
 			abstracttype as extension
 		redefine
+			internal_extension,
 			extension,
 			is_extension,
 			is_logical_extension,
@@ -53,6 +55,10 @@ feature -- Status
 feature -- Access
 
 	extension: XPLAIN_EXTENSION
+			-- Extension that defines this attribute
+		do
+			Result := internal_extension
+		end
 
 
 feature {XPLAIN_TYPE} -- Xplain type controlled SQL code generation
@@ -61,5 +67,14 @@ feature {XPLAIN_TYPE} -- Xplain type controlled SQL code generation
 		do
 			sqlgenerator.write_drop_extension (extension)
 		end
+
+
+feature {NONE} -- Implementation
+
+	internal_extension: XPLAIN_EXTENSION
+			-- Base/type/extension that defines this attribute;
+			-- usually set, except for cases when it is a self-reference,
+			-- it's set afterward in that case.
+
 
 end

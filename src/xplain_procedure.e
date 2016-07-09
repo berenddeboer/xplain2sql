@@ -244,10 +244,14 @@ feature -- SQL output
 		do
 			-- Switch into correct SQL for to create the PostgreSQL
 			-- function type.
-			if last_get_statement /= Void then
-				Result := sqlgenerator.sp_function_type_for_selection (last_get_statement.selection, is_path_procedure)
+			if attached last_get_statement as last_get then
+				Result := sqlgenerator.sp_function_type_for_selection (last_get.selection, is_path_procedure)
+			elseif attached last_value_selection_statement as last_value then
+				Result := sqlgenerator.sp_function_type_for_selection_value (last_value.value.sqlname (sqlgenerator), last_value.value.representation, an_emit_path)
 			else
-				Result := sqlgenerator.sp_function_type_for_selection_value (last_value_selection_statement.value.sqlname (sqlgenerator), last_value_selection_statement.value.representation, an_emit_path)
+				-- Seems we can get this if a function does not have a get or value?
+				-- Or is that guaranteed by `returns_rows'?
+				Result := "-- SHOULD NOT HAPPEN"
 			end
 		ensure
 			function_type_not_empty: Result /= Void and then not Result.is_empty

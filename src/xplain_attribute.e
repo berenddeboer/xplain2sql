@@ -15,7 +15,7 @@ feature {NONE} -- Initialization
 
 	make (
 		a_role: detachable STRING;
-		an_abstracttype: like abstracttype;
+		an_abstracttype: like internal_abstracttype;
 		a_overrule_required,
 		a_required,
 		a_specialization,
@@ -26,7 +26,7 @@ feature {NONE} -- Initialization
 			-- if it is a self reference, we don't have the type yet
 		do
 			role := a_role
-			abstracttype := an_abstracttype
+			internal_abstracttype := an_abstracttype
 			overrule_required := a_overrule_required
 			is_required := a_required
 			is_specialization := a_specialization
@@ -35,6 +35,11 @@ feature {NONE} -- Initialization
 
 
 feature -- Status
+
+	is_abstracttype_attached: BOOLEAN
+		do
+			Result := attached internal_abstracttype
+		end
 
 	is_assertion: BOOLEAN
 			-- Is this a virtual attribute?
@@ -77,17 +82,22 @@ feature -- Status
 
 feature -- Access
 
-	abstracttype: detachable XPLAIN_ABSTRACT_TYPE
+	abstracttype: XPLAIN_ABSTRACT_TYPE
 			-- Base/type/extension that defines this attribute
+		do
+			check attached internal_abstracttype as at then
+				Result := at
+			end
+		end
 
 	full_name: STRING
 		do
-			if role = Void then
-				Result := name
-			else
-				Result := role.twin
+			if attached role as r then
+				Result := r.twin
 				Result.append_character ('_')
 				Result.append_string (name)
+			else
+				Result := name
 			end
 		ensure
 			name_not_empty: Result /= Void and then not Result.is_empty
@@ -97,6 +107,8 @@ feature -- Access
 			-- init or init default expression
 
 	name: STRING
+		require
+			type_available: is_abstracttype_attached
 		do
 			Result := abstracttype.name
 		end
@@ -114,9 +126,9 @@ feature -- Change
 			-- fix abstracttype when it is a self reference (reference to
 			-- its owner in this case)
 		require
-			not_yet_set: abstracttype = Void
+			not_yet_set: not is_abstracttype_attached
 		do
-			abstracttype := aowner
+			internal_abstracttype := aowner
 		ensure
 			owner_set: aowner = abstracttype
 		end
@@ -158,7 +170,7 @@ feature -- SQL code
 			-- Name to be used in select or order by statement. Should
 			-- replace usage of `sqlcolumnidentifier'.
 		require
-			type_info_available: abstracttype /= Void
+			type_available: is_abstracttype_attached
 		do
 			Result := abstracttype.q_sql_select_name (sqlgenerator, role)
 		ensure
@@ -169,7 +181,7 @@ feature -- SQL code
 			-- Name to be used in select or order by statement. Should
 			-- replace usage of `sqlcolumnidentifier'.
 		require
-			type_info_available: abstracttype /= Void
+			type_available: is_abstracttype_attached
 		do
 			Result := abstracttype.sql_select_name (sqlgenerator, role)
 		ensure
@@ -182,9 +194,17 @@ feature -- SQL code
 		end
 
 
+feature {NONE} -- Implementation
+
+	internal_abstracttype: detachable XPLAIN_ABSTRACT_TYPE
+			-- Base/type/extension that defines this attribute;
+			-- usually set, except for cases when it is a self-reference,
+			-- it's set afterward in that case.
+
+
 invariant
 
-	role_void_or_not_empty: role = Void or else not role.is_empty
+	role_void_or_not_empty: not attached role as r or else not r.is_empty
 	is_init_default_consistent: is_init_default implies init /= Void
 
 end

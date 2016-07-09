@@ -66,10 +66,10 @@ feature -- generation of init [default] expressions
 		do
 			Result :=
 				not ChecksNullAfterTrigger and then
-				an_attribute.init /= Void and then
+				attached an_attribute.init as init and then
 				not an_attribute.is_init_default and then
-				not an_attribute.init.is_constant and then
-				(not ExpressionsInDefaultClauseSupported or else not an_attribute.init.is_literal)
+				not init.is_constant and then
+				(not ExpressionsInDefaultClauseSupported or else not init.is_literal)
 		end
 
 	init_forced_null (an_attribute: XPLAIN_ATTRIBUTE): BOOLEAN
@@ -84,10 +84,10 @@ feature -- generation of init [default] expressions
 		do
 			Result :=
 				not ChecksNullAfterTrigger and then
-				an_attribute.init /= Void and then
+				attached an_attribute.init as init and then
 				an_attribute.is_init_default and then
-				not an_attribute.init.is_constant and then
-				(not ExpressionsInDefaultClauseSupported or else not an_attribute.init.is_literal)
+				not init.is_constant and then
+				(not ExpressionsInDefaultClauseSupported or else not init.is_literal)
 		end
 
 	sql_init_expression (an_attribute: XPLAIN_ATTRIBUTE): STRING
@@ -95,6 +95,7 @@ feature -- generation of init [default] expressions
 			-- if the init is a default or not
 		require
 			an_attribute_not_void: an_attribute /=  Void
+			attribute_has_init: attached an_attribute.init
 		do
 			create Result.make (64)
 			if CoalesceSupported and then attached SQLCoalesce as coalesce then
@@ -103,7 +104,9 @@ feature -- generation of init [default] expressions
 				end
 			end
 			Tab.append_string ("  ")
-			Result.append_string (an_attribute.init.sqlinitvalue (Current))
+			if attached an_attribute.init as init then
+				Result.append_string (init.sqlinitvalue (Current))
+			end
 			Tab.remove_tail (2)
 			if CoalesceSupported then
 				if an_attribute.is_init_default then
@@ -278,7 +281,7 @@ feature -- Cast expressions
 
 feature -- generate columns either base or type columns
 
-	sqlcolumnrequired_base (an_attribute: XPLAIN_ATTRIBUTE): detachable STRING
+	sqlcolumnrequired_base (an_attribute: XPLAIN_ATTRIBUTE): READABLE_STRING_GENERAL
 			-- Produce null or not null status of a column that is a base
 		do
 			if init_forced_null (an_attribute) then
@@ -288,7 +291,7 @@ feature -- generate columns either base or type columns
 			end
 		end
 
-	sqlcolumnrequired_type (an_attribute: XPLAIN_ATTRIBUTE): detachable STRING
+	sqlcolumnrequired_type (an_attribute: XPLAIN_ATTRIBUTE): READABLE_STRING_GENERAL
 			-- Produce null or not null status of a column that refers to a type
 		do
 			if init_forced_null (an_attribute) then

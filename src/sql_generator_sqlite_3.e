@@ -6,8 +6,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2005 Berend de Boer, see forum.txt"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #5 $"
 
 
 class
@@ -152,7 +150,7 @@ feature -- create statements
 			until
 				cursor.after
 			loop
-				if not cursor.item.init.is_literal then
+				if attached cursor.item.init as init and then not init.is_literal then
 					std.output.put_string (comma)
 					std.output.put_string (Tab)
 					std.output.put_string (cursor.item.q_sql_select_name (Current))

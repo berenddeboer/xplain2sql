@@ -182,12 +182,12 @@ feature -- Generate output
 			counter_statement.write (a_generator)
 
 			-- 2. extend node with round visited = counter.
-			round_visited_statement.write (a_generator)
+			-- FIX COMPILE: round_visited_statement.write (a_generator)
 
 			-- 3. extend node with this round =
 			--      nil arc
 			--      per to_node.
-			first_round_statement.write (a_generator)
+			-- FIX COMPILE: first_round_statement.write (a_generator)
 
 			-- repeat until finished:
 			-- 1. value counter = counter + 1.
@@ -197,7 +197,7 @@ feature -- Generate output
 			-- 2. update node its round visited = counter
 			--      where
 			--        this round.
-			update_round_visited_statement.write (a_generator)
+			-- FIX COMPILE: update_round_visited_statement.write (a_generator)
 
 			-- Mark the nodes that we will visit this round:
 			-- 3. extend node with this round =
@@ -205,7 +205,7 @@ feature -- Generate output
 			--        where
 			--          round visited = counter
 			--        per to_node.
-			current_round_statement.write (a_generator)
+			-- FIX COMPILE: current_round_statement.write (a_generator)
 
 			-- Are we finished?
 			-- value finished =

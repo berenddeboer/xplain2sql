@@ -210,7 +210,8 @@ feature -- SQL creation statements
 				cursor.after
 			loop
 				if
-					not cursor.item.init.is_literal or else
+					(attached cursor.item.init as init and then
+					not init.is_literal) or else
 					not cursor.item.is_init_default
 				then
 					std.output.put_string (Tab)

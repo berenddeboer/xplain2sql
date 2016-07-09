@@ -528,9 +528,9 @@ general_deletion
 	XPLAIN_ITS attribute_name
 		{
 			write_pending_statement
-			if attached subject_type.find_attribute ($5) as myattribute then
+			if attached subject_type as t and then attached t.find_attribute ($5) as myattribute then
 				if immediate_output_mode then
-					subject_type.write_drop_attribute	(sqlgenerator, myattribute)
+					t.write_drop_attribute	(sqlgenerator, myattribute)
 				end
 			else
 				error_unknown_attribute ($2, $5)
@@ -664,9 +664,9 @@ logical_factor
 			-- silence compiler, we either return something valid or abort:
 			create {XPLAIN_LOGICAL_VALUE_EXPRESSION} $$.make (False)
 			if attached subject_type then
-				if attached get_object_if_valid_tree ($1) then
+				if attached get_object_if_valid_tree ($1) and then attached last_object_in_tree as o then
 					-- the last object in the tree knows what expression to build here
-					if attached last_object_in_tree.create_expression ($1) as e then
+					if attached o.create_expression ($1) as e then
 						if e.is_logical_expression then
 							create {XPLAIN_NOTNOT_EXPRESSION} $$.make (e)
 						else
@@ -682,7 +682,7 @@ logical_factor
 	| XPLAIN_NOT property_name
 		{
 			if attached subject_type then
-				if attached get_object_if_valid_tree ($2) and then attached last_object_in_tree.create_expression ($2) as e then
+				if attached get_object_if_valid_tree ($2) and then attached last_object_in_tree as o and then attached o.create_expression ($2) as e then
 					-- the last object in the tree knows what expression to build here
 					create {XPLAIN_NOT_EXPRESSION} $$.make (e)
 				else
@@ -790,14 +790,9 @@ property_factor
 			-- attribute/extension/value/variable.
 			-- let's get the correct object associated with this tree
 			if attached subject_type then
-				if attached get_object_if_valid_tree ($1) then
+				if attached get_object_if_valid_tree ($1) and then attached last_object_in_tree as last_object then
 					-- the last object in the tree knows what expression to build here
-					if attached last_object_in_tree.create_expression ($1) as o then
-						$$ := o
-					else
-						-- silence compiler, we either return something valid or abort:
-						create {XPLAIN_LOGINNAME_EXPRESSION} $$
-					end
+					$$ := last_object.create_expression ($1)
 				else
 					-- silence compiler, we either return something valid or abort:
 					create {XPLAIN_LOGINNAME_EXPRESSION} $$
@@ -812,14 +807,9 @@ property_factor
 	| '-' property_name
 		{
 			if attached subject_type then
-				if attached get_object_if_valid_tree ($2) then
+				if attached get_object_if_valid_tree ($2) and then attached last_object_in_tree as last_object then
 					-- the last object in the tree knows what expression to build here
-					if attached last_object_in_tree.create_expression ($2) as e then
-						create {XPLAIN_PREFIX_EXPRESSION} $$.make ("-", e)
-					else
-						-- silence compiler, we either return something valid or abort:
-						create {XPLAIN_LOGINNAME_EXPRESSION} $$
-					end
+					create {XPLAIN_PREFIX_EXPRESSION} $$.make ("-", last_object.create_expression ($2))
 				else
 					-- silence compiler, we either return something valid or abort:
 					create {XPLAIN_LOGINNAME_EXPRESSION} $$
@@ -945,7 +935,7 @@ initialization: type_name
 	XPLAIN_ITS attribute_name '=' init_specification
 		{
 			if attached subject_type as t and then attached t.find_attribute ($4) as myattribute then
-				if myattribute.init /= Void then
+				if attached myattribute.init then
 					report_warning (format ("Attribute `$s' already has an initialization expression.", <<myattribute.full_name>>))
 				end
 				if attached $6 as s then
@@ -1133,24 +1123,18 @@ definition_attribute: '[' attribute ']'
 attribute
 	: name
 	{
+		create $$.make (Void, $1)
 		if attached get_known_base_or_type ($1) as t then
-			create $$.make (Void, $1)
 			-- when self reference, it is valid to be Void
 			$$.set_object (t)
-		else
-			-- silence compiler:
-			create $$.make (Void, "BAD")
 		end
 	}
 	| role '_' name
 	{
+		create $$.make ($1, $3)
 		if attached get_known_base_or_type ($3) as t then
-			create $$.make ($1, $3)
 			-- when self reference, it is valid to be Void
 			$$.set_object (t)
-		else
-			-- silence compiler:
-			create $$.make (Void, "BAD")
 		end
 	}
 	;
@@ -1406,18 +1390,22 @@ optional_simple_attribute_list
 simple_attribute_list
 	: attribute
 		{
-			if attached subject_type.find_attribute ($1) as myattribute then
-			  create $$.make ($1, Void)
-			else
-				error_unknown_attribute (subject_type.name, $1)
+			check attached subject_type as t then
+				if attached t.find_attribute ($1) then
+					create $$.make ($1, Void)
+				else
+					error_unknown_attribute (t.name, $1)
+				end
 			end
 		}
 	| attribute ',' simple_attribute_list
 		{
-			if attached subject_type.find_attribute ($1) as  myattribute then
-				create $$.make ($1, $3)
-			else
-				error_unknown_attribute (subject_type.name, $1)
+			check attached subject_type as t then
+				if attached t.find_attribute ($1) then
+					create $$.make ($1, $3)
+				else
+					error_unknown_attribute (t.name, $1)
+				end
 			end
 		}
 	| attribute error
@@ -1456,23 +1444,21 @@ insert
 	: XPLAIN_INSERT subject XPLAIN_ITS assignment_list
 		{
 			write_pending_statement
-			mytype := $2.type
-			if attached $4 as al then
+			if attached $2 as subject and then attached subject.type as mytype and then attached $4 as al then
 				warn_attributes_with_inits (al)
-				if not attached $2.identification then
+				if not attached subject.identification as identification then
 					report_error ("Identification expected.")
 					abort
 				elseif
 					mytype.representation.is_integer and then
-					$2.identification.is_constant and then
-					not $2.identification.sqlvalue (sqlgenerator).is_integer
-				then
-					report_error (format ("Primary key %"$s%" is not an integer.", <<$2.identification.sqlvalue (sqlgenerator)>>))
+					identification.is_constant and then
+					not identification.sqlvalue (sqlgenerator).is_integer then
+					report_error (format ("Primary key %"$s%" is not an integer.", <<identification.sqlvalue (sqlgenerator)>>))
 					abort
-				elseif attached mytype as t then
-					create {XPLAIN_INSERT_STATEMENT} $$.make (t, $2.identification, al)
+				else
+					create {XPLAIN_INSERT_STATEMENT} $$.make (mytype, identification, al)
 					if immediate_output_mode then
-						sqlgenerator.write_insert (t, $2.identification, al)
+						sqlgenerator.write_insert (mytype, identification, al)
 					end
 				end
 			end
@@ -1481,22 +1467,23 @@ insert
 	| XPLAIN_INSERT subject '*' XPLAIN_ITS assignment_list
 		{
 			write_pending_statement
-			mytype := $2.type
-			if not sqlgenerator.CreateAutoPrimaryKey
-			then
-				-- Can't abort as it might be output for a dialect that
-				-- doesn't support auto primary keys.
-				report_warning ("auto primary key support disabled, but insert with '*' as primary key specified.")
-			elseif
-				not mytype.representation.is_integer
-			then
-				report_error ("Auto-primary keys on character instance identification not supported.")
-				abort
-			end
-			if attached mytype as t and attached $5 as al then
-				create {XPLAIN_INSERT_STATEMENT} $$.make (t, Void, al)
-				if immediate_output_mode then
-					sqlgenerator.write_insert (t, Void, al)
+			if attached $2 as subject and then attached subject.type as mytype then
+				if not sqlgenerator.CreateAutoPrimaryKey
+				then
+					-- Can't abort as it might be output for a dialect that
+					-- doesn't support auto primary keys.
+					report_warning ("auto primary key support disabled, but insert with '*' as primary key specified.")
+				elseif
+					not mytype.representation.is_integer
+				then
+					report_error ("Auto-primary keys on character instance identification not supported.")
+					abort
+				end
+				if attached mytype as t and attached $5 as al then
+					create {XPLAIN_INSERT_STATEMENT} $$.make (t, Void, al)
+					if immediate_output_mode then
+						sqlgenerator.write_insert (t, Void, al)
+					end
 				end
 			end
 			subject_type := Void
@@ -1685,19 +1672,23 @@ update
 attribute_name: name
 	{
 		create {XPLAIN_ATTRIBUTE_NAME} $$.make (Void, $1)
-		if attached subject_type.find_attribute ($$) as myattribute then
-			$$.set_attribute (myattribute)
-		else
-			error_unknown_attribute (subject_type.name, $$)
+		if attached subject_type as t then
+			if attached t.find_attribute ($$) as myattribute then
+				$$.set_attribute (myattribute)
+			else
+				error_unknown_attribute (t.name, $$)
+			end
 		end
 	}
 	| role '_' name
 	{
 		create {XPLAIN_ATTRIBUTE_NAME} $$.make ($1, $3)
-		if attached subject_type.find_attribute ($$) as myattribute then
-			$$.set_attribute (myattribute)
-		else
-			error_unknown_attribute (subject_type.name, $$)
+		if attached subject_type as t then
+			if attached t.find_attribute ($$) as myattribute then
+				$$.set_attribute (myattribute)
+			else
+				error_unknown_attribute (t.name, $$)
+			end
 		end
 	}
 	;
@@ -1735,12 +1726,11 @@ value_definition
 		}
 	| XPLAIN_INSERTED type_name
 		{
-			mytype := get_known_type ($2)
 			if not sqlgenerator.CreateAutoPrimaryKey then
 				report_error ("Auto primary key support disabled or not supported. Cannot retrieve auto-generated primary key.")
 			end
-			if attached mytype as t then
-				create {XPLAIN_LAST_AUTO_PK_EXPRESSION} $$.make (t)
+			if attached get_known_type ($2) as mytype then
+				create {XPLAIN_LAST_AUTO_PK_EXPRESSION} $$.make (mytype)
 			else
 				$$ := silence_compiler_expression
 			end
@@ -1903,11 +1893,13 @@ extension_definition
 		{ create {XPLAIN_EXTENSION_EXPRESSION_EXPRESSION} $$.make ($2) }
 	| selection_with_set_function XPLAIN_PER property_name
 	{ -- check per attribute tree for validness
-		if attached get_object_if_valid_tree ($3) and attached $1 as sf then
-			if $3.last.item.object = extend_type then
+		if attached get_object_if_valid_tree ($3) and attached $1 as sf and then attached $3.last as last then
+			if last.item.object = extend_type then
 				create {XPLAIN_EXTENSION_FUNCTION_EXPRESSION} $$.make (sf, $3)
 			else
-				report_error ("Error in per clause. The given type is `" + $3.last.item.object.name + "', while the expected type is `" + extend_type.name + "'. Make sure the per property ends in the same type that is being extended.")
+				check attached last.item.object as object and attached extend_type as et then
+					report_error ("Error in per clause. The given type is `" + object.name + "', while the expected type is `" + et.name + "'. Make sure the per property ends in the same type that is being extended.")
+				end
 				abort
 			end
 
@@ -2023,8 +2015,10 @@ selection_list
 	: -- empty
 	| XPLAIN_ITS property_list
 		{
-			$$ := $2
-			$$.give_column_names (2) -- first column is always the instance id
+			if attached $2 as property_list then
+				$$ := property_list
+				property_list.give_column_names (2) -- first column is always the instance id
+			end
 		}
 	;
 
@@ -2249,7 +2243,6 @@ feature {NONE} -- dummy variables to store created objects in
 feature {NONE} -- local variables, do not survive outside a code block!
 
 	mybase: detachable XPLAIN_BASE
-	mytype: detachable XPLAIN_TYPE
 	myvariable: detachable XPLAIN_VARIABLE
 	myindex: detachable XPLAIN_INDEX
 	current_type_name: detachable STRING
@@ -2431,8 +2424,8 @@ feature {NONE} -- pending statements
 			if attached pending_type as t then
 				if not use_mode then
 					sqlgenerator.write_type (t)
-					if mwgenerator /= Void then
-						mwgenerator.dump_type (t, sqlgenerator)
+					if attached mwgenerator as g then
+						g.dump_type (t, sqlgenerator)
 					end
 				end
 				pending_type := Void
@@ -2500,95 +2493,95 @@ feature {NONE} -- Checks for validness of parsed code
 			-- Also augment tree with type information.
 		require
 			first_not_void: first /= Void
-			subject_type_set: subject_type /= Void
+			subject_type_set: attached subject_type
 		local
 			my_attribute: detachable XPLAIN_ATTRIBUTE
 			node: detachable XPLAIN_ATTRIBUTE_NAME_NODE
-			preceding_type: detachable XPLAIN_TYPE
+			preceding_type: XPLAIN_TYPE
 			atype: detachable XPLAIN_ABSTRACT_TYPE
 			valid_attribute: BOOLEAN
 			msg: STRING
 		do
 			last_object_in_tree := Void
-			if first.next /= Void then
-				-- Something like a its b its c, should all be attributes.
-				from
-					node := first
-					if attached subject_type as t then
-						preceding_type := t
-					end
-					valid_attribute := True
-				until
-					node = Void or
-					not valid_attribute
-				loop
-					if attached preceding_type as t then
-						my_attribute := t.find_attribute (node.item)
-					end
-					if attached my_attribute then
+			check attached subject_type as my_subject_type then
+				if attached first.next then
+					-- Something like a its b its c, should all be attributes.
+					from
+						node := first
+						preceding_type := my_subject_type
 						valid_attribute := True
-					end
-					if valid_attribute and attached my_attribute as a then
-						node.item.set_attribute (a)
-						atype := a.abstracttype
-						--node.item.set_object (atype)
-						if node.next /= Void then
-							if attached {XPLAIN_TYPE} atype as t then
-								preceding_type := t
-							else
-								-- we've a base here (but missed extension
-								-- because it's a type, need to fix this)
-								valid_attribute := False
-								report_error ("A base cannot have attributes. Base name is: " + node.item.name)
-								abort
-							end
+					until
+						node = Void or
+						not valid_attribute
+					loop
+						my_attribute := preceding_type.find_attribute (node.item)
+						if attached my_attribute then
+							valid_attribute := True
 						end
-					else -- type doesn't have this attribute
-						valid_attribute := False
-						report_error ("Type " + preceding_type.name + " doesn't have the attribute: " + node.item.name)
-						abort
-					end
-					node := node.next
-				end
-				if valid_attribute then
-					last_object_in_tree := atype
-					Result := subject_type.find_attribute (first.item).abstracttype
-				end
-			else
-				-- Can be value/variable or attribute.
-				-- Check attribute first.
-				my_attribute := subject_type.find_attribute (first.item)
-				if my_attribute = Void then
-					Result := universe.find_object (first.item.name)
-					if Result = Void then
-						report_error ( format("`$s' is not an attribute of type `$s', nor a value or constant.", <<first.item.name, subject_type.name>>))
-						abort
-					else
-						-- check if value/variable
-						if attached {XPLAIN_VALUE} Result as value and then attached {XPLAIN_VARIABLE} Result as variable then
-							create msg.make (128)
-							msg.append_string ("base/type '")
-							if first.item.role /= Void then
-								msg.append_string (first.item.role)
-								msg.append_string ("_")
+						if valid_attribute and attached my_attribute as a then
+							node.item.set_attribute (a)
+							atype := a.abstracttype
+							--node.item.set_object (atype)
+							if node.next /= Void then
+								if attached {XPLAIN_TYPE} atype as t then
+									preceding_type := t
+								else
+									-- we've a base here (but missed extension
+									-- because it's a type, need to fix this)
+									valid_attribute := False
+									report_error ("A base cannot have attributes. Base name is: " + node.item.name)
+									abort
+								end
 							end
-							msg.append_string (first.item.name)
-							msg.append_string ("' is not an attribute of '")
-							msg.append_string (subject_type.name)
-							msg.append_string ("'%N")
-							report_error (msg)
+						else -- type doesn't have this attribute
+							valid_attribute := False
+							report_error ("Type " + preceding_type.name + " doesn't have the attribute: " + node.item.name)
 							abort
-							Result := Void
-						else
-							first.item.set_object (Result)
+						end
+						node := node.next
+					end
+					if valid_attribute then
+						last_object_in_tree := atype
+						check attached my_subject_type.find_attribute (first.item) as a then
+							Result := a.abstracttype
 						end
 					end
 				else
-					first.item.set_attribute (my_attribute)
-					Result := my_attribute.abstracttype
-				end
-				if Result /= Void then
-					last_object_in_tree := Result
+					-- Can be value/variable or attribute.
+					-- Check attribute first.
+					my_attribute := my_subject_type.find_attribute (first.item)
+					if my_attribute = Void then
+						Result := universe.find_object (first.item.name)
+						if Result = Void then
+							report_error ( format("`$s' is not an attribute of type `$s', nor a value or constant.", <<first.item.name, my_subject_type.name>>))
+							abort
+						else
+							-- check if value/variable
+							if attached {XPLAIN_VALUE} Result as value and then attached {XPLAIN_VARIABLE} Result as variable then
+								create msg.make (128)
+								msg.append_string ("base/type '")
+								if first.item.role /= Void then
+									msg.append_string (first.item.role)
+									msg.append_string ("_")
+								end
+								msg.append_string (first.item.name)
+								msg.append_string ("' is not an attribute of '")
+								msg.append_string (my_subject_type.name)
+								msg.append_string ("'%N")
+								report_error (msg)
+								abort
+								Result := Void
+							else
+								first.item.set_object (Result)
+							end
+						end
+					else
+						first.item.set_attribute (my_attribute)
+						Result := my_attribute.abstracttype
+					end
+					if Result /= Void then
+						last_object_in_tree := Result
+					end
 				end
 			end
 		ensure
@@ -2630,8 +2623,9 @@ feature {NONE} -- Checks
 				node = Void
 			loop
 				if
-					node.item.attribute_name.type_attribute.init /= Void and then
-					not node.item.attribute_name.type_attribute.is_init_default
+					attached node.item.attribute_name.type_attribute as type_attribute and then
+					attached type_attribute.init and then
+					not type_attribute.is_init_default
 				then
 					report_error (format ("Attribute $s has an init expression. Assignment specified in insert will be ignored.%N", <<node.item.attribute_name.full_name>>))
 				end

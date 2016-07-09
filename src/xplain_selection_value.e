@@ -31,7 +31,7 @@ feature -- Status
 		do
 			Result :=
 				precursor (a_parameter) or else
-				(property /= Void and then property.uses_parameter (a_parameter))
+				(attached property as p and then p.uses_parameter (a_parameter))
 		end
 
 
@@ -41,8 +41,8 @@ feature --  Joins
 			-- Retrieval statement can make sure the join_list is up to
 			-- date.
 		do
-			if property /= Void then
-				property.add_to_join (sqlgenerator, join_list)
+			if attached property as p then
+				p.add_to_join (sqlgenerator, join_list)
 			end
 			precursor (sqlgenerator, join_list)
 		end

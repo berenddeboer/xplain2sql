@@ -35,10 +35,10 @@ feature -- Status
 			-- Is parameter `a_parameter' used by this statement?
 		do
 			Result :=
-				(subject.identification /= Void and then
-				 subject.identification.uses_parameter (a_parameter)) or else
-				(predicate /= Void and then
-				 predicate.uses_parameter (a_parameter))
+				(attached subject.identification as id and then
+				 id.uses_parameter (a_parameter)) or else
+				(attached predicate as p and then
+				 p.uses_parameter (a_parameter))
 		end
 
 
@@ -61,9 +61,9 @@ feature -- SQL generation
 			-- join_list is created starting with `type'
 		do
 			-- add where clause
-			if predicate /= Void then
+			if attached predicate as p then
 				a_join_list.enable_existential_join_optimisation
-				predicate.add_to_join (sqlgenerator, a_join_list)
+				p.add_to_join (sqlgenerator, a_join_list)
 				a_join_list.disable_existential_join_optimisation
 			end
 		end

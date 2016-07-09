@@ -45,8 +45,8 @@ feature -- Status
 	uses_its: BOOLEAN
 			-- Does expression has an its list somewhere?
 		do
-			if select_value.property /= Void then
-				Result := select_value.property.uses_its
+			if attached select_value.property as property then
+				Result := property.uses_its
 			end
 		end
 
@@ -65,7 +65,9 @@ feature -- SQL output
 			-- for example. The XML_GENERATOR uses it to give clients
 			-- some idea what the column name of a select is going to be.
 		do
-			Result := select_value.property.column_name
+			if attached select_value.property as property then
+				Result := property.column_name
+			end
 		end
 
 	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION

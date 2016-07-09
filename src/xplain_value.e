@@ -54,10 +54,10 @@ feature -- Status
 
 feature -- SQL
 
-	create_expression (node: XPLAIN_ATTRIBUTE_NAME_NODE): detachable XPLAIN_EXPRESSION
+	create_expression (node: XPLAIN_ATTRIBUTE_NAME_NODE): XPLAIN_EXPRESSION
 			-- Return suitable expression for variable.
 		do
-			if attached node.item.value as v then
+			check attached node.item.value as v then
 				create {XPLAIN_VALUE_EXPRESSION} Result.make (v)
 			end
 		end
