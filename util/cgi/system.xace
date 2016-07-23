@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<system name="cgi_xplain2sql">
+	<description>
+		system:      "CGI interface for xplain2sql"
+		author:      "Berend de Boer [berend@pobox.com]"
+		copyright:   "Copyright (c) 2002, Berend de Boer"
+		license:     "Eiffel Forum Freeware License v2 (see forum.txt)"
+	</description>
+
+	<root class="CGI_XPLAIN2SQL" creation="make_no_rescue"/>
+<!-- 	<root class="CGI_XPLAIN2SQL" creation="make"/> -->
+
+	<option unless="${DEBUG}">
+		<option name="assertion" value="none"/>
+		<option name="garbage_collector" value="none"/>
+		<option name="finalize" value="true"/>
+	</option>
+	<option if="${DEBUG}">
+		<option name="split" value="true"/>
+		<option name="debug" value="false"/>
+		<option name="assertion" value="require"/>
+		<option name="garbage_collector" value="none"/>
+		<option name="finalize" value="false"/>
+	</option>
+
+  <cluster name="asp" location="."/>
+
+	<mount location="${EPOSIX}/src/library.xace"/>
+	<mount location="${GOBO}/library/library.xace"/>
+  <mount location="${GOBO}/library/kernel.xace"/>
+
+</system>

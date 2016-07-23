@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<project name="cgi_xplain2sql.cgi" default="help">
+
+	<description>
+		system:      "CGI interface for xplain2sql"
+		author:      "Berend de Boer [berend@pobox.com]"
+		copyright:   "Copyright (c) 2002, Berend de Boer"
+		license:     "Eiffel Forum Freeware License v1 (see forum.txt)"
+	</description>
+
+	<inherit>
+		<parent location="${GOBO}/misc/eiffel.eant">
+			<redefine target="init_system"/>
+		</parent>
+	</inherit>
+
+
+<!-- Implementation -->
+	<target name="init_system">
+		<set name="system_dir" value="."/>
+	</target>
+
+</project>

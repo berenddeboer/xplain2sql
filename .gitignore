@@ -4,8 +4,8 @@ src/xplain2sql
 src/xplain_parser.e
 src/xplain_scanner.e
 src/xplain_tokens.e
-src/compile_ge.xace
-src/compile_ise.ecf
+compile_ge.xace
+compile_ise.ecf
 *.err
 *.out
 doc/*.log
@@ -14,6 +14,7 @@ builddir
 samples/test2.ddl
 *.tar.gz
 *.zip
-src/EIFGENs
+EIFGENs
 samples/*.tmp
 samples/*.sql
+util/cgi/cgi_xplain2sql
