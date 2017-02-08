@@ -17,11 +17,6 @@ inherit
 			make
 		end
 
-	-- POSIX_FILE_SYSTEM
-	-- 	export
-	-- 		{NONE} all
-	-- 	end
-
 	POSIX_CURRENT_PROCESS
 		select
 			stdin,
