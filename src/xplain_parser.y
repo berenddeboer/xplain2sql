@@ -789,11 +789,12 @@ property_factor
 			-- we have something here that can be an
 			-- attribute/extension/value/variable.
 			-- let's get the correct object associated with this tree
-			if attached subject_type then
+			if attached subject_type as s then
 				if attached get_object_if_valid_tree ($1) and then attached last_object_in_tree as last_object then
 					-- the last object in the tree knows what expression to build here
 					$$ := last_object.create_expression ($1)
 				else
+					abort
 					-- silence compiler, we either return something valid or abort:
 					create {XPLAIN_LOGINNAME_EXPRESSION} $$
 				end
@@ -2343,11 +2344,11 @@ feature -- Statement generation
 			create Result.make (myprocedure)
 		end
 
-	new_value_statement (an_sqlgenerator: SQL_GENERATOR; a_name: STRING; a_expression: XPLAIN_EXPRESSION): XPLAIN_VALUE_STATEMENT
+	new_value_statement (an_sqlgenerator: SQL_GENERATOR; a_name: STRING; an_expression: XPLAIN_EXPRESSION): XPLAIN_VALUE_STATEMENT
 		local
 			myvalue: XPLAIN_VALUE
 		do
-			create myvalue.make (an_sqlgenerator, a_name, a_expression)
+			create myvalue.make (an_sqlgenerator, a_name, an_expression)
 			create Result.make (myvalue)
 		end
 
@@ -2550,36 +2551,39 @@ feature {NONE} -- Checks for validness of parsed code
 					-- Can be value/variable or attribute.
 					-- Check attribute first.
 					my_attribute := my_subject_type.find_attribute (first.item)
-					if my_attribute = Void then
-						Result := universe.find_object (first.item.name)
-						if Result = Void then
-							report_error ( format("`$s' is not an attribute of type `$s', nor a value or constant.", <<first.item.name, my_subject_type.name>>))
-							abort
-						else
-							-- check if value/variable
-							if attached {XPLAIN_VALUE} Result as value and then attached {XPLAIN_VARIABLE} Result as variable then
-								create msg.make (128)
-								msg.append_string ("base/type '")
-								if first.item.role /= Void then
-									msg.append_string (first.item.role)
-									msg.append_string ("_")
-								end
-								msg.append_string (first.item.name)
-								msg.append_string ("' is not an attribute of '")
-								msg.append_string (my_subject_type.name)
-								msg.append_string ("'%N")
-								report_error (msg)
-								abort
-								Result := Void
-							else
-								first.item.set_object (Result)
-							end
-						end
-					else
+					if attached my_attribute then
 						first.item.set_attribute (my_attribute)
 						Result := my_attribute.abstracttype
+					else
+						Result := universe.find_object (first.item.name)
+						if attached {XPLAIN_VALUE} Result as value then
+							-- variable or constants are OK
+							-- I probably don't detect cases
+							first.item.set_object (value)
+						elseif attached {XPLAIN_VARIABLE} Result as variable then
+							first.item.set_object (variable)
+						elseif attached Result then
+							create msg.make (128)
+							msg.append_string ("base/type '")
+							if first.item.role /= Void then
+								msg.append_string (first.item.role)
+								msg.append_string ("_")
+							end
+							msg.append_string (first.item.name)
+							msg.append_string ("' is not an attribute of '")
+							msg.append_string (my_subject_type.name)
+							msg.append_string ("'%N")
+							report_error (msg)
+							abort
+							Result := Void
+						else
+							-- Doesn't exist in universe at all
+							report_error ( format("`$s' is not an attribute of type `$s', nor a value or constant.", <<first.item.full_name, my_subject_type.name>>))
+							abort
+							Result := Void
+						end
 					end
-					if Result /= Void then
+					if attached Result then
 						last_object_in_tree := Result
 					end
 				end
