@@ -144,9 +144,11 @@ feature -- SQL specifics
 			-- present as join.
 		do
 				check
-					valid_extension: extension /= Void
+					valid_extension: attached extension
 				end
-			join_list.extend (sqlgenerator, anode)
+			if attached anode as a then
+				join_list.extend (sqlgenerator, a)
+			end
 		end
 
 	set_extension (

@@ -3525,9 +3525,9 @@ feature -- Return sql code
 			create Result.make (512)
 			Result.append_string (once "( select ")
 			check attached update_type as ut then
-				if attached an_its_list.next and then attached an_its_list.last as last then
+				if attached an_its_list.next as n and then attached an_its_list.last as last then
 					create join_list.make (an_its_list.item.type)
-					join_list.extend (Current, an_its_list.next)
+					join_list.extend (Current, n)
 					join_list.finalize (Current)
 						check attached last.prefix_table as p then
 					Result.append_string (quote_identifier (p))

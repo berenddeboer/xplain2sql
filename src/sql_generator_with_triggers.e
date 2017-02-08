@@ -161,9 +161,7 @@ sql_operator: STRING
 		do
 			create Result.make (128)
 			-- try to minimize the need to create singleton selects
-			if expression.first.next = Void then
-				Result.append_string (new_row_prefix + expression.first.item.q_sql_select_name (Current))
-			else
+			if attached expression.first.next as n then
 				-- Result := sql_singleton_select (expression)
 				-- create a (select .. from .. where ..)
 
@@ -171,7 +169,7 @@ sql_operator: STRING
 				-- attribute and doesn't join from `type' because its rows
 				-- are not yet visible.
 				create join_list.make (expression.first.item.type)
-				join_list.extend (Current, expression.first.next)
+				join_list.extend (Current, n)
 				join_list.finalize (Current)
 				Result.append_string ("(select ")
 				Result.append_string (expression.sqlvalue (Current))
@@ -199,6 +197,8 @@ sql_operator: STRING
 				Result.append_string (new_row_prefix)
 				Result.append_string (expression.first.item.q_sql_select_name (Current))
 				Result.append_string ("))")
+			else
+				Result.append_string (new_row_prefix + expression.first.item.q_sql_select_name (Current))
 			end
 		ensure
 			result_not_empty: Result /= Void and then not Result.is_empty

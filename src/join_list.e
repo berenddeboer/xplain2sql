@@ -203,7 +203,7 @@ feature -- Main commands
 
 	extend (
 			sqlgenerator: SQL_GENERATOR
-			attribute_list: detachable XPLAIN_ATTRIBUTE_NAME_NODE)
+			attribute_list: XPLAIN_ATTRIBUTE_NAME_NODE)
 			-- Add more joins if somewhere in attribute_list a chain is
 			-- not in the joins already present.
 		require
@@ -220,7 +220,7 @@ feature -- Main commands
 				print (once "  root%N")
 				indent := 4
 			end
-			if attribute_list.next = Void then
+			if not attached attribute_list.next then
 				debug ("xplain2sql_join")
 					print (once "    " + attribute_list.item.full_name + " (immediate attribute)%N")
 				end

@@ -34,9 +34,6 @@ feature {NONE} -- Initialization
 		do
 			make_abstract_type (aname, arepresentation)
 			representation := arepresentation
-			if attached {XPLAIN_IDENTIFICATION_RESTRICTION} representation.domain_restriction as id_restriction then
-				id_restriction.set_owner (Current)
-			end
 
 			create  attributes.make
 			-- add `a_attributes' to `attributes'
@@ -52,6 +49,10 @@ feature {NONE} -- Initialization
 				end
 				attributes.put_last (node.item)
 				node := node.next
+			end
+
+			if attached {XPLAIN_IDENTIFICATION_RESTRICTION} representation.domain_restriction as id_restriction then
+				id_restriction.set_owner (Current)
 			end
 		end
 

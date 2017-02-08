@@ -35,9 +35,14 @@ feature -- Access
 			-- What's the xplain representation for this function?
 		do
 				check
-					need_expression: expression /= Void
+					need_expression: attached expression
 				end
-			Result := expression.representation (sqlgenerator)
+			if attached expression as e then
+				Result := e.representation (sqlgenerator)
+			else
+				-- silence compiler
+				create {XPLAIN_I_REPRESENTATION} Result.make (1)
+			end
 		end
 
 	sqlextenddefault (sqlgenerator: SQL_GENERATOR; expression: detachable XPLAIN_EXPRESSION): STRING

@@ -157,7 +157,7 @@ feature -- SQL specifics
 				-- we always have data, but just emit the value of the
 				-- assertion.
 				-- In case sqlgenerator doesn't have a coalesce, we won't bother
-				if sqlgenerator.SQLCoalesce /= Void then
+				if not sqlgenerator.SQLCoalesce.is_empty then
 					Result := sqlgenerator.SQLCoalesce + once "(" + Result + once ", " + assertion.expression.sqlvalue (sqlgenerator) + once ")"
 				end
 			end
