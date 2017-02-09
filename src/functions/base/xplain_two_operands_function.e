@@ -3,8 +3,6 @@ note
 	description: "Xplain expression that is a function with two operands. This class is a base class for the actual functions like '+' or 'combine'"
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2004, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #5 $"
 
 
 deferred class
