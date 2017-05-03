@@ -83,7 +83,6 @@ feature -- Stored procedure support
 	sp_result_parameter (a_procedure: detachable XPLAIN_PROCEDURE)
 			-- Emit the result parameter of the stored procedure, if
 			-- applicable.
-			-- For example DB/2/Oracle needs to know if rows are returned.
 		do
 			if a_procedure /= Void then
 				if a_procedure.is_postgresql_trigger then
