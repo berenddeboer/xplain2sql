@@ -9,6 +9,8 @@
 	</description>
 
 	<root class="XPLAIN2SQL" creation="make"/>
+	<option name="syntax" value="standard"/>
+  <option name="void_safety" value="complete"/>
 
 	<option unless="${DEBUG}">
 		<option name="assertion" value="all"/>
