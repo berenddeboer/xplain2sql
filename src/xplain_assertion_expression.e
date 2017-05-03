@@ -157,9 +157,12 @@ feature -- SQL specifics
 				-- we always have data, but just emit the value of the
 				-- assertion.
 				-- In case sqlgenerator doesn't have a coalesce, we won't bother
-				if not sqlgenerator.SQLCoalesce.is_empty then
-					Result := sqlgenerator.SQLCoalesce + once "(" + Result + once ", " + assertion.expression.sqlvalue (sqlgenerator) + once ")"
-				end
+				-- 2017-02-08: disabled this, as we create incorrect sql
+				-- when an assertion uses another assertion which depends on.
+				-- an attribute derived via an its.
+				-- if not sqlgenerator.SQLCoalesce.is_empty then
+				--	Result := sqlgenerator.SQLCoalesce + once "(" + Result + once ", " + assertion.expression.sqlvalue (sqlgenerator) + once ")"
+				-- end
 			end
 		end
 
