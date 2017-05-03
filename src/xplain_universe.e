@@ -44,9 +44,10 @@ feature -- Commands
 			object_not_void: object /= Void
 		do
 			if attached find_object (object.name) as o and then o.may_be_redefined then
-				std.error.put_string ("object already created: ")
-				std.error.put_string (object.name)
-				std.error.put_character ('%N')
+				-- Don't bother with saying a value is set again.
+				-- std.error.put_string ("object already created: ")
+				-- std.error.put_string (object.name)
+				-- std.error.put_character ('%N')
 			else
 				objects.force (object, object.name)
 			end
