@@ -98,13 +98,8 @@ feature -- SQL code
 
 	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
 			-- The representation of left operand. Maybe should be
-			-- improved to infer better? If you add int and double, should
-			-- return double I think.
-			-- Also I think we should return a type that is equal to the
-			-- types involved. A division is always an integer division
-			-- if both types are integer. Cast a type to a double to get
-			-- a double result. Anyway, this is what PostgreSQL seems to
-			-- be doing.
+			-- improved to infer better? Did work for this in
+			-- XPLAIN_INFIX_EXPRESSION.
 		do
 			Result := left.representation (sqlgenerator)
 		end

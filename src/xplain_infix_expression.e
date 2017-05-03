@@ -3,8 +3,6 @@ note
 	description: "Use for infix expressions, with 2 operands"
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #9 $"
 
 class
 
@@ -18,6 +16,7 @@ inherit
 			make as make_two_operands,
 			name as operator
 		redefine
+			representation,
 			sqlvalue_as_wildcard
 		end
 
@@ -51,6 +50,30 @@ feature -- Access
 
 
 feature -- SQL code
+
+	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION
+			-- Tried to come up with some rules of thumb to make sure we
+			-- generate the correct type.
+		local
+			leftr,
+			rightr: XPLAIN_REPRESENTATION
+		do
+			if operator ~ "/" then
+				Result := sqlgenerator.value_representation_float
+			else
+				leftr := left.representation (sqlgenerator)
+				if attached {XPLAIN_I_REPRESENTATION} leftr then
+					rightr := right.representation (sqlgenerator)
+					if not attached {XPLAIN_I_REPRESENTATION} rightr then
+						Result := rightr
+					else
+						Result := leftr
+					end
+				else
+					Result := leftr
+				end
+			end
+		end
 
 	sqloperator: STRING
 			-- The SQL translation for `operator'
