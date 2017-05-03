@@ -16,6 +16,8 @@ CREATED_SOURCES=xplain_scanner.e xplain_parser.e
 E_SOURCES=$(shell find . -name "*.e")
 SOURCES=system.xace build.eant $(CREATED_SOURCES) $(E_SOURCES)
 
+W_code=${GOBO_BUILD_PREFIX}/EIFGENs/xplain2sql/W_code
+
 # binary
 # Windows platform:
 #BINARIES=xplain2sql.exe
@@ -27,7 +29,9 @@ all: build
 build: $(BINARY)
 
 $(BINARY): $(SOURCES)
-	geant compile_debug_$(GOBO_EIFFEL)
+	ec -project_path ${GOBO_BUILD_PREFIX} -config xplain2sql.ecf
+	cd ${W_code} && finish_freezing
+	cp -p ${W_code}/xplain2sql ${W_code}/xplain2sql.melted .
 	rm -f $(SAMPLEFILES) $(SAMPLEFILE).sql
 
 TAGS: $(SOURCES)
@@ -80,7 +84,7 @@ SAMPLEFILE=$(SAMPLEDIR)$(SAMPLENAME)
 #SAMPLEFILE=~/src/business-process/src/Xplain/call-center
 #SAMPLEFILE=~/src/automatem/nakedbus/tools/Xplain/nakedbus_prices
 
-SQLOPTIONS=-nosp
+SQLOPTIONS=
 SQLDIALECT=-pgsql
 #SQLOPTIONS=-nosp -pkformat '$$s_id' -sequenceformat '$$s_seq'
 

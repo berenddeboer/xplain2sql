@@ -347,6 +347,9 @@ value val31 = false.
 value valu32 = val30 and val31.
 value valu33 = val30 or val31.
 
+# select type instead of base
+value val34 = some t3 "1" its t1.
+
 # test extend
 extend t1 with mytest = 1.
 get t1 its mytest.
@@ -504,7 +507,11 @@ assert t20 its assert3 = t1 its i8 * 2.
 assert t20 its assert4 (*..*) = i8 * i9 * t1 its i8.
 assert t20 its assert5 = 1.
 assert t20 its assert6 = assert5 * 2.
+assert t20 its assert7 = i8 / 2.
 assert t1 its assert5 = count t20 per t1.
+
+assert t3 its b1 = t1 its a1.
+assert t3 its b2 = b1.
 
 
 # test includes
@@ -718,6 +725,15 @@ end.
 procedure testnil =
 
 get nil t space.
+
+end.
+
+
+# postgresql: properly should create a float output as type, not an int output.
+
+procedure correcttype =
+
+get t20 its assert7.
 
 end.
 

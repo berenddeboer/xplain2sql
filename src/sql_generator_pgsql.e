@@ -517,7 +517,7 @@ feature -- Stored procedure support
 			-- appears in the header, and hopefully as it is known to
 			-- clients.
 		do
-			Result := no_space_identifier ("a_" + name)
+			Result := quote_identifier (no_space_identifier ("a_" + name))
 		end
 
 	sp_delete_declaration (
