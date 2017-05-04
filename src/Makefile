@@ -17,6 +17,7 @@ E_SOURCES=$(shell find . -name "*.e")
 SOURCES=system.xace build.eant $(CREATED_SOURCES) $(E_SOURCES)
 
 W_code=${GOBO_BUILD_PREFIX}/EIFGENs/xplain2sql/W_code
+F_code=${GOBO_BUILD_PREFIX}/EIFGENs/xplain2sql/F_code
 
 # binary
 # Windows platform:
@@ -33,6 +34,11 @@ $(BINARY): $(SOURCES)
 	cd ${W_code} && finish_freezing
 	cp -p ${W_code}/xplain2sql ${W_code}/xplain2sql.melted .
 	rm -f $(SAMPLEFILES) $(SAMPLEFILE).sql
+
+final_binary: $(SOURCES)
+	ec -project_path ${GOBO_BUILD_PREFIX} -config xplain2sql.ecf -finalize
+	cd ${F_code} && finish_freezing
+	cp -p ${F_code}/xplain2sql .
 
 TAGS: $(SOURCES)
 	ctags -e *.e
