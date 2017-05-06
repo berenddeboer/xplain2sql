@@ -189,7 +189,9 @@ feature -- creation
 					create {SQL_GENERATOR_MYSQL322} sqlgenerator.make
 				elseif equal (arg, "-oracle") or else equal (arg, "-oracle901") then
 					create {SQL_GENERATOR_ORACLE} sqlgenerator.make
-				elseif equal (arg, "-pgsql") or else equal (arg, "-pgsql8") or else equal (arg, "-pgsql82") then
+				elseif equal (arg, "-pgsql") or else equal (arg, "-pgsql9") or else equal (arg, "-pgsql95") then
+					create {SQL_GENERATOR_PGSQL_95} sqlgenerator.make
+				elseif equal (arg, "-pgsql8") or else equal (arg, "-pgsql82") then
 					create {SQL_GENERATOR_PGSQL_82} sqlgenerator.make
 				elseif equal (arg, "-pgsql81") then
 					create {SQL_GENERATOR_PGSQL_81} sqlgenerator.make
@@ -329,9 +331,11 @@ feature -- help
 			std.error.put_string ("-pgsql7%N")
 			std.error.put_string ("-pgsql73         output PostgreSQL 7.3%N")
 			std.error.put_string ("-pgsql81         output PostgreSQL 8.1%N")
-			std.error.put_string ("-pgsql%N")
 			std.error.put_string ("-pgsql8%N")
 			std.error.put_string ("-pgsql82         output PostgreSQL 8.2%N")
+			std.error.put_string ("-pgsql%N")
+			std.error.put_string ("-pgsql9%N")
+			std.error.put_string ("-pgsql95         output PostgreSQL 9.5%N")
 			std.error.put_string ("-sqlite%N")
 			std.error.put_string ("-sqlite3         output SQLite 3 SQL%N")
 			std.error.put_string ("-tsql%N")

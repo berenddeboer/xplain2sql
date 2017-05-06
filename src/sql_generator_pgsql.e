@@ -138,9 +138,12 @@ feature -- Auto primary key
 
 feature -- Stored procedures
 
-	NamedParametersSupported: BOOLEAN = False
+	NamedParametersSupported: BOOLEAN
 			-- Can stored procedures use named parameters?
 			-- PostgreSQL does not support them.
+		do
+			Result := False
+		end
 
 	OutputParametersSupported: BOOLEAN = False
 			-- PostgreSQL does not support them.
@@ -750,22 +753,24 @@ feature -- Stored procedure support
 			i: INTEGER
 		do
 			std.output.put_string ("declare%N")
-			-- Emit declarations for parameters
-			from
-				i := 1
-				procedure.parameters.start
-			until
-				procedure.parameters.after
-			loop
-				std.output.put_string (Tab)
-				parameter := procedure.parameters.item_for_iteration
-				std.output.put_string (sp_define_param_name (parameter.sqlcolumnidentifier (Current)))
-				std.output.put_string (" alias for $")
-				std.output.put_string (i.out)
-				std.output.put_string (CommandSeparator)
-				std.output.put_character ('%N')
-				i := i + 1
-				procedure.parameters.forth
+			if not NamedParametersSupported then
+				-- Emit declarations for parameters
+				from
+					i := 1
+					procedure.parameters.start
+				until
+					procedure.parameters.after
+				loop
+					std.output.put_string (Tab)
+					parameter := procedure.parameters.item_for_iteration
+					std.output.put_string (sp_define_param_name (parameter.sqlcolumnidentifier (Current)))
+					std.output.put_string (" alias for $")
+					std.output.put_string (i.out)
+					std.output.put_string (CommandSeparator)
+					std.output.put_character ('%N')
+					i := i + 1
+					procedure.parameters.forth
+				end
 			end
 
 			-- Emit declarations for value statement
