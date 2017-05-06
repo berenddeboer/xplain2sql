@@ -87,10 +87,10 @@ feature -- Stored procedure support
 			if a_procedure /= Void then
 				if a_procedure.is_postgresql_trigger then
 					if a_procedure.returns_rows then
-						std.error.put_line ("ERROR: trigger procedure returns rows")
+						std.error.put_line ("ERROR: trigger procedure returns rows.")
 					end
 					if a_procedure.parameters.count > 0 then
-						std.error.put_line ("ERROR: trigger procedure has parameters")
+						std.error.put_line ("ERROR: trigger procedure has parameters. Use the `new' variable to access the new row and the `old' variable to access the old row.")
 					end
 					std.output.put_string (once " returns trigger")
 				elseif a_procedure.returns_rows then
