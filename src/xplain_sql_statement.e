@@ -4,8 +4,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2002, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #4 $"
 
 class
 
@@ -35,8 +33,8 @@ feature -- Generate output
 	write (a_generator: ABSTRACT_GENERATOR)
 			-- Write output according to this generator.
 		do
-			if sql /= Void then
-				a_generator.write_sql (sql)
+			if attached sql as s then
+				a_generator.write_sql (s)
 			end
 		end
 

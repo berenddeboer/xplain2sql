@@ -738,6 +738,15 @@ get t20 its assert7.
 end.
 
 
+# postgresql: test if we can insert sql into the declare block
+
+procedure user sql {  rec record } =
+
+get t1.
+
+end.
+
+
 # purge procedures
 
 # procedure empty not created on InterBase/Oracle, so purging won't work.

@@ -252,6 +252,7 @@ create
 %type <detachable XPLAIN_PROCEDURE_STATEMENT> procedure
 %type <INTEGER> procedure_kind
 %type <XPLAIN_SQL_STATEMENT> sql
+%type <XPLAIN_SQL_STATEMENT> optional_sql
 %type <detachable XPLAIN_TYPE> type_definition
 %type <detachable XPLAIN_UPDATE_STATEMENT> update
 %type <XPLAIN_VALUE_STATEMENT> value
@@ -2084,14 +2085,17 @@ procedure
 			write_pending_statement
 			procedure_mode := True
 		}
-		name optional_procedure_parameters '='
+		name optional_procedure_parameters optional_sql '='
 		{
 			my_parameters := $4
 		}
 		optional_procedure_statement_list XPLAIN_END
 		{
 			procedure_mode := False
-			$$ := new_procedure_statement ($3, $4, $1, $7)
+			$$ := new_procedure_statement ($3, $4, $1, $8)
+			if not $5.sql.is_empty then
+				$$.procedure.sql_declare.append_string ($5.sql)
+			end
 			universe.add ($$.procedure)
 			if immediate_output_mode then
 				sqlgenerator.write_procedure ($$.procedure)
@@ -2117,6 +2121,13 @@ procedure_parameter_list
 		{ create $$.make ($1, Void) }
 	| attribute ',' procedure_parameter_list
 		{ create $$.make ($1, $3) }
+	;
+
+optional_sql
+	: -- empty
+		{ create {XPLAIN_SQL_STATEMENT} $$.make ("") }
+	| sql
+		{ $$ := $1 }
 	;
 
 optional_procedure_statement_list

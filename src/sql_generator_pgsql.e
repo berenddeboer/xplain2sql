@@ -784,6 +784,12 @@ feature -- Stored procedure support
 				end
 				procedure.statements.forth
 			end
+
+			if not procedure.sql_declare.is_empty then
+				std.output.put_string (procedure.sql_declare)
+				std.output.put_character ('%N')
+			end
+
 			in_user_declaration := False
 
 			-- declation for cursor should be done in descendants

@@ -74,6 +74,7 @@ feature {NONE} -- Initialization
 			recompile := a_procedure_kind = 1
 			is_postgresql_trigger := a_procedure_kind = 2
 			is_path_procedure := a_procedure_kind = 3
+			create sql_declare.make_empty
 		ensure
 			recompile_set: recompile = (a_procedure_kind = 1)
 		end
@@ -212,6 +213,9 @@ feature -- Access
 
 	statements: DS_BILINKED_LIST [XPLAIN_STATEMENT]
 			-- Zero or more Xplain statements.
+
+	sql_declare: STRING
+			-- PostgreSQL only: sql that gets inserted into the declare block
 
 
 feature -- Expression builder support
