@@ -1,7 +1,20 @@
+2017-05-08  Berend de Boer  <berend@pobox.com>
+
+	* !value expression in procedures: values could not freely use
+   	parameters in expressions.
+
+	* constant value assignment: now properly rejects a value being
+	used in an expression. Also a constant cannot be given a new value.
+
+
+2017-05-06  Berend de Boer  <berend@pobox.com>
+
+	* !PostgreSQL: support named parameters.
+
+
 2017-02-10  Berend de Boer  <berend@pobox.com>
 
-	* !No longer warn when a value is set again that "object already
-	created".
+	* !Fix error where we wrongly complained value was set again, but not when a base or type was redefined.
 
 
 2017-02-09  Berend de Boer  <berend@pobox.com>

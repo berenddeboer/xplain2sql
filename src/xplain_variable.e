@@ -26,6 +26,7 @@ feature
 			end
 		end
 
+
 feature -- Names
 
 	sqlname (sqlgenerator: SQL_GENERATOR): STRING
@@ -34,6 +35,7 @@ feature -- Names
 			Result := sqlgenerator.constant_identifier (Current)
 		end
 
+
 feature -- Drop statement
 
 	write_drop (sqlgenerator: SQL_GENERATOR)
@@ -41,18 +43,25 @@ feature -- Drop statement
 			sqlgenerator.drop_constant (Current)
 		end
 
+
+feature -- Access
+
+	has_value: BOOLEAN
+		do
+			Result := attached value
+		end
+
+
 feature -- Constant state
 
 	value: detachable XPLAIN_EXPRESSION
 			-- last set value, Void if no value given.
 
 	set_value (new_value: XPLAIN_EXPRESSION)
-		require
-			new_value_not_void: new_value /= Void
 		do
 			value := new_value
 		ensure
-			value_not_void: value /= Void
+			value_not_void: has_value
 		end
 
 end

@@ -185,7 +185,7 @@ create
 %type <INTEGER> integer
 %type <STRING> real
 
-%type <XPLAIN_EXPRESSION> constant_expression
+%type <XPLAIN_EXPRESSION> constant_or_value_expression
 %type <XPLAIN_EXPRESSION> number_expression
 %type <XPLAIN_EXPRESSION> number_term
 %type <XPLAIN_EXPRESSION> number_factor
@@ -415,22 +415,29 @@ deletion
 	;
 
 constant_assignment
-	: constant '=' '(' constant_expression ')'
+	: constant '=' '(' { constant_mode := True } constant_or_value_expression ')'
 		{
 			write_pending_statement
 			if attached universe.find_variable($1) as variable then
-				if not use_mode then
-					sqlgenerator.write_constant_assignment (variable, $4)
+				if not variable.has_value then
+					if not use_mode then
+						sqlgenerator.write_constant_assignment (variable, $5)
+					end
+					variable.set_value ($5)
+					create $$.make (variable, $5)
+				else
+					report_error ("Constant `" + $1 + "' has already been assigned a value.")
+					abort
 				end
-				variable.set_value ($4)
-				create $$.make (variable, $4)
 			else
-				report_error ("Not a valid variable: " + $1)
+				report_error ("Not a valid constant: " + $1)
 				abort
 			end
+			constant_mode := False
 		}
 	| constant '=' error
 		{
+			constant_mode := False
 			report_error ("A constant assignment expression should be surrounded by parentheses")
 			abort
 		}
@@ -1165,8 +1172,10 @@ real: XPLAIN_DOUBLE
 
 
 -- following not in Xplain 5.8
+-- definition shared with value statement and via some hacks we try
+-- try to dissuade the user from using a constant expression that won't work.
 
-constant_expression
+constant_or_value_expression
 	: constant_logical_expression
 		{ $$ := $1 }
 	;
@@ -1268,16 +1277,31 @@ number_factor
 			if attached universe.find_variable ($1) as variable then
 				create {XPLAIN_VARIABLE_EXPRESSION} $$.make (variable)
 			elseif attached universe.find_value ($1) as value then
-				-- not a variable, maybe a value?
-				-- depends on context, not checked now
-				create {XPLAIN_VALUE_EXPRESSION} $$.make (value)
+				if not constant_mode then
+					-- not a variable, maybe a value?
+					-- depends on context, not checked now
+					create {XPLAIN_VALUE_EXPRESSION} $$.make (value)
+				else
+					report_error ("A constant expression can only use constant, not a variable: " + $1)
+					abort
+					$$ := silence_compiler_expression
+				end
 			else
-				report_error ("Not a known variable: " + $1)
+				report_error ("Not a known constant or variable: " + $1)
 				abort
 				$$ := silence_compiler_expression
 			end
 		}
+	| '?' parameter_name
+		{
+			if is_parameter_declared ($2) then
+				create {XPLAIN_PARAMETER_EXPRESSION} $$.make ($2)
+			else
+				$$ := silence_compiler_expression
+			end
+		}
 	;
+
 
 
 -- assert and check not in Xplain 5.8
@@ -1716,7 +1740,7 @@ value
 	;
 
 value_definition
-	: constant_expression
+	: constant_or_value_expression
 		{ $$ := $1 }
 	| value_selection_expression
 		{
@@ -1743,14 +1767,6 @@ value_definition
 		{ create {XPLAIN_UNMANAGED_PARAMETER_EXPRESSION} $$.make ($2.full_name) }
 	| system_variable
 		{ $$ := $1 }
-	| '?' parameter_name
-		{
-			if is_parameter_declared ($2) then
-				create {XPLAIN_PARAMETER_EXPRESSION} $$.make ($2)
-			else
-				$$ := silence_compiler_expression
-			end
-			}
 
 		-- conversion functions
 	| XPLAIN_DATEF value_definition ')'
@@ -2271,6 +2287,10 @@ feature {NONE} -- these vars survive a little bit longer
 	extend_type: detachable XPLAIN_TYPE   -- used in extend statement
 	my_parameters: detachable XPLAIN_ATTRIBUTE_NAME_NODE
 			-- List of declared parameters for a procedure
+
+	constant_mode: BOOLEAN
+			-- Are we parsing a constant expression?
+
 
 feature -- Xplain
 
