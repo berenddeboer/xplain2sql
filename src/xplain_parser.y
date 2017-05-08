@@ -385,7 +385,7 @@ definition
 		{
 			if attached $1 as t then
 				create {XPLAIN_TYPE_STATEMENT} $$.make (t)
-				universe.add (t)
+				universe.add (t, Current)
 			end
 		}
 	| base_definition
@@ -394,7 +394,7 @@ definition
 			if not use_mode then
 				sqlgenerator.write_base($1)
 			end
-			universe.add($1)
+			universe.add($1, Current)
 		}
 	| init_definition
 	| default_definition
@@ -507,7 +507,7 @@ constant_definition
 				if not use_mode then
 					sqlgenerator.write_constant (v)
 				end
-				universe.add(v)
+				universe.add(v, Current)
 				create $$.make (v)
 			end
 	}
@@ -1711,7 +1711,7 @@ value
 			if immediate_output_mode then
 				sqlgenerator.write_value ($$.value)
 			end
-			universe.add ($$.value)
+			universe.add ($$.value, Current)
 		}
 	;
 
@@ -2096,7 +2096,7 @@ procedure
 			if not $5.sql.is_empty then
 				$$.procedure.sql_declare.append_string ($5.sql)
 			end
-			universe.add ($$.procedure)
+			universe.add ($$.procedure, Current)
 			if immediate_output_mode then
 				sqlgenerator.write_procedure ($$.procedure)
 			end

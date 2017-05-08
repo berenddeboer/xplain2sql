@@ -26,7 +26,7 @@ feature -- Initialization
 
 	make
 		do
-			create objects.make (1024)
+			create objects.make_equal (1024)
 		end
 
 
@@ -38,16 +38,14 @@ feature -- Access
 
 feature -- Commands
 
-	add (object: XPLAIN_ABSTRACT_OBJECT)
+	add (object: XPLAIN_ABSTRACT_OBJECT; parser: XPLAIN_PARSER)
 			-- Add new object to the universe.
 		require
 			object_not_void: object /= Void
 		do
-			if attached find_object (object.name) as o and then o.may_be_redefined then
-				-- Don't bother with saying a value is set again.
-				-- std.error.put_string ("object already created: ")
-				-- std.error.put_string (object.name)
-				-- std.error.put_character ('%N')
+			if attached find_object (object.name) as o and then not o.may_be_redefined then
+				parser.report_error ("There is already an object named `" + object.name + "'.")
+				parser.abort
 			else
 				objects.force (object, object.name)
 			end
