@@ -2837,7 +2837,15 @@ feature -- Return sql code
 			if an_expression.is_logical_expression and extension.no_update_optimization then
 				Result.append_string (SQLTrue)
 			else
+				if attached an_expression.extension as e and then e.explicit_domain then
+					Result.append_string ("cast (")
+				end
 				Result.append_string (an_expression.sqlvalue (Current))
+				if attached an_expression.extension as e and then e.explicit_domain then
+					Result.append_string (" as ")
+					Result.append_string (e.representation.datatype (Current))
+					Result.append_character (')')
+				end
 			end
 			Result.append_character ('%N')
 			Result.append_string (Tab)

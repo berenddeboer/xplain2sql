@@ -79,6 +79,7 @@ feature {NONE} -- Initialization
 			-- use abstract_representation when seen as base
 			if attached an_attribute.domain as d then
 				r := d
+				explicit_domain := True
 			else
 				r := expression.representation (sqlgenerator)
 			end

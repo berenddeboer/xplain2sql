@@ -53,6 +53,10 @@ feature -- Access
 	expression: XPLAIN_EXTENSION_EXPRESSION
 			-- Extension definition
 
+	explicit_domain: BOOLEAN
+			-- Has an explicit domain been set for this extension?
+			-- If so, the extend view will explicitly cast the expression to this domain.
+
 
 feature
 
