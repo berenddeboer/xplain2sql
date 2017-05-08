@@ -63,6 +63,13 @@ feature -- Supports
 			Result := True
 		end
 
+	StoredProcedureSupportsTrueFunction: BOOLEAN
+			-- Can a stored procedure return a value as a scalar value
+			-- instead of as a set?
+		do
+			Result := False
+		end
+
 
 feature -- SQL pieces for stored procedures
 

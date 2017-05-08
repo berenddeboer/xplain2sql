@@ -64,7 +64,7 @@ feature -- Stored procedure support
 			-- applicable.
 			-- For example DB/2/Oracle needs to know if rows are returned.
 		do
-			if a_procedure /= Void and then a_procedure.returns_rows then
+			if a_procedure /= Void and then a_procedure.returns_rows (Current) then
 				std.output.put_string (" returns ")
 				std.output.put_string (sp_type_name (a_procedure))
 			else
@@ -108,7 +108,7 @@ feature -- Stored procedure support
 			-- Emit value declarations.
 		do
 			precursor (procedure)
-			if procedure.returns_rows then
+			if procedure.returns_rows (Current) then
 				std.output.put_string (Tab)
 				std.output.put_string ("result_cursor ")
 				std.output.put_string (sp_type_name (procedure))

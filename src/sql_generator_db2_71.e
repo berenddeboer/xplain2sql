@@ -432,7 +432,7 @@ feature -- Stored procedure support
 		do
 			std.output.put_character ('%N')
 			std.output.put_string (Tab)
-			if a_procedure /= Void and then a_procedure.returns_rows then
+			if a_procedure /= Void and then a_procedure.returns_rows (Current) then
 				std.output.put_string ("dynamic result sets 1%N")
 				std.output.put_string (Tab)
 			end

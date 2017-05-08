@@ -305,7 +305,7 @@ feature -- Stored procedures
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE]
 			my_attribute: XPLAIN_ATTRIBUTE
 		do
-			if procedure.returns_rows then
+			if procedure.returns_rows (Current) then
 				std.output.put_string ("%Nreturns (%N")
 				if attached procedure.last_get_statement as get_statement then
 					type := get_statement.selection.subject.type

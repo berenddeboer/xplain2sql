@@ -707,7 +707,7 @@ feature -- Stored procedure support
 	sp_type_name (a_procedure: XPLAIN_PROCEDURE): STRING
 		require
 			procedure_not_void: a_procedure /= Void
-			procedure_returns_rows: a_procedure.returns_rows
+			procedure_returns_rows: a_procedure.returns_rows (Current)
 		deferred
 		ensure
 			type_name_not_empty: Result /= Void and then not Result.is_empty

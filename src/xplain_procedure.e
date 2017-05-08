@@ -204,11 +204,16 @@ feature -- Access
 			-- Highly recommended when using extend statements in a
 			-- stored procedure.
 
-	returns_rows: BOOLEAN
-			-- True if this is a procedure that returns a result set, 0
-			-- or more rows.
+	returns_rows (sqlgenerator: SQL_GENERATOR_WITH_SP): BOOLEAN
+			-- Does this procedure returns a result set of 0 or more rows?
 		do
-			Result := last_get_statement /= Void or else last_value_selection_statement /= Void
+			Result := attached last_get_statement or else (attached last_value_selection_statement and not sqlgenerator.StoredProcedureSupportsTrueFunction)
+		end
+
+	returns_value (sqlgenerator: SQL_GENERATOR_WITH_SP): BOOLEAN
+			-- Does this procedure returns a single value?
+		do
+			Result := not attached last_get_statement and attached last_value_selection_statement and sqlgenerator.StoredProcedureSupportsTrueFunction
 		end
 
 	statements: DS_BILINKED_LIST [XPLAIN_STATEMENT]
@@ -240,11 +245,11 @@ feature -- Names
 
 feature -- SQL output
 
-	sp_function_type (sqlgenerator: SQL_GENERATOR; an_emit_path: BOOLEAN): STRING
+	sp_function_type (sqlgenerator: SQL_GENERATOR_WITH_SP; an_emit_path: BOOLEAN): STRING
 			-- Function type as required by PostgreSQL.
 		require
 			sqlgenerator_not_void: sqlgenerator /= Void
-			returns_rows: returns_rows
+			returns_rows: returns_rows (sqlgenerator)
 		do
 			-- Switch into correct SQL for to create the PostgreSQL
 			-- function type.

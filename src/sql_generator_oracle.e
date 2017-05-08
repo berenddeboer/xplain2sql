@@ -569,7 +569,7 @@ feature -- Stored procedure support
 	drop_procedure (procedure: XPLAIN_PROCEDURE)
 			-- Drop procedure `procedure'.
 		do
-			if procedure.returns_rows then
+			if procedure.returns_rows (Current) then
 				do_drop_function (procedure.sqlname (Current))
 			else
 				do_drop_procedure (procedure.sqlname (Current))
@@ -642,7 +642,7 @@ feature -- Stored procedure support
 			-- "create procedure " statement itself (including space).
 		do
 			is_stored_procedure := True
-			if a_procedure /= Void and then a_procedure.returns_rows then
+			if a_procedure /= Void and then a_procedure.returns_rows (Current) then
 				std.output.put_string ("create or replace function ")
 			else
 				std.output.put_string ("create or replace procedure ")
@@ -654,7 +654,7 @@ feature -- Stored procedure support
 			-- applicable.
 			-- For example DB/2 and Oracle needs to know if rows are returned.
 		do
-			if a_procedure /= Void and then a_procedure.returns_rows then
+			if a_procedure /= Void and then a_procedure.returns_rows (Current) then
 				std.output.put_string (" return sys_refcursor")
 			end
 		end
@@ -673,7 +673,7 @@ feature -- Stored procedure support
 				procedure.statements.forth
 			end
 
-			if procedure.returns_rows then
+			if procedure.returns_rows (Current) then
 				std.output.put_string (Tab)
 				std.output.put_string ("result_cursor sys_refcursor")
 				std.output.put_string (CommandSeparator)

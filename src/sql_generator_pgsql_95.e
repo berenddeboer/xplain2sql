@@ -4,7 +4,6 @@ note
 
 		"Produces PostgreSQL 9.5 output."
 
-	library: "Gobo Eiffel ???? library"
 	author: "Berend de Boer <berend@pobox.com>"
 	copyright: "Copyright (c) 2017, Berend de Boer"
 	license: "Eiffel Forum License v2 (see forum.txt)"
@@ -21,9 +20,11 @@ inherit
 		redefine
 			target_name,
 			NamedParametersSupported,
+			StoredProcedureSupportsTrueFunction,
 			sp_insert_declaration,
 			sp_update_declaration,
-			sp_delete_declaration
+			sp_delete_declaration,
+			create_select_value_inside_sp
 		end
 
 
@@ -46,6 +47,8 @@ feature -- Stored procedure support
 	NamedParametersSupported: BOOLEAN = True
 			-- PostgreSQL 9 supports named parameters
 
+	StoredProcedureSupportsTrueFunction: BOOLEAN = True
+
 	sp_insert_declaration (
 			type: XPLAIN_TYPE;
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE];
@@ -67,6 +70,15 @@ feature -- Stored procedure support
 			param_name: STRING)
 			-- No longer applicable for PostgreSQL 9.
 		do
+		end
+
+	create_select_value_inside_sp (a_value: XPLAIN_VALUE)
+			-- Emit SQL that returns the value when asked for that value
+			-- inside a stored procedure.
+		do
+			std.output.put_string ("return ")
+			std.output.put_string (a_value.quoted_name (Current))
+			std.output.put_character ('%N')
 		end
 
 end

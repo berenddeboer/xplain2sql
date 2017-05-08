@@ -56,7 +56,7 @@ feature -- Stored procedure support
 			-- not exist.
 		require
 			procedure_not_void: a_procedure /= Void
-			procedure_returns_rows: a_procedure.returns_rows
+			procedure_returns_rows: a_procedure.returns_rows (Current)
 		do
 			std.output.put_string (once "drop type ")
 			std.output.put_string (sp_type_name (a_procedure))
@@ -69,7 +69,7 @@ feature -- Stored procedure support
 			-- Create the type of records the procedure returns.
 		require
 			procedure_not_void: a_procedure /= Void
-			procedure_returns_rows: a_procedure.returns_rows
+			procedure_returns_rows: a_procedure.returns_rows (Current)
 		do
 			std.output.put_string (once "create type ")
 			std.output.put_string (sp_type_name (a_procedure))
@@ -84,18 +84,25 @@ feature -- Stored procedure support
 			-- Emit the result parameter of the stored procedure, if
 			-- applicable.
 		do
-			if a_procedure /= Void then
-				if a_procedure.is_postgresql_trigger then
-					if a_procedure.returns_rows then
+			if attached a_procedure as p then
+				if p.is_postgresql_trigger then
+					if p.returns_rows (Current) then
 						std.error.put_line ("ERROR: trigger procedure returns rows.")
+					elseif p.returns_value (Current) then
+						std.error.put_line ("ERROR: trigger procedure returns a value.")
 					end
-					if a_procedure.parameters.count > 0 then
+					if p.parameters.count > 0 then
 						std.error.put_line ("ERROR: trigger procedure has parameters. Use the `new' variable to access the new row and the `old' variable to access the old row.")
 					end
 					std.output.put_string (once " returns trigger")
-				elseif a_procedure.returns_rows then
+				elseif p.returns_rows (Current) then
 					std.output.put_string (once " returns setof ")
-					std.output.put_string (sp_type_name (a_procedure))
+					std.output.put_string (sp_type_name (p))
+				elseif p.returns_value (current) then
+					std.output.put_string (once " returns ")
+					if attached p.last_value_selection_statement as statement then
+						std.output.put_string (statement.value.representation.datatype (Current))
+					end
 				else
 					std.output.put_string (once " returns void")
 				end
@@ -124,9 +131,9 @@ feature -- Stored procedure support
 			-- Write statements to start a procedure, including the
 			-- "create procedure " statement itself (including space).
 		do
-			if a_procedure /= Void and then a_procedure.returns_rows then
-				drop_sp_type (a_procedure)
-				create_sp_type (a_procedure)
+			if attached a_procedure as p and then p.returns_rows (Current) then
+				drop_sp_type (p)
+				create_sp_type (p)
 				std.output.put_character ('%N')
 			end
 			is_stored_procedure := True
@@ -151,7 +158,7 @@ feature -- Stored procedure support
 			-- Emit value declarations.
 		do
 			precursor (procedure)
-			if procedure.returns_rows then
+			if procedure.returns_rows (Current) then
 				std.output.put_string (Tab)
 				std.output.put_string ("result_cursor ")
 				std.output.put_string (sp_type_name (procedure))

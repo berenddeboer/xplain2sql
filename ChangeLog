@@ -1,5 +1,11 @@
 2017-05-08  Berend de Boer  <berend@pobox.com>
 
+	* !Postgresql 9.5: experiment: let procedure that returns just a
+	value, return that as a value, no longer as a set. This may become
+	an option, as it is quite a break from previous behaviour, and
+	makes code inconsistent across various databases.
+
+
 	* !value expression in procedures: values could not freely use
    	parameters in expressions.
 
@@ -9,7 +15,7 @@
 
 2017-05-06  Berend de Boer  <berend@pobox.com>
 
-	* !PostgreSQL: support named parameters.
+	* !PostgreSQL 9.5: support named parameters.
 
 
 2017-02-10  Berend de Boer  <berend@pobox.com>
