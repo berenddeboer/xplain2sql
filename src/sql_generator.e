@@ -4330,6 +4330,15 @@ feature {NONE} -- Cast expressions implementation
 		end
 
 
+feature -- Date functions
+
+	sql_newdate (a_date, a_number, a_part: XPLAIN_EXPRESSION): STRING
+		do
+			std.error.put_string ("newdate function is not supported by this dialect.%N")
+			Result := a_date.sqlvalue (Current)
+		end
+
+
 feature -- Extension specific methods
 
 	extension_index_name (an_extension: XPLAIN_EXTENSION): STRING

@@ -841,10 +841,10 @@ property_factor
 				$$ := silence_compiler_expression
 			end
 		}
---	| XPLAIN_HEAD property_expression ')'
---	| XPLAIN_TAIL property_expression ')'
+	--	| XPLAIN_HEAD property_expression ')'
+	--	| XPLAIN_TAIL property_expression ')'
 
--- and conversion functions
+-- conversion functions
 	| XPLAIN_DATEF property_expression ')'
 		{
 			create {XPLAIN_DATEF_FUNCTION} $$.make ($2)
@@ -862,9 +862,20 @@ property_factor
 			create {XPLAIN_STRING_FUNCTION} $$.make ($2)
 		}
 
--- and mathematical functions
+-- date functions
+	| XPLAIN_NEWDATE property_expression ',' property_expression ')'
+		{
+			create {XPLAIN_NEWDATE_FUNCTION} $$.make ($2, $4, newdate_default_days)
+		}
+	| XPLAIN_NEWDATE property_expression ',' property_expression ',' property_expression ')'
+		{
+			create {XPLAIN_NEWDATE_FUNCTION} $$.make ($2, $4, $6)
+		}
 
-		-- enhanced Xplain functions:
+-- mathematical functions
+-- TODO
+
+-- enhanced Xplain functions:
 	| XPLAIN_ID
 		{
 			if attached subject_type as t then
@@ -898,7 +909,7 @@ property_factor
 			end
 		}
 
-		-- user functions
+-- user functions (allows calling custom stored procedures)
 	| '$' name '(' ')'
 		{
 			create {XPLAIN_USER_FUNCTION} $$.make ($2, Void)
@@ -1300,6 +1311,16 @@ number_factor
 				$$ := silence_compiler_expression
 			end
 		}
+
+	| XPLAIN_NEWDATE property_expression ',' property_expression ')'
+		{
+			create {XPLAIN_NEWDATE_FUNCTION} $$.make ($2, $4, newdate_default_days)
+		}
+	| XPLAIN_NEWDATE property_expression ',' property_expression ',' property_expression ')'
+		{
+			create {XPLAIN_NEWDATE_FUNCTION} $$.make ($2, $4, $6)
+		}
+
 	;
 
 
@@ -1768,7 +1789,7 @@ value_definition
 	| system_variable
 		{ $$ := $1 }
 
-		-- conversion functions
+-- conversion functions
 	| XPLAIN_DATEF value_definition ')'
 		{
 			create {XPLAIN_DATEF_FUNCTION} $$.make ($2)
@@ -1786,7 +1807,7 @@ value_definition
 			create {XPLAIN_STRING_FUNCTION} $$.make ($2)
 		}
 
-		-- user functions
+-- user functions (allows calling custom stored procedures)
 	| '$' name '(' ')'
 		{
 			create {XPLAIN_USER_FUNCTION} $$.make ($2, Void)
@@ -1795,6 +1816,7 @@ value_definition
 		{
 			create {XPLAIN_USER_FUNCTION} $$.make ($2, $4)
 		}
+
 	| LITERAL_SQL
 		{ create {XPLAIN_SQL_EXPRESSION} $$.make ($1) }
 	;
@@ -2229,16 +2251,12 @@ sql
 feature -- Initialization
 
 	make_with_file (a_file: KI_CHARACTER_INPUT_STREAM; a_sqlgenerator: SQL_GENERATOR)
-		require
-			sqlgenerator_not_void: a_sqlgenerator /= Void
 		do
 			make_scanner_with_file (a_file)
 			make (a_sqlgenerator)
 		end
 
 	make_with_stdin (a_sqlgenerator: SQL_GENERATOR)
-		require
-			sqlgenerator_not_void: a_sqlgenerator /= Void
 		do
 			make_scanner_with_stdin
 			make (a_sqlgenerator)
@@ -2363,6 +2381,10 @@ feature -- Code blocks
 			create Result.make (a_name, a_definition)
 		end
 
+	newdate_default_days: XPLAIN_STRING_EXPRESSION
+		once
+			create {XPLAIN_STRING_EXPRESSION} Result.make ("days")
+		end
 
 
 feature -- Statement generation
@@ -2674,10 +2696,5 @@ feature {NONE} -- Once strings
 	once_equal: STRING = "="
 	once_not_equal: STRING = "<>"
 
-
-invariant
-
-	have_sqlgenerator: sqlgenerator /= Void
-	have_statements: statements /= Void
 
 end

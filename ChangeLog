@@ -1,5 +1,7 @@
 2017-05-08  Berend de Boer  <berend@pobox.com>
 
+	* !Postgressql 7.3 and up: add support for Xplain's newdate function.
+
 	* !Postgresql 9.5: experiment: let procedure that returns just a
 	value, return that as a value, no longer as a set. This may become
 	an option, as it is quite a break from previous behaviour, and

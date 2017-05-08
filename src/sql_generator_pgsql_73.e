@@ -22,7 +22,8 @@ inherit
 		redefine
 			CreateViewSQL,
 			sp_start,
-			sp_user_declaration
+			sp_user_declaration,
+			sql_newdate
 		end
 
 
@@ -165,6 +166,30 @@ feature -- Stored procedure support
 				std.output.put_string ("%%rowtype")
 				std.output.put_string (CommandSeparator)
 				std.output.put_character ('%N')
+			end
+		end
+
+
+feature -- Date functions
+
+	sql_newdate (a_date, a_number, a_part: XPLAIN_EXPRESSION): STRING
+		local
+			in_concat: BOOLEAN
+		do
+			Result := a_date.sqlvalue (Current)
+			if a_number.is_literal and then a_part.is_literal and then attached {XPLAIN_STRING_EXPRESSION} a_part as part then
+				Result.append_string (" + interval ")
+				Result.append_character ('%'')
+				Result.append_string (a_number.sqlvalue (Current))
+				Result.append_character (' ')
+				Result.append_string (part.value)
+				Result.append_character ('%'')
+			else
+				Result.append_string (" + (")
+				Result.append_string (a_number.sqlvalue (Current))
+				Result.append_string (" || ' ' || ")
+				Result.append_string (a_part.sqlvalue (Current))
+				Result.append_string (")::interval")
 			end
 		end
 
