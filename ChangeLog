@@ -1,5 +1,10 @@
 2017-05-08  Berend de Boer  <berend@pobox.com>
 
+	* If an extend has an explicit representation, the resulting
+	column is cast to that representation, instead of relying upon
+	what the particular SQL implementation decides the resulting type
+	will be.
+
 	* !Postgressql 7.3 and up: add support for Xplain's newdate function.
 
 	* !Postgresql 9.5: experiment: let procedure that returns just a
