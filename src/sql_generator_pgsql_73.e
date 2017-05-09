@@ -173,8 +173,6 @@ feature -- Stored procedure support
 feature -- Date functions
 
 	sql_newdate (a_date, a_number, a_part: XPLAIN_EXPRESSION): STRING
-		local
-			in_concat: BOOLEAN
 		do
 			Result := a_date.sqlvalue (Current)
 			if a_number.is_literal and then a_part.is_literal and then attached {XPLAIN_STRING_EXPRESSION} a_part as part then
