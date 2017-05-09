@@ -20,6 +20,7 @@ inherit
 		redefine
 			target_name,
 			datatype_int,
+			datatype_picture,
 			NamedParametersSupported,
 			StoredProcedureSupportsTrueFunction,
 			sp_insert_declaration,
@@ -62,6 +63,11 @@ feature -- type specification for xplain types
 					Result := "numeric(" + representation.length.out + ", 0)"
 				end
 			end
+		end
+
+	datatype_picture (representation: XPLAIN_P_REPRESENTATION): STRING
+		once
+			Result := "bytea"
 		end
 
 
