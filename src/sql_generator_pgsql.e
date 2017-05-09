@@ -5,7 +5,8 @@ note
 
 	Known_bugs:
 		"1. Add support for create type to create domains.%
-		%2. Constants are parsed as float8 and do not map to numeric datatypes."
+		%2. Constants are parsed as float8 and do not map to numeric datatypes.%
+		%3. Strings and string comparison are case-sensitive."
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 1999, Berend de Boer"
