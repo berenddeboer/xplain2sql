@@ -684,6 +684,42 @@ feature -- create stored procedures
 			sp_end
 		end
 
+	sp_function_type_for_selection (selection: XPLAIN_SELECTION; an_emit_path: BOOLEAN): STRING
+			-- The function type for output of a get statement.
+			-- Required for PostgreSQL output.
+		require
+			selection_not_void: selection /= Void
+		do
+			Result := selection.sp_function_type (Current, an_emit_path)
+		ensure
+			function_type_not_empty: Result /= Void and then not Result.is_empty
+		end
+
+	sp_function_type_for_selection_list (selection: XPLAIN_SELECTION_LIST; an_emit_path: BOOLEAN): STRING
+			-- The function type for output of a get statement.
+			-- Required for PostgreSQL output.
+		require
+			selection_not_void: selection /= Void
+		do
+			-- Implement in PostgreSQL
+			Result := ""
+		ensure
+			function_type_not_empty: Result /= Void and then not Result.is_empty
+		end
+
+	sp_function_type_for_selection_value (a_column_name: STRING; a_representation: XPLAIN_REPRESENTATION; an_emit_path: BOOLEAN): STRING
+			-- The function type for output of a get statement.
+			-- Required for PostgreSQL output.
+		require
+			column_name_not_empty: a_column_name /= Void and then not a_column_name.is_empty
+			representation_not_void: a_representation /= Void
+		do
+			-- Implement in PostgreSQL
+			Result := ""
+		ensure
+			function_type_not_empty: Result /= Void and then not Result.is_empty
+		end
+
 
 feature -- SQL parts
 

@@ -55,7 +55,7 @@ feature -- SQL generation
 			Result := sqlgenerator.sql_select_function_as_subselect (Current)
 		end
 
-	sp_function_type (sqlgenerator: SQL_GENERATOR; an_emit_path: BOOLEAN): STRING
+	sp_function_type (sqlgenerator: SQL_GENERATOR_WITH_SP; an_emit_path: BOOLEAN): STRING
 			-- Callback in generator to generate function type for
 			-- PostgreSQL functions.
 		do

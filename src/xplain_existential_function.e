@@ -52,7 +52,7 @@ feature -- Access
 			Result := sqlgenerator.value_representation_boolean
 		end
 
-	sp_function_type (sqlgenerator: SQL_GENERATOR; a_selection: XPLAIN_SELECTION_FUNCTION; an_emit_path: BOOLEAN): STRING
+	sp_function_type (sqlgenerator: SQL_GENERATOR_WITH_SP; a_selection: XPLAIN_SELECTION_FUNCTION; an_emit_path: BOOLEAN): STRING
 			-- Callback to generator to retrieve function type for
 			-- PostgreSQL functions.
 		do

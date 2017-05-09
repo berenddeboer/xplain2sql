@@ -90,7 +90,7 @@ SAMPLEFILE=$(SAMPLEDIR)$(SAMPLENAME)
 #SAMPLEFILE=~/src/business-process/src/Xplain/call-center
 #SAMPLEFILE=~/src/automatem/nakedbus/tools/Xplain/nakedbus_prices
 
-SQLOPTIONS=
+SQLOPTIONS=-nosp
 SQLDIALECT=-pgsql
 #SQLOPTIONS=-nosp -pkformat '$$s_id' -sequenceformat '$$s_seq'
 

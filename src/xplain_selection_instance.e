@@ -57,7 +57,7 @@ feature -- Access
 
 feature -- SQL generation
 
-	sp_function_type (sqlgenerator: SQL_GENERATOR; an_emit_path: BOOLEAN): STRING
+	sp_function_type (sqlgenerator: SQL_GENERATOR_WITH_SP; an_emit_path: BOOLEAN): STRING
 			-- Callback in generator to generate function type for
 			-- PostgreSQL functions.
 		do
