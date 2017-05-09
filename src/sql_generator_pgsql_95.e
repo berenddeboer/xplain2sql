@@ -24,7 +24,8 @@ inherit
 			sp_insert_declaration,
 			sp_update_declaration,
 			sp_delete_declaration,
-			create_select_value_inside_sp
+			create_select_value_inside_sp,
+			do_sql_cast_to_real
 		end
 
 
@@ -39,6 +40,15 @@ feature -- About this generator
 			-- Name and version of dialect
 		once
 			Result := "PostgreSQL 9.5"
+		end
+
+
+feature {NONE} -- Cast expressions implementation
+
+	do_sql_cast_to_real (an_sql_expression: STRING): STRING
+			-- SQL expression to cast `an_expression' to a real
+		do
+			Result := "cast (" + an_sql_expression + " as numeric)"
 		end
 
 
