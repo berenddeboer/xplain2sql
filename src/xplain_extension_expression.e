@@ -171,7 +171,7 @@ feature -- SQL specifics
 			-- instantiated because an extension has been used in an expression.
 		do
 			check attached extension as e then
-				Result := e.expression.representation (sqlgenerator)
+				Result := e.representation
 			end
 		end
 
