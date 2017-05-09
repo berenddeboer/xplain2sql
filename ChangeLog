@@ -1,11 +1,21 @@
+2017-05-09  Berend de Boer  <berend@pobox.com>
+
+	* !Postgresql 9.5: picture data type is now a bytea.
+
+
 2017-05-08  Berend de Boer  <berend@pobox.com>
 
-	* If an extend has an explicit representation, the resulting
+	* !Postgresql 9.5: The real() function maps to the numeric data
+	type with no specified limits on the before/after precision. This
+	more closely maps Xplain expected behaviour, and avoids casting
+	issues.
+
+	* !If an extend has an explicit representation, the resulting
 	column is cast to that representation, instead of relying upon
 	what the particular SQL implementation decides the resulting type
 	will be.
 
-	* !Postgressql 7.3 and up: add support for Xplain's newdate function.
+	* !Postgresql 7.3 and up: add support for Xplain's newdate function.
 
 	* !Postgresql 9.5: experiment: let procedure that returns just a
 	value, return that as a value, no longer as a set. This may become
