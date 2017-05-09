@@ -19,6 +19,7 @@ inherit
 	SQL_GENERATOR_PGSQL_82
 		redefine
 			target_name,
+			datatype_int,
 			NamedParametersSupported,
 			StoredProcedureSupportsTrueFunction,
 			sp_insert_declaration,
@@ -40,6 +41,27 @@ feature -- About this generator
 			-- Name and version of dialect
 		once
 			Result := "PostgreSQL 9.5"
+		end
+
+
+feature -- type specification for xplain types
+
+	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING
+			-- int2 parameters in postgresql give a lot of grieve. They
+			-- somehow are not implicitly casted.
+		do
+			if not is_stored_procedure then
+				Result := precursor (representation)
+			else
+				inspect representation.length
+				when 1 .. 9 then
+					Result := "integer"
+				when 10 .. 17 then
+					Result := "bigint"
+				else
+					Result := "numeric(" + representation.length.out + ", 0)"
+				end
+			end
 		end
 
 
