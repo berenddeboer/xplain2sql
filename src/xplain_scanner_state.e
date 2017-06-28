@@ -113,8 +113,6 @@ feature {NONE} -- directory
 
 invariant
 
-	has_input_buffer: input_buffer /= Void
-	filename_void_or_not_empty: filename = Void or else not filename.is_empty
-	filename_implies_directory: filename /= Void implies directory /= Void
+	filename_implies_directory: filename.is_empty = directory.is_empty
 
 end
