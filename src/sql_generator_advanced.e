@@ -27,6 +27,7 @@ inherit
 			create_select_value,
 			create_value_assign,
 			create_value_declare,
+			optional_create_value_declare,
 			drop_table,
 			drop_value,
 			sqlgetvalue,

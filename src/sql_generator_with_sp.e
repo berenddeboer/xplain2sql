@@ -20,6 +20,7 @@ inherit
 			create_select_value,
 			create_value_assign,
 			create_value_declare,
+			optional_create_value_declare,
 			drop_table,
 			drop_value,
 			sqlgetvalue,
@@ -246,6 +247,14 @@ feature -- create SQL for Xplain constructs
 				create_value_declare_outside_sp (a_value)
 			end
 			declared_values.force (a_value, a_value.name)
+		end
+
+	optional_create_value_declare (a_value: XPLAIN_VALUE)
+			-- Inside stored procedures, never redeclare a value.
+		do
+			if not is_value_declared (a_value) then
+				create_value_declare (a_value)
+			end
 		end
 
 	frozen create_value_assign (a_value: XPLAIN_VALUE)

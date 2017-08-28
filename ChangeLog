@@ -1,3 +1,11 @@
+2017-08-29  Berend de Boer  <berend@pobox.com>
+
+	* Microsoft SQL: doesn't like it when a value got redeclared in a
+	stored procedure, which could happen if we think the type has
+	changed. But in a stored procedure we should never redeclare a
+	value.
+
+
 2017-05-09  Berend de Boer  <berend@pobox.com>
 
 	* !Postgresql 9.5: picture data type is now a bytea.
