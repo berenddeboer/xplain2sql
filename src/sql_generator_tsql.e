@@ -563,9 +563,10 @@ feature -- drop statements
 			-- nothing
 		end
 
-	drop_value (value: XPLAIN_VALUE)
+	drop_value (a_value: XPLAIN_VALUE)
 		do
 			-- values are automatically dropped at end of session
+			declared_values.remove (a_value.name)
 		end
 
 	drop_constant (a_constant: XPLAIN_VARIABLE)
