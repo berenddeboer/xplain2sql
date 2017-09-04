@@ -201,7 +201,9 @@ feature -- creation
 					create {SQL_GENERATOR_PGSQL_72} sqlgenerator.make
 				elseif equal (arg, "-sqlite") or else equal (arg, "-sqlite3") then
 					create {SQL_GENERATOR_SQLITE_3} sqlgenerator.make
-				elseif equal (arg, "-tsql") or else equal (arg, "-tsql2000") then
+				elseif equal (arg, "-tsql") or else equal (arg, "-tsql2005") then
+					create {SQL_GENERATOR_TSQL2005} sqlgenerator.make
+				elseif equal (arg, "-tsql2000") then
 					create {SQL_GENERATOR_TSQL2000} sqlgenerator.make
 				elseif equal (arg, "-tsql70") or else equal (arg, "-tsql7") then
 					create {SQL_GENERATOR_TSQL70} sqlgenerator.make
