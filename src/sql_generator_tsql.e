@@ -301,7 +301,7 @@ feature -- TransactSQL specific SQL creation statements
 				std.output.put_string (Tab)
 				std.output.put_string (once "group by%N")
 				std.output.put_string (TabTab)
-				if extension.expression.sqlfromaliasname /= Void then
+				if not extension.expression.sqlfromaliasname.is_empty then
 					std.output.put_string (extension.expression.sqlfromaliasname)
 				else
 					std.output.put_string (extension.type.quoted_name (Current))
