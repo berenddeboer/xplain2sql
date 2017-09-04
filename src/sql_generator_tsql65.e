@@ -6,8 +6,6 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2000, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #6 $"
 
 	known_bugs:
 	"0. See inherited bugs...%
