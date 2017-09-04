@@ -269,7 +269,7 @@ feature -- TransactSQL specific SQL creation statements
 			join_list.finalize (Current)
 
 			std.output.put_string (once "select ")
-			if extension.expression.sqlfromaliasname /= Void and then not extension.expression.sqlfromaliasname.is_empty then
+			if not extension.expression.sqlfromaliasname.is_empty then
 				std.output.put_string (extension.expression.sqlfromaliasname)
 			else
 				std.output.put_string (quote_identifier (extension.type.sqlname (Current)))
@@ -289,7 +289,7 @@ feature -- TransactSQL specific SQL creation statements
 			std.output.put_string ("from ")
 			std.output.put_string (quote_identifier (extension.type.sqlname (Current)))
 			std.output.put_string (" ")
-			if extension.expression.sqlfromaliasname /= Void then
+			if not extension.expression.sqlfromaliasname.is_empty then
 				std.output.put_string (extension.expression.sqlfromaliasname)
 			end
 			std.output.put_string (sql_select_joins (join_list))
