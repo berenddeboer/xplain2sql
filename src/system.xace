@@ -32,7 +32,7 @@
       <option name="abstract" value="true"/>
       <cluster name="base"/>
       <cluster name="conversion"/>
-<!--       <cluster name="math"/> -->
+			<cluster name="date"/>
       <cluster name="string"/>
       <cluster name="user"/>
     </cluster>
