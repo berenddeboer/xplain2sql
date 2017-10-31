@@ -2607,7 +2607,7 @@ feature -- Return sql code
 			right_value: STRING
 		do
 			if
-				an_operator.is_equal (once "+") and then
+				an_operator.same_string (once "+") and then
 				(a_left.is_string_expression or else a_right.is_string_expression)
 			then
 				left_value := a_left.sqlvalue (Current)

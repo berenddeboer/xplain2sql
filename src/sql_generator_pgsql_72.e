@@ -127,9 +127,9 @@ feature -- Identifiers
 			-- Rename the PostgreSQL keywords time and name.
 		do
 			Result := precursor (name)
-			if name.is_equal ("time") then
+			if name.same_string ("time") then
 				Result := renamed_time
-			elseif name.is_equal ("name") then
+			elseif name.same_string ("name") then
 				Result := renamed_name
 			end
 		end

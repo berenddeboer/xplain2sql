@@ -776,9 +776,9 @@ feature -- Return sql code
 				a_left.exact_representation (Current).domain.is_equal (once_domain_t) or else
 				a_right.exact_representation (Current).domain.is_equal (once_domain_t)
 			if text_column then
-				if an_operator.is_equal (once_equal) then
+				if an_operator.same_string (once_equal) then
 					sql_operator := "like"
-				elseif an_operator.is_equal (once_not_equal) then
+				elseif an_operator.same_string (once_not_equal) then
 					sql_operator := "not like"
 				else
 					std.error.put_string ("Warning: Attempt to use the '" + an_operator + "' operator on a text column. " + target_name + " does not support this.%N")
