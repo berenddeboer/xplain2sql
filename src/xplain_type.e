@@ -244,8 +244,8 @@ feature -- Attribute handling
 				attributes.start
 			until
 				attributes.after or else
-				(equal (attributes.item_for_iteration.name, attribute_name.name) and
-				 equal (attributes.item_for_iteration.role, attribute_name.role))
+				(attributes.item_for_iteration.name.same_string (attribute_name.name) and
+				 attributes.item_for_iteration.role.same_string (attribute_name.role))
 			loop
 				attributes.forth
 			end

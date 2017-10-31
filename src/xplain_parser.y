@@ -2339,9 +2339,9 @@ feature {NONE} -- Expression generation
 			not_equal_operator: BOOLEAN
 			r: detachable XPLAIN_INFIX_EXPRESSION
 		do
-			if an_operator.is_equal (once_equal) then
+			if an_operator.same_string (once_equal) then
 				equal_operator := True
-			elseif an_operator.is_equal (once_not_equal) then
+			elseif an_operator.same_string (once_not_equal) then
 				not_equal_operator := True
 			end
 			if equal_operator or else not_equal_operator then
