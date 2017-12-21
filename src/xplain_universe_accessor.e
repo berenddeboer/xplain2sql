@@ -4,7 +4,6 @@ note
 	thanks: "Thanks to Design Patterns and Contracts."
 
 	author: "Berend de Boer"
-	copyright: "(c) 2002 by XSol Ltd."
 
 
 class
