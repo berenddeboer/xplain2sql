@@ -11,7 +11,7 @@ note
 
 class
 
-	SQL_GENERATOR_TSQL2005
+	SQL_GENERATOR_TSQL2016
 
 
 inherit
@@ -19,6 +19,7 @@ inherit
 	SQL_GENERATOR_TSQL2000
 		redefine
 			target_name,
+			drop_table_if_exist,
 			conditional_drop_procedure
 		end
 
@@ -33,7 +34,20 @@ feature -- About this generator
 	target_name: STRING
 			-- Name and version of dialect
 		once
-			Result := "MS SQL Server 2005"
+			Result := "MS SQL Server 2016"
+		end
+
+
+feature -- drop statements
+
+	drop_table_if_exist (type: XPLAIN_TYPE)
+			-- TSQL 2016 specific drop statement
+		do
+			std.output.put_character ('%N')
+			std.output.put_string ("drop table if exist ")
+			std.output.put_string (quote_identifier (type.sqltablename (Current)))
+			std.output.put_character ('%N')
+			end_with_go
 		end
 
 

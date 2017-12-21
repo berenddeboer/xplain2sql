@@ -1,3 +1,9 @@
+2017-09-04  Berend de Boer  <berend@pobox.com>
+
+	* !Microsoft SQL: Add support for SQL Server 2016/Azure SQL
+	Database: generate drop table if exist and drop procedure if exist.
+
+
 2017-08-29  Berend de Boer  <berend@pobox.com>
 
 	* Microsoft SQL: doesn't like it when a value got redeclared in a

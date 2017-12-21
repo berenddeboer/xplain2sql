@@ -201,8 +201,8 @@ feature -- creation
 					create {SQL_GENERATOR_PGSQL_72} sqlgenerator.make
 				elseif equal (arg, "-sqlite") or else equal (arg, "-sqlite3") then
 					create {SQL_GENERATOR_SQLITE_3} sqlgenerator.make
-				elseif equal (arg, "-tsql") or else equal (arg, "-tsql2005") then
-					create {SQL_GENERATOR_TSQL2005} sqlgenerator.make
+				elseif equal (arg, "-tsql") or else equal (arg, "-tsql2016") then
+					create {SQL_GENERATOR_TSQL2016} sqlgenerator.make
 				elseif equal (arg, "-tsql2000") then
 					create {SQL_GENERATOR_TSQL2000} sqlgenerator.make
 				elseif equal (arg, "-tsql70") or else equal (arg, "-tsql7") then
@@ -341,6 +341,7 @@ feature -- help
 			std.error.put_string ("-sqlite%N")
 			std.error.put_string ("-sqlite3         output SQLite 3 SQL%N")
 			std.error.put_string ("-tsql%N")
+			std.error.put_string ("-tsql2016        output Microsoft SQL Server 2016 Transact SQL%N")
 			std.error.put_string ("-tsql2000        output Microsoft SQL Server 2000 Transact SQL%N")
 			std.error.put_string ("-tsql70          output Microsoft SQL Server Transact SQL 7.0%N")
 			std.error.put_string ("-tsql65          output Microsoft SQL Server Transact SQL 6.5%N")
