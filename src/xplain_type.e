@@ -245,7 +245,8 @@ feature -- Attribute handling
 			until
 				attributes.after or else
 				(attributes.item_for_iteration.name.same_string (attribute_name.name) and
-				 attributes.item_for_iteration.role.same_string (attribute_name.role))
+				 attributes.item_for_iteration.role ~ attribute_name.role
+				)
 			loop
 				attributes.forth
 			end
