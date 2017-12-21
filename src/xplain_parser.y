@@ -28,7 +28,7 @@ note
 	%12. It seems we're more strict in ordering of types than Xplain.%
 	%    Generally, a type should exist, before you can use it as an %
 	%    attribute.%
-	%13. 'its' list parsing not strict enough. Accepts some times an %
+	%13. 'its' list parsing not strict enough. My accept an %
 	%    attribute that is not correct. Probably dumps core later...%
 	%15. names are case-sensitive, but should not be.%
 	%16. No newline keyword support (parse as string??).%
