@@ -1,3 +1,8 @@
+2018-01-09  Berend de Boer  <berend@pobox.com>
+
+	* xplain2sql compiles with gec again.
+
+
 2017-09-04  Berend de Boer  <berend@pobox.com>
 
 	* !Microsoft SQL: Add support for SQL Server 2016/Azure SQL

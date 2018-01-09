@@ -521,13 +521,14 @@ feature {NONE} -- Write helpers
 			Result := as_some_string (s, '%%')
 		end
 
-	as_ncname (s: STRING): UC_STRING
+	as_ncname (s: STRING): STRING
 			-- As `s', but spaces replaced with '-'
 		local
 			p: INTEGER
 			c: INTEGER
+			u: UC_STRING
 		do
-			create Result.make_from_utf8 (s)
+			create u.make_from_utf8 (s)
 			from
 				p := 1
 			until
@@ -542,6 +543,7 @@ feature {NONE} -- Write helpers
 			if not is_name_first (Result.item_code (1)) then
 				Result.insert_character ('_', 1)
 			end
+			Result := u.as_string
 		ensure
 			not_empty: is_ncname (Result)
 		end

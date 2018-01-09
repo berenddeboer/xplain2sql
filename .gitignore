@@ -4,6 +4,10 @@ src/xplain2sql
 src/xplain_parser.e
 src/xplain_scanner.e
 src/xplain_tokens.e
+src/xplain2sql*.h
+src/xplain2sql*.c
+src/xplain2sql*.o
+src/xplain2sql.sh
 compile_ge.xace
 compile_ise.ecf
 *.err
