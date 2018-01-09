@@ -532,16 +532,16 @@ feature {NONE} -- Write helpers
 			from
 				p := 1
 			until
-				p > Result.count
+				p > u.count
 			loop
-				c := Result.item_code (p)
+				c := u.item_code (p)
 				if not is_name_char (c) then
-					Result.put ('-', p)
+					u.put ('-', p)
 				end
 				p := p + 1
 			end
-			if not is_name_first (Result.item_code (1)) then
-				Result.insert_character ('_', 1)
+			if not is_name_first (u.item_code (1)) then
+				u.insert_character ('_', 1)
 			end
 			Result := u.as_string
 		ensure
