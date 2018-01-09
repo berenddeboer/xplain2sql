@@ -270,6 +270,8 @@ get t1 where a4 = combine("a", "*").
 
 # test simple init
 base t10i10 (I2) (1..*).
+# use this base for sqlite
+#base t10i10 (I2).
 type t10 (I4) = t1, a1, a4, a6, i8, i9, b1, b2, another_i9, t10i10.
 init t10 its a4 = "abc".
 init t10 its i8 = 0.
@@ -283,6 +285,8 @@ init default t10 its t1 = 1.
 init t10 its another_i9 = 33 * 2.
 init t10 its t10i10 = 1 + 1.
 
+# this insert fails on sqlite as it validates the check constraint on t10i10 before
+# running the trigger.
 insert t10 "1" its a1 = "Y", a6 = "X".
 
 # after insert
