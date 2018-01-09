@@ -620,7 +620,7 @@ feature -- functions
 
 	CoalesceSupported: BOOLEAN
 		once
-			Result := SQLCoalesce /= Void
+			Result := not SQLCoalesce.is_empty
 		end
 
 
