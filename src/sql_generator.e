@@ -3995,9 +3995,9 @@ feature -- Table specific methods
 			end
 		ensure
 			valid_response:
-				Result = Void or else
-				equal (Result, "null") or else
-				equal (Result, "not null")
+				Result.is_empty or else
+				Result ~ "null" or else
+				Result ~ "not null"
 		end
 
 	sqlcolumnconstraint_base (restriction: XPLAIN_DOMAIN_RESTRICTION
