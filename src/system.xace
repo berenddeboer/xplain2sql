@@ -13,7 +13,7 @@
   <option name="void_safety" value="complete"/>
 
 	<option unless="${DEBUG}">
-		<option name="assertion" value="all"/>
+		<option name="assertion" value="none"/>
 		<option name="garbage_collector" value="none"/>
 		<option name="finalize" value="true"/>
 	</option>
