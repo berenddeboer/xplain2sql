@@ -215,6 +215,11 @@ feature -- Table options
 			Result := PrimaryKeyConstraint
 		end
 
+	TemporaryTablePrimaryKey: STRING
+		once
+			Result := AutoPrimaryKeyConstraint
+		end
+
 	sequence_name_format: STRING = "$s_$s_seq"
 			-- Format of name of generated sequence if a dialect has the
 			-- concept of sequences and names for sequences
@@ -1142,7 +1147,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			end
 		end
 
-		create_extend_create_table (extension: XPLAIN_EXTENSION)
+	create_extend_create_table (extension: XPLAIN_EXTENSION)
 			-- Output sql code to create a separate table to hold the
 			-- extension.
 		require
@@ -1158,9 +1163,11 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			std.output.put_string (extension.type.q_sqlpkname (Current))
 			std.output.put_character (' ')
 			std.output.put_string (extension.type.columndatatype (Current))
-			std.output.put_string (once " not null")
 			if not CreateExtendIndex then
-				std.output.put_string (" primary key")
+				std.output.put_character (' ')
+				std.output.put_string (TemporaryTablePrimaryKey)
+			else
+				std.output.put_string (once " not null")
 			end
 			std.output.put_string (",%N")
 			std.output.put_string (Tab)
@@ -2997,7 +3004,7 @@ feature -- Return sql code
 
 	sql_extend_insert_missing_rows (an_expression: XPLAIN_EXTENSION_FUNCTION_EXPRESSION; an_extension: XPLAIN_ABSTRACT_EXTENSION): STRING
 			-- An extend with a where clause will make the initial insert
-			-- into the temporary table to be only a partial on. Missing
+			-- into the temporary table to be only a partial one. Missing
 			-- rows are added here. But MySQL does not support self
 			-- selects against tempory tables so for MySQL it's a two
 			-- step process.
@@ -3594,7 +3601,6 @@ feature -- Return sql code
 			Result.append_string ("( select ")
 			Result.append_string (extension.sql_qualified_name (Current, Void))
 			Result.append_string (" from ")
-			--Result.append_string (TemporaryTablePrefix)
 			Result.append_string (extension.quoted_name (Current))
 			Result.append_character (' ')
 			Result.append_string (quote_identifier (extension.sqlname (Current)))
