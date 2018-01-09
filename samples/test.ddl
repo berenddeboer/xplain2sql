@@ -289,11 +289,12 @@ insert t10 "1" its a1 = "Y", a6 = "X".
 
 # test more complex init
 # first define it
-# init b1 does not work on InterBase 6 has it does not have booleans
 type t11 (I4) = a1, a4, a6, i8, i9, another_i9, b1.
 init t11 its i9 = 3.
 init t11 its a1 = a6.
 init t11 its another_i9 = i8 + 10.
+# init b1 does not work on InterBase 6 has it does not have booleans
+# disable when testing InterBase 6.
 init default t11 its b1 = (a4 = "abc").
 
 # now i9 and a1 don't have to be specified in insert
