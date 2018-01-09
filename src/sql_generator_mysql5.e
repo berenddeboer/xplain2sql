@@ -402,14 +402,17 @@ feature -- Updates
 			end
 		end
 
-	output_update_join_clause (a_subject: XPLAIN_SUBJECT; a_join_list: JOIN_LIST)
+	output_update_join_clause (a_subject: XPLAIN_SUBJECT; a_join_list: detachable JOIN_LIST)
 			-- Output join to necessary tables for an update statement.
 			-- If a dialect doesn't support it, just the update for
 			-- the extended table is emitted and it will need
 			-- subselects to retrieve other pieces of data.
 		do
 			std.output.put_string (a_subject.type.quoted_name (Current))
-			std.output.put_string (sql_select_joins (a_join_list))
+			check attached a_join_list end
+			if attached a_join_list as jl then
+				std.output.put_string (sql_select_joins (jl))
+			end
 		end
 
 

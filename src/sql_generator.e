@@ -1926,9 +1926,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 
 				std.output.put_character ('%N')
 				std.output.put_string (once "update ")
-				if attached join_list as jl then
-					output_update_join_clause (subject, jl)
-				end
+				output_update_join_clause (subject, join_list)
 				std.output.put_character ('%N')
 				std.output.put_string (Tab)
 				std.output.put_string (once "set")
