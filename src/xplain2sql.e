@@ -53,6 +53,7 @@ feature -- creation
 			AssertEnabled,
 			AttributeRequiredEnabled,
 			ExtendIndex,
+			ExtendView,
 			NoStoredProcedurePrefix,
 			OldConstraintNames,
 			SetDatabaseEnabled,
@@ -81,6 +82,7 @@ feature -- creation
 				AttributeRequiredEnabled := True
 				AutoPrimaryKeyEnabled := True
 				ExtendIndex := True
+				ExtendView := True
 				SetDatabaseEnabled := True
 				StoredProcedureEnabled := True
 				IdentifierWithSpacesEnabled := True
@@ -114,6 +116,8 @@ feature -- creation
 					SetDatabaseEnabled := False
 				elseif equal(arg, "-noextendindex") then
 					ExtendIndex := False
+				elseif equal(arg, "-noextendview") then
+					ExtendView := False
 				elseif equal(arg, "-nosp") then
 					StoredProcedureEnabled := False
 				elseif equal(arg, "-nospace") then
@@ -254,6 +258,7 @@ feature -- creation
 				AttributeRequiredEnabled,
 				AutoPrimaryKeyEnabled,
 				ExtendIndex,
+				ExtendView,
 				NoStoredProcedurePrefix,
 				OldConstraintNames,
 				SetDatabaseEnabled,
@@ -352,6 +357,7 @@ feature -- help
 			std.error.put_string ("-noassert        do not generate code to support asserts%N")
 			std.error.put_string ("-nodatabase      do not generate code for the database command%N")
 			std.error.put_string ("-noextendindex   do not create index on the primary key for extend temporary tables%N")
+			std.error.put_string ("-noextendview    always generate a temporary table for an extend%N")
 			std.error.put_string ("-nosp            do not create insert/update and delete stored procedures%N")
 			std.error.put_string ("-nospprefix      do not prefix stored procedure names with sp_%N")
 			std.error.put_string ("-notimezone      do not emit date data type with time zone enabled%N")

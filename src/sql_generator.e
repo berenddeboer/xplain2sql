@@ -73,6 +73,7 @@ feature {NONE} -- Initialization
 			TimestampEnabled := False
 			ViewsEnabled := False
 			ExtendIndex := True
+			ExtendView := True
 
 			create declared_values.make_equal (8)
 		end
@@ -387,11 +388,21 @@ feature -- extend options
 			Result := False
 		end
 
+	ExtendView: BOOLEAN
+			-- Create a view for an extend instead of a temporary table where possible.
+
 	can_write_extend_as_view (an_extension: XPLAIN_EXTENSION): BOOLEAN
+			-- Are we allowed to emit a view instead of a temporary table?
+			-- This logic can be faulty, i.e. outside a stored procedure
+			-- we create a view, but this means you cannot update that
+			-- extend. That's usually the behaviour you want as such
+			-- extends are typically reused and should be fast, but we
+			-- don't do global analysis to determine if you want to
+			-- update that extend for some reason some statements later.
 		require
 			extension_not_void: an_extension /= Void
 		do
-			Result := ViewsSupported
+			Result := ViewsSupported and then ExtendView
 		end
 
 
@@ -4471,7 +4482,8 @@ feature -- Options
 			AAssertEnabled,
 			AAttributeRequiredEnabled,
 			AAutoPrimaryKeyEnabled,
-			AExtendIndex,
+			AnExtendIndex,
+			AnExtendView,
 			ANoStoredProcedurePrefix,
 			AOldConstraintNames,
 			ASetDatabaseEnabled,
@@ -4485,7 +4497,8 @@ feature -- Options
 			AssertEnabled := AAssertEnabled
 			AttributeRequiredEnabled := AAttributeRequiredEnabled
 			AutoPrimaryKeyEnabled := AAutoPrimaryKeyEnabled
-			ExtendIndex := AExtendIndex
+			ExtendIndex := AnExtendIndex
+			ExtendView := AnExtendView
 			OldConstraintNames := AOldConstraintNames
 			SetDatabaseEnabled := ASetDatabaseEnabled
 			StoredProcedureEnabled := AStoredProcedureEnabled

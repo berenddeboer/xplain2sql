@@ -1116,7 +1116,7 @@ feature -- Extend options
 
 	can_write_extend_as_view (an_extension: XPLAIN_EXTENSION): BOOLEAN
 		do
-			Result := ViewsSupported and then not is_stored_procedure
+			Result := precursor (an_extension) and then not is_stored_procedure
 		ensure then
 			no_views_in_stored_procedure: is_stored_procedure implies not Result
 		end

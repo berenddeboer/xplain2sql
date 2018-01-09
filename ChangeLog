@@ -1,5 +1,8 @@
 2018-01-09  Berend de Boer  <berend@pobox.com>
 
+	* Add option -noextendview so updateable extends are generated
+  	outside a stored procedure.
+
 	* xplain2sql compiles with gec again.
 
 

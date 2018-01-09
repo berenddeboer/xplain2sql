@@ -372,6 +372,7 @@ delete t1 where mytest = 3.
 
 # update extend itself
 # because a literal is used, every dialect should be able to support it
+# but you will need the -noextendview flag.
 update t1 its mytest = 2.
 
 # Because it references itself, also every dialect should be able to support it
