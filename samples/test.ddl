@@ -743,7 +743,7 @@ end.
 
 # postgresql: test if we can insert sql into the declare block
 
-procedure user sql {  rec record } =
+procedure user sql {  rec record; } =
 
 get t1.
 
