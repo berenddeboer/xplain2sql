@@ -92,18 +92,19 @@ type tsr2 (I4) = [previous_tsr2], a1.
 # test constant definition
 constant v1 (A40).
 constant v2 (I1).
-constant v3 (I4).
+constant v3a (I4).
+constant v3b (I4).
+constant v3c (I4).
 constant v4 (B).
-constant v5 (R2,2).
 constant v space (I2).
 constant v space space (I2).
 
 # test constant assignment
 v1 = ("abc").
 v2 = (0).
-v3 = (( 1 * 17.5 ) / 10).
-v3 = (v2 + 10).
-v3 = (- v2 + 10).
+v3a = (( 1 * 17.5 ) / 10).
+v3b = (v2 + 10).
+v3c = (- v2 + 10).
 v4 = (True).
 v space = (1).
 v space space = (v space).
