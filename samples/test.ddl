@@ -294,10 +294,11 @@ init t11 its i9 = 3.
 init t11 its a1 = a6.
 init t11 its another_i9 = i8 + 10.
 # init b1 does not work on InterBase 6 has it does not have booleans
-# disable when testing InterBase 6.
+# disable this line when testing InterBase 6.
 init default t11 its b1 = (a4 = "abc").
 
 # now i9 and a1 don't have to be specified in insert
+# disable this line when testing InterBase 6.
 insert t11 "1" its a4 = "abc", a6 = "X", i8 = 0.
 
 # init such that insert in sp should be just 'insert default values'
@@ -346,6 +347,7 @@ value mysome2 = some t6 "5".
 # boolean values
 value val30 = true.
 value val31 = false.
+# disable these lines for InterBase
 value valu32 = val30 and val31.
 value valu33 = val30 or val31.
 
