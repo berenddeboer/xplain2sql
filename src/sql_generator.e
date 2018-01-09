@@ -217,7 +217,7 @@ feature -- Table options
 
 	TemporaryTablePrimaryKey: STRING
 		once
-			Result := AutoPrimaryKeyConstraint
+			Result := PrimaryKeyConstraint
 		end
 
 	sequence_name_format: STRING = "$s_$s_seq"
