@@ -32,8 +32,8 @@ build: $(BINARY)
 $(BINARY): $(SOURCES)
 	ec -project_path ${GOBO_BUILD_PREFIX} -config xplain2sql.ecf
 	cd ${W_code} && finish_freezing
-	cp -p ${W_code}/xplain2sql ${W_code}/xplain2sql.melted .
 	rm -f $(SAMPLEFILES) $(SAMPLEFILE).sql
+	cp -p ${W_code}/xplain2sql ${W_code}/xplain2sql.melted .
 
 final_binary: $(SOURCES)
 	ec -project_path ${GOBO_BUILD_PREFIX} -config xplain2sql.ecf -finalize
@@ -76,6 +76,9 @@ MYSQL_USER=berend
 #ISQL_FB=isql-fb
 ISQL_FB=/opt/firebird/bin/isql
 
+# samples we can actually run
+SAMPLES=test bank employee sales supplier
+
 SAMPLEFILES=../samples/test.sql \
 	../samples/testuse.sql \
 	../samples/bank.sql \
@@ -83,15 +86,15 @@ SAMPLEFILES=../samples/test.sql \
 	../samples/sales.sql \
 	../samples/supplier.sql
 
-SAMPLENAME=test2
+SAMPLENAME=test
 #SAMPLENAME=graph
 SAMPLEDIR=../samples/
 SAMPLEFILE=$(SAMPLEDIR)$(SAMPLENAME)
 #SAMPLEFILE=~/src/business-process/src/Xplain/call-center
 #SAMPLEFILE=~/src/automatem/nakedbus/tools/Xplain/nakedbus_prices
 
-SQLOPTIONS=-nosp
-SQLDIALECT=-tsql
+SQLOPTIONS=-nosp -noextendview
+SQLDIALECT=-tsql2000
 #SQLOPTIONS=-nosp -pkformat '$$s_id' -sequenceformat '$$s_seq'
 
 # Runs the test script and attempts
@@ -99,9 +102,10 @@ SQLDIALECT=-tsql
 
 createdb-interbase: build $(SAMPLEFILE).sql
 	rm -f $(SAMPLENAME).gdb $(SAMPLEFILE).out
-	echo 'create database "$(SAMPLENAME).gdb";' > createdb.sql
+	@echo 'create database "$(SAMPLENAME).gdb";' > createdb.sql
 	/opt/interbase/bin/isql -i createdb.sql
 	/opt/interbase/bin/isql -i $(SAMPLEFILE).sql -e -o $(SAMPLEFILE).out
+	@rm createdb.sql
 
 createdb-firebird: build $(SAMPLEFILE).sql
 	rm -f $(SAMPLENAME).gdb $(SAMPLEFILE).out
@@ -109,8 +113,6 @@ createdb-firebird: build $(SAMPLEFILE).sql
 	$(ISQL_FB) -u sysdba -p masterkey -i createdb.sql
 	$(ISQL_FB) -u sysdba -p masterkey -i $(SAMPLEFILE).sql -e -o $(SAMPLEFILE).out
 
-#/usr/bin/postmaster (as user postgres)
-# or just /etc/rc.d/init.d/postgres start
 # to work under my own name, create proper user. su postgres and next
 # use the createuser shell script for that.
 # I've added plpgsql to the template database with:
@@ -126,14 +128,17 @@ createdb-pgsql: build $(SAMPLEFILE).sql
 	cat $(SAMPLEFILE).err
 
 createdb-mysql: build $(SAMPLEFILE).sql
-	#/etc/init.d/mysqld start
-	# make sure berend is added as user:
 	-mysqladmin -h $(MYSQL_HOST) -u $(MYSQL_USER) -f drop $(SAMPLENAME)
 	mysqladmin -h $(MYSQL_HOST) -u $(MYSQL_USER) create $(SAMPLENAME)
 	mysql -h $(MYSQL_HOST) -u $(MYSQL_USER) --database=$(SAMPLENAME) --batch < $(SAMPLEFILE).sql > $(SAMPLEFILE).out
 
+createdb-tsql: build $(SAMPLEFILE).sql
+	-sqlcmd -Q "drop database $(SAMPLENAME)"
+	sqlcmd -Q "create database $(SAMPLENAME)"
+	sqlcmd -d $(SAMPLENAME) -b -i $(SAMPLEFILE).sql -o $(SAMPLEFILE).out -r1
+
 createdb-db2: build $(SAMPLEFILE).sql
-	-db2 disconnect $(SAMPLENAME) > /dev/null
+	-db2 disconnect $(SAMPLENAME)
 	-db2 "drop database $(SAMPLENAME)" > /dev/null
 	db2 "create database $(SAMPLENAME)"
 	db2 connect to $(SAMPLENAME);	db2 "CREATE USER TEMPORARY TABLESPACE USR_TEMPSPC1 MANAGED BY SYSTEM USING ('usr_tempspc1')"
@@ -183,7 +188,40 @@ createdb-sqlite: build $(SAMPLEFILE).sql
 	rm -f $(SAMPLENAME).db $(SAMPLEFILE).out
 	sqlite3 $(SAMPLENAME).db < $(SAMPLEFILE).sql
 
-samples: build $(SAMPLEFILES)
+
+# Run all samples against a dialect
+
+# test.ddl requires one instruction commented out before it will work
+createdb-mysql-all: build
+	rm -f $(SAMPLEFILES) $(SAMPLEFILE).sql
+	for sample in $(SAMPLES); do make createdb-mysql SQLDIALECT=-mysql SQLOPTIONS="-nosp -noextendview" SAMPLENAME=$$sample; res=$$?; if [ $$res -ne 0 ]; then exit 1; fi; done
+
+# test.ddl requires some commenting out before it will work
+createdb-interbase-all: build
+	rm -f $(SAMPLEFILES) $(SAMPLEFILE).sql
+	for sample in $(SAMPLES); do make createdb-interbase SQLDIALECT=-interbase SQLOPTIONS="-nosp -noextendview" SAMPLENAME=$$sample; res=$$?; if [ $$res -ne 0 ]; then exit 1; fi; done
+
+createdb-pgsql-all: build
+	rm -f $(SAMPLEFILES) $(SAMPLEFILE).sql
+	for sample in $(SAMPLES); do make createdb-pgsql SQLDIALECT=-pgsql SQLOPTIONS="-nosp -noextendview" SAMPLENAME=$$sample; res=$$?; if [ $$res -ne 0 ]; then exit 1; fi; done
+
+createdb-sqlite-all: build
+	rm -f $(SAMPLEFILES) $(SAMPLEFILE).sql
+	for sample in $(SAMPLES); do make createdb-sqlite SQLDIALECT=-sqlite SQLOPTIONS="-nosp -noextendview" SAMPLENAME=$$sample; res=$$?; if [ $$res -ne 0 ]; then exit 1; fi; done
+
+createdb-tsql-all: build
+	rm -f $(SAMPLEFILES) $(SAMPLEFILE).sql
+	for sample in $(SAMPLES); do make createdb-tsql SQLDIALECT=-tsql2000 SQLOPTIONS="-nosp -noextendview" SAMPLENAME=$$sample; res=$$?; if [ $$res -ne 0 ]; then exit 1; fi; done
+
+createdb-db2-all: build
+	rm -f $(SAMPLEFILES) $(SAMPLEFILE).sql
+	for sample in $(SAMPLES); do make createdb-db2 SQLDIALECT=-db2 SQLOPTIONS="-nosp -noextendview" SAMPLENAME=$$sample; res=$$?; if [ $$res -ne 0 ]; then exit 1; fi; done
+
+
+samples: build sample-intro $(SAMPLEFILES)
+
+sample-intro:
+	@echo building samples with options: $(SQLDIALECT) $(SQLOPTIONS)
 
 bank: build ../samples/bank.sql
 
