@@ -1706,7 +1706,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 				check attached cursor.item.abstracttype as abstracttype then
 					column_name := abstracttype.sqlcolumnidentifier (Current, cursor.item.role)
 					std.output.put_string (quote_identifier (column_name))
-					std.output.put_string (" ")
+					std.output.put_character (' ')
 					-- columndatatype is either a domain type or a standard
 					-- data type. If it is a domain type, make sure it is quoted.
 					std.output.put_string (abstracttype.columndatatype (Current))
