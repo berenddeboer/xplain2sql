@@ -485,7 +485,7 @@ type inh2 (I4) = [t1], [t2].
 # DB2 likes 128.
 # This creates an insert sp with default values, which doesn't work
 # for InterBase.
-# MySQL 5 doesn't support systemfunctions, comment out when testing.
+# MySQL 5 doesn't support systemfunctions.
 base tfname (A128).
 base tfdate (D).
 type tf1 (I9) = tfname, tfdate.
