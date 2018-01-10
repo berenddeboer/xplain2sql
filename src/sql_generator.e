@@ -2966,14 +2966,13 @@ feature -- Return sql code
 			-- existence. But the code is still here in case we want to
 			-- experiment with it.
 			-- Note 2: there is some indication that the generated code
-			-- with a group by is incorrect. Try it with the Drupal Focus
+			-- with a group by is incorrect. Try it with the Process Focus
 			-- process, the list of my processes is wrong on that case.
 			-- This seems to happen when an extend with a where clause is
 			-- used, and the extend is updated. A left outer join is used
 			-- in that case, but it counts entirely different things in
 			-- this case.
-			group_by_elimination :=
-				an_expression.selection.function.is_existential
+			group_by_elimination := an_expression.selection.function.is_existential
 			if not group_by_elimination then
 				Result.append_character ('%N')
 				Result.append_string (Tab)
