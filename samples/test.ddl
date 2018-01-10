@@ -351,7 +351,7 @@ value mysome2 = some t6 "5".
 # boolean values
 value val30 = true.
 value val31 = false.
-# disable these lines for InterBase
+# disable these lines for InterBase and Microsoft SQL
 value valu32 = val30 and val31.
 value valu33 = val30 or val31.
 
@@ -515,6 +515,8 @@ assert t20 its assert2 (*..*) = i8 * 0.10.
 assert t20 its assert3 = t1 its i8 * 2.
 assert t20 its assert4 (*..*) = i8 * i9 * t1 its i8.
 assert t20 its assert5 = 1.
+# this does no longer work in SQL Server 2005 or later (accepted before!), so
+# comment out line when testing.
 assert t20 its assert6 = assert5 * 2.
 assert t20 its assert7 = i8 / 2.
 assert t1 its assert5 = count t20 per t1.
