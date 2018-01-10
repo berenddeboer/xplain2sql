@@ -259,6 +259,7 @@ feature -- TransactSQL specific SQL creation statements
 		local
 			join_list: JOIN_LIST
 			type: XPLAIN_TYPE
+			group_by_elimination: BOOLEAN
 		do
 			std.output.put_character ('%N')
 			set_nocount_on
@@ -298,16 +299,19 @@ feature -- TransactSQL specific SQL creation statements
 				check attached f.per_property.last as last then
 					type := last.item.type
 				end
-				std.output.put_string (Tab)
-				std.output.put_string (once "group by%N")
-				std.output.put_string (TabTab)
-				if not extension.expression.sqlfromaliasname.is_empty then
-					std.output.put_string (extension.expression.sqlfromaliasname)
-				else
-					std.output.put_string (extension.type.quoted_name (Current))
+				group_by_elimination := f.selection.function.is_existential
+				if not group_by_elimination then
+					std.output.put_string (Tab)
+					std.output.put_string (once "group by%N")
+					std.output.put_string (TabTab)
+					if not extension.expression.sqlfromaliasname.is_empty then
+						std.output.put_string (extension.expression.sqlfromaliasname)
+					else
+						std.output.put_string (extension.type.quoted_name (Current))
+					end
+					std.output.put_character ('.')
+					std.output.put_string (extension.type.q_sqlpkname (Current))
 				end
-				std.output.put_character ('.')
-				std.output.put_string (extension.type.q_sqlpkname (Current))
 			end
 			std.output.put_string (CommandSeparator)
 			std.output.put_character ('%N')
