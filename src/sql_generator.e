@@ -1121,7 +1121,6 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 
 			if attached {XPLAIN_EXTENSION_FUNCTION_EXPRESSION} extension.expression as function_expression then
 				emulate_coalesce :=
-					function_expression /= Void and then
 					function_expression.selection.function.needs_coalesce and then
 					not CoalesceSupported
 				if emulate_coalesce then
