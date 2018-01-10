@@ -54,8 +54,7 @@ feature -- Access
 		end
 
 	assertion: XPLAIN_ASSERTION
-			-- Assertion;
-			-- Can be Void in certain cases (when expression is build).
+			-- Assertion
 
 	anode: XPLAIN_ATTRIBUTE_NAME_NODE
 			-- The way (its list) this assertion was derived
