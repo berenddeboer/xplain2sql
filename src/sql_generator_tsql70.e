@@ -9,7 +9,8 @@ note
 	license: "Eiffel Forum License v2 (see forum.txt)"
 
 	known_bugs:
-		"0. See inherited bugs..."
+		"0. See inherited bugs... %
+		%1. Asserts using previous asserts will not generate correct code."
 
 
 class
