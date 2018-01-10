@@ -509,14 +509,15 @@ unique clustered index t2 its `second index' = a1, a4.
 
 
 # test asserts
+# note tat assert6 does no longer work in SQL Server 2005 or later
+# (accepted before!), so remove that line when testing. Can't comment that out,
+# due to parsing issues that would generate the table without the assert7 column.
 type t20 (I4) = a1, a4, a6, i8, i9, t1.
 assert t20 its assert1 (*..*) = i8 * i9.
 assert t20 its assert2 (*..*) = i8 * 0.10.
 assert t20 its assert3 = t1 its i8 * 2.
 assert t20 its assert4 (*..*) = i8 * i9 * t1 its i8.
 assert t20 its assert5 = 1.
-# this does no longer work in SQL Server 2005 or later (accepted before!), so
-# comment out line when testing.
 assert t20 its assert6 = assert5 * 2.
 assert t20 its assert7 = i8 / 2.
 assert t1 its assert5 = count t20 per t1.
