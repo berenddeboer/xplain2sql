@@ -1752,7 +1752,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 					end
 
 					-- write references and check constraint, if any
-					if attached  abstracttype.representation.domain_restriction as domain_restriction and then attached domain_restriction.sqlcolumnconstraint (Current, column_name) as ss then
+					if attached abstracttype.representation.domain_restriction as domain_restriction and then attached domain_restriction.sqlcolumnconstraint (Current, column_name) as ss then
 						std.output.put_character ('%N')
 						std.output.put_string (Tab)
 						std.output.put_string (Tab)
