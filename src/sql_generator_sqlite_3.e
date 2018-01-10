@@ -4,6 +4,9 @@ note
 
 		"SQLite version 3 support"
 
+	known_bugs:
+		"1. base with domain restriction and a default which is not a constant generates incorrect code."
+
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2005 Berend de Boer, see forum.txt"
 
@@ -22,6 +25,7 @@ inherit
 		redefine
 			AutoPrimaryKeySupported,
 			AutoPrimaryKeyConstraint,
+			ExpressionsInDefaultClauseSupported,
 			datatype_char,
 			datatype_varchar,
 			DomainsSupported,
@@ -37,6 +41,7 @@ inherit
 		redefine
 			AutoPrimaryKeySupported,
 			AutoPrimaryKeyConstraint,
+			ExpressionsInDefaultClauseSupported,
 			ChecksNullAfterTrigger,
 			datatype_char,
 			datatype_varchar,
@@ -95,6 +100,10 @@ feature -- Table options
 			-- Does the dialect require a list of columns after the view
 			-- name?
 
+	ExpressionsInDefaultClauseSupported: BOOLEAN = False
+			-- Does the SQL dialect support expressions (1 + 1 for
+			-- example) in the default clause?
+
 
 feature -- init [default] options
 
@@ -150,7 +159,8 @@ feature -- create statements
 			until
 				cursor.after
 			loop
-				if attached cursor.item.init as init and then not init.is_literal then
+				if not cursor.item.is_init_default or else
+					(attached cursor.item.init as init and then not init.is_constant) then
 					std.output.put_string (comma)
 					std.output.put_string (Tab)
 					std.output.put_string (cursor.item.q_sql_select_name (Current))
