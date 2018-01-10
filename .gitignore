@@ -8,6 +8,9 @@ src/xplain2sql*.h
 src/xplain2sql*.c
 src/xplain2sql*.o
 src/xplain2sql.sh
+src/*.gdb
+src/*.db
+xplain2sql-*.deb
 compile_ge.xace
 compile_ise.ecf
 *.err

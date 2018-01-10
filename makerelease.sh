@@ -3,8 +3,8 @@
 # BEREND, after setting the release name
 # CHECK THE NEXT THINGS AS WELL!!!
 
-releasename=xplain2sql-beta-4.1.3
-#releasename=xplain2sql-beta-3.9.0
+releasename=xplain2sql-5.0
+#releasename=xplain2sql-beta-4.1.3
 
 # CHECK THIS TO!!
 # 1. check XPLAIN2SQL.Version!
@@ -21,15 +21,11 @@ releasename=xplain2sql-beta-4.1.3
 # if [ $? -gt 0 ]; then exit 1; fi
 # cd ..
 
+#cat >/dev/null <<GOTO_1
+
 # make sure the created classes are there
 cd src
-# make xplain_scanner.e
-# if [ $? -gt 0 ]; then exit 1; fi
-# make xplain_parser.e
-# if [ $? -gt 0 ]; then exit 1; fi
-# cd ..
-# 2016-04-22: won't compile with ge
-geant compile_ise_debug
+make
 cd ..
 
 # we want an i386 version only, so make sure we have the default CFLAGS.
@@ -59,30 +55,36 @@ unzip ../$releasename.zip
 if [ $? -gt 0 ]; then exit 1; fi
 
 # test release
-# make with .y and .l
 unset GOBO_BUILD_PREFIX
 cd xplain2sql
-make
-if [ $? -gt 0 ]; then exit 1; fi
 
 # make without .y and .l
-# also produce production code
 make clean
 if [ $? -gt 0 ]; then exit 1; fi
 make
 if [ $? -gt 0 ]; then exit 1; fi
 
+# make with .y and .l
+# produce production code
+cd src
+geant compile_ge
+if [ $? -gt 0 ]; then exit 1; fi
+cd ..
+
 # build the examples
 make examples
 if [ $? -gt 0 ]; then exit 1; fi
+cd ..
 
+#GOTO_1
+#cd builddir
 
 # make C source release
 # test it by renaming xplain2sql, making and reverting rename
-cd ..
 mkdir $releasename
 cd $releasename
-cp ../xplain2sql/src/xplain2sql.[ch] .
+cp ../xplain2sql/src/xplain2sql*.[ch] .
+cp ../xplain2sql/src/xplain2sql.sh .
 cp ../../Makefile.csrc Makefile
 cp ../../README.csrc README
 cp ../../NEWS .
@@ -92,9 +94,20 @@ cp ../../pkg/xplain2sql.spec .
 cp ../../man/xplain2sql.1 .
 make
 if [ $? -gt 0 ]; then exit 1; fi
+if [ ! -x xplain2sql ]
+then
+	echo 1>&2 binary xplain2sql not found
+  exit 1
+fi
+./xplain2sql -h
+if [ $? -gt 0 ]
+then
+	echo 1>&2 cannot execute compiled binary
+  exit 1
+fi
 rm xplain2sql
 cd ..
-rm ../$releasename-csrc.*
+rm -f ../$releasename-csrc.*
 tar -czf ../$releasename-csrc.tar.gz $releasename
 zip -r ../$releasename-csrc.zip $releasename
 
@@ -109,7 +122,7 @@ mkdir -p debian/usr/bin debian/usr/share/man/man1 debian/DEBIAN
 cp $releasename/xplain2sql debian/usr/bin/
 cp $releasename/xplain2sql.1 debian/usr/share/man/man1
 cp ../pkg/control debian/DEBIAN/control
-dpkg --build debian ../$releasename-1_i386.deb
+dpkg --build debian ../$releasename-1_amd64.deb
 
 # ready
 cd ..

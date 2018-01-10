@@ -1,11 +1,20 @@
 NEWS - list of user-visible changes between releases of xplain2sql
 See ChangeLog for more details.
 
-New in beta release 4.1.0 <2011-12-19>
+New or fixed in release 5.0 <2018-01-09>
 
 * postgresql:
   - minimum value for a date was set to 0000-01-01, but that date is
  	  rejected with version 8.4. So minimum value is now 0001-01-01.
+  - add support for Xplain's newdate function.
+  - generated stored procedure was incorrect when it contained a get
+    using division on an integer property: the generated type should
+    have been a float, but was still an integer.
+  - support for PostgreSQL 9.5:
+    - support named parameters.
+    - picture data type is now a bytea.
+    - The real() function maps to the numeric data type with no specified limits on the before/after precision.
+    - Procedure that returns a scalar value, return that as a value, no longer as a set. Will break existing code if you switch to using the 9.5. output.
 * mysql:
   - extend with where claused caused a self select against a temporary
 	  table which MySQL doesn't support.
@@ -17,21 +26,34 @@ New in beta release 4.1.0 <2011-12-19>
   	against an existing database is easier.
   - proper support for some function as limit can be used in
 	  subqueries as well.
+* Microsoft SQL Server:
+  - Add support for SQL Server 2016/Azure SQL
+  - incorrect code for an existential extend.
+* DB2:
+  - incorrect code generated when updating an attribute from an extend.
 * assert statement:
   - Assertion in SQL select was done with an inner join instead of a
     left outer join. Inner join is incorrect when the assertion is a
     some function as there might be no data.
+* SQLite:
+  - incorrect code generated when an expression instead ofconstant was used as default value for an attribute.
 * purge statement:
   - Support purge of assertions.
 * extend statement:
   - optimization: if extend not updated, generate optimized
   	output. Does wonders for MySQL 5. Also fixed bug where extra
   	temporary table step was inserted unnecessarily.
+  - if extend is used outside a stored procedure, a view is created. Use
+    option -noextendview to suppress this behaviour as we don't detect if you
+    subsequently actually want to update that view.
   - extend with any/nil now emits a '1' instead of a column name in
 	  the subselect. Works much better with MySQL's 'optimiser'.
   - with any/nil function code optimisation in case the extended
   	attribute is not update in a procedure.
   - logical expression code optimisation.
+  - If an extend has an explicit representation, the resulting
+    column is cast to that representation, instead of relying upon
+  	what the particular SQL implementation decides the resulting type will be.
 * Functions:
   - Didn't generate a proper column name for get max/get min.
   - Optimized output for any/nil: they're now done with a left outer
@@ -46,7 +68,8 @@ New in beta release 4.1.0 <2011-12-19>
     when reusing it again or using it inside stored procedures it was
     not properly redeclared.
   - value statement didn't accept systemdate or loginname.
-* procedures: a view was created instead of using a temporary table.
+* procedures:
+  - values could not freely use parameters in expressions.
 
 
 New in release 4.0.1 <2008-08-19>

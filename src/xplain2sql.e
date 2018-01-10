@@ -3,7 +3,7 @@ note
 	description: "Xplain2SQL root class."
 
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 1999-2016 Berend de Boer, see LICENSE"
+	copyright:  "Copyright (c) 1999-2018 Berend de Boer, see LICENSE"
 
 class
 
@@ -36,7 +36,7 @@ create
 
 feature -- identification
 
-	Version: STRING = "beta-4.1.5"
+	Version: STRING = "5.0"
 
 
 feature -- creation

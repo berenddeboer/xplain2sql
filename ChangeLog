@@ -1,5 +1,14 @@
 2018-01-09  Berend de Boer  <berend@pobox.com>
 
+	* Release 5.0.
+
+	* Microsoft SQL: incorrect code for an existential extend.
+
+	* SQLite: incorrect code generated when an expression instead of
+	constant was used as default value for an attribute.
+
+	* DB2: incorrect code generated when updating an attribute from an extend.
+
 	* Add option -noextendview so updateable extends are generated
   	outside a stored procedure.
 
@@ -8,7 +17,7 @@
 
 2017-09-04  Berend de Boer  <berend@pobox.com>
 
-	* !Microsoft SQL: Add support for SQL Server 2016/Azure SQL
+	* Microsoft SQL: Add support for SQL Server 2016/Azure SQL
 	Database: generate drop table if exist and drop procedure if exist.
 
 
@@ -22,30 +31,30 @@
 
 2017-05-09  Berend de Boer  <berend@pobox.com>
 
-	* !Postgresql 9.5: picture data type is now a bytea.
+	* Postgresql 9.5: picture data type is now a bytea.
 
 
 2017-05-08  Berend de Boer  <berend@pobox.com>
 
-	* !Postgresql 9.5: The real() function maps to the numeric data
+	* Postgresql 9.5: The real() function maps to the numeric data
 	type with no specified limits on the before/after precision. This
 	more closely maps Xplain expected behaviour, and avoids casting
 	issues.
 
-	* !If an extend has an explicit representation, the resulting
+	* If an extend has an explicit representation, the resulting
 	column is cast to that representation, instead of relying upon
 	what the particular SQL implementation decides the resulting type
 	will be.
 
-	* !Postgresql 7.3 and up: add support for Xplain's newdate function.
+	* Postgresql 7.3 and up: add support for Xplain's newdate function.
 
-	* !Postgresql 9.5: experiment: let procedure that returns just a
+	* Postgresql 9.5: experiment: let procedure that returns just a
 	value, return that as a value, no longer as a set. This may become
 	an option, as it is quite a break from previous behaviour, and
 	makes code inconsistent across various databases.
 
 
-	* !value expression in procedures: values could not freely use
+	* value expression in procedures: values could not freely use
    	parameters in expressions.
 
 	* constant value assignment: now properly rejects a value being
@@ -54,24 +63,24 @@
 
 2017-05-06  Berend de Boer  <berend@pobox.com>
 
-	* !PostgreSQL 9.5: support named parameters.
+	* PostgreSQL 9.5: support named parameters.
 
 
 2017-02-10  Berend de Boer  <berend@pobox.com>
 
-	* !Fix error where we wrongly complained value was set again, but not when a base or type was redefined.
+	* Fix error where we wrongly complained value was set again, but not when a base or type was redefined.
 
 
 2017-02-09  Berend de Boer  <berend@pobox.com>
 
-	* !PostgreSQL: generated stored procedure was incorrect when it
+	* PostgreSQL: generated stored procedure was incorrect when it
 	contained a get using division on an integer property: the
 	generated type should have been a float, but was still an integer.
 
 
 2017-02-08  Berend de Boer  <berend@pobox.com>
 
-	* !Didn't determine properly when a property wasn't part of a type,
+	* Didn't determine properly when a property wasn't part of a type,
 	leading subsequent crash.
 
 
