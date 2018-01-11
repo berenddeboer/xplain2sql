@@ -1,4 +1,4 @@
-input mp-tool;
+input mp-tool.mpii;
 verbatimtex \input dplain etex
 
 beginfig(1);

@@ -1,4 +1,4 @@
-input mp-tool;
+input mp-tool.mpii;
 verbatimtex \input dplain etex
 
 beginfig(1);
@@ -10,7 +10,3 @@ label(btex \vbox{\hbox{department}} etex, center q);
 draw (45,40)--(45,70);
 endfig;
 end;
-
-
-
-
