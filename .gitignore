@@ -25,3 +25,11 @@ EIFGENs
 samples/*.tmp
 samples/*.sql
 util/cgi/cgi_xplain2sql
+*.buildinfo
+*.changes
+*.deb
+*.ddeb
+*.ppa.upload
+*.build
+*.dsc
+*.debian.tar.xz
