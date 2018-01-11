@@ -2,13 +2,13 @@
 
 SHELL=/bin/sh
 .SUFFIXES:
-.SUFFIXES: .mp .1 .tex .pdf
+.SUFFIXES: .mp .tex .pdf
 
-SCHEMES= aggregation.1 \
-	bank.1 \
-	classification.1 \
-	employee.1 \
-	generalization.1
+SCHEMES= aggregation.mp \
+	bank.mp \
+	classification.mp \
+	employee.mp \
+	generalization.mp
 
 PICTURES=*.png
 
@@ -21,12 +21,8 @@ build: xplain2sql.pdf
 xplain2sql.pdf: ${SOURCES}
 
 clean:
-	rm -f xplain2sql.pdf xplain2sql.log xplain2sql.tuo xplain2sql.tui
-	rm -f mpgraph.* *.1 *.mpx
+	rm -f xplain2sql.pdf xplain2sql.log xplain2sql.tuo xplain2sql.tui xplain2sql.aux xplain2sql.bbl xplain2sql.blg temp.tuc temp.log
 
 .tex.pdf:
 	context --result=temp.pdf $<
 	mv temp.pdf $@
-
-.mp.1:
-	mpost -mem=metafun.mem $<
