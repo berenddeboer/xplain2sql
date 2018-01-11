@@ -113,14 +113,19 @@ zip -r ../$releasename-csrc.zip $releasename
 #rpmbuild -ta ../$releasename-csrc.tar.gz
 #if [ $? -gt 0 ]; then exit 1; fi
 #cp /usr/src/redhat/RPMS/i386/$releasename-1.i386.rpm ..
-cd $releasename
-make
-cd ..
-mkdir -p debian/usr/bin debian/usr/share/man/man1 debian/DEBIAN
-cp $releasename/xplain2sql debian/usr/bin/
-cp $releasename/xplain2sql.1 debian/usr/share/man/man1
-cp ../pkg/control debian/DEBIAN/control
-dpkg --build debian ../$releasename-1_amd64.deb
+
+# build Ubuntu 16.04 xenial package
+# We can only run pbuilder after actually having updated/created the package
+# which unfortunately is still a lot of manual work right now.
+#pbuilder-dist trusty build xplain2sql_5.0.1-1.dsc
+# cd $releasename
+# make
+# cd ..
+# mkdir -p debian/usr/bin debian/usr/share/man/man1 debian/DEBIAN
+# cp $releasename/xplain2sql debian/usr/bin/
+# cp $releasename/xplain2sql.1 debian/usr/share/man/man1
+# cp ../pkg/control debian/DEBIAN/control
+# dpkg --build debian ../$releasename-1_amd64.deb
 
 # ready
 cd ..
