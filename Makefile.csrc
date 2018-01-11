@@ -5,11 +5,37 @@
 # The Eiffel source code is available at:
 #   http://www.pobox.com/~berend/xplain2sql
 
+.PHONY: all install clean distclean uninstall
+
 all: xplain2sql
 
-xplain2sql: xplain2sql*.c xplain2sql.h
-	$(CC) $(CFLAGS) xplain2sql*.c -lm -o xplain2sql
+OBJ=xplain2sql1.o xplain2sql2.o xplain2sql3.o xplain2sql4.o
+
+prefix = /usr/local
+exec_prefix = $(prefix)
+bindir = $(exec_prefix)/bin
+mandir = $(prefix)/man
+man1dir = $(mandir)/man1
+
+INSTALL = install -C
+INSTALL_PROGRAM = $(INSTALL)
+INSTALL_DATA = $(INSTALL)
+
+xplain2sql: $(OBJ) xplain2sql.h
+	$(CC) $(CFLAGS) $(OBJ) -lm -o xplain2sql
+
+clean:
+	-rm $(OBJ) xplain2sql
+
+distclean: clean
 
 install:
-	install -C xplain2sql /usr/local/bin
-	install -C xplain2sql.1 /usr/local/man/man1
+	$(INSTALL_PROGRAM) -d $(DESTDIR)$(bindir) $(DESTDIR)$(man1dir)
+	$(INSTALL_PROGRAM) xplain2sql $(DESTDIR)$(bindir)
+	$(INSTALL_DATA)  -m 0644 xplain2sql.1 $(DESTDIR)$(man1dir)
+
+uninstall:
+	-rm -f $(DESTDIR)$(bindir)/xplain2sql $(DESTDIR)$(man1dir)/xplain2sql.1.gz
+
+.c.o:
+	$(CC) $(CFLAGS) -c $<

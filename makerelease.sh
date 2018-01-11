@@ -3,7 +3,7 @@
 # BEREND, after setting the release name
 # CHECK THE NEXT THINGS AS WELL!!!
 
-releasename=xplain2sql-5.0
+releasename=xplain2sql-5.0.1
 #releasename=xplain2sql-beta-4.1.3
 
 # CHECK THIS TO!!
@@ -84,13 +84,11 @@ cd ..
 mkdir $releasename
 cd $releasename
 cp ../xplain2sql/src/xplain2sql*.[ch] .
-cp ../xplain2sql/src/xplain2sql.sh .
 cp ../../Makefile.csrc Makefile
 cp ../../README.csrc README
 cp ../../NEWS .
 cp ../../ChangeLog .
 cp ../../LICENSE .
-cp ../../pkg/xplain2sql.spec .
 cp ../../man/xplain2sql.1 .
 make
 if [ $? -gt 0 ]; then exit 1; fi
@@ -105,7 +103,7 @@ then
 	echo 1>&2 cannot execute compiled binary
   exit 1
 fi
-rm xplain2sql
+make clean
 cd ..
 rm -f ../$releasename-csrc.*
 tar -czf ../$releasename-csrc.tar.gz $releasename

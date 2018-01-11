@@ -1,0 +1,5 @@
+This is a port of xplain2sql, a command-line utility to convert code
+written in Xplain, a data modeling language, to a variety of SQL
+dialects such as MySQL, PostgreSQL, Micrsoft SQL and DB/2.
+
+WWW: http://www.berenddeboer.net/xplain2sql/
