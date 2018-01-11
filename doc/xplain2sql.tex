@@ -116,9 +116,12 @@
 
 
 \unprotect
-\installprettytype
+% \installprettytype
+%   [XPLAIN]
+%   [XPLAIN]
+\definetyping
   [XPLAIN]
-  [XPLAIN]
+  [option=XPLAIN]
 \definetyping
   [XPLAIN]
   [option=XPLAIN]
@@ -126,7 +129,7 @@
 \definepalet [XPLAINgraypretty]  [graypretty]
 \protect
 
-\input verb-xpl.tex
+%\input verb-xpl.tex
 \setuptyping
   [XPLAIN]
   [margin=2em,
@@ -137,6 +140,10 @@
 \def\Xplainkeyword#1{\index{{\it #1} command}{\it #1}}
 \def\Xplainfunction#1{\index{{\it #1} function}{\it #1}}
 
+\definetyping
+  [SQL]
+  [option=SQL]
+
 \setuptyping
   [SQL]
   [margin=2em,
@@ -144,11 +151,15 @@
 
 % XML
 
+\definetyping
+  [XML]
+  [option=XML]
+
 \setuptyping[XML]
   [margin=1em,
    before={\blank[medium]},
    after={\blank[medium]},
-   style=\ss\x]
+   style=\ss\tfx]
 
 % default is no XML line breaks
 \def\disableXMLlinebreaks{\let\XMLlinebreak\relax}
@@ -183,8 +194,11 @@
 % SQL generation
 %\input verb-sql.tex
 
+\usemodule[bib]
+\usemodule[bibltx]
+
 \setupbibtex
-  [database=/usr/local/share/texmf/bibtex/berend,
+  [database=/home/berend/context/tex/texmf-local/bibtex/berend,
    sort=author]
 
 \setuppublications
@@ -516,8 +530,8 @@ To convert an Xplain ddl to some dialect of SQL, type:
 xplain2sql -tsql test.ddl
 \stoptyping
 
-The above example translates the Xplain \type|test.ddl| to
-Transact-SQL, writing it to standard output. \type|xplain2sql| exits
+The above example translates the Xplain \filename{test.ddl} to
+Transact-SQL, writing it to standard output. \filename{xplain2sql} exits
 with \index{error level}exit level 1 if a fatal error has occurred.
 
 To generate output for MySQL, use:
@@ -526,7 +540,7 @@ To generate output for MySQL, use:
 xplain2sql -mysql test.ddl
 \stoptyping
 
-To save output to \type|test.sql|, redirect the output as usual:
+To save output to \filename{test.sql}, redirect the output as usual:
 
 \starttyping
 xplain2sql -tsql test.ddl > test.sql
@@ -788,8 +802,8 @@ version 6 (but \in{see also}[sec:db2_71]):
 \item There is no support for temporary tables. The SQL generated for
   the {\it value} statement is therefore not immediately useful in a
   multi-user environment.
-\item For extends, one use either views (option \type|-extendview|) or
-  subselects (option \type|extendinline|) instead of extends with tables.
+\item For extends, one use either views (option \type{-extendview}) or
+  subselects (option \type{-extendinline}) instead of extends with tables.
 \item Insert, update and delete stored procedures cannot be generated
   as DB/2 only has Java or C stored procedures.
 \item No full support for the {\it some} statement.
@@ -1830,21 +1844,21 @@ are discussed in detail, by showing how the Builder pattern is used.
 \section{Tokenizing}
 
 The tokenizer is the first stage of the Director participant. The
-tokenizer class is written with Lex, see \type|xplain_scanner.l|. This
-file is converted by \type|gelex| to the Eiffel class
+tokenizer class is written with Lex, see \filename{xplain_scanner.l}. This
+file is converted by \filename{gelex} to the Eiffel class
 \EClass{XPLAIN_SCANNER}. The responsibility of the tokenizer is to
 output tokens.
 
 However, the tokenizer knows a bit about sql generation, because of
 inline sql and sql comments.
 
-A `\type|{|' starts literal sql. The tokenizer doesn't bother the parser
+A `\{' starts literal sql. The tokenizer doesn't bother the parser
 with this (literal sql can occur anywhere currently) and writes
 the sql code straight to the output file. Literal sql of course makes
 an Xplain file not portable. Maybe there should be support for sql dialect
-specific literal sql with something like `\type|interbase{ ... }|'.
+specific literal sql with something like `\type{interbase}\arg{...}'.
 
-A `\type|--|' starts a one line comment that is also written to the
+A `\type{--}' starts a one line comment that is also written to the
 output file. As not all sql dialects support one line comments, the
 tokenizer calls the sqlgenerator (see section~\in[sec:sqlgeneration])
 directly so it can transform a one line comment to a multi line like
@@ -2049,7 +2063,7 @@ designs.
 Abstract of this book (taken from Ter Bekke's website
 \from[bekkehome]):
 
-\startnarrower\ix
+\startnarrower
 The book explains the fundamental concepts and general principles of
 data modeling, with practical cases to illustrate the theory where
 appropriate. Recent developments in the database area have been
@@ -2441,7 +2455,7 @@ corresponding SQL code is far harder to read.
 
 In \cite[Bekke1992] three case studies are given. Parts of the
 first case study are given here. Also there is an example file
-supplied with the xplain2sql distribution, \type|bank.ddl| which contains
+supplied with the xplain2sql distribution, \filename{bank.ddl} which contains
 all data definition and data manipulation presented in this case
 study.
 
@@ -2605,24 +2619,7 @@ MetaPost).
 
 \chapter{References}
 
-\placepublications[criterium=all]
-
-% \startpublicatie[Bekke93]
-%   \naam{J.H.~ter~Bekke}
-%   \titel{Database ontwerp (Dutch)}
-%   \jaar{1993}
-%   \plaats{Deventer}
-%   \uitgever{Kluwer Bedrijfswetenschappen}
-% \stoppublicatie
-
-% \startpublicatie[Bekke99]
-%   \naam{J.H.~ter~Bekke}
-%   \titel{Handleiding Xplain DBMS, versie 5.8 (in dutch)}
-%   \jaar{1999}
-%   \plaats{Delft}
-%   \uitgever{Faculteit der Technische Wiskunde en Informatica, vakgroep
-%   Informatiesystemen, groep Database Systemen}
-% \stoppublicatie
+\placepublications[criterium=text]
 
 \stopbackmatter
 
