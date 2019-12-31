@@ -8,7 +8,6 @@ note
 	%2. Add assert support with the generated always option."
 
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 2001-2002, Berend de Boer"
 
 class
 
@@ -39,7 +38,6 @@ inherit
 			StoredProcedureUserDeclarationBeforeBody,
 			sp_define_in_param,
 			sp_define_out_param,
-			sp_get_auto_generated_primary_key,
 			sp_header_end,
 			sp_result_parameter,
 			sp_use_param,
@@ -47,7 +45,6 @@ inherit
 			create_select_function,
 			create_select_list,
 			create_sync_auto_generated_primary_key_with_supplied_value,
-			create_init,
 			DomainsSupported,
 			IdentifierWithSpacesSupported,
 			MaxConstraintIdentifierLength,

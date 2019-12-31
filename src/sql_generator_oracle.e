@@ -3,7 +3,6 @@ note
 	description: "Produces Oracle 9.0.1 SQL output"
 
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 2002, Berend de Boer"
 
 class
 
@@ -28,7 +27,6 @@ inherit
 			sql_string_combine_separator,
 			max_numeric_precision,
 			SupportsDefaultValues,
-			create_init,
 			create_domain,
 			create_end,
 			create_select_function,
@@ -48,7 +46,6 @@ inherit
 			sp_define_param_name,
 			sp_end,
 			sql_expression_as_boolean_value,
-			sp_get_auto_generated_primary_key,
 			sql_last_auto_generated_primary_key,
 			sp_result_parameter,
 			sp_return_parameter_format_string,

@@ -2,7 +2,6 @@ note
 
 	description: "Xplain expression that is a function with a single operand."
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 2004, Berend de Boer"
 
 
 deferred class
@@ -16,8 +15,7 @@ inherit
 		redefine
 			add_to_join,
 			column_name,
-			is_using_other_attributes,
-			uses_its
+			is_using_other_attributes
 		end
 
 

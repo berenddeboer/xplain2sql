@@ -3,7 +3,6 @@ note
 	description: "Base class for InterBase output."
 
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 1999, Berend de Boer"
 
 deferred class
 
@@ -39,7 +38,6 @@ inherit
 			extension_index_name,
 			sp_define_param_name,
 			sp_end,
-			sp_get_auto_generated_primary_key,
 			sp_use_param,
 			sp_start,
 			sqlinitvalue_attribute,

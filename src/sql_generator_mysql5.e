@@ -3,7 +3,6 @@ note
 	description: "Produces mySQL 5.0 output."
 
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 2005, Berend de Boer"
 
 
 class
@@ -21,13 +20,9 @@ inherit
 			sql_string_combine_start,
 			sql_string_combine_separator,
 			sql_string_combine_end,
-			create_select_value_inside_sp,
 			create_select_value_outside_sp,
-			create_value_assign_inside_sp,
 			create_value_assign_outside_sp,
-			create_value_declare_inside_sp,
 			create_value_declare_outside_sp,
-			create_use_database,
 			datatype_int,
 			DomainsSupported,
 			ExpressionsInDefaultClauseSupported,
@@ -55,7 +50,6 @@ inherit
 			SupportsDefaultValues,
 			SupportsJoinInUpdate,
 			ExistentialFromTable,
-			target_name,
 			drop_table_if_exist,
 			drop_temporary_table_if_exist,
 			drop_view_if_exist

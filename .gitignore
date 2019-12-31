@@ -11,7 +11,7 @@ src/xplain2sql.sh
 src/*.gdb
 src/*.db
 xplain2sql-*.deb
-compile_ge.xace
+compile_ge.ecf
 compile_ise.ecf
 *.err
 *.out

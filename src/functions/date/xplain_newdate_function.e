@@ -5,8 +5,6 @@ note
 		"Allows adding or subtracting days, months or years from dates"
 
 	author: "Berend de Boer <berend@pobox.com>"
-	copyright: "Copyright (c) 2017, Berend de Boer"
-	license: "MIT License (see LICENSE)"
 
 
 class
@@ -19,8 +17,7 @@ inherit
 	XPLAIN_EXPRESSION
 		redefine
 			add_to_join,
-			is_using_other_attributes,
-			uses_its
+			is_using_other_attributes
 		end
 
 

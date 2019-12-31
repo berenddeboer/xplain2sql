@@ -2,7 +2,6 @@ note
 
 	description: "Xplain integer representation"
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 1999, Berend de Boer"
 
 class
 
@@ -17,8 +16,6 @@ inherit
 		undefine
 			min_value,
 			max_value
-		redefine
-			is_integer
 		end
 
 	XPLAIN_I_REPRESENTATION

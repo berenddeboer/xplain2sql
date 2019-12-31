@@ -2,7 +2,6 @@ note
 
 	description: "Xplain expression that is a function with two operands. This class is a base class for the actual functions like '+' or 'combine'"
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 2004, Berend de Boer"
 
 
 deferred class
@@ -17,8 +16,7 @@ inherit
 			add_to_join,
 			has_wild_card_characters,
 			is_literal,
-			is_using_other_attributes,
-			uses_its
+			is_using_other_attributes
 		end
 
 

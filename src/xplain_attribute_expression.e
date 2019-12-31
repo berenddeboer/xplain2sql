@@ -2,7 +2,6 @@ note
 
 	description: "Xplain its expression"
 	author:	"Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 1999, Berend de Boer"
 
 class
 
@@ -22,9 +21,7 @@ inherit
 			is_using_other_attributes,
 			sqlminvalue,
 			sqlmaxvalue,
-			sqlinitvalue,
-			sqlname,
-			uses_its
+			sqlname
 		end
 
 create

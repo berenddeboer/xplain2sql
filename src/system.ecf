@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<system
+  xmlns="http://www.eiffel.com/developers/xml/configuration-1-20-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.eiffel.com/developers/xml/configuration-1-20-0 http://www.eiffel.com/developers/xml/configuration-1-20-0.xsd"
+  name="xplain2sql"
+  uuid="224B93D4-B16E-44BC-8D42-0395CA86807D"
+  library_target="all_classes"
+>
+  <description>
+    system:      "Translate Xplain code to SQL"
+    author:      "Berend de Boer [berend@pobox.com]"
+    copyright:   "Copyright (c) 2002-2019, Berend de Boer"
+    license:     "MIT"
+  </description>
+  <target name="all_classes">
+    <root all_classes="true"/>
+    <file_rule>
+      <exclude>/\.svn$</exclude>
+      <exclude>/\.git$</exclude>
+      <exclude>/EIFGENs$</exclude>
+    </file_rule>
+    <option warning="true"/>
+    <library name="free_elks" location="${GOBO}/library/free_elks/library_${GOBO_EIFFEL}.ecf" readonly="true"/>
+    <library name="kernel" location="${GOBO}/library/kernel/library.ecf" readonly="true"/>
+    <library name="lexical" location="${GOBO}/library/lexical/library_skl.ecf" readonly="true"/>
+    <library name="parse" location="${GOBO}/library/parse/library_skl.ecf" readonly="true"/>
+    <library name="string" location="${GOBO}/library/string/library.ecf" readonly="true"/>
+    <library name="structure" location="${GOBO}/library/structure/library.ecf" readonly="true"/>
+    <library name="utility" location="${GOBO}/library/utility/library.ecf" readonly="true"/>
+    <library name="xml" location="${GOBO}/library/xml/library.ecf" readonly="true"/>
+    <cluster name="xplain2sql" location="./" recursive="true"/>
+  </target>
+  <target name="xplain2sql" extends="all_classes">
+    <root class="XPLAIN2SQL" feature="make"/>
+    <setting name="console_application" value="true"/>
+    <capability>
+      <concurrency use="none"/>
+    </capability>
+  </target>
+</system>

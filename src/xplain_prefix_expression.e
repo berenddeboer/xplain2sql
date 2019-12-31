@@ -2,9 +2,6 @@ note
 
 	description: "use for prefix expressions like not or -"
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #7 $"
 
 class
 
@@ -16,8 +13,6 @@ inherit
 		rename
 			name as operator,
 			make as make_one_operand
-		redefine
-			sqlvalue
 		end
 
 

@@ -9,7 +9,6 @@ note
 		%3. Strings and string comparison are case-sensitive."
 
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 1999, Berend de Boer"
 
 deferred class
 
@@ -53,7 +52,6 @@ inherit
 			sp_end,
 			sp_function_type_for_selection_list,
 			sp_function_type_for_selection_value,
-			sp_get_auto_generated_primary_key,
 			sp_header_end,
 			sp_insert_declaration,
 			sp_update_declaration,

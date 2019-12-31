@@ -5,7 +5,6 @@ note
 		"Xplain character representation"
 
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 1999, Berend de Boer"
 
 
 class
@@ -17,7 +16,6 @@ inherit
 
 	XPLAIN_REPRESENTATION
 		redefine
-			default_value,
 			value_representation,
 			mw_column_value
 		end

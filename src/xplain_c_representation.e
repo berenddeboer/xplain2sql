@@ -5,9 +5,6 @@ note
 		"Xplain fixed length character representation"
 
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 1999, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #2 $"
 
 
 class
@@ -19,7 +16,6 @@ inherit
 
 	XPLAIN_REPRESENTATION
 		redefine
-			default_value,
 			value_representation,
 			mw_column_value
 		end
