@@ -5,6 +5,10 @@ dist: bionic
 os:
   - linux
 
+env:
+  global:
+    - MAKEFLAGS="-j 2"
+
 before_script:
   # Install ISE Eiffel (see https://www.eiffel.org/setup/)
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then export ISE_PLATFORM=linux-x86-64; fi
@@ -14,12 +18,12 @@ before_script:
   - ec -version
 
   # Install gobo
-  - export MAKEFLAGS=-j2
   - export GOBO=$PWD/gobo
   - export PATH=$GOBO/bin:$PATH
   - git clone --depth=1 https://github.com/gobo-eiffel/gobo.git
-  - travis_wait 120 $GOBO/bin/install.sh -t gcc
+  - travis_wait $GOBO/bin/install.sh -t gcc
   - gec --version
+  - geant --version
 
 script:
   - cd src
