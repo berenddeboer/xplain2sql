@@ -36,6 +36,8 @@
 		<setting name="console_application" value="true"/>
 		<capability>
 			<concurrency use="none"/>
+			<void_safety support="all" use="all"/>
+			<catcall_detection support="none" use="none"/>
 		</capability>
 	</target>
 </system>
