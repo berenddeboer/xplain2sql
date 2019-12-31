@@ -27,6 +27,7 @@ before_script:
 
 script:
   - cd src
+  - geant compile_ise
   - geant compile_ge
   - ec -batch -config xplain2sql.ecf
   - make -f xplain2sql.make clean all
