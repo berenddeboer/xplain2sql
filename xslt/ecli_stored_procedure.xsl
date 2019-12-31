@@ -77,7 +77,7 @@ feature {NONE} -- Implementation
 		local
 			v: ARRAY [ECLI_VALUE]
 		do
-			create v.make (1, result_columns_count)
+			create v.make_empty
 <xsl:apply-templates select="select/column" mode="bind"/>
 <xsl:text/>			set_results (v)
 		end
@@ -130,7 +130,7 @@ end
 
 <xsl:template match="column" mode="bind">
 <xsl:text/>			create its_<xsl:value-of select="@identifier"/>.make<xsl:apply-templates select="." mode="create-parameters"/>
-			v.put (its_<xsl:value-of select="@identifier"/>, <xsl:value-of select="position()"/>)
+			v.force (its_<xsl:value-of select="@identifier"/>, <xsl:value-of select="position()"/>)
 </xsl:template>
 
 
