@@ -36,7 +36,7 @@ create
 
 feature -- identification
 
-	Version: STRING = "5.0"
+	Version: STRING = "5.1"
 
 
 feature -- creation
@@ -101,6 +101,9 @@ feature -- creation
 				elseif
 					equal(arg, "-h") or else equal(arg, "-help")  then
 					show_usage
+					die (0)
+				elseif arg ~  "-version" or else arg ~  "--version" then
+					std.output.put_string (Version)
 					die (0)
 
 					-- sql options
@@ -311,7 +314,7 @@ feature -- help
 			std.error.put_string ("This is xplain2sql, version ")
 			std.error.put_string (Version)
 			std.error.put_string ("%N")
-			std.error.put_string ("Support page: http://www.pobox.com/~berend/xplain2sql/%N%N")
+			std.error.put_string ("Support page: http://www.berenddeboer.net/xplain2sql/%N%N")
 			std.error.put_string ("usage: xplain2sql [sql dialect] [options] [Xplain-script | stdin ]%N%N")
 
 			std.error.put_string ("The following sql dialects are supported:%N")

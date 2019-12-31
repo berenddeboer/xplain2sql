@@ -1,3 +1,10 @@
+2020-01-01  Berend de Boer  <berend@pobox.com>
+
+	* Working on 5.1
+
+	* !Added -version option to print the current version.
+
+
 2018-01-09  Berend de Boer  <berend@pobox.com>
 
 	* Release 5.0.
