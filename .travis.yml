@@ -7,17 +7,16 @@ os:
 
 before_script:
   # Install ISE Eiffel (see https://www.eiffel.org/setup/)
-  - export TRAVIS_ISE_VERSION=19.05.103187
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then export ISE_PLATFORM=linux-x86-64; fi
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export ISE_PLATFORM=macosx-x86-64; fi
-  - curl -sSL https://www.eiffel.org/setup/install.sh | bash -s $TRAVIS_ISE_VERSION > eiffel.rc
+  - curl -sSL https://www.eiffel.org/setup/install.sh | bash > eiffel.rc
   - source ./eiffel.rc
   - ec -version
 
   # Install gobo
   - export MAKEFLAGS=-j2
   - export GOBO=$PWD/gobo
-  - export PATH=$PATH:$GOBO/bin
+  - export PATH=$GOBO/bin:$PATH
   - git clone --depth=1 https://github.com/gobo-eiffel/gobo.git
   - travis_wait 120 $GOBO/bin/install.sh -t gcc
   - gec --version
@@ -26,3 +25,4 @@ script:
   - cd src
   - geant compile_ge
   - ec -batch -config xplain2sql.ecf
+  - make -f xplain2sql.make clean all
