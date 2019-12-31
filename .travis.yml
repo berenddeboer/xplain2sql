@@ -16,4 +16,5 @@ before_script:
 
 script:
   - cd src
-  - ec -config xplain2sql.ecf
+  - geant compile_ise
+  - ec -batch -config xplain2sql.ecf
