@@ -1,0 +1,19 @@
+language: c
+
+dist: xenial
+
+os:
+  - linux
+
+before_script:
+  - export EPOSIX=$PWD
+  # Install ISE Eiffel (see https://www.eiffel.org/setup/)
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then export ISE_PLATFORM=linux-x86-64; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export ISE_PLATFORM=macosx-x86-64; fi
+  - curl -sSL https://www.eiffel.org/setup/install.sh | bash -s 19.05.103187 > eiffel.rc
+  - source ./eiffel.rc
+  - echo `ec -version`
+
+script:
+  - cd $EPOSIX/src
+  - travis_wait 60 ec -config xplain2sql.ecf
