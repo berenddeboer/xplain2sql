@@ -83,3 +83,25 @@ The xplain2sql support page is http://www.berenddeboer.net/xplain2sql/.
 
 There is [an extensive manual](doc/xplain2sql.pdf) covering use of the
 tool, its internals and many examples.
+
+
+
+# Compiling xplain2sql
+
+Requirements, either:
+
+1. ISE Eiffel 19.12.
+
+2 Latest [Gobo](https://github.com/gobo-eiffel/gobo).
+
+If you use ISE Eiffel, you can open `src/xplain2sql.ecf` with ISE
+Studio and compile the project.
+
+If you use the command-line, compile with `geant compile_ge` to
+compile with Gobo or `geant compile_ise` to compile with ISE.
+
+
+
+# Development status #
+
+[![Build Status](https://api.travis-ci.org/berenddeboer/xplain2sql.svg?branch=master)](https://travis-ci.org/berenddeboer/xplain2sql/)
