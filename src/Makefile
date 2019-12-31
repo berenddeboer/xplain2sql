@@ -14,7 +14,7 @@ GEYACC=geyacc
 # xplain2sql sources
 CREATED_SOURCES=xplain_scanner.e xplain_parser.e
 E_SOURCES=$(shell find . -name "*.e")
-SOURCES=system.xace build.eant $(CREATED_SOURCES) $(E_SOURCES)
+SOURCES=system.ecf build.eant $(CREATED_SOURCES) $(E_SOURCES)
 
 W_code=${GOBO_BUILD_PREFIX}/EIFGENs/xplain2sql/W_code
 F_code=${GOBO_BUILD_PREFIX}/EIFGENs/xplain2sql/F_code
