@@ -2,7 +2,6 @@ note
 
 	description: "Xplain procedure (xplain2sql extension)"
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 2002, Berend de Boer"
 
 
 class
