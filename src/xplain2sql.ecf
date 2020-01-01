@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<system xmlns="http://www.eiffel.com/developers/xml/configuration-1-21-0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.eiffel.com/developers/xml/configuration-1-21-0 http://www.eiffel.com/developers/xml/configuration-1-21-0.xsd" name="xplain2sql" uuid="224B93D4-B16E-44BC-8D42-0395CA86807D">
+<system
+	xmlns="http://www.eiffel.com/developers/xml/configuration-1-20-0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.eiffel.com/developers/xml/configuration-1-20-0 http://www.eiffel.com/developers/xml/configuration-1-20-0.xsd"
+	name="xplain2sql"
+	uuid="224B93D4-B16E-44BC-8D42-0395CA86807D"
+>
 	<target name="xplain2sql">
 		<root class="XPLAIN2SQL" feature="make"/>
-		<option warning="warning" syntax="standard" manifest_array_type="mismatch_warning">
-			<assertions precondition="true" postcondition="true" check="true" invariant="true" loop="true" supplier_precondition="true"/>
+		<option manifest_array_type="mismatch_warning" syntax="standard" warning="true">
+			<assertions check="true" invariant="true" loop="true" postcondition="true" precondition="true" supplier_precondition="true"/>
 		</option>
 		<setting name="console_application" value="true"/>
 		<setting name="dead_code_removal" value="feature"/>
@@ -12,14 +18,14 @@
 			<concurrency support="none"/>
 			<void_safety support="all" use="all"/>
 		</capability>
-		<library name="base" location="$ISE_LIBRARY\library\base\base.ecf"/>
-		<library name="gobo_kernel" location="$ISE_LIBRARY\library\gobo\gobo_kernel.ecf"/>
-		<library name="gobo_lexical" location="$ISE_LIBRARY\library\gobo\gobo_lexical_skl.ecf"/>
-		<library name="gobo_parse" location="$ISE_LIBRARY\library\gobo\gobo_parse_skl.ecf"/>
-		<library name="gobo_string" location="$ISE_LIBRARY\library\gobo\gobo_string.ecf"/>
-		<library name="gobo_structure" location="$ISE_LIBRARY\library\gobo\gobo_structure.ecf"/>
-		<library name="gobo_utility" location="$ISE_LIBRARY\library\gobo\gobo_utility.ecf"/>
-		<library name="gobo_xml" location="$ISE_LIBRARY\library\gobo\gobo_xml.ecf"/>
+		<library name="base" location="$ISE_LIBRARY\library\base\base.ecf" readonly="true"/>
+		<library name="gobo_kernel" location="$ISE_LIBRARY\library\gobo\gobo_kernel.ecf" readonly="true"/>
+		<library name="gobo_lexical" location="$ISE_LIBRARY\library\gobo\gobo_lexical_skl.ecf" readonly="true"/>
+		<library name="gobo_parse" location="$ISE_LIBRARY\library\gobo\gobo_parse_skl.ecf" readonly="true"/>
+		<library name="gobo_string" location="$ISE_LIBRARY\library\gobo\gobo_string.ecf" readonly="true"/>
+		<library name="gobo_structure" location="$ISE_LIBRARY\library\gobo\gobo_structure.ecf" readonly="true"/>
+		<library name="gobo_utility" location="$ISE_LIBRARY\library\gobo\gobo_utility.ecf" readonly="true"/>
+		<library name="gobo_xml" location="$ISE_LIBRARY\library\gobo\gobo_xml.ecf" readonly="true"/>
 		<cluster name="xplain2sql" location=".\" recursive="true">
 			<file_rule>
 				<exclude>/.svn$</exclude>
