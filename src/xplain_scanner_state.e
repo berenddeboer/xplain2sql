@@ -5,7 +5,6 @@ note
 	"Tracks scanner state for currently parsed file."
 
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 2001, Berend de Boer, see forum.txt"
 
 
 class
