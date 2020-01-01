@@ -25,14 +25,12 @@ before_script:
   - git clone --depth=1 https://github.com/gobo-eiffel/gobo.git
   - travis_wait $GOBO/bin/install.sh gcc
   - gec --version
-  - geant --version
-  - gelex --version
 
 script:
   - cd src
-  - ls -l xplain_scanner.e
-  - geant -v compile_ge
-  - ls -l xplain_scanner.e
-  - grep yyMax_symbol_equiv_class *.e
-  - geant compile_ise
+  - geant compile_ge
   - ec -batch -config xplain2sql.ecf
+  - geant compile_debug_ise
+  - make
+  - cd ..
+  - make examples
