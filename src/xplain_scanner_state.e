@@ -113,6 +113,6 @@ feature {NONE} -- directory
 
 invariant
 
-	filename_implies_directory: filename.is_empty = directory.is_empty
+	filename_implies_directory: filename.is_empty implies directory.is_empty
 
 end
