@@ -26,6 +26,7 @@ feature {NONE} -- Initialization
 			-- state based on file reading
 		require
 			valid_buffer: a_input_buffer /= Void
+			a_filename_not_empty: not a_filename.is_empty
 		do
 			do_make (a_input_buffer)
 			filename := a_filename
