@@ -10,6 +10,8 @@ env:
     - MAKEFLAGS="-j 2"
 
 before_script:
+  - export XPLAIN2SQL=$PWD
+
   # Install ISE Eiffel (see https://www.eiffel.org/setup/)
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then export ISE_PLATFORM=linux-x86-64; fi
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export ISE_PLATFORM=macosx-x86-64; fi
@@ -21,17 +23,16 @@ before_script:
   - export GOBO=$PWD/gobo
   - export PATH=$GOBO/bin:$PATH
   - git clone --depth=1 https://github.com/gobo-eiffel/gobo.git
-  - travis_wait $GOBO/bin/install.sh -t gcc
+  - travis_wait $GOBO/bin/install.sh gcc
   - gec --version
   - geant --version
   - gelex --version
 
 script:
   - cd src
-  #- geant compile_ise
   - ls -l xplain_scanner.e
   - geant -v compile_ge
   - ls -l xplain_scanner.e
   - grep yyMax_symbol_equiv_class *.e
-  #- ec -batch -config xplain2sql.ecf
-  #- make -f xplain2sql.make clean all
+  - geant compile_ise
+  - ec -batch -config xplain2sql.ecf
