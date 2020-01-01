@@ -80,8 +80,8 @@ many articles and contributions about the Xplain language.
 
 The xplain2sql support page is http://www.berenddeboer.net/xplain2sql/.
 
-There is [an extensive manual](doc/xplain2sql.pdf) covering use of the
-tool, its internals and many examples.
+There is [an extensive manual](http://www.berenddeboer.net/xplain2sql/xplain2sql.pdf)
+covering use of the tool, its internals and many examples.
 
 
 
