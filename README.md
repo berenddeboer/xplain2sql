@@ -19,8 +19,7 @@ Convert an Xplain file:
 Either [download a
 binary](http://www.berenddeboer.net/xplain2sql/index.html#downloadofficial)
 or the [C source
-tarball](http://www.berenddeboer.net/xplain2sql/xplain2sql-5.0.1-csrc.tar.gz)
-simply
+tarball](http://www.berenddeboer.net/xplain2sql/xplain2sql-5.0.1-csrc.tar.gz).
 
 If you downloaded the tarball, you generate a binary with:
 
