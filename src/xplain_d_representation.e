@@ -5,7 +5,6 @@ note
 		"Xplain date and time representation"
 
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 1999, Berend de Boer"
 
 class
 
