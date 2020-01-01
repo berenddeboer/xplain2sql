@@ -98,7 +98,7 @@ covering use of the tool, its internals and many examples.
 
 Requirements, either:
 
-1. ISE Eiffel 19.12.
+1. [ISE Eiffel](https://www.eiffel.com/) 19.12.
 
 2. Latest [Gobo](https://github.com/gobo-eiffel/gobo).
 
