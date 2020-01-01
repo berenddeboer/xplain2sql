@@ -9,6 +9,7 @@ src/xplain2sql*.c
 src/xplain2sql*.o
 src/xplain2sql.sh
 src/xplain2sql.make
+src/xplain2sql.xml
 src/*.gdb
 src/*.db
 xplain2sql-*.deb
