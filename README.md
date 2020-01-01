@@ -14,6 +14,11 @@ Convert an Xplain file:
 
     xplain2sql -mysql example.ddl
 
+# Online demo
+
+Try it out [online](http://www.berenddeboer.net/cgi-bin/cgi_xplain2sql.cgi).
+
+
 # Installation
 
 Either [download a
