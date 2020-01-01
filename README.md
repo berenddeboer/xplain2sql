@@ -91,7 +91,7 @@ Requirements, either:
 
 1. ISE Eiffel 19.12.
 
-2 Latest [Gobo](https://github.com/gobo-eiffel/gobo).
+2. Latest [Gobo](https://github.com/gobo-eiffel/gobo).
 
 If you use ISE Eiffel, you can open `src/xplain2sql.ecf` with ISE
 Studio and compile the project.
