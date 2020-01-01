@@ -72,8 +72,12 @@ Employee database example:
 
 # Learning Xplain
 
-See the [Johan ter Bekke tribute site](http://www.jhterbekke.net/) for
-many articles and contributions about the Xplain language.
+* A brief introduction to [Xplain's Semantic Data Language](http://www.jhterbekke.net/DataLanguage.html).
+* The [Xplain language syntax](http://www.jhterbekke.net/xplain/syntaxgb.pdf).
+* See the [Johan ter Bekke tribute site](http://www.jhterbekke.net/)
+  for many articles and contributions about the Xplain language.
+
+See also [my Xplain page for more tools and utilities](http://www.berenddeboer.net/xplain/index.html).
 
 
 # More about xplain2sql
