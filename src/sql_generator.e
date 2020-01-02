@@ -311,8 +311,16 @@ feature -- Table options
 			Result := False
 		end
 
+	CreateTableStatement: STRING
+			-- The create table statement to create a table if it does not exist
+		once
+			Result := "create table"
+		ensure
+			not_empty: not Result.is_empty
+		end
+
 	CreateTemporaryTableStatement: STRING
-			-- The create statement to start creating a temporary table.
+			-- The create statement to start creating a temporary table
 		once
 			if TemporaryTablesSupported then
 				Result := "create temporary table"
@@ -320,7 +328,7 @@ feature -- Table options
 				Result := "create table"
 			end
 		ensure
-			CreateTemporaryTableStatement_not_empty: Result /= Void and then not Result.is_empty
+			not_empty: not Result.is_empty
 		end
 
 	FinishTemporaryTableStatement: STRING
@@ -1678,7 +1686,8 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 		do
 			-- create table statement
 			std.output.put_character ('%N')
-			std.output.put_string ("create table ")
+			std.output.put_string (CreateTableStatement)
+			std.output.put_character (' ')
 			std.output.put_string (quote_identifier (type.sqltablename(Current)))
 			std.output.put_string (" (")
 			std.output.put_character ('%N')

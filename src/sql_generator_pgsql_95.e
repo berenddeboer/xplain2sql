@@ -5,8 +5,6 @@ note
 		"Produces PostgreSQL 9.5 output."
 
 	author: "Berend de Boer <berend@pobox.com>"
-	copyright: "Copyright (c) 2017, Berend de Boer"
-	license: "Eiffel Forum License v2 (see forum.txt)"
 
 
 class
@@ -21,6 +19,7 @@ inherit
 			target_name,
 			datatype_int,
 			datatype_picture,
+			CreateTableStatement,
 			NamedParametersSupported,
 			StoredProcedureSupportsTrueFunction,
 			sp_insert_declaration,
@@ -42,6 +41,15 @@ feature -- About this generator
 			-- Name and version of dialect
 		once
 			Result := "PostgreSQL 9.5"
+		end
+
+
+feature -- SQL snippets
+
+	CreateTableStatement: STRING
+			-- The create table statement to create a table if it does not exist
+		once
+			Result := "create table if not exists"
 		end
 
 
