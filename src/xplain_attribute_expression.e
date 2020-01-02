@@ -33,8 +33,6 @@ feature {NONE} -- Initialization
 
 	make (a_first: XPLAIN_ATTRIBUTE_NAME_NODE)
 			-- Initialize.
-		require
-			valid_list: a_first /= Void
 		do
 			first := a_first
 		end
@@ -212,11 +210,6 @@ feature {NONE} -- Implementation
 				Result := l
 			end
 		end
-
-
-invariant
-
-	has_first: first /= Void
 
 
 end
