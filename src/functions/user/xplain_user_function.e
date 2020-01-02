@@ -4,9 +4,7 @@ note
 
 		"Access to some system/user function defined outside Xplain"
 
-	library: "xplain2sql"
 	author: "Berend de Boer <berend@pobox.com>"
-	copyright: "Copyright (c) 2006, Berend de Boer and others"
 
 
 class
