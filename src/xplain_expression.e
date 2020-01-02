@@ -2,7 +2,7 @@ note
 
 	description: "Base for all expression types."
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 1999, Berend de Boer"
+
 
 deferred class
 
@@ -155,12 +155,9 @@ feature -- SQL generation
 			-- statements. As it must be able to accomodate updates, it
 			-- is usually wider than required.
 			-- Use `exact_representation' to get a more precise representation.
-		require
-			have_sqlgenerator: sqlgenerator /= Void
 		deferred
 		ensure
-			valid_result: Result /= Void
-			have_domain_restriction: Result.domain_restriction /= Void
+			have_domain_restriction: attached Result.domain_restriction
 		end
 
 	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING
@@ -168,11 +165,9 @@ feature -- SQL generation
 			-- `sqlvalue' in many cases, but usually if you refer to
 			-- an attribute of `a_type' it has to be prefixed by "new." for
 			-- example.
-		require
-			sqlgenerator_not_void: sqlgenerator /= Void
 		deferred
 		ensure
-			not_empty: Result /= Void and then not Result.is_empty
+			not_empty: not Result.is_empty
 		end
 
 	sqlmaxvalue (sqlgenerator: SQL_GENERATOR): STRING
@@ -187,12 +182,10 @@ feature -- SQL generation
 
 	sqlminvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Return the minimum value of this expression according to its type.
-		require
-			have_sqlgenerator: sqlgenerator /= Void
 		do
 			Result := representation (sqlgenerator).min_value (sqlgenerator)
 		ensure
-			min_value_not_empty: Result /= Void and then not Result.is_empty
+			min_value_not_empty: not Result.is_empty
 		end
 
 	sqlname (sqlgenerator: SQL_GENERATOR): detachable STRING
@@ -200,8 +193,6 @@ feature -- SQL generation
 			-- expression, only applicable for attributes. If nothing
 			-- found, return Void.
 			-- Very similar to `column_name' so we return that as default.
-		require
-			have_sqlgenerator: sqlgenerator /= Void
 		do
 			Result := column_name
 		ensure
@@ -210,22 +201,18 @@ feature -- SQL generation
 
 	sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
 			-- Expression in generator syntax
-		require
-			generator_not_void: sqlgenerator /= Void
 		deferred
 		ensure
-			not_empty: Result /= Void and then not Result.is_empty
+			not_empty: not Result.is_empty
 		end
 
 	sqlvalue_as_wildcard (sqlgenerator: SQL_GENERATOR): STRING
 			-- As `sqlvalue', but a string literal uses this to return a
 			-- properly formatted SQL like expression
-		require
-			generator_not_void: sqlgenerator /= Void
 		do
 			Result := sqlvalue (sqlgenerator)
 		ensure
-			not_empty: Result /= Void and then not Result.is_empty
+			not_empty: not Result.is_empty
 		end
 
 	outer_sqlvalue (sqlgenerator: SQL_GENERATOR): STRING
@@ -234,12 +221,8 @@ feature -- SQL generation
 			-- wrapped in another expression. So it may want to add
 			-- additional brackets, converting the result (to a Boolean)
 			-- etc.
-		require
-			generator_not_void: sqlgenerator /= Void
 		do
 			Result := sqlvalue (sqlgenerator)
-		ensure
-			valid_result: Result /= Void
 		end
 
 	sql_alias (sqlgenerator: SQL_GENERATOR): detachable STRING
@@ -248,8 +231,6 @@ feature -- SQL generation
 			-- colum name. With this the column name can be forced even
 			-- if the user doesn't specify " as ".
 			-- Void if not applicable.
-		require
-			sqlgenerator_not_void: sqlgenerator /= Void
 		do
 		end
 
