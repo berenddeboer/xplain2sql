@@ -2,7 +2,6 @@ note
 
   description: "Xplain node used for enumerations"
   author:     "Berend de Boer <berend@pobox.com>"
-  copyright:  "Copyright (c) 1999, Berend de Boer"
 
 deferred class XPLAIN_ENUMERATION_NODE [G]
 
