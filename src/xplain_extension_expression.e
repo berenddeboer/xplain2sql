@@ -30,6 +30,7 @@ inherit
 		redefine
 			add_to_join,
 			column_name,
+			is_date,
 			is_logical_expression,
 			is_using_other_attributes,
 			sqlname,
@@ -80,12 +81,15 @@ feature -- Access
 
 feature -- Status
 
+	is_date: BOOLEAN
+		do
+			Result := attached extension as e and then attached {XPLAIN_D_REPRESENTATION} e.representation
+		end
+
 	is_logical_expression: BOOLEAN
 			-- Is this a logical expression?
 		do
-			if attached extension as e and then attached {XPLAIN_B_REPRESENTATION} e.representation then
-				Result := True
-			end
+			Result := attached extension as e and then attached {XPLAIN_B_REPRESENTATION} e.representation
 		end
 
 	is_nil_expression: BOOLEAN

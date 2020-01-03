@@ -72,6 +72,7 @@ feature -- Stored procedure support
 			procedure_not_void: a_procedure /= Void
 			procedure_returns_rows: a_procedure.returns_rows (Current)
 		do
+			in_sp_type := True
 			std.output.put_string (once "create type ")
 			std.output.put_string (sp_type_name (a_procedure))
 			std.output.put_string (once " as (")
@@ -79,6 +80,7 @@ feature -- Stored procedure support
 			std.output.put_character (')')
 			std.output.put_string (CommandSeparator)
 			std.output.put_character ('%N')
+			in_sp_type := False
 		end
 
 	sp_result_parameter (a_procedure: detachable XPLAIN_PROCEDURE)
@@ -191,5 +193,11 @@ feature -- Date functions
 			end
 		end
 
+
+feature {NONE} -- Implementation
+
+	in_sp_type: BOOLEAN
+			-- Are we generating a function type?
+			-- We need to emit a special datetime if we support ISO 8601 dates.
 
 end

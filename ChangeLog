@@ -1,6 +1,33 @@
-2020-01-01  Berend de Boer  <berend@pobox.com>
+2020-01-03  Berend de Boer  <berend@pobox.com>
 
-	* Working on 5.1
+	* xplain2sql.xml: emits <insert>, <update> and <delete> tags
+	inside a <storedProcedure> if the procedure executes any of these
+	statements. This allows you to distinguish between procedures that
+	query or mutate data.
+
+	* !Postgresql 9.5: Added option -iso8601date to force all dates to
+	be emitted in ISO 8601 format. This date format is compatible with
+	what AppSync expects. No need to add custom SQL functions to
+	output to get the right date, which also has the problem that the
+	date type disappears and becomes a generic string. Now everything
+	is still seen as a date, and returned properly.
+
+
+2020-01-02  Berend de Boer  <berend@pobox.com>
+
+	* !Postgresql 9.5: created function output time now has a better
+	name if you used the advanced feature of calling a custom SQL
+	function. For example: "select $`to_json'(created) from mytable"
+	will now emit the nicer "created" field for this type instead of
+	"to_json". Previously you had to use: "select $`to_json'(created)
+	as created from mytable".
+
+	* !Postgresql 9.5: now emits "create table if not exists", more
+	compatible with how functions are created, and makes it easier to
+	rerun a script if the tables themselves have not changd.
+
+
+2020-01-01  Berend de Boer  <berend@pobox.com>
 
 	* !Added -version option to print the current version.
 

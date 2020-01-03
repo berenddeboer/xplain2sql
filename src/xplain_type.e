@@ -232,6 +232,15 @@ feature -- questions about the type itself
 			Result := not attributes.is_empty
 		end
 
+	has_a_date_attribute: BOOLEAN
+			-- Does the type have at least one attribute that is a date?
+		do
+			across attributes as c loop
+				if attached {XPLAIN_D_REPRESENTATION} c.item.abstracttype.representation then
+					Result := True
+				end
+			end
+		end
 
 feature -- Attribute handling
 

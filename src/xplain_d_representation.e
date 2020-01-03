@@ -14,6 +14,7 @@ inherit
 
 	XPLAIN_REPRESENTATION
 		redefine
+			is_date,
 			value_representation,
 			min_value,
 			max_value
@@ -30,6 +31,11 @@ feature  -- Access
 		once
 			Result := "dateTime"
 		end
+
+
+feature -- Status
+
+	is_date: BOOLEAN = True
 
 
 feature  -- Required implementations

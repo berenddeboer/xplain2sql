@@ -43,6 +43,8 @@ examples:
 	rm samples/*.sql
 	cd src; make samples "SQLOPTIONS=" "SQLDIALECT=-sqlite"
 	rm samples/*.sql
+	cd src; make samples "SQLOPTIONS=" "SQLDIALECT=-pgsql -iso8601date"
+	rm samples/*.sql
 
 clean:
 	cd src; make clean

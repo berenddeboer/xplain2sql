@@ -359,7 +359,7 @@ feature -- drop statements
 		end
 
 
-feature -- type specification for xplain types
+feature -- type specification for Xplain types
 
 	datatype_boolean (representation: XPLAIN_B_REPRESENTATION): STRING
 		once

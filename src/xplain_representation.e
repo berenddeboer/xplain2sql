@@ -52,6 +52,10 @@ feature -- Status
 			Result := False
 		end
 
+	is_date: BOOLEAN
+		do
+		end
+
 	write_with_quotes: BOOLEAN
 			-- Should values of this type be surrounded by quotes?
 		do

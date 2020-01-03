@@ -18,6 +18,7 @@ inherit
 			exact_representation,
 			is_logical_expression,
 			is_specialization,
+			is_date,
 			is_using_other_attributes,
 			sqlminvalue,
 			sqlmaxvalue,
@@ -85,9 +86,7 @@ feature -- Status
 
 	is_logical_expression: BOOLEAN
 		do
-			if attached first.last as l and then attached l.item.abstracttype as at and then attached {XPLAIN_B_REPRESENTATION} at.representation then
-				Result := True
-			end
+			Result := attached first.last as l and then attached l.item.abstracttype as at and then attached {XPLAIN_B_REPRESENTATION} at.representation
 		end
 
 	is_specialization: BOOLEAN
@@ -98,6 +97,11 @@ feature -- Status
 			if attached first.last as l and then attached l.item.type_attribute as ta then
 				Result := ta.is_specialization
 			end
+		end
+
+	is_date: BOOLEAN
+		do
+			Result := attached first.last as l and then attached l.item.abstracttype as at and then at.representation.is_date
 		end
 
 	is_using_other_attributes (an_attribute: XPLAIN_ATTRIBUTE_NAME): BOOLEAN

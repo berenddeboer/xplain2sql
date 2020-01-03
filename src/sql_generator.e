@@ -24,7 +24,6 @@ note
 		%    attributes in that case."
 
 	author:	"Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 1999-2014, Berend de Boer, see forum.txt"
 
 
 deferred class
@@ -512,6 +511,9 @@ feature -- select options
 			from_needed: ExistentialFromNeeded
 		do
 		end
+
+	Iso8601Dates: BOOLEAN
+			-- Emit dates upon select in Iso8601 format; useful for integrating with AppSync
 
 
 feature -- insert options
@@ -1491,7 +1493,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			-- order by clause
 			std.output.put_string (Tab)
 			std.output.put_string (once "order by")
-			if selection_list.sort_order = Void then
+			if not attached selection_list.sort_order then
 				std.output.put_character ('%N')
 				std.output.put_string (Tab)
 				std.output.put_string (Tab)
@@ -1508,7 +1510,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 					std.output.put_character ('%N')
 					std.output.put_string (Tab)
 					std.output.put_string (Tab)
-					check attached snode.item.last as sort_attribute and then attached sort_attribute.prefix_table as p then
+					if attached snode.item.last as sort_attribute and then attached sort_attribute.prefix_table as p then
 						std.output.put_string (quote_identifier (p))
 						std.output.put_character ('.')
 						std.output.put_string (sort_attribute.item.q_sql_select_name (Current))
@@ -1552,7 +1554,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			std.output.put_string ("select")
 
 			-- column list
-			if selection_list.expression_list = Void then
+			if not attached selection_list.expression_list then
 				if a_self_insert then
 					std.output.put_character (' ')
 					from
@@ -1564,7 +1566,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 					loop
 						std.output.put_string (table_alias)
 						std.output.put_character ('.')
-						check attached cursor.item.abstracttype as abstracttype then
+						if attached cursor.item.abstracttype as abstracttype then
 							std.output.put_string (abstracttype.sqlcolumnidentifier (Current, cursor.item.role))
 						end
 						cursor.forth
@@ -1575,8 +1577,24 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 					end
 				else
 					std.output.put_character (' ')
-					std.output.put_string (selection_list.type.quoted_name (Current))
-					std.output.put_string (once ".*")
+					if not Iso8601Dates or not selection_list.type.has_a_date_attribute then
+						std.output.put_string (selection_list.type.quoted_name (Current))
+						std.output.put_string (once ".*")
+					else
+						-- Unfortunately as soon as we start to emit
+						-- formatted dates we need to list every column
+						std.output.put_string (selection_list.subject.type.q_sqlpkname (Current))
+						across selection_list.subject.type.new_data_attributes_cursor (Current) as c loop
+							if CalculatedColumnsSupported or else not c.item.is_assertion then
+								std.output.put_string (", ")
+								if c.item.is_date then
+									std.output.put_string (sql_cast_to_iso_8601_date (c.item.q_sql_select_name (Current)))
+									std.output.put_string (" as ")
+								end
+								std.output.put_string (c.item.q_sql_select_name (Current))
+							end
+						end
+					end
 				end
 			else
 				std.output.put_character ('%N')
@@ -1596,7 +1614,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 				end
 				if not selection_list.show_only_identifier_column then
 					from
-						if not a_self_insert then
+					if not a_self_insert then
 							std.output.put_string (once ",%N")
 						end
 						std.output.put_string (Tab)
@@ -1616,7 +1634,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 							end
 						end
 						enode := enode.next
-						if enode /= Void then
+						if attached enode then
 							std.output.put_string (once ",%N")
 							std.output.put_string (Tab)
 							std.output.put_string (Tab)
@@ -2632,7 +2650,7 @@ feature -- Return sql code
 		do
 			if
 				an_operator.same_string (once "+") and then
-				(a_left.is_string_expression or else a_right.is_string_expression)
+				(a_left.is_string or else a_right.is_string)
 			then
 				left_value := a_left.sqlvalue (Current)
 				right_value := a_right.sqlvalue (Current)
@@ -4242,6 +4260,29 @@ feature -- Cast expressions
 			cast_not_empty: Result /= Void and then not Result.is_empty
 		end
 
+	sql_cast_to_formatted_date (an_sql_expression: STRING): STRING
+			-- SQL expression to cast `an_expression' to formatted date;
+			-- for example return date as ISO 8601 date if enabled
+		do
+			if Iso8601Dates then
+				Result := sql_cast_to_iso_8601_date (an_sql_expression)
+			else
+				Result := an_sql_expression
+			end
+		ensure
+			cast_not_empty: not Result.is_empty
+		end
+
+	sql_cast_to_iso_8601_date (an_sql_expression: STRING): STRING
+			-- SQL expression to cast `an_expression' to an ISO 8601 date
+			-- if the dialect supports this;
+		do
+			-- Not supported by default
+			Result := an_sql_expression
+		ensure
+			cast_not_empty: not Result.is_empty
+		end
+
 	sql_cast_to_integer (an_expression: XPLAIN_EXPRESSION): STRING
 			-- SQL expression to cast `an_expression' to an integer
 		do
@@ -4496,6 +4537,7 @@ feature -- Options
 			AAutoPrimaryKeyEnabled,
 			AnExtendIndex,
 			AnExtendView,
+			AnIso8601Dates,
 			ANoStoredProcedurePrefix,
 			AOldConstraintNames,
 			ASetDatabaseEnabled,
@@ -4511,6 +4553,7 @@ feature -- Options
 			AutoPrimaryKeyEnabled := AAutoPrimaryKeyEnabled
 			ExtendIndex := AnExtendIndex
 			ExtendView := AnExtendView
+			Iso8601Dates := AnIso8601Dates
 			OldConstraintNames := AOldConstraintNames
 			SetDatabaseEnabled := ASetDatabaseEnabled
 			StoredProcedureEnabled := AStoredProcedureEnabled

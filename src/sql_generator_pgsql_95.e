@@ -17,6 +17,7 @@ inherit
 	SQL_GENERATOR_PGSQL_82
 		redefine
 			target_name,
+			datatype_datetime,
 			datatype_int,
 			datatype_picture,
 			CreateTableStatement,
@@ -26,7 +27,8 @@ inherit
 			sp_update_declaration,
 			sp_delete_declaration,
 			create_select_value_inside_sp,
-			do_sql_cast_to_real
+			do_sql_cast_to_real,
+			sql_cast_to_iso_8601_date
 		end
 
 
@@ -53,7 +55,16 @@ feature -- SQL snippets
 		end
 
 
-feature -- type specification for xplain types
+feature -- type specification for Xplain types
+
+	datatype_datetime (representation: XPLAIN_D_REPRESENTATION): STRING
+		do
+			if in_sp_type and then Iso8601Dates then
+				Result := "varchar(32)"
+			else
+				Result := precursor (representation)
+			end
+		end
 
 	datatype_int (representation: XPLAIN_I_REPRESENTATION): STRING
 			-- int2 parameters in postgresql give a lot of grieve. They
@@ -80,6 +91,11 @@ feature -- type specification for xplain types
 
 
 feature {NONE} -- Cast expressions implementation
+
+	sql_cast_to_iso_8601_date (an_sql_expression: STRING): STRING
+		do
+			Result := "to_char (" + an_sql_expression + ", 'YYYY-MM-DD%"T%"HH24:MI:SS.MSOF:00')"
+		end
 
 	do_sql_cast_to_real (an_sql_expression: STRING): STRING
 			-- SQL expression to cast `an_expression' to a real

@@ -15,7 +15,7 @@ inherit
 		rename
 			name as operator
 		redefine
-			is_string_expression,
+			is_string,
 			sqlvalue_as_wildcard
 		end
 
@@ -32,7 +32,7 @@ feature -- Access
 
 feature -- Status
 
-	is_string_expression: BOOLEAN = True
+	is_string: BOOLEAN = True
 			-- Is this a string?
 
 

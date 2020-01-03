@@ -124,7 +124,14 @@ feature -- SQL code
 			-- for example. The XML_GENERATOR uses it to give clients
 			-- some idea what the column name of a select is going to be.
 		do
-			Result := name
+			if attached parameters as params and then
+				not attached params.next and then
+				attached {XPLAIN_ATTRIBUTE_EXPRESSION} params.item as ae
+			then
+				Result := ae.column_name
+			else
+				Result := name
+			end
 		end
 
 	representation (sqlgenerator: SQL_GENERATOR): XPLAIN_REPRESENTATION

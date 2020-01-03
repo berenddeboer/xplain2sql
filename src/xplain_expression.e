@@ -66,7 +66,12 @@ feature -- Status
 			Result := False
 		end
 
-	is_string_expression: BOOLEAN
+	is_date: BOOLEAN
+			-- Is this a date expression?
+		do
+		end
+
+	is_string: BOOLEAN
 			-- Is this a string?
 		do
 		end
@@ -223,6 +228,13 @@ feature -- SQL generation
 			-- etc.
 		do
 			Result := sqlvalue (sqlgenerator)
+			if is_date then
+				Result := sqlgenerator.sql_cast_to_formatted_date(Result)
+				-- Also make sure output still has the proper name
+				if attached sqlname(sqlgenerator) as name then
+					Result := Result + " as " + name
+				end
+			end
 		end
 
 	sql_alias (sqlgenerator: SQL_GENERATOR): detachable STRING

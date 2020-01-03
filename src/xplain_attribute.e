@@ -47,6 +47,12 @@ feature -- Status
 			Result := False
 		end
 
+	is_date: BOOLEAN
+			-- Is this a date attribute?
+		do
+			Result := attached abstracttype as at and then at.representation.is_date
+		end
+
 	is_extension: BOOLEAN
 			-- Is this an extended attribute?
 		do

@@ -14,7 +14,7 @@ inherit
 		redefine
 			has_wild_card_characters,
 			is_constant,
-			is_string_expression,
+			is_string,
 			sqlvalue_as_wildcard
 		end
 
@@ -53,7 +53,7 @@ feature -- Status
 	is_constant: BOOLEAN = True
 			-- Is this expression a constant value?
 
-	is_string_expression: BOOLEAN = True
+	is_string: BOOLEAN = True
 			-- Is this a string?
 
 	uses_its: BOOLEAN

@@ -2,9 +2,6 @@ note
 
 	description: "Conversion of expression to a string."
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 2004, Berend de Boer"
-	date:       "$Date: 2010/02/11 $"
-	revision:   "$Revision: #5 $"
 
 
 class
@@ -16,7 +13,7 @@ inherit
 
 	XPLAIN_ONE_OPERAND_FUNCTION
 		redefine
-			is_string_expression,
+			is_string,
 			representation
 		end
 
@@ -33,7 +30,7 @@ feature -- Access
 
 feature -- Status
 
-	is_string_expression: BOOLEAN = True
+	is_string: BOOLEAN = True
 			-- Is this a string?
 
 
