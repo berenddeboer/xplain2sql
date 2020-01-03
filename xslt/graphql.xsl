@@ -104,6 +104,7 @@ type <xsl:value-of select="@identifier"/>Columns {
 </xsl:template>
 
 
+
 <!-- Emit a query -->
 
 <xsl:template match="storedProcedure[select]" mode="query">
@@ -151,8 +152,18 @@ type <xsl:value-of select="@identifier"/>Columns {
 </xsl:template>
 
 <xsl:template match="parameter" mode="parameter">
-  <xsl:value-of select="@identifier"/>: <xsl:apply-templates select="." mode="type"/><xsl:if test="not(@optional)">!</xsl:if>
+  <xsl:apply-templates select="." mode="name"/>: <xsl:apply-templates select="." mode="type"/><xsl:if test="not(@optional)">!</xsl:if>
   <xsl:if test="position() != last()">, </xsl:if>
+</xsl:template>
+
+
+<xsl:template match="parameter" mode="name">
+  <xsl:choose>
+    <xsl:when test="@references and @xplainName = @references and (../delete[@xplainName = current()/@references] or ../update[@xplainName = current()/@references] or ../select[@xplainName = current()/@references])">id</xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="@identifier"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 </xsl:stylesheet>

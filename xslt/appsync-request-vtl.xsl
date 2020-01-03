@@ -36,7 +36,7 @@ Example style sheet to generate an AppSync Apache Velocity Request template.
 </xsl:template>
 
 <xsl:template match="parameter[@xsd = 'string']" mode="quoted-string">
-  <xsl:text/>#set($<xsl:value-of select="@identifier"/> = $context.args.<xsl:value-of select="@identifier"/>.toString().replace("'", "''"))
+  <xsl:text/>#set($<xsl:value-of select="@identifier"/> = $context.args.<xsl:value-of select="@identifier"/>.toString().replace("'", "''").replace('"', '\"'))
 </xsl:template>
 
 
@@ -52,10 +52,20 @@ Example style sheet to generate an AppSync Apache Velocity Request template.
   <xsl:choose>
     <xsl:when test="$quote">'$<xsl:value-of select="@identifier"/>'</xsl:when>
     <xsl:otherwise>
-      <xsl:text>$context.args.</xsl:text><xsl:value-of select="@identifier"/>
+      <xsl:text>$context.args.</xsl:text><xsl:apply-templates select="." mode="name"/>
     </xsl:otherwise>
   </xsl:choose>
   <xsl:if test="position() != last()">, </xsl:if>
+</xsl:template>
+
+
+<xsl:template match="parameter" mode="name">
+  <xsl:choose>
+    <xsl:when test="@references and @xplainName = @references and (../delete[@xplainName = current()/@references] or ../update[@xplainName = current()/@references] or ../select[@xplainName = current()/@references])">id</xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="@identifier"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 

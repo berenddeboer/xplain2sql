@@ -215,6 +215,10 @@ feature -- Write callbacks
 						param_type,
 						as_ncname (cursor.item.abstracttype.sqlcolumnidentifier (sqlgenerator, cursor.item.role)),
 						cursor.item.abstracttype.representation.xml_schema_data_type)
+					if attached {XPLAIN_TYPE} cursor.item.abstracttype as my_type then
+						xml.set_attribute (once "references", my_type.name)
+						xml.set_attribute (once "sqlReferences", my_type.quoted_name (sqlgenerator))
+					end
 					xml.stop_tag
 					cursor.forth
 				end
