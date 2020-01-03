@@ -433,6 +433,7 @@ feature {NONE} -- Write helpers
 		local
 			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE]
 			my_attribute: XPLAIN_ATTRIBUTE
+			enum: XPLAIN_A_NODE
 		do
 			-- primary key
 			xml.start_tag (once "column")
@@ -491,6 +492,16 @@ feature {NONE} -- Write helpers
 					if sqlgenerator.StoredProcedureSupported then
 						if attached my_attribute.abstracttype as at then
 							xml.set_attribute (once "sqlParamName", sqlgenerator.sp_define_param_name (at.sqlcolumnidentifier (sqlgenerator, my_attribute.role)))
+						end
+					end
+					if attached {XPLAIN_BASE} my_attribute.abstracttype as my_base and then attached {XPLAIN_A_ENUMERATION} my_base.representation.domain_restriction as r then
+						from
+							enum := r.first
+						until
+							not attached enum
+						loop
+							xml.add_tag ("enum", enum.item)
+							enum := enum.next
 						end
 					end
 					xml.stop_tag

@@ -19,6 +19,8 @@
 # DO NOT EDIT
 #
 
+<xsl:apply-templates select="table/column[enum]" mode="enum"/>
+
 <xsl:apply-templates select="table | storedProcedure[select/column]" mode="type"/>
 
 
@@ -36,6 +38,23 @@ schema {
   query: Query
   mutation: Mutation
 }
+</xsl:template>
+
+
+<!-- Emit an enum -->
+
+<xsl:template match="column" mode="enum">
+<xsl:text/>enum <xsl:value-of select="@identifier"/> {
+<xsl:apply-templates select="enum"/>
+}
+</xsl:template>
+
+
+<xsl:template match="enum">
+  <xsl:text>  </xsl:text>
+  <xsl:value-of select="."/>
+  <xsl:text>
+</xsl:text>
 </xsl:template>
 
 
@@ -101,6 +120,21 @@ type <xsl:value-of select="@identifier"/>Columns {
 
 <xsl:template match="*[@references]" mode="type">
   <xsl:value-of select="@identifier"/>
+</xsl:template>
+
+<xsl:template match="column[enum][@xsd = 'string']" mode="type">
+  <xsl:value-of select="@identifier"/>
+</xsl:template>
+
+<xsl:template match="parameter[@xsd = 'string']" mode="type">
+  <xsl:choose>
+    <xsl:when test="/sql/table/column[@xplainName = current()/@xplainName][enum]">
+      <xsl:value-of select="@identifier"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>String</xsl:text>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 
