@@ -54,6 +54,7 @@ feature -- creation
 			AttributeRequiredEnabled,
 			ExtendIndex,
 			ExtendView,
+			Iso8601Dates,
 			NoStoredProcedurePrefix,
 			OldConstraintNames,
 			SetDatabaseEnabled,
@@ -83,6 +84,7 @@ feature -- creation
 				AutoPrimaryKeyEnabled := True
 				ExtendIndex := True
 				ExtendView := True
+				Iso8601Dates := True
 				SetDatabaseEnabled := True
 				StoredProcedureEnabled := True
 				IdentifierWithSpacesEnabled := True
@@ -113,6 +115,8 @@ feature -- creation
 					AssertEnabled := False
 				elseif equal(arg, "-attributenull") then
 					AttributeRequiredEnabled := False
+				elseif equal(arg, "-iso8601date") then
+					Iso8601Dates := True
 				elseif equal(arg, "-oldconstraintnames") then
 					OldConstraintNames := True
 				elseif equal(arg, "-nodatabase") then
@@ -262,6 +266,7 @@ feature -- creation
 				AutoPrimaryKeyEnabled,
 				ExtendIndex,
 				ExtendView,
+				Iso8601Dates,
 				NoStoredProcedurePrefix,
 				OldConstraintNames,
 				SetDatabaseEnabled,
@@ -356,6 +361,7 @@ feature -- help
 
 			std.error.put_string ("%NSQL generation options can be:%N")
 			std.error.put_string ("-attributenull   Attributes (columns) are null by default%N")
+			std.error.put_string ("-iso8601date     Emit (D) attributes listed in a get in ISO 8601 format%N")
 			std.error.put_string ("-noauto          do not create auto-generated primary keys%N")
 			std.error.put_string ("-noassert        do not generate code to support asserts%N")
 			std.error.put_string ("-nodatabase      do not generate code for the database command%N")

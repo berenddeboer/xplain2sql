@@ -100,7 +100,7 @@ feature -- Write callbacks
 		local
 			value: STRING
 		do
-			if constant.value /= Void then
+			if attached constant.value as v then
 				xml.start_tag ("constant")
 				set_names (
 					constant.name,
@@ -109,9 +109,7 @@ feature -- Write callbacks
 					constant.representation.datatype (sqlgenerator),
 					Void,
 					constant.representation.xml_schema_data_type)
-				check attached constant.value as v then
-					value := v.sqlvalue (sqlgenerator)
-				end
+				value := v.sqlvalue (sqlgenerator)
 				-- strip surrounding quotes, if any
 				if value.count >= 2 then
 					if value.item (1) = '%'' and then value.item (value.count) = '%'' then
@@ -132,8 +130,19 @@ feature -- Write callbacks
 
 	write_delete (subject: XPLAIN_SUBJECT; predicate: detachable XPLAIN_EXPRESSION)
 			-- Code for delete statement.
+		local
+			type: XPLAIN_TYPE
 		do
-			-- no output.
+			xml.start_tag ("delete")
+			type := subject.type
+			set_names (
+				type.name,
+				type.representation.domain,
+				type.sqltablename (sqlgenerator),
+				Void,
+				Void,
+				type.representation.xml_schema_data_type)
+			xml.stop_tag
 		end
 
 	write_get_insert (
@@ -154,7 +163,15 @@ feature -- Write callbacks
 
 	write_insert (type: XPLAIN_TYPE; id: detachable XPLAIN_EXPRESSION; assignment_list: XPLAIN_ASSIGNMENT_NODE)
 		do
-			-- no output
+			xml.start_tag ("insert")
+			set_names (
+				type.name,
+				type.representation.domain,
+				type.sqltablename (sqlgenerator),
+				Void,
+				Void,
+				type.representation.xml_schema_data_type)
+			xml.stop_tag
 		end
 
 	write_procedure (procedure: XPLAIN_PROCEDURE)
@@ -201,6 +218,12 @@ feature -- Write callbacks
 					xml.stop_tag
 					cursor.forth
 				end
+				-- If the procedure has any modification statements, emit them here.
+				-- That allows us to generate GraphQL query and mutate objects definitions
+				-- for example.
+				across procedure.statements as statement loop
+					statement.item.write (Current)
+				end
 				-- write columns for last get statement, if any
 				if attached procedure.last_get_statement as get_statement then
 					get_statement.selection.write_select (Current)
@@ -226,7 +249,7 @@ feature -- Write callbacks
 		do
 			xml.start_tag ("select")
 			xml.start_tag ("column")
-			if selection_list.property = Void then
+			if not attached selection_list.property then
 				representation := selection_list.function.representation (sqlgenerator, selection_list.type, Void)
 				set_names (
 					"value",
@@ -269,9 +292,10 @@ feature -- Write callbacks
 			r: XPLAIN_REPRESENTATION
 		do
 			xml.start_tag ("select")
-			xml.set_attribute ("table", selection_list.subject.type.quoted_name (sqlgenerator))
 			xml.set_attribute ("xplainName", selection_list.subject.type.name)
-			if selection_list.expression_list = Void then
+			xml.set_attribute ("table", selection_list.subject.type.quoted_name (sqlgenerator))
+			if not attached selection_list.expression_list then
+				xml.set_attribute ("attributes", "all")
 				dump_columns (selection_list.type)
 			else
 				xml.start_tag ("column")
@@ -316,6 +340,9 @@ feature -- Write callbacks
 							r.xml_schema_data_type)
 						if node.item.is_specialization then
 							xml.set_attribute ("specialization", "true")
+						end
+						if not node.item.can_be_null then
+							xml.set_attribute (once "optional", once "true")
 						end
 						xml.stop_tag
 						node := node.next
@@ -372,8 +399,19 @@ feature -- Write callbacks
 			assignment_list: XPLAIN_ASSIGNMENT_NODE;
 			predicate: detachable XPLAIN_EXPRESSION)
 			-- Code for update statement.
+		local
+			type: XPLAIN_TYPE
 		do
-			-- no output.
+			xml.start_tag ("update")
+			type := subject.type
+			set_names (
+				type.name,
+				type.representation.domain,
+				type.sqltablename (sqlgenerator),
+				Void,
+				Void,
+				type.representation.xml_schema_data_type)
+			xml.stop_tag
 		end
 
 	write_value (value: XPLAIN_VALUE)
@@ -435,7 +473,7 @@ feature {NONE} -- Write helpers
 					if my_attribute.is_unique then
 						xml.set_attribute (once "unique", once "true")
 					end
-					if my_attribute.init = Void then
+					if not attached my_attribute.init then
 						xml.set_attribute (once "init", once "none")
 					elseif my_attribute.is_init_default then
 						xml.set_attribute (once "init", once "default")
@@ -469,27 +507,25 @@ feature {NONE} -- Write helpers
 		local
 			quoted_sql_name: STRING
 		do
-			if xplain_name /= Void then
-				xml.set_attribute ("xplainName", xplain_name)
-			end
-			if xplain_domain /= Void then
-				xml.set_attribute ("xplainDomain", xplain_domain)
+			xml.set_attribute ("xplainName", xplain_name)
+			if attached xplain_domain as domain then
+				xml.set_attribute ("xplainDomain", domain)
 			end
 			quoted_sql_name := sqlgenerator.quote_valid_identifier (sql_name)
 			xml.set_attribute ("sqlName", quoted_sql_name)
-			if sql_type /= Void then
-				xml.set_attribute ("sqlType", sql_type)
+			if attached sql_type as type then
+				xml.set_attribute ("sqlType", type)
 			end
 			xml.set_attribute ("identifier", code_common_identifier (xplain_name))
-			if an_ncname = Void then
-				xml.set_attribute ("ncname", as_ncname (sql_name))
+			if attached an_ncname as name then
+				xml.set_attribute ("ncname", name)
 			else
-				xml.set_attribute ("ncname", an_ncname)
+				xml.set_attribute ("ncname", as_ncname (sql_name))
 			end
 			xml.set_attribute ("sqlNameAsEiffelString", as_eiffel_string (quoted_sql_name))
 			xml.set_attribute ("sqlNameAsCString", as_c_string (quoted_sql_name))
-			if an_xs_data_type /= Void then
-				xml.set_attribute ("xsd", an_xs_data_type)
+			if attached an_xs_data_type as type then
+				xml.set_attribute ("xsd", type)
 			end
 		end
 
@@ -508,7 +544,7 @@ feature {NONE} -- Write helpers
 	as_c_string (s: STRING): STRING
 			-- Quote occurrences of " in `s'.
 		require
-			s_not_empty: s /= Void and then not s.is_empty
+			s_not_empty: not s.is_empty
 		do
 			Result := as_some_string (s, '\')
 		end
@@ -516,7 +552,7 @@ feature {NONE} -- Write helpers
 	as_eiffel_string (s: STRING): STRING
 			-- Quote occurrences of " in `s'.
 		require
-			s_not_empty: s /= Void and then not s.is_empty
+			s_not_empty: not s.is_empty
 		do
 			Result := as_some_string (s, '%%')
 		end
@@ -552,7 +588,7 @@ feature {NONE} -- Write helpers
 			-- Return as a valid string in some language. Reserved
 			-- characters are quoted using `quote'.
 		require
-			s_not_empty: s /= Void and then not s.is_empty
+			s_not_empty: not s.is_empty
 		local
 			p: INTEGER
 		do
@@ -576,7 +612,7 @@ feature {NONE} -- Write helpers
 				end
 			end
 		ensure
-			not_empty: Result /= Void and then not Result.is_empty
+			not_empty: not Result.is_empty
 		end
 
 
@@ -591,7 +627,7 @@ feature {NONE} -- Implementation
 			-- Identifier that works for most programming languages such
 			-- as Eiffel, Delphi or C.
 		require
-			s_not_void: name /= Void and then not name.is_empty
+			s_not_void: not name.is_empty
 		local
 			s: STRING
 			i: INTEGER
@@ -617,7 +653,7 @@ feature {NONE} -- Implementation
 			end
 			Result := s
 		ensure
-			got_result: Result /= Void and then not Result.is_empty
+			got_result: not Result.is_empty
 			no_spaces: Result.index_of (' ', 1) = 0
 		end
 
