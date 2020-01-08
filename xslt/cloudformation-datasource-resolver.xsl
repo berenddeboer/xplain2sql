@@ -4,8 +4,9 @@
 
 
 <xsl:stylesheet
-  version="1.0"
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    version="1.0"
+    xmlns:str="http://exslt.org/strings"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <xsl:output
   method="text"
@@ -112,7 +113,7 @@ Resources:
 
 <xsl:template match="storedProcedure" mode="resolver">
   <xsl:text>
-  </xsl:text><xsl:value-of select="@identifier"/>Resolver:
+  </xsl:text><xsl:apply-templates select="." mode="valid-resource-name"/>Resolver:
     Type: AWS::AppSync::Resolver
     Properties:
       ApiId: !Ref AppSyncApiId
@@ -141,6 +142,17 @@ Resources:
       <xsl:text>Query</xsl:text>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+
+<!-- Return a valid AWS CloudFormation resource name -->
+
+<xsl:template match="*" mode="valid-resource-name">
+  <xsl:message terminate="yes">Cannot create a valid resource name.</xsl:message>
+</xsl:template>
+
+<xsl:template match="*[@identifier]" mode="valid-resource-name">
+  <xsl:value-of select="str:replace(@identifier, '_', '')"/>
 </xsl:template>
 
 

@@ -31,19 +31,19 @@ clean:
 &#x09;rm -f $(RESOLVERS)
 
 Query.%.req.vtl: <xsl:value-of select="$request-transformation"/> xplain2sql.xml
-&#x09;xsltproc -stringparam procedure-name "$(*F)" $^ > $@.tmp
+&#x09;xsltproc -stringparam procedure-identifier "$(*F)" $^ > $@.tmp
 &#x09;mv $@.tmp $@
 
 Mutation.%.req.vtl: <xsl:value-of select="$request-transformation"/> xplain2sql.xml
-&#x09;xsltproc -stringparam procedure-name "$(*F)" $^ > $@.tmp
+&#x09;xsltproc -stringparam procedure-identifier "$(*F)" $^ > $@.tmp
 &#x09;mv $@.tmp $@
 
 Query.%.res.vtl: <xsl:value-of select="$response-transformation"/> xplain2sql.xml
-&#x09;xsltproc -stringparam procedure-name "$(*F)" $^ > $@.tmp
+&#x09;xsltproc -stringparam procedure-identifier "$(*F)" $^ > $@.tmp
 &#x09;mv $@.tmp $@
 
 Mutation.%.res.vtl: <xsl:value-of select="$response-transformation"/> xplain2sql.xml
-&#x09;xsltproc -stringparam procedure-name "$(*F)" $^ > $@.tmp
+&#x09;xsltproc -stringparam procedure-identifier "$(*F)" $^ > $@.tmp
 &#x09;mv $@.tmp $@
 </xsl:template>
 

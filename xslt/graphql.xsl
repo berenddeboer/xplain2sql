@@ -113,8 +113,8 @@ type <xsl:value-of select="@identifier"/>Columns {
   <xsl:text>Float</xsl:text>
 </xsl:template>
 
-<xsl:template match="column[@xsd = 'positiveInteger'] | parameter[@xsd = 'positiveInteger']" mode="type">
-  <!-- TODO: need to take length into account!! -->
+<xsl:template match="column[@xsd = 'positiveInteger'] | parameter[@xsd = 'positiveInteger'] | column[@xsd = 'int'] | parameter[@xsd = 'int']" mode="type">
+  <!-- TODO: need to take length into account, only 32-bit integers accepted!! -->
   <xsl:text>Int</xsl:text>
 </xsl:template>
 

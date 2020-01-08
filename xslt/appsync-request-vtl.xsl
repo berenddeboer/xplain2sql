@@ -14,29 +14,47 @@ Example style sheet to generate an AppSync Apache Velocity Request template.
   encoding="UTF-8"/>
 
 
-<xsl:param name="procedure-name"/>
+<xsl:param name="procedure-identifier"/>
 
 
 <xsl:template match="/sql">
-<xsl:apply-templates select="storedProcedure[@xplainName = $procedure-name]"/>
+  <xsl:if test="$procedure-identifier = ''">
+    <xsl:message terminate="yes">Parameter procedure-identifier is required.</xsl:message>
+  </xsl:if>
+  <xsl:if test="not(storedProcedure[@identifier = $procedure-identifier])">
+    <xsl:message terminate="yes">No procedure with identifier <xsl:value-of select="@procedure-identifier"/> found.</xsl:message>
+  </xsl:if>
+  <xsl:apply-templates select="storedProcedure[@identifier = $procedure-identifier]"/>
 </xsl:template>
 
 
 <xsl:template match="storedProcedure">
-  <xsl:apply-templates select="parameter" mode="quoted-string"/>
+  <xsl:apply-templates select="parameter" mode="validate"/>
 <xsltext/>{
   "version": "2018-05-29",
-  "statements":   ["select <xsl:apply-templates select="select/column" mode="list"/> from <xsl:value-of select="@sqlNameAsCString"/>(<xsl:apply-templates select="parameter" mode="value"/>)"]
+  "statements": [
+    "select <xsl:apply-templates select="select/column" mode="list"/> from <xsl:value-of select="@sqlNameAsCString"/>(<xsl:apply-templates select="parameter" mode="value"/>)"
+  ],
+  "variableMap": {<xsl:text/>
+    <xsl:apply-templates select="parameter" mode="variable-map"/>
+  }
 }
 </xsl:template>
 
 
-<xsl:template match="parameter" mode="quoted-string">
-  <!-- skip -->
+<xsl:template match="parameter" mode="validate">
 </xsl:template>
 
-<xsl:template match="parameter[@xsd = 'string']" mode="quoted-string">
-  <xsl:text/>#set($<xsl:value-of select="@identifier"/> = $context.args.<xsl:value-of select="@identifier"/>.toString().replace("'", "''").replace('"', '\"'))
+<xsl:template match="parameter[@xsd = 'positiveInteger']" mode="validate">
+<xsl:text/>#if ($context.args.<xsl:apply-templates select="." mode="name"/> &lt; 1)
+  $util.error("Provided input '<xsl:apply-templates select="." mode="name"/>' is not valid.")
+#end
+</xsl:template>
+
+
+<xsl:template match="parameter" mode="variable-map">
+    ":<xsl:apply-templates select="." mode="name"/>": $util.toJson($context.args.<xsl:apply-templates select="." mode="name"/><xsl:if test="@xsd = 'string'">.replace("'", "''")</xsl:if>)<xsl:text/>
+  <xsl:if test="position() != last()">,</xsl:if>
 </xsl:template>
 
 
@@ -48,13 +66,7 @@ Example style sheet to generate an AppSync Apache Velocity Request template.
 
 
 <xsl:template match="parameter" mode="value">
-  <xsl:variable name="quote" select="@xsd = 'string'"/>
-  <xsl:choose>
-    <xsl:when test="$quote">'$<xsl:value-of select="@identifier"/>'</xsl:when>
-    <xsl:otherwise>
-      <xsl:text>$context.args.</xsl:text><xsl:apply-templates select="." mode="name"/>
-    </xsl:otherwise>
-  </xsl:choose>
+  <xsl:text/>:<xsl:apply-templates select="." mode="name"/>
   <xsl:if test="position() != last()">, </xsl:if>
 </xsl:template>
 
