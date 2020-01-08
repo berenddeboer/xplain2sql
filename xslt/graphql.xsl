@@ -166,8 +166,9 @@ type <xsl:value-of select="@identifier"/>Columns {
 
 <xsl:template match="storedProcedure">
   <xsl:variable name="name" select="select/@xplainName"/>
+  <xsl:variable name="is-instance" select="select/@instance = true()"/>
   <xsl:text>
-  </xsl:text><xsl:value-of select="@identifier"/><xsl:if test="parameter">(<xsl:apply-templates select="parameter" mode="parameter"/>)</xsl:if>: [<xsl:text/>
+  </xsl:text><xsl:value-of select="@identifier"/><xsl:if test="parameter">(<xsl:apply-templates select="parameter" mode="parameter"/>)</xsl:if>: <xsl:if test="not($is-instance)">[</xsl:if>
   <xsl:choose>
     <xsl:when test="select/column">
       <xsl:choose>
@@ -178,11 +179,11 @@ type <xsl:value-of select="@identifier"/>Columns {
           <xsl:value-of select="@identifier"/>Columns<xsl:text/>
         </xsl:otherwise>
       </xsl:choose>
-      <xsl:text>!</xsl:text>
+      <xsl:if test="not($is-instance)">!</xsl:if>
     </xsl:when>
     <xsl:otherwise>Boolean</xsl:otherwise>
   </xsl:choose>
-  <xsl:text>]</xsl:text>
+  <xsl:if test="not($is-instance)">]</xsl:if>
 </xsl:template>
 
 <xsl:template match="parameter" mode="parameter">
