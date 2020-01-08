@@ -232,7 +232,8 @@ feature -- Write callbacks
 				if attached procedure.last_get_statement as get_statement then
 					get_statement.selection.write_select (Current)
 				elseif attached procedure.last_value_selection_statement as value_statement then
-					value_statement.write (Current)
+					-- this is already emitted when writing the statements above.
+					--value_statement.write (Current)
 				end
 				xml.stop_tag
 			end
