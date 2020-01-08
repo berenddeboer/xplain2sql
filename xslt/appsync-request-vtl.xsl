@@ -33,7 +33,7 @@ Example style sheet to generate an AppSync Apache Velocity Request template.
 <xsltext/>{
   "version": "2018-05-29",
   "statements": [
-    "select <xsl:apply-templates select="select/column" mode="list"/> from <xsl:value-of select="@sqlNameAsCString"/>(<xsl:apply-templates select="parameter" mode="value"/>)"
+    "select <xsl:if test="not(@returns)"><xsl:apply-templates select="select/column" mode="list"/> from </xsl:if><xsl:value-of select="@sqlNameAsCString"/>(<xsl:apply-templates select="parameter" mode="value"/>)<xsl:if test="@returns"> as <xsl:value-of select="select/column[1]/@sqlNameAsCString"/></xsl:if>"
   ],
   "variableMap": {<xsl:text/>
     <xsl:apply-templates select="parameter" mode="variable-map"/>

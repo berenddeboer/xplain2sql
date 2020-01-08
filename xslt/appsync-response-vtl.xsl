@@ -42,6 +42,9 @@ Example style sheet to generate an AppSync Apache Velocity Response template.
   $utils.error($context.error.message, $context.error.type)
 #end
 <xsl:choose>
+  <xsl:when test="@returns">
+    <xsl:text/>$utils.toJson($utils.rds.toJsonObject($context.result)[0][0]["<xsl:value-of select="select/column/@identifier"/>"])<xsl:text/>
+  </xsl:when>
   <xsl:when test="$max-one-row">
     <xsl:text/>#set( $result = $utils.rds.toJsonObject($context.result) )
 #if (!$result[0].isEmpty())

@@ -75,7 +75,7 @@ type <xsl:value-of select="@identifier"/>Columns {
 </xsl:template>
 
 
-<xsl:template match="storedProcedure[select/@attributes = 'all']" mode="type">
+<xsl:template match="storedProcedure[select/@attributes = 'all' or @returns]" mode="type">
   <!-- skip -->
 </xsl:template>
 
@@ -172,6 +172,9 @@ type <xsl:value-of select="@identifier"/>Columns {
   <xsl:choose>
     <xsl:when test="select/column">
       <xsl:choose>
+        <xsl:when test="@returns">
+          <xsl:apply-templates select="select/column[1]" mode="type"/>
+        </xsl:when>
         <xsl:when test="select/@attributes = 'all'">
           <xsl:value-of select="/sql/table[@xplainName = $name]/@identifier"/>
         </xsl:when>
