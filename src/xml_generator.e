@@ -364,6 +364,7 @@ feature -- Write callbacks
 			-- Value selection: value v.
 		do
 			xml.start_tag ("select")
+			xml.set_attribute ("value", "true")
 			xml.start_tag ("column")
 			set_names (
 				value.name,
