@@ -4,9 +4,6 @@ note
 		"Produces PostgreSQL 7.2 output."
 
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 2003, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #5 $"
 
 class
 
