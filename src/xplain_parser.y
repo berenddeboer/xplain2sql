@@ -1491,21 +1491,26 @@ insert
 	: XPLAIN_INSERT subject XPLAIN_ITS assignment_list
 		{
 			write_pending_statement
-			if attached $2 as subject and then attached subject.type as mytype and then attached $4 as al then
+			if attached $2 as subject and then attached $4 as al then
 				warn_attributes_with_inits (al)
 				if not attached subject.identification as identification then
-					report_error ("Identification expected.")
+					report_error ("Identification expected after a type name.")
+					std.error.put_line ("%NAn identification is the primary key, usually a '*' meaning generate a unique key,")
+					std.error.put_line ("but can be a string like %"1%".%N")
+					std.error.put_line ("Examples:")
+					std.error.put_line ("    insert " + subject.type.name + " * its ...")
+					std.error.put_line ("    insert " + subject.type.name + " %"1%" its ...")
 					abort
 				elseif
-					mytype.representation.is_integer and then
+					subject.type.representation.is_integer and then
 					identification.is_constant and then
 					not identification.sqlvalue (sqlgenerator).is_integer then
 					report_error (format ("Primary key %"$s%" is not an integer.", <<identification.sqlvalue (sqlgenerator)>>))
 					abort
 				else
-					create {XPLAIN_INSERT_STATEMENT} $$.make (mytype, identification, al)
+					create {XPLAIN_INSERT_STATEMENT} $$.make (subject.type, identification, al)
 					if immediate_output_mode then
-						sqlgenerator.write_insert (mytype, identification, al)
+						sqlgenerator.write_insert (subject.type, identification, al)
 					end
 				end
 			end
