@@ -299,6 +299,9 @@ feature -- Write callbacks
 			xml.start_tag ("select")
 			xml.set_attribute ("xplainName", selection_list.subject.type.name)
 			xml.set_attribute ("table", selection_list.subject.type.quoted_name (sqlgenerator))
+			if attached selection_list.subject.identification then
+				xml.set_attribute ("instance", "true")
+			end
 			if not attached selection_list.expression_list then
 				xml.set_attribute ("attributes", "all")
 				dump_columns (selection_list.type)
