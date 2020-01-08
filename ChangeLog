@@ -1,9 +1,17 @@
+2020-01-09  Berend de Boer  <berend@pobox.com>
+
+	* !xplain2slq.xml: attribute value="true" on the <select> if we
+	are selecting a single value.
+
+	* !xplain2sql.xml: attribute instance="true" on the <select> if we
+	are selecting at maximum a single instance.
+
 2020-01-03  Berend de Boer  <berend@pobox.com>
 
-	* xplain2sql.xml: add <enum> tags inside a column if the base type
+	* !xplain2sql.xml: add <enum> tags inside a column if the base type
 	has a text enumeration.
 
-	* xplain2sql.xml: emits <insert>, <update> and <delete> tags
+	* !xplain2sql.xml: emits <insert>, <update> and <delete> tags
 	inside a <storedProcedure> if the procedure executes any of these
 	statements. This allows you to distinguish between procedures that
 	query or mutate data.
