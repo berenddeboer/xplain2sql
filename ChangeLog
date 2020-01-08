@@ -1,5 +1,9 @@
 2020-01-09  Berend de Boer  <berend@pobox.com>
 
+	* !xplainsql.xml: attribute returns="int4" and such on the
+	<storedProcedure> element if the function returns a scalar value
+	instead of a row set.
+
 	* !xplain2slq.xml: attribute value="true" on the <select> if we
 	are selecting a single value.
 

@@ -190,6 +190,11 @@ feature -- Write callbacks
 					Void,
 					Void,
 					Void)
+				if sqlgenerator.ReturnValueSupported then
+					if attached procedure.last_value_selection_statement as value_statement then
+						xml.set_attribute ("returns", value_statement.value.representation.datatype (sqlgenerator))
+					end
+				end
 				-- write parameters
 				cursor := procedure.parameters.new_cursor
 				from

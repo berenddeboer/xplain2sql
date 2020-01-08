@@ -466,6 +466,11 @@ feature -- Stored procedure options
 		deferred
 		end
 
+	ReturnValueSupported: BOOLEAN
+			-- In case a value is selected, is this returned as a function result?
+		do
+		end
+
 
 feature -- index options
 

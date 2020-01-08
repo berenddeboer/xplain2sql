@@ -17,6 +17,7 @@ inherit
 	SQL_GENERATOR_PGSQL_82
 		redefine
 			target_name,
+			ReturnValueSupported,
 			datatype_datetime,
 			datatype_int,
 			datatype_picture,
@@ -44,6 +45,12 @@ feature -- About this generator
 		once
 			Result := "PostgreSQL 9.5"
 		end
+
+
+feature -- Stored procedure options
+
+	ReturnValueSupported: BOOLEAN = True
+			-- In case a value is selected, is this returned as a function result?
 
 
 feature -- SQL snippets
