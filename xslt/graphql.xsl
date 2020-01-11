@@ -29,14 +29,18 @@ type Query {<xsl:text/>
 }
 
 
+<xsl:if test="storedProcedure[insert | update | delete]">
 type Mutation {<xsl:text/>
 <xsl:apply-templates select="storedProcedure" mode="mutation"/>
 }
+</xsl:if>
 
 
 schema {
-  query: Query
+  query: Query<xsl:text/>
+<xsl:if test="storedProcedure[insert | update | delete]">
   mutation: Mutation
+</xsl:if>
 }
 </xsl:template>
 
