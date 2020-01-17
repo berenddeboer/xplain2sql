@@ -48,9 +48,7 @@ feature -- Status
 	uses_parameter (a_parameter: XPLAIN_ATTRIBUTE_NAME): BOOLEAN
 			-- Does this expression refer to `a_parameter'?
 		do
-			Result := name.is_equal (a_parameter)
-		ensure then
-			definition: Result = name.is_equal (a_parameter)
+			Result := name.role ~ a_parameter.role and name.name ~ a_parameter.name
 		end
 
 

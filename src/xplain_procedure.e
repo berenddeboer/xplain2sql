@@ -31,15 +31,15 @@ create
 
 feature {NONE} -- Initialization
 
-	make (a_name: STRING; a_parameters: detachable XPLAIN_ATTRIBUTE_NAME_NODE; a_procedure_kind: INTEGER; a_statements: detachable XPLAIN_STATEMENT_NODE)
+	make (a_name: STRING; a_parameters: detachable XPLAIN_PARAMETER_NODE; a_procedure_kind: INTEGER; a_statements: detachable XPLAIN_STATEMENT_NODE)
 			-- Initialize stored procedure.
 		require
 			valid_name: a_name /= Void and then not a_name.is_empty
 			-- a_parameters /= Void implies for_each p in a_parameters it_holds p.item.abstracttype /= Void
 		local
 			r: XPLAIN_I_REPRESENTATION
-			anode: detachable XPLAIN_ATTRIBUTE_NAME_NODE
-			snode: detachable XPLAIN_STATEMENT_NODE
+			anode: like a_parameters
+			snode: like a_statements
 		do
 			-- dummy representation for now, perhaps when stored
 			-- procedures can return a value, we have to do something
@@ -53,7 +53,7 @@ feature {NONE} -- Initialization
 			from
 				anode := a_parameters
 			until
-				anode = Void
+				not attached anode
 			loop
 				parameters.put_last (anode.item)
 				anode := anode.next
@@ -64,7 +64,7 @@ feature {NONE} -- Initialization
 			from
 				snode := a_statements
 			until
-				snode = Void
+				not attached snode
 			loop
 				statements.put_last (snode.item)
 				snode := snode.next
@@ -188,7 +188,7 @@ feature -- Access
 			end
 		end
 
-	parameters: DS_LINKED_LIST [XPLAIN_ATTRIBUTE_NAME]
+	parameters: DS_LINKED_LIST [XPLAIN_PARAMETER]
 			-- Procedure parameters
 
 	is_path_procedure: BOOLEAN

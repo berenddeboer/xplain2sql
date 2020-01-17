@@ -1,3 +1,10 @@
+2020-01-17  Berend de Boer  <berend@pobox.com>
+
+	* !xplain2sql.xml: procedure parameters can now take the
+	*optional* keyword. This does do nothing for the output
+	(parameters are null at least in PostgreSQL), but the output now
+	has the indication this intended to be an optional parameter.
+
 2020-01-09  Berend de Boer  <berend@pobox.com>
 
 	* !xplainsql.xml: attribute returns="int4" and such on the

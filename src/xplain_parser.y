@@ -225,8 +225,9 @@ create
 %type <detachable STRING> optional_new_name
 %type <detachable XPLAIN_EXPRESSION> predicate
 
-%type <detachable XPLAIN_ATTRIBUTE_NAME_NODE> optional_procedure_parameters
-%type <XPLAIN_ATTRIBUTE_NAME_NODE> procedure_parameter_list
+%type <detachable XPLAIN_PARAMETER_NODE> optional_procedure_parameters
+%type <XPLAIN_PARAMETER_NODE> procedure_parameter_list
+%type <XPLAIN_PARAMETER> procedure_parameter
 %type <detachable XPLAIN_STATEMENT_NODE> optional_procedure_statement_list
 %type <detachable XPLAIN_STATEMENT_NODE> procedure_statement_list
 %type <detachable XPLAIN_STATEMENT> procedure_supported_command
@@ -2160,10 +2161,15 @@ optional_procedure_parameters
 	;
 
 procedure_parameter_list
-	: attribute
+	: procedure_parameter
 		{ create $$.make ($1, Void) }
-	| attribute ',' procedure_parameter_list
+	| procedure_parameter ',' procedure_parameter_list
 		{ create $$.make ($1, $3) }
+;
+
+procedure_parameter
+	: attribute { create $$.make ($1, True) }
+	| XPLAIN_OPTIONAL attribute { create $$.make ($2, False) }
 	;
 
 optional_sql
@@ -2308,7 +2314,7 @@ feature {NONE} -- these vars survive a little bit longer
 
 	subject_type: detachable XPLAIN_TYPE  -- used to check if valid attribute
 	extend_type: detachable XPLAIN_TYPE   -- used in extend statement
-	my_parameters: detachable XPLAIN_ATTRIBUTE_NAME_NODE
+	my_parameters: detachable XPLAIN_PARAMETER_NODE
 			-- List of declared parameters for a procedure
 
 	constant_mode: BOOLEAN
@@ -2394,7 +2400,7 @@ feature -- Code blocks
 
 feature -- Statement generation
 
-	new_procedure_statement (a_name: STRING; a_parameters: detachable XPLAIN_ATTRIBUTE_NAME_NODE; a_procedure_kind: INTEGER; a_statements: detachable XPLAIN_STATEMENT_NODE): XPLAIN_PROCEDURE_STATEMENT
+	new_procedure_statement (a_name: STRING; a_parameters: like my_parameters; a_procedure_kind: INTEGER; a_statements: detachable XPLAIN_STATEMENT_NODE): XPLAIN_PROCEDURE_STATEMENT
 		local
 			myprocedure: XPLAIN_PROCEDURE
 		do
@@ -2660,7 +2666,7 @@ feature {NONE} -- Checks for validness of parsed code
 		require
 			name_not_empty: a_name /= Void
 		do
-			Result := attached my_parameters as p and then p.has (a_name)
+			Result := attached my_parameters as p and then p.has_parameter (a_name)
 			if not Result then
 				report_error ("Parameter `" + a_name.full_name + "' has not been declared.")
 				abort

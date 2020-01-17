@@ -177,7 +177,7 @@ feature -- Write callbacks
 	write_procedure (procedure: XPLAIN_PROCEDURE)
 			-- Dump stored procedure info.
 		local
-			cursor: DS_LINEAR_CURSOR [XPLAIN_ATTRIBUTE_NAME]
+			cursor: DS_LINEAR_CURSOR [XPLAIN_PARAMETER]
 			param_name,
 			param_type: STRING
 		do
@@ -223,6 +223,9 @@ feature -- Write callbacks
 					if attached {XPLAIN_TYPE} cursor.item.abstracttype as my_type then
 						xml.set_attribute (once "references", my_type.name)
 						xml.set_attribute (once "sqlReferences", my_type.quoted_name (sqlgenerator))
+					end
+					if not cursor.item.is_required then
+						xml.set_attribute (once "optional", once "true")
 					end
 					xml.stop_tag
 					cursor.forth
