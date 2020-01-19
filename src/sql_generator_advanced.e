@@ -5,8 +5,6 @@ note
 		"SQL generator which dialect which supports procedures and triggers"
 
 	author: "Berend de Boer <berend@pobox.com>"
-	copyright: "Copyright (c) 2005, Berend de Boer and others"
-	license: "Eiffel Forum License v2 (see forum.txt)"
 
 
 deferred class
