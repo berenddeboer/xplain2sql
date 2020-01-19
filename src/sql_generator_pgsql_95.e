@@ -22,6 +22,7 @@ inherit
 			datatype_int,
 			datatype_picture,
 			CreateTableStatement,
+			CreateIndexIfNotExistsClause,
 			NamedParametersSupported,
 			StoredProcedureSupportsTrueFunction,
 			sp_insert_declaration,
@@ -60,6 +61,8 @@ feature -- SQL snippets
 		once
 			Result := "create table if not exists"
 		end
+
+	CreateIndexIfNotExistsClause: STRING = "if not exists "
 
 
 feature -- type specification for Xplain types

@@ -491,6 +491,11 @@ feature -- index options
 			Result := False
 		end
 
+	CreateIndexIfNotExistsClause: STRING
+		do
+			Result := ""
+		end
+
 
 feature -- select options
 
@@ -1336,6 +1341,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 				std.output.put_string ("clustered ")
 			end
 			std.output.put_string ("index ")
+			std.output.put_string (CreateIndexIfNotExistsClause)
 			std.output.put_string (quote_identifier(index_name (index)))
 			std.output.put_string (" on ")
 			std.output.put_string (index.type.quoted_name (Current))
