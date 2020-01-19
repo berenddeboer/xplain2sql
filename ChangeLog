@@ -1,5 +1,7 @@
 2020-01-20  Berend de Boer  <berend@pobox.com>
 
+	* Validate length of A enumerations.
+
 	* Postgresql 9.5: indexes are now created with the ' if not
 	exists' clause.
 

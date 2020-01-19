@@ -141,11 +141,12 @@ create
 -- Xplain nonterminal types
 %type <STRING> script_start
 %type <STRING> database_name
-%type <XPLAIN_BASE> base_definition
+%type <detachable XPLAIN_BASE> base_definition
 %type <detachable XPLAIN_DOMAIN_RESTRICTION> optional_trajectory
 %type <XPLAIN_DOMAIN_RESTRICTION> domain_constraint
 %type <XPLAIN_DOMAIN_RESTRICTION> enumeration
 %type <XPLAIN_A_NODE> string_enumeration
+%type <STRING> string_enumeration_of_proper_length
 %type <XPLAIN_I_NODE> integer_enumeration
 %type <XPLAIN_DOMAIN_RESTRICTION> trajectory
 %type <STRING> lower_border
@@ -391,11 +392,13 @@ definition
 		}
 	| base_definition
 		{
-			create {XPLAIN_BASE_STATEMENT} $$.make ($1)
-			if not use_mode then
-				sqlgenerator.write_base($1)
-			end
-			universe.add($1, Current)
+			if attached $1 as b then
+			  create {XPLAIN_BASE_STATEMENT} $$.make (b)
+			  if not use_mode then
+				  sqlgenerator.write_base(b)
+			  end
+			  universe.add(b, Current)
+		  end
 		}
 	| init_definition
 	| default_definition
@@ -457,10 +460,10 @@ base_definition
 		write_pending_statement
 		$$ := new_base ($2, $3, True)
 	}
-	| XPLAIN_BASE base_name domain domain_constraint
+	| XPLAIN_BASE base_name domain { last_representation := $3; } domain_constraint
 	{
 		write_pending_statement
-		$3.set_domain_restriction (sqlgenerator, $4)
+		$3.set_domain_restriction (sqlgenerator, $5)
 		$$ := new_base ($2, $3, False)
 	}
 	;
@@ -575,10 +578,28 @@ enumeration
 	;
 
 string_enumeration
-	: text
+	: string_enumeration_of_proper_length
 		{ create {XPLAIN_A_NODE} $$.make ($1, void) }
-	| text ',' string_enumeration
+	| string_enumeration_of_proper_length ',' string_enumeration
 		{ create {XPLAIN_A_NODE} $$.make ($1, $3) }
+	;
+
+string_enumeration_of_proper_length
+	: text
+		{
+			if attached {XPLAIN_A_REPRESENTATION} last_representation as a_representation then
+				if $1.count <= a_representation.length then
+					$$ := $1
+				else
+					report_error("Maximum string length of enumeration is " + a_representation.length.out + ", but enumeration has a string of " + $1.count.out + " characters.%N")
+					abort
+					-- silence compiler:
+					$$ := ""
+				end
+			else
+				$$ := $1
+			end
+		}
 	;
 
 integer_enumeration
@@ -2672,6 +2693,9 @@ feature {NONE} -- Checks for validness of parsed code
 				abort
 			end
 		end
+
+	last_representation: detachable XPLAIN_REPRESENTATION
+
 
 
 feature {NONE} -- Checks
