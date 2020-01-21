@@ -220,6 +220,10 @@ feature -- Write callbacks
 						param_type,
 						as_ncname (cursor.item.abstracttype.sqlcolumnidentifier (sqlgenerator, cursor.item.role)),
 						cursor.item.abstracttype.representation.xml_schema_data_type)
+					if attached {XPLAIN_I_REPRESENTATION} cursor.item.abstracttype.representation as int then
+						xml.set_attribute (once "minInclusive", int.min_value (sqlgenerator))
+						xml.set_attribute (once "maxInclusive", int.max_value (sqlgenerator))
+					end
 					if attached {XPLAIN_TYPE} cursor.item.abstracttype as my_type then
 						xml.set_attribute (once "references", my_type.name)
 						xml.set_attribute (once "sqlReferences", my_type.quoted_name (sqlgenerator))
@@ -481,6 +485,10 @@ feature {NONE} -- Write helpers
 							at.columndatatype (sqlgenerator),
 							Void,
 							at.representation.xml_schema_data_type)
+					end
+					if attached {XPLAIN_I_REPRESENTATION} my_attribute.abstracttype.representation as int then
+						xml.set_attribute (once "minInclusive", int.min_value (sqlgenerator))
+						xml.set_attribute (once "maxInclusive", int.max_value (sqlgenerator))
 					end
 					if my_attribute.is_specialization then
 						xml.set_attribute (once "specialization", once "true")

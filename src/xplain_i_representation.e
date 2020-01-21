@@ -131,14 +131,26 @@ feature  -- required implementations
 	max_value (sqlgenerator: SQL_GENERATOR): STRING
 			-- maximum value that fits in this representation
 		do
-			create Result.make_filled ('9', length)
+			if attached {XPLAIN_TRAJECTORY} domain_restriction as trajectory
+				and then trajectory.max.is_integer then
+				Result := trajectory.max
+			else
+				create Result.make_filled ('9', length)
+			end
 		end
 
 	min_value (sqlgenerator: SQL_GENERATOR): STRING
 			-- minimum value that fits in this representation
+		local
+			min: INTEGER
 		do
-			create Result.make_filled ('9', length)
-			Result.insert_character ('-', 1)
+			if attached {XPLAIN_TRAJECTORY} domain_restriction as trajectory
+				and then trajectory.min.is_integer then
+				Result := trajectory.min
+			else
+				create Result.make_filled ('9', length)
+				Result.insert_character ('-', 1)
+			end
 		end
 
 

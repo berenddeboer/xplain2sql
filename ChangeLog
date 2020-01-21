@@ -1,8 +1,24 @@
+2020-01-22  Berend de Boer  <berend@pobox.com>
+
+	* extend max: the default when there are no rows is now the
+	minimum possible according to the domain restriction. For example
+	if your domain and domain restrictions are "(I4) (1..*)" it will
+	now return 1 as the minimum, and no longer "-9999".
+
+	* extend min: the default when there are no rows is now the
+	minimum possible according to the domain restriction. For example
+	if your domain and domain restrictions are "(I4) (1..4)" it will
+	now return 4 as the maximum, and no longer "9999".
+
+	* !xplain2sql.xml: add the minInclusive and maxInclusive
+	attributes to represent the corresponding XML Schema data type
+	attributes.
+
 2020-01-20  Berend de Boer  <berend@pobox.com>
 
-	* Validate length of A enumerations.
+	* !Validate length of A enumerations.
 
-	* Postgresql 9.5: indexes are now created with the ' if not
+	* !Postgresql 9.5: indexes are now created with the ' if not
 	exists' clause.
 
 
