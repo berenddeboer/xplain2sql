@@ -12,8 +12,8 @@ base a1 (A1).
 base a2 (A10) "ABC%".
 base a3 (A123) = "abc".
 base a4 (A10) = "abc", "def".
-# a5 should generate warning
-base a5 (A2) = "abc".
+# a5 now generates an error.
+#base a5 (A2) = "abc".
 base a6 (A1) required.
 base a7 (A2) = "", "aa", "bb".
 base a8 (A80) required.
