@@ -1428,13 +1428,15 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			-- supplied identifications don't work well together. Output
 			-- some code to correct the sitation, if possible.
 			if CreateAutoPrimaryKey then
-				if id /= Void and then id.is_constant then
+				if attached id and then id.is_constant then
 					is_integer_id := not type.representation.write_with_quotes
 					if is_integer_id then
 						if id.sqlvalue (Current).to_integer > 0 then
 							create_sync_auto_generated_primary_key_with_supplied_value (type, id.sqlvalue (Current).to_integer)
 						end
 					end
+				elseif attached {XPLAIN_PARAMETER_EXPRESSION} id as parameter then
+					create_sync_auto_generated_primary_key_to_highest_value (type)
 				end
 			end
 		end
@@ -1701,6 +1703,17 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 			auto_pk_support: AutoPrimaryKeySupported
 			type_not_void: type /= Void
 			valid_identification: user_identification > 0
+		do
+			-- do nothing
+		end
+
+	create_sync_auto_generated_primary_key_to_highest_value (type: XPLAIN_TYPE)
+			-- On some systems, auto-generated primary keys and user
+			-- supplied identifications don't work well together. Output
+			-- some code to set the generator to the highest value in the table.
+			-- The code has to be safe for concurrent use and be useful within a procedure.
+		require
+			auto_pk_support: AutoPrimaryKeySupported
 		do
 			-- do nothing
 		end

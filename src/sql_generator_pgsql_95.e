@@ -23,6 +23,8 @@ inherit
 			datatype_picture,
 			CreateTableStatement,
 			CreateIndexIfNotExistsClause,
+			create_sync_auto_generated_primary_key_with_supplied_value,
+			create_sync_auto_generated_primary_key_to_highest_value,
 			NamedParametersSupported,
 			StoredProcedureSupportsTrueFunction,
 			sp_insert_declaration,
@@ -111,6 +113,30 @@ feature {NONE} -- Cast expressions implementation
 			-- SQL expression to cast `an_expression' to a real
 		do
 			Result := "cast (" + an_sql_expression + " as numeric)"
+		end
+
+
+feature -- SQL creation statements
+
+	create_sync_auto_generated_primary_key_with_supplied_value (type: XPLAIN_TYPE; user_identification: INTEGER)
+			-- Update sequence.
+		do
+			create_sync_auto_generated_primary_key_to_highest_value (type)
+		end
+
+	create_sync_auto_generated_primary_key_to_highest_value (type: XPLAIN_TYPE)
+			-- Update sequence.
+		do
+			std.output.put_string ("perform setval(pg_get_serial_sequence('")
+			std.output.put_string (type.sqltablename (Current))
+			std.output.put_string ("', '")
+			std.output.put_string (type.sqlpkname (Current))
+			std.output.put_string ("'), coalesce(max(")
+			std.output.put_string (type.q_sqlpkname (Current))
+			std.output.put_string ("), 0) + 1, false) from ")
+			std.output.put_string (type.quoted_name (Current))
+			std.output.put_string (CommandSeparator)
+			std.output.put_string ("%N")
 		end
 
 
