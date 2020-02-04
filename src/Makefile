@@ -86,15 +86,15 @@ SAMPLEFILES=../samples/test.sql \
 	../samples/sales.sql \
 	../samples/supplier.sql
 
-SAMPLENAME=test
+SAMPLENAME=test2
 #SAMPLENAME=graph
 SAMPLEDIR=../samples/
 SAMPLEFILE=$(SAMPLEDIR)$(SAMPLENAME)
 #SAMPLEFILE=~/src/business-process/src/Xplain/call-center
 #SAMPLEFILE=~/src/automatem/nakedbus/tools/Xplain/nakedbus_prices
 
-SQLOPTIONS=-nosp -noextendview
-SQLDIALECT=-tsql2000
+SQLOPTIONS=-nosp -nospprefix -noextendview -xml -iso8601date
+SQLDIALECT=-pgsql
 #SQLOPTIONS=-nosp -pkformat '$$s_id' -sequenceformat '$$s_seq'
 
 # Runs the test script and attempts

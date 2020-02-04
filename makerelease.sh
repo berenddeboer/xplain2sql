@@ -3,12 +3,12 @@
 # BEREND, after setting the release name
 # CHECK THE NEXT THINGS AS WELL!!!
 
-releasename=xplain2sql-5.0.1
+releasename=xplain2sql-5.1.0
 #releasename=xplain2sql-beta-4.1.3
 
 # CHECK THIS TO!!
 # 1. check XPLAIN2SQL.Version!
-# 2. change pkg/xplain2sql.spec too!
+# 2. change debian/xplain2sql.spec too!
 # 3. test if src/system.xace assertion is ok for your release
 #    - for beta's assertion should be all.
 #    - for official releases it should be none.
@@ -33,7 +33,7 @@ unset CFLAGS
 
 # build .tar.gz release
 cd ..
-tar -czf $releasename.tar.gz xplain2sql/README xplain2sql/NEWS xplain2sql/INSTALL xplain2sql/LICENSE xplain2sql/ChangeLog xplain2sql/Makefile `find xplain2sql/src -name "*.e"` xplain2sql/src/*.y xplain2sql/src/*.l xplain2sql/src/Makefile xplain2sql/src/system.xace xplain2sql/src/build.eant xplain2sql/src/*.bat xplain2sql/samples/bank.ddl xplain2sql/samples/employee.ddl  xplain2sql/samples/sales.ddl xplain2sql/samples/supplier.ddl xplain2sql/samples/test.ddl xplain2sql/samples/include.ddl xplain2sql/samples/testuse.ddl xplain2sql/samples/testused.ddl xplain2sql/samples/testtsql.ddl xplain2sql/middleware/*.pas xplain2sql/doc/xplain2sql.pdf xplain2sql/doc/*.tex xplain2sql/doc/*.mp xplain2sql/doc/*.png xplain2sql/doc/Makefile xplain2sql/xslt/delphi_ado_class.xsl xplain2sql/xslt/delphi_makefile.xsl xplain2sql/man/xplain2sql.1
+tar -czf $releasename.tar.gz xplain2sql/README xplain2sql/NEWS xplain2sql/INSTALL xplain2sql/LICENSE xplain2sql/ChangeLog xplain2sql/Makefile `find xplain2sql/src -name "*.e"` xplain2sql/src/*.y xplain2sql/src/*.l xplain2sql/src/Makefile xplain2sql/src/system.ecf xplain2sql/src/build.eant xplain2sql/src/*.bat xplain2sql/samples/bank.ddl xplain2sql/samples/employee.ddl  xplain2sql/samples/sales.ddl xplain2sql/samples/supplier.ddl xplain2sql/samples/test.ddl xplain2sql/samples/include.ddl xplain2sql/samples/testuse.ddl xplain2sql/samples/testused.ddl xplain2sql/samples/testtsql.ddl xplain2sql/middleware/*.pas xplain2sql/doc/xplain2sql.pdf xplain2sql/doc/*.tex xplain2sql/doc/*.mp xplain2sql/doc/*.png xplain2sql/doc/Makefile xplain2sql/xslt/delphi_ado_class.xsl xplain2sql/xslt/delphi_makefile.xsl xplain2sql/man/xplain2sql.1
 cd xplain2sql
 mv -f ../$releasename.tar.gz .
 
@@ -67,7 +67,7 @@ if [ $? -gt 0 ]; then exit 1; fi
 # make with .y and .l
 # produce production code
 cd src
-geant compile_ge
+unset BOEHM_GC; geant compile_ge
 if [ $? -gt 0 ]; then exit 1; fi
 cd ..
 
@@ -84,7 +84,7 @@ cd ..
 mkdir $releasename
 cd $releasename
 cp ../xplain2sql/src/xplain2sql*.[ch] .
-cp ../../Makefile.csrc Makefile
+cp ../xplain2sql/src/xplain2sql.make Makefile
 cp ../../README.csrc README
 cp ../../NEWS .
 cp ../../ChangeLog .
@@ -117,7 +117,7 @@ zip -r ../$releasename-csrc.zip $releasename
 # build Ubuntu 16.04 xenial package
 # We can only run pbuilder after actually having updated/created the package
 # which unfortunately is still a lot of manual work right now.
-#pbuilder-dist trusty build xplain2sql_5.0.1-1.dsc
+#pbuilder-dist trusty build xplain2sql_5.1.0-1.dsc
 # cd $releasename
 # make
 # cd ..

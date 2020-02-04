@@ -10,7 +10,7 @@
 	<description>
     system:      "Translate Xplain code to SQL"
     author:      "Berend de Boer [berend@pobox.com]"
-    copyright:   "Copyright (c) 2002-2019, Berend de Boer"
+    copyright:   "Copyright (c) 2002-2020, Berend de Boer"
     license:     "MIT"
   </description>
 	<target name="all_classes">

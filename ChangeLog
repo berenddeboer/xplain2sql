@@ -1,3 +1,8 @@
+2020-02-04  Berend de Boer  <berend@pobox.com>
+
+	* Release 5.0.
+
+
 2020-01-22  Berend de Boer  <berend@pobox.com>
 
 	* extend max: the default when there are no rows is now the
@@ -10,48 +15,49 @@
 	if your domain and domain restrictions are "(I4) (1..4)" it will
 	now return 4 as the maximum, and no longer "9999".
 
-	* !xplain2sql.xml: add the minInclusive and maxInclusive
+	* xplain2sql.xml: add the minInclusive and maxInclusive
 	attributes to represent the corresponding XML Schema data type
 	attributes.
 
+
 2020-01-20  Berend de Boer  <berend@pobox.com>
 
-	* !Validate length of A enumerations.
+	* Validate length of A enumerations.
 
-	* !Postgresql 9.5: indexes are now created with the ' if not
+	* Postgresql 9.5: indexes are now created with the ' if not
 	exists' clause.
 
 
 2020-01-17  Berend de Boer  <berend@pobox.com>
 
-	* !xplain2sql.xml: procedure parameters can now take the
+	* xplain2sql.xml: procedure parameters can now take the
 	*optional* keyword. This does do nothing for the output
 	(parameters are null at least in PostgreSQL), but the output now
 	has the indication this intended to be an optional parameter.
 
 2020-01-09  Berend de Boer  <berend@pobox.com>
 
-	* !xplainsql.xml: attribute returns="int4" and such on the
+	* xplainsql.xml: attribute returns="int4" and such on the
 	<storedProcedure> element if the function returns a scalar value
 	instead of a row set.
 
-	* !xplain2slq.xml: attribute value="true" on the <select> if we
+	* xplain2slq.xml: attribute value="true" on the <select> if we
 	are selecting a single value.
 
-	* !xplain2sql.xml: attribute instance="true" on the <select> if we
+	* xplain2sql.xml: attribute instance="true" on the <select> if we
 	are selecting at maximum a single instance.
 
 2020-01-03  Berend de Boer  <berend@pobox.com>
 
-	* !xplain2sql.xml: add <enum> tags inside a column if the base type
+	* xplain2sql.xml: add <enum> tags inside a column if the base type
 	has a text enumeration.
 
-	* !xplain2sql.xml: emits <insert>, <update> and <delete> tags
+	* xplain2sql.xml: emits <insert>, <update> and <delete> tags
 	inside a <storedProcedure> if the procedure executes any of these
 	statements. This allows you to distinguish between procedures that
 	query or mutate data.
 
-	* !Postgresql 9.5: Added option -iso8601date to force all dates to
+	* Postgresql 9.5: Added option -iso8601date to force all dates to
 	be emitted in ISO 8601 format. This date format is compatible with
 	what AppSync expects. No need to add custom SQL functions to
 	output to get the right date, which also has the problem that the
@@ -61,21 +67,21 @@
 
 2020-01-02  Berend de Boer  <berend@pobox.com>
 
-	* !Postgresql 9.5: created function output time now has a better
+	* Postgresql 9.5: created function output time now has a better
 	name if you used the advanced feature of calling a custom SQL
 	function. For example: "select $`to_json'(created) from mytable"
 	will now emit the nicer "created" field for this type instead of
 	"to_json". Previously you had to use: "select $`to_json'(created)
 	as created from mytable".
 
-	* !Postgresql 9.5: now emits "create table if not exists", more
+	* Postgresql 9.5: now emits "create table if not exists", more
 	compatible with how functions are created, and makes it easier to
 	rerun a script if the tables themselves have not changd.
 
 
 2020-01-01  Berend de Boer  <berend@pobox.com>
 
-	* !Added -version option to print the current version.
+	* Added -version option to print the current version.
 
 
 2018-01-09  Berend de Boer  <berend@pobox.com>

@@ -1,6 +1,38 @@
 NEWS - list of user-visible changes between releases of xplain2sql
 See ChangeLog for more details.
 
+New or fixed in release 5.1 <2020-02-04>
+
+* parameters:
+- added the "-version" parameter.
+* DDL:
+- Using an enumeration that is too long is now an error.
+* extend statement:
+- the default for the min and max functions when there are now
+  rows obeys the maximum and minimum of the domain restriction, if
+  any.
+* procedure:
+- parameters do now take the optional keyword. The output has not
+  changed, for example in PostgreSQL parameters can always be null,
+  but this information is now made available in xplain2sql.xml.
+* xplain2sql.xml:
+- lots of additional detail in the output.
+* Postgresql 9.5
+- indexes are created with the "if not exists" clause.
+- tables are now created with the  "if not exists" clause.
+- option -iso8601date to force all dates to be emitted in ISO 8601
+	format. This date format is compatible with what AppSync expects. No
+	need to add custom SQL functions to output to get the right date,
+	which also has the problem that the date type disappears and becomes
+	a generic string. Now everything is still seen as a date, and
+	returned properly.
+- created function output time now has a better name if you used the
+	advanced feature of calling a custom SQL function. For example:
+	"select $`to_json'(created) from mytable" will now emit the nicer
+	"created" field for this type instead of "to_json". Previously you
+	had to use: "select $`to_json'(created) as created from mytable".
+
+
 New or fixed in release 5.0 <2018-01-09>
 
 * postgresql:
