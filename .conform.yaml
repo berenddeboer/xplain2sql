@@ -1,7 +1,7 @@
 policies:
   - type: commit
     spec:
-      headerLength: 100
+      headerLength: 120
       dco: false
       gpg: false
       imperative: true
