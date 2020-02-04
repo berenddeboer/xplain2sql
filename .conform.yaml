@@ -1,0 +1,34 @@
+policies:
+  - type: commit
+    spec:
+      headerLength: 100
+      dco: false
+      gpg: false
+      imperative: true
+      maximumOfOneCommit: true
+      requireCommitBody: false
+      conventional:
+        types:
+          - "build"
+          - "chore"
+          - "ci"
+          - "docs"
+          - "perf"
+          - "refactor"
+          - "style"
+          - "test"
+          - "type"
+        scopes:
+          - "scope"
+          - "pgsql95"
+  - type: license
+    spec:
+      skipPaths:
+        - .git/
+        - .build*/
+      includeSuffixes:
+        - .ext
+      excludeSuffixes:
+        - .exclude-ext-prefix.ext
+      header: |
+        This is the contents of a license header.
