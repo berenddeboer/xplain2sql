@@ -569,7 +569,7 @@ feature -- Stored procedure support
 			Result.append_character (' ')
 			Result.append_string (selection.subject.type.representation.datatype (Current))
 			e := selection.expression_list
-			if e = Void then
+			if not attached e then
 				cursor := selection.subject.type.new_data_attributes_cursor (Current)
 				from
 					cursor.start
