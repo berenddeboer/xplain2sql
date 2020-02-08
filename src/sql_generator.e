@@ -1596,6 +1596,9 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 					else
 						-- Unfortunately as soon as we start to emit
 						-- formatted dates we need to list every column
+						table_alias := selection_list.type.quoted_name (Current)
+						std.output.put_string (table_alias)
+						std.output.put_character ('.')
 						std.output.put_string (selection_list.subject.type.q_sqlpkname (Current))
 						across selection_list.subject.type.new_data_attributes_cursor (Current) as c loop
 							if CalculatedColumnsSupported or else not c.item.is_assertion then
