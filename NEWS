@@ -1,5 +1,15 @@
 NEWS - list of user-visible changes between releases of xplain2sql
-See ChangeLog for more details.
+See git log since version 5.1 and ChangeLog before version 5.1 for more details.
+
+New or fixed in release 5.2 <2020-02-08>
+
+* PostgreSQL 9.5:
+- stored procedure type had a different column name depending if you
+  had written "get t1 its t2" or just "get t1". This can potentially be
+  a breaking change.
+- when -iso8601date was enabled, a get with an extend produced
+  incorrect SQL.
+
 
 New or fixed in release 5.1 <2020-02-04>
 
