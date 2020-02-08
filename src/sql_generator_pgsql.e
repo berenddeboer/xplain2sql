@@ -606,7 +606,11 @@ feature -- Stored procedure support
 						Result.append_string (path_identifier (e.path_name))
 						Result.append_character ('"')
 					else
-						Result.append_string (quote_valid_identifier (e.column_name))
+						if attached e.item.sqlname (Current) as sqlname then
+							Result.append_string (quote_valid_identifier (sqlname))
+						else
+							std.error.put_string ("Unknown error: no SQL colum name.%N")
+						end
 					end
 					Result.append_character (' ')
 					Result.append_string (e.item.exact_representation (Current).datatype (Current))
