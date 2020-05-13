@@ -141,8 +141,6 @@ feature  -- required implementations
 
 	min_value (sqlgenerator: SQL_GENERATOR): STRING
 			-- minimum value that fits in this representation
-		local
-			min: INTEGER
 		do
 			if attached {XPLAIN_TRAJECTORY} domain_restriction as trajectory
 				and then trajectory.min.is_integer then
