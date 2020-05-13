@@ -3,7 +3,6 @@ note
 	description: "Produce an XML description of the executable code."
 
 	author:     "Berend de Boer <berend@pobox.com>"
-	copyright:  "Copyright (c) 2002, Berend de Boer, see forum.txt"
 
 
 class
