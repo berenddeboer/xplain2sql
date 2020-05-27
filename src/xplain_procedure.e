@@ -100,7 +100,7 @@ feature -- Commands
 		end
 
 	optimize_statements
-			-- Check what optimiziations can be applied.
+			-- Check what optimisations can be applied.
 		local
 			cursor: DS_BILINEAR_CURSOR [XPLAIN_STATEMENT]
 		do
