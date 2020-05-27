@@ -609,7 +609,7 @@ feature -- Stored procedure support
 						if attached e.item.sqlname (Current) as sqlname then
 							Result.append_string (quote_valid_identifier (sqlname))
 						else
-							std.error.put_string ("Unknown error: no SQL colum name.%N")
+							std.error.put_string ("Unknown error: no SQL column name.%N")
 						end
 					end
 					Result.append_character (' ')
