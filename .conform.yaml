@@ -20,6 +20,7 @@ policies:
           - "type"
         scopes:
           - "scope"
+          - "pgsql"
           - "pgsql95"
   - type: license
     spec:
