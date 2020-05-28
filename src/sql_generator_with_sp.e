@@ -830,8 +830,6 @@ feature -- SQL code inside procedures
 
 	sp_value_declarations (statements: DS_BILINKED_LIST [XPLAIN_STATEMENT])
 			-- Emit code to declare values used in a procedure.
-		local
-			value: XPLAIN_VALUE
 		do
 			from
 				statements.start
