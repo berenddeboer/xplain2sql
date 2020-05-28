@@ -162,7 +162,12 @@ feature -- Write callbacks
 
 	write_if (if_statement: XPLAIN_IF_STATEMENT)
 		do
-			-- no output
+			across if_statement.then_statements as statement loop
+				statement.item.write (Current)
+			end
+			across if_statement.else_statements as statement loop
+				statement.item.write (Current)
+			end
 		end
 
 	write_insert (type: XPLAIN_TYPE; id: detachable XPLAIN_EXPRESSION; assignment_list: XPLAIN_ASSIGNMENT_NODE)
