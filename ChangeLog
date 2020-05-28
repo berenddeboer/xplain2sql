@@ -1,5 +1,10 @@
 2020-05-28  Berend de Boer  <berend@pobox.com>
 
+	* Release 5.4.
+
+	* xplain2sql.xml: mutation statements inside if statement were not
+	written to XML output.
+
 	* Release 5.3. See NEWS.
 
 
