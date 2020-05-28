@@ -4,8 +4,7 @@ note
 
 	author:     "Berend de Boer <berend@pobox.com>"
 	copyright:  "Copyright (c) 2002, Berend de Boer"
-	date:       "$Date: 2008/12/15 $"
-	revision:   "$Revision: #7 $"
+
 
 class
 
@@ -16,7 +15,8 @@ inherit
 
 	XPLAIN_STATEMENT
 		redefine
-			cleanup
+			cleanup,
+			write_value_declare_inside_sp
 		end
 
 	XPLAIN_UNIVERSE_ACCESSOR
@@ -43,6 +43,16 @@ feature -- Generate output
 			-- Write output according to this generator.
 		do
 			a_generator.write_value (value)
+		end
+
+	write_value_declare_inside_sp (a_generator: SQL_GENERATOR_WITH_SP)
+			-- Write output according to this generator.
+		do
+			if not a_generator.is_value_declared (value) then
+				a_generator.create_value_declare (value)
+			end
+		ensure then
+			declared: a_generator.is_value_declared (value)
 		end
 
 

@@ -34,6 +34,14 @@ feature -- Commands
 		deferred
 		end
 
+	write_value_declare_inside_sp(a_generator: SQL_GENERATOR_WITH_SP)
+			-- Write output in case value needs to be declared locally.
+		require
+			must_declare_values: a_generator.StoredProcedureUserDeclarationBeforeBody
+		do
+			-- No output for most statements
+		end
+
 
 feature -- Status
 

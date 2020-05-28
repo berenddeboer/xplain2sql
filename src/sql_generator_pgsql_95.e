@@ -25,6 +25,7 @@ inherit
 			CreateIndexIfNotExistsClause,
 			create_sync_auto_generated_primary_key_with_supplied_value,
 			create_sync_auto_generated_primary_key_to_highest_value,
+			write_if,
 			NamedParametersSupported,
 			StoredProcedureSupportsTrueFunction,
 			sp_insert_declaration,
@@ -137,6 +138,22 @@ feature -- SQL creation statements
 			std.output.put_string (type.quoted_name (Current))
 			std.output.put_string (CommandSeparator)
 			std.output.put_string ("%N")
+		end
+
+	write_if (if_statement: XPLAIN_IF_STATEMENT)
+		do
+			std.output.put_string ("if ")
+			std.output.put_string (if_statement.logical_expression.outer_sqlvalue (Current))
+			std.output.put_string (" then%N%N")
+
+			sp_body_statements (if_statement.then_statements)
+
+			if not if_statement.else_statements.is_empty then
+				std.output.put_string ("%Nelse%N%N")
+				sp_body_statements (if_statement.else_statements)
+			end
+
+			std.output.put_string ("%Nend if;%N%N")
 		end
 
 

@@ -231,7 +231,10 @@ create
 %type <XPLAIN_PARAMETER> procedure_parameter
 %type <detachable XPLAIN_STATEMENT_NODE> optional_procedure_statement_list
 %type <detachable XPLAIN_STATEMENT_NODE> procedure_statement_list
-%type <detachable XPLAIN_STATEMENT> procedure_supported_command
+%type <detachable XPLAIN_STATEMENT> procedure_statement
+%type <detachable XPLAIN_IF_STATEMENT> if_statement
+%type <detachable XPLAIN_STATEMENT_NODE> if_statement_list
+%type <detachable XPLAIN_STATEMENT> allowed_if_statement
 
 %type <detachable XPLAIN_STATEMENT> user_command
 %type <detachable XPLAIN_STATEMENT> definition_command
@@ -753,6 +756,20 @@ logical_factor
 	| property_expression relation property_expression
 		{
 			$$ := new_logical_infix_expression ($1, $2, $3)
+		}
+	| property_expression relation '\''       -- '
+		{
+			report_error ("Did you mean to quote a string here? Xplain strings use a double quote: " + text)
+			abort;
+			-- silence compiler, we either return something valid or abort:
+			$$ := $1
+		}
+	| property_expression relation '\'' '\''
+		{
+		report_error ("Xplain strings use double quotes. So write %"%" instead of ''.")
+			abort;
+			-- silence compiler, we either return something valid or abort:
+			$$ := $1
 		}
 	| XPLAIN_NOT property_expression relation property_expression
 		{
@@ -2207,11 +2224,11 @@ optional_procedure_statement_list
 	;
 
 procedure_statement_list
-	: procedure_supported_command '.'
+	: procedure_statement '.'
 		{
 			if attached $1 as s then create $$.make (s, Void) end
 		}
-	| procedure_supported_command '.' procedure_statement_list
+	| procedure_statement '.' procedure_statement_list
 		{
 			if attached $1 as s then create $$.make (s, $3) end
 		}
@@ -2221,7 +2238,7 @@ procedure_statement_list
 		}
 	| sql procedure_statement_list
 		{
-			if attached $2 as s then create $$.make ($1, s) end
+			create $$.make ($1, $2)
 		}
 	| error
 		{
@@ -2245,7 +2262,8 @@ procedure_statement_list
 		{ report_error ("A procedure statement cannot appear in a procedure."); abort }
 	;
 
-procedure_supported_command
+
+procedure_statement
 	: extension
 		{ $$ := $1 }
 	| delete
@@ -2260,6 +2278,45 @@ procedure_supported_command
 		{ $$ := $1 }
 	| value_selection
 		{ $$ := $1 }
+	| if_statement
+		{ $$ := $1 }
+	;
+
+
+if_statement
+	: XPLAIN_IF logical_expression XPLAIN_THEN if_statement_list XPLAIN_END
+		{ create $$.make ($2, $4, Void) }
+	| XPLAIN_IF logical_expression XPLAIN_THEN if_statement_list XPLAIN_ELSE if_statement_list XPLAIN_END
+		{ create $$.make ($2, $4, $6) }
+	;
+
+
+if_statement_list
+	: allowed_if_statement '.'
+		 { if attached $1 as s then create $$.make (s, Void) end }
+	| allowed_if_statement '.' if_statement_list
+		 { if attached $1 as s then create $$.make (s, $3) end }
+	| sql
+		 { if attached $1 as s then create $$.make (s, Void) end }
+	| sql if_statement_list
+		 { create $$.make ($1, $2) }
+	;
+
+allowed_if_statement
+	: delete
+		{ $$ := $1 }
+	| insert
+		{ $$ := $1 }
+	| update
+		{ $$ := $1 }
+	| value
+		{ $$ := $1 }
+	| if_statement
+		{ $$ := $1 }
+	| XPLAIN_GET error
+		{ report_error ("A get statement cannot appear inside an if statement."); abort }
+	| XPLAIN_VALUE error
+		{ report_error ("A select value statement cannot appear inside an if statement."); abort }
 	;
 
 

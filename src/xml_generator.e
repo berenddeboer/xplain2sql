@@ -160,6 +160,11 @@ feature -- Write callbacks
 			-- no output
 		end
 
+	write_if (if_statement: XPLAIN_IF_STATEMENT)
+		do
+			-- no output
+		end
+
 	write_insert (type: XPLAIN_TYPE; id: detachable XPLAIN_EXPRESSION; assignment_list: XPLAIN_ASSIGNMENT_NODE)
 		do
 			xml.start_tag ("insert")

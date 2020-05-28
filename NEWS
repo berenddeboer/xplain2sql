@@ -1,6 +1,27 @@
 NEWS - list of user-visible changes between releases of xplain2sql
 See git log since version 5.1 and ChangeLog before version 5.1 for more details.
 
+New or fixed in release 5.3 <2020-05-28>
+
+* PostgreSQL 9.5:
+- You can now use if statements inside a procedure. Example:
+    procedure p with a =
+
+      if a = 0 then
+
+        value v = 0.
+
+      else
+
+        value v = 1.
+
+      end.
+
+      value v.
+
+    end.
+
+
 New or fixed in release 5.2 <2020-02-08>
 
 * PostgreSQL 9.5:

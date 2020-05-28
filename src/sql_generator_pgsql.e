@@ -747,7 +747,6 @@ feature -- Stored procedure support
 	sp_user_declaration (procedure: XPLAIN_PROCEDURE)
 			-- Emit value declarations.
 		local
-			value: XPLAIN_VALUE
 			parameter: XPLAIN_ATTRIBUTE_NAME
 			i: INTEGER
 		do
@@ -774,20 +773,7 @@ feature -- Stored procedure support
 
 			-- Emit declarations for value statement
 			in_user_declaration := True
-			from
-				procedure.statements.start
-			until
-				procedure.statements.after
-			loop
-				if attached {XPLAIN_VALUE_STATEMENT} procedure.statements.item_for_iteration as value_statement then
-					value := value_statement.value
-					if not is_value_declared (value) then
-						create_value_declare_inside_sp (value)
-						declared_values.force (value, value.name)
-					end
-				end
-				procedure.statements.forth
-			end
+			sp_value_declarations (procedure.statements)
 
 			if not procedure.sql_declare.is_empty then
 				std.output.put_string (procedure.sql_declare)

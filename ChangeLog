@@ -1,3 +1,15 @@
+2020-05-28  Berend de Boer  <berend@pobox.com>
+
+	* Release 5.3. See NEWS.
+
+
+2020-05-27  Berend de Boer  <berend@pobox.com>
+
+	* Postgresql: Xplain now allows you to write if statements in a
+	procedure. This reduces the amount of SQL code that otherwise
+	would have to be written in upsert style procedures, and that
+	makes the code more readable, as ther is now only Xplain to deal with.
+
 2020-02-08  Berend de Boer  <berend@pobox.com>
 
 	* Release 5.2. See NEWS.

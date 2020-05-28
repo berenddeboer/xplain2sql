@@ -829,6 +829,11 @@ feature -- Convert Xplain definition to sql, you usually do not redefine these
 			create_get_insert (a_selection, an_insert_type, an_auto_primary_key, an_assignment_list)
 		end
 
+	write_if (if_statement: XPLAIN_IF_STATEMENT)
+		do
+			std.error.put_string ("If statements are not supported by this dialect.%N")
+		end
+
 	write_index (index: XPLAIN_INDEX)
 		require
 			valid_index: index /= Void

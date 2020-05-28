@@ -209,7 +209,7 @@ feature -- create SQL for Xplain constructs
 				sp_user_declaration (procedure)
 			end
 
-			sp_body_statements (procedure)
+			sp_body_statements (procedure.statements)
 
 			-- got it
 			sp_end
@@ -247,6 +247,8 @@ feature -- create SQL for Xplain constructs
 				create_value_declare_outside_sp (a_value)
 			end
 			declared_values.force (a_value, a_value.name)
+		ensure then
+			declared: is_value_declared (a_value)
 		end
 
 	optional_create_value_declare (a_value: XPLAIN_VALUE)
@@ -826,18 +828,31 @@ feature -- SQL code inside procedures
 			-- do nothing
 		end
 
-	sp_body_statements (procedure: XPLAIN_PROCEDURE)
-			-- Output statements in a stored procedure.
-		require
-			procedure_not_void: procedure /= Void
+	sp_value_declarations (statements: DS_BILINKED_LIST [XPLAIN_STATEMENT])
+			-- Emit code to declare values used in a procedure.
+		local
+			value: XPLAIN_VALUE
 		do
 			from
-				procedure.statements.start
+				statements.start
 			until
-				procedure.statements.after
+				statements.after
 			loop
-				procedure.statements.item_for_iteration.write (Current)
-				procedure.statements.forth
+				statements.item_for_iteration.write_value_declare_inside_sp (Current)
+				statements.forth
+			end
+		end
+
+	sp_body_statements (a_statements: DS_BILINKED_LIST [XPLAIN_STATEMENT])
+			-- Output statements in a stored procedure.
+		do
+			from
+				a_statements.start
+			until
+				a_statements.after
+			loop
+				a_statements.item_for_iteration.write (Current)
+				a_statements.forth
 			end
 		end
 
