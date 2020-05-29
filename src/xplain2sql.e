@@ -36,7 +36,7 @@ create
 
 feature -- identification
 
-	Version: STRING = "5.4"
+	Version: STRING = "5.5"
 
 
 feature -- creation

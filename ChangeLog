@@ -1,3 +1,12 @@
+2020-05-29  Berend de Boer  <berend@pobox.com>
+
+	* Release 5.5.
+
+	* Postgresql: fix to avoid generating incorrect SQL created
+	different function types, so making the generated code
+	incompatible with earlier releases. Implemented a better fix.
+
+
 2020-05-28  Berend de Boer  <berend@pobox.com>
 
 	* Release 5.4.
