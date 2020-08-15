@@ -128,7 +128,12 @@ feature -- SQL creation statements
 	create_sync_auto_generated_primary_key_to_highest_value (type: XPLAIN_TYPE)
 			-- Update sequence.
 		do
-			std.output.put_string ("perform setval(pg_get_serial_sequence('")
+			if is_stored_procedure then
+				std.output.put_string ("perform")
+			else
+				std.output.put_string ("select")
+			end
+			std.output.put_string (" setval(pg_get_serial_sequence('")
 			std.output.put_string (type.sqltablename (Current))
 			std.output.put_string ("', '")
 			std.output.put_string (type.sqlpkname (Current))
