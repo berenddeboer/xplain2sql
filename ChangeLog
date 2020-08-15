@@ -1,3 +1,12 @@
+2020-08-15  Berend de Boer  <berend@pobox.com>
+
+	* !extend: an extend on a type that had a self-reference, and that
+	referenced itself via the per property generated incorrect SQL.
+
+	* !Postgresql: incorrect output for inserts when used outside
+	stored procedures.
+
+
 2020-05-29  Berend de Boer  <berend@pobox.com>
 
 	* Release 5.5.
