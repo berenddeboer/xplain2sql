@@ -2972,6 +2972,7 @@ feature -- Return sql code
 			use_where_clause: BOOLEAN
 			group_by_elimination: BOOLEAN
 			distinct_elimination: BOOLEAN
+			outer_alias: STRING
 		do
 			check attached an_expression.per_property.last as last then
 			type := last.item.type
@@ -2999,7 +3000,12 @@ feature -- Return sql code
 					Result.append_string (once "distinct ")
 				end
 			end
-			Result.append_string (type.quoted_name (Current))
+			outer_alias := quote_identifier (join_list.per_self_join_prefix + type.sqlname (Current))
+			if join_list.per_self_join then
+				Result.append_string (outer_alias)
+			else
+				Result.append_string (type.quoted_name (Current))
+			end
 			Result.append_character ('.')
 			Result.append_string (type.q_sqlpkname (Current))
 			Result.append_string (once ", ")
@@ -3008,6 +3014,10 @@ feature -- Return sql code
 			Result.append_string (Tab)
 			Result.append_string (once "from ")
 			Result.append_string (type.quoted_name (Current))
+			if join_list.per_self_join then
+				Result.append_string (" as ")
+				Result.append_string (outer_alias)
+			end
 			Result.append_string (sql_select_joins (join_list))
 			-- With a where clause we get only some rows from `type', not all...
 			-- So that's why we add the where parts to the on clause if

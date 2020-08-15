@@ -124,7 +124,8 @@ feature -- JOIN_NODE generation
 	generate_join_nodes (
 			sqlgenerator: SQL_GENERATOR;
 			aggregate: XPLAIN_TYPE;
-			aggregate_alias: STRING): detachable JOIN_NODE
+			aggregate_alias: STRING;
+			a_per_self_join: BOOLEAN): detachable JOIN_NODE
 			-- Return JOIN_NODEs for self and any children.
 			-- Also set prefix for all managed XPLAIN_ATTRIBUTE_NAME_NODE.
 		require
@@ -165,7 +166,9 @@ feature -- JOIN_NODE generation
 				else
 					-- This is the root node, clear table_counter
 					table_counter.wipe_out
-					increment_usage (aggregate)
+					if not a_per_self_join then
+						increment_usage (aggregate)
+					end
 					set_prefix_table (aggregate_alias)
 					my_attribute := aggregate
 					attribute_alias := aggregate_alias
@@ -178,7 +181,8 @@ feature -- JOIN_NODE generation
 					next_join_nodes := next.item_for_iteration.generate_join_nodes (
 						sqlgenerator,
 						my_attribute,
-						attribute_alias)
+						attribute_alias,
+						False)
 					if attached first as f then
 						check attached f.last as last then
 							last.set_next (next_join_nodes)
@@ -204,9 +208,6 @@ feature {NONE} -- Implementation
 			-- Valid and unique sql identifier to use as alias for this
 			-- table;
 			-- preferably the alias should equal the table.
-		require
-			have_sqlgenerator: sqlgenerator /= Void
-			have_type: type /= Void
 		do
 			Result := type.sqlname (sqlgenerator)
 			table_counter.search (type)

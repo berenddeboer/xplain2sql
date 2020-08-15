@@ -208,14 +208,16 @@ feature -- for sql conversion
 			-- Name of column, type info must be available.
 		require
 			type_info_available: object /= Void
+			is_abstracttype: abstracttype /= Void
 		do
 			Result := abstracttype.sqlcolumnidentifier (sqlgenerator, role)
 		end
 
 	quoted_name	(sqlgenerator: SQL_GENERATOR): STRING
-			-- Return sqlcolumnidentifier, but quoted.
+			-- Return `sqlcolumnidentifier', but quoted.
 		require
 			type_info_available: object /= Void
+			is_abstracttype: abstracttype /= Void
 		do
 			Result := sqlgenerator.quote_identifier (sqlcolumnidentifier (sqlgenerator))
 		end

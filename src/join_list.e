@@ -49,6 +49,9 @@ feature -- Access
 			Result := my_first
 		end
 
+	per_self_join_prefix: STRING = "outer_"
+			-- Prefix to use for outer table when joining with self via per property
+
 
 feature -- Status
 
@@ -73,6 +76,9 @@ feature -- Status
 
 	is_finalized: BOOLEAN
 			-- Has `finalize' been called?
+
+	per_self_join: BOOLEAN
+			-- Is an extend causing a join with `base_aggregate` via the per property?
 
 
 feature -- Change
@@ -199,6 +205,8 @@ feature -- Main commands
 			base_aggregate := save_base_aggregate
 			root := save_root
 			force_left_outer_join := False
+
+			per_self_join := a_selection.subject.type = a_per_property.item.type
 		end
 
 	extend (
@@ -271,15 +279,22 @@ feature -- Main commands
 			-- the `first' property.
 		require
 			not_finalized: not is_finalized
+		local
+			l_aggregate_alias: STRING
 		do
 			debug ("xplain2sql_join")
 				print (once "Assigning aliases to joined tables.%N")
 			end
 			if root.has_children then
+				l_aggregate_alias := base_aggregate.sqlname (sqlgenerator)
+				if per_self_join then
+					l_aggregate_alias := per_self_join_prefix + l_aggregate_alias
+				end
 				my_first := root.generate_join_nodes (
 					sqlgenerator,
 					base_aggregate,
-					base_aggregate.sqlname (sqlgenerator))
+					l_aggregate_alias,
+					per_self_join)
 				debug ("xplain2sql_join")
 					print_tree
 				end

@@ -442,7 +442,9 @@ get td its tc
 
 # self reference join torture test
 
-type node (I4) = a1, parent_node.
+base i1 (I1).
+
+type node (I4) = i1, parent_node.
 
 get node its parent_node its parent_node its parent_node.
 get node its parent_node its parent_node its parent_node its parent_node.
@@ -464,14 +466,52 @@ get node its
 get node its
   parent_node its parent_node,
   parent_node its parent_node,
-  parent_node its a1,
-  parent_node its a1,
+  parent_node its i1,
+  parent_node its i1,
   temp.
 
 # this query does not work on MySQL 5. Comment it out when testing:
 get node its
   temp,
   parent_node its temp.
+
+
+# Test if proper self-referencing table is selected.
+
+insert node "1" its i1 = 0.
+insert node "2" its i1 = 1, parent_node = 1.
+
+extend node with included =
+  any node
+  where
+    i1 = 0
+  per
+    parent_node.
+
+type node2 (I4) = i1.
+type parent (I4) = node2, parent_node2.
+
+insert node2 "1" its i1 = 0.
+insert node2 "2" its i1 = 1.
+insert parent "1" its node2 = 2, parent_node2 = 1.
+
+extend node2 with included =
+  any parent
+  where
+    node2 its i1 = 0
+  per
+    parent_node2.
+
+
+# Both queries should produce zero results.
+
+get node
+  where included.
+
+get node2
+  where included.
+
+
 
 # test extend with per property with role.
 extend ta with tbcount = count tb per other_ta.

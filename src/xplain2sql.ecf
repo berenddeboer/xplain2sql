@@ -4,7 +4,8 @@
 		<description>Convert Xplain to a given SQL dialect</description>
 		<root class="XPLAIN2SQL" feature="make"/>
 		<version major="5" minor="1" release="0" build="0" company="Xplain Technology Ltd"/>
-		<option warning="warning" syntax="standard" manifest_array_type="mismatch_warning">
+		<option debug="false" warning="warning" syntax="standard" manifest_array_type="mismatch_warning">
+			<debug name="xplain2sql_join" enabled="false"/>
 			<assertions precondition="true" postcondition="true" check="true" invariant="true" loop="true" supplier_precondition="true"/>
 		</option>
 		<setting name="console_application" value="true"/>
