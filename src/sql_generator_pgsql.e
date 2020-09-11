@@ -606,7 +606,10 @@ feature -- Stored procedure support
 						Result.append_string (path_identifier (e.path_name))
 						Result.append_character ('"')
 					else
-						if attached e.item.sqlname (Current) as sqlname then
+						--Result.append_string (quote_valid_identifier (e.column_name))
+						if attached e.new_name as new_name then
+							Result.append_string (quote_valid_identifier (new_name))
+						elseif attached e.item.sqlname (Current) as sqlname then
 							Result.append_string (quote_valid_identifier (sqlname))
 						else
 							Result.append_string (quote_valid_identifier (e.column_name))

@@ -1,9 +1,14 @@
+2020-09-12  Berend de Boer  <berend@pobox.com>
+
+	* Postgresql: renamed column name was not used as name in the
+	function type.
+
 2020-08-15  Berend de Boer  <berend@pobox.com>
 
-	* !extend: an extend on a type that had a self-reference, and that
+	* extend: an extend on a type that had a self-reference, and that
 	referenced itself via the per property generated incorrect SQL.
 
-	* !Postgresql: incorrect output for inserts when used outside
+	* Postgresql: incorrect output for inserts when used outside
 	stored procedures.
 
 
