@@ -138,7 +138,12 @@ feature -- SQL code
 			-- The representation of this user function
 		do
 			-- TODO: don't know representation
-			Result := sqlgenerator.value_representation_char (250)
+			-- Handle "coalesce" function special, really should support this in Xplain.
+			if name ~ "coalesce" and then attached parameters as p and then attached p.item as first_argument then
+				Result := first_argument.exact_representation (sqlgenerator)
+			else
+				Result := sqlgenerator.value_representation_char (250)
+			end
 		end
 
 	sqlinitvalue (sqlgenerator: SQL_GENERATOR_WITH_TRIGGERS): STRING
