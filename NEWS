@@ -1,6 +1,17 @@
 NEWS - list of user-visible changes between releases of xplain2sql
 See git log since version 5.1 and ChangeLog before version 5.1 for more details.
 
+New or fixed in release 5.6 <2020-09-12>
+
+* an extend on a type that had a self-reference, and that
+	referenced itself via the per property generated incorrect SQL.
+* Postgresql:
+- stored procedure function type did not use the renamed name (i.e. when
+  using the "as" operator).
+- fix incorrect output for inserts when used outside
+	stored procedures.
+
+
 New or fixed in release 5.3 <2020-05-28>
 
 * PostgreSQL 9.5:
@@ -24,7 +35,7 @@ New or fixed in release 5.3 <2020-05-28>
 
 New or fixed in release 5.2 <2020-02-08>
 
-* PostgreSQL 9.5:
+* PostgreSQL:
 - stored procedure type had a different column name depending if you
   had written "get t1 its t2" or just "get t1". This can potentially be
   a breaking change.
