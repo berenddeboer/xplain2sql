@@ -36,7 +36,7 @@ create
 
 feature -- identification
 
-	Version: STRING = "5.6"
+	Version: STRING = "5.7"
 
 
 feature -- creation
@@ -84,7 +84,7 @@ feature -- creation
 				AutoPrimaryKeyEnabled := True
 				ExtendIndex := True
 				ExtendView := True
-				Iso8601Dates := True
+				Iso8601Dates := False
 				SetDatabaseEnabled := True
 				StoredProcedureEnabled := True
 				IdentifierWithSpacesEnabled := True

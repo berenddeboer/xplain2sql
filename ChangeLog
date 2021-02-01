@@ -1,3 +1,8 @@
+2021-02-01  Berend de Boer  <berend@pobox.com>
+
+	* Postgresql: -iso8601date was enabled by default, but should be false by default.
+
+
 2020-11-04  Berend de Boer  <berend@pobox.com>
 
 	* Postgresql: using the -iso8601date would emit all extended
