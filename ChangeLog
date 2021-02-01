@@ -1,8 +1,15 @@
+2020-11-04  Berend de Boer  <berend@pobox.com>
+
+	* Postgresql: using the -iso8601date would emit all extended
+	attributes for "get t1" when no attributes were
+	specified. But extended attributes should not be included by default.
+
+
 2020-09-12  Berend de Boer  <berend@pobox.com>
 
 	* Release 5.6.
 
-	* Postgesql: attempt to guess column output for user function
+	* Postgresql: attempt to guess column output for user function
 	called "coalesce" better. Probably we need to support coalesce in
 	Xplain, just more shorthand than writing if statements.
 

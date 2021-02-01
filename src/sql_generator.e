@@ -1606,7 +1606,7 @@ feature {NONE} -- Actual creation of sql statements, you may redefine these
 						std.output.put_character ('.')
 						std.output.put_string (selection_list.subject.type.q_sqlpkname (Current))
 						across selection_list.subject.type.new_data_attributes_cursor (Current) as c loop
-							if CalculatedColumnsSupported or else not c.item.is_assertion then
+							if (CalculatedColumnsSupported or else not c.item.is_assertion) and not c.item.is_extension then
 								std.output.put_string (", ")
 								if c.item.is_date then
 									std.output.put_string (sql_cast_to_iso_8601_date (c.item.q_sql_select_name (Current)))

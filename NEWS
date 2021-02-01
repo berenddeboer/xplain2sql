@@ -1,6 +1,15 @@
 NEWS - list of user-visible changes between releases of xplain2sql
 See git log since version 5.1 and ChangeLog before version 5.1 for more details.
 
+
+New or fixed in release 5.7 <2020-11-04>
+
+* Postgresql:
+- Using the -iso8601date option would emit extended attributes with
+  not specifying any attributes in a get. This would often result in
+  incorrect SQL. And extended attributes should not be emitted by default.
+
+
 New or fixed in release 5.6 <2020-09-12>
 
 * an extend on a type that had a self-reference, and that
